@@ -1,4 +1,6 @@
-
 extends sparkgs.SparkFile
 
-get('/', \-> "Hello World")
+StaticFiles = "public/"
+
+get('/', \-> view.Root.renderToString() )
+
