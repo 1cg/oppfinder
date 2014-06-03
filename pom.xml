@@ -14,6 +14,14 @@
       <name>Official Gosu website (releases)</name>
       <url>http://gosu-lang.org/repositories/m2/releases</url>
     </repository>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sontatype Snapshots Repo</name>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <dependencies>
