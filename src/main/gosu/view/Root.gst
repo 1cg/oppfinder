@@ -6,8 +6,9 @@ ${view.Header.renderToString()}
 
 <p>Would you like to begin a new analysis?</p>
 
-<button class="btn btn-lg btn-primary">
+<button ic-post-to="/test" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Analysis &rarr;</strong>
 </button>
+<span id="feedback"></span>
 
 ${view.Footer.renderToString()}
