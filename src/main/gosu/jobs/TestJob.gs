@@ -8,8 +8,7 @@ uses java.util.HashMap
 class TestJob extends Job implements Runnable {
 
   override function run() {
-    var db = new Database("test")
-    var dataSet = db.getDataSet("foo")
+    var dataSet = new DataSet("foo")
     var a = new Analysis()
     var iterations = 30
     for(var i in 1..iterations) {
@@ -17,11 +16,13 @@ class TestJob extends Job implements Runnable {
       print("Test Job On Iteration ${i}")
       a.analyzeDataSet(dataSet)
       Thread.sleep(1 * 1000)
-      progress = i/iterations
-      pushStatus()
+      this.Progress = i/iterations * 100
     }
-    pushStatus()
+    this.Progress = 100
     print("Test Job Complete")
   }
 
+  static property get Active() : List<JobInfo> {
+    return getActiveJobs()
+  }
 }

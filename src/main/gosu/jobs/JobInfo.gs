@@ -1,11 +1,12 @@
 package jobs
-/**
- * Created with IntelliJ IDEA.
- * User: mgode
- * Date: 6/4/14
- * Time: 3:53 PM
- * To change this template use File | Settings | File Templates.
- */
+
 class JobInfo {
 
+  var _UUID : String as UUID
+  var _Progress : int as Progress
+
+  construct(JobUUID : String, progress : int) {
+    this.UUID = JobUUID
+    this.Progress = progress
+  }
 }
