@@ -5,8 +5,8 @@ uses java.io.BufferedReader
 uses java.util.HashMap
 uses java.util.LinkedList
 uses java.util.Random
+uses model.Database
 uses model.Company
-uses model.DataSet
 uses java.math.BigDecimal
 
 var file = new File("Output.json")
@@ -37,11 +37,11 @@ for (column in columnMap.Keys) {
 
 // Replace or create new Mongo Collection loaded with this data
 
-var dataSet = new DataSet("Randomly Generated Data")
-dataSet.drop()
+var dataSet = new Database("mongodb").getDataSet("generatedCollection")
+Company.deleteAllCompanies(dataSet)
 
 for (name in dataMap.get("Company") index i) {
-  var company = new Company("Ramdomly Generated Data")
+  var company = new Company(dataSet)
   company.CompanyName = dataMap.get("Company").get(i % dataMap.get("Company").size()) as String
   company.ContactName = dataMap.get("Name").get(i % dataMap.get("Name").size()) as String
   company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String
