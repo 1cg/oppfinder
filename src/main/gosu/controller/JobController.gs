@@ -1,17 +1,13 @@
 package controller
 
 uses sparkgs.util.IHasRequestContext
-uses net.greghaines.jesque.*
-uses net.greghaines.jesque.client.*
+uses jobs.Job
+uses jobs.TestJob
 
 class JobController implements IHasRequestContext {
 
   static function startTestJob() : String{
-    var config = new ConfigBuilder().build()
-    var testJob = new Job("TestJob",{})
-    var client = new ClientImpl(config)
-    client.enqueue("main", testJob)
-    client.end()
+    new TestJob().start()
     return "Job Started!!!"
   }
 
