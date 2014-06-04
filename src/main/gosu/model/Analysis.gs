@@ -1,10 +1,9 @@
 package model
 
-uses view.*
-
 class Analysis {
 
-  function foo() {
+  function analyzeDataSet(data : DataSet) {
+    print(data.getCount())
   }
 
 }
