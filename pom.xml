@@ -50,6 +50,7 @@
   </dependencies>
 
   <build>
+    <sourceDirectory>src/main/gosu</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
