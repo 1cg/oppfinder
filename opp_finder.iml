@@ -9,12 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:2.12.2" level="project" />
     <orderEntry type="library" name="Maven: org.gosu-lang.sparkgs:sparkgs:0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.gosu-lang.gosu:gosu-core-api:0.10.J82" level="project" />
-    <orderEntry type="library" name="Maven: org.gosu-lang.gosu:gosu-launcher-api:2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.gosu-lang.gosu:gosu-launcher-impl:2.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.gosu-lang.gosu:gosu-core:0.10.J82" level="project" />
     <orderEntry type="library" name="Maven: com.sparkjava:spark-core:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.6" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:9.0.2.v20130417" level="project" />
@@ -27,6 +22,10 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-servlet:9.0.2.v20130417" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-security:9.0.2.v20130417" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.6" level="project" />
+    <orderEntry type="library" name="Maven: org.gosu-lang.gosu:gosu-core-api:0.10.J82" level="project" />
+    <orderEntry type="library" name="Maven: org.gosu-lang.gosu:gosu-launcher-api:2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.gosu-lang.gosu:gosu-launcher-impl:2.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.gosu-lang.gosu:gosu-core:0.10.J82" level="project" />
     <orderEntry type="library" name="Maven: net.greghaines:jesque:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: redis.clients:jedis:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.0" level="project" />

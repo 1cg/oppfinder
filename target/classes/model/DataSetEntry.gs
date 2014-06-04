@@ -2,8 +2,14 @@ package model
 
 uses java.util.HashMap
 uses java.util.Map
-uses java.util.UUID
 
+/**
+ * Created with IntelliJ IDEA.
+ * User: jchoi
+ * Date: 6/4/14
+ * Time: 1:49 PM
+ * To change this template use File | Settings | File Templates.
+ */
 class DataSetEntry {
   var myDataSet : DataSet
   var info : Map<String, Object>
@@ -11,15 +17,17 @@ class DataSetEntry {
   construct(dataSetName : String) {
     myDataSet = new DataSet(dataSetName)
     info = new HashMap<String, Object>()
-    info.put("UUID", UUID.randomUUID())
   }
 
-  property set DataSet(dataSet : DataSet) {
+
+  // Move this entry to a new dataset
+  property set MyDataSet(newDataSet : DataSet) {
     myDataSet.remove(info)
+    myDataSet = newDataSet
   }
 
-  property get UUID() : UUID {
-    return info.get("UUID") as UUID
+  property get MyDataSet() : DataSet {
+    return myDataSet
   }
 
   // Saves this company info into the mongo dataset
@@ -32,16 +40,17 @@ class DataSetEntry {
     myDataSet.remove(info)
   }
 
+  // Wrapper, drops an entire DataSet
   static function deleteAllEntries(dataSet : DataSet) {
     dataSet.drop()
   }
 
   // put and get are for the child classes to update info
-  function put (s : String, o : Object) {
+  protected function put (s : String, o : Object) {
     info.put(s, o)
   }
 
-  function get (s : String) : Object {
+  protected function get (s : String) : Object {
     return info.get(s)
   }
 

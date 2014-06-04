@@ -3,6 +3,7 @@ package controller
 uses sparkgs.util.IHasRequestContext
 uses jobs.Job
 uses jobs.TestJob
+uses datagen.Generator
 
 class JobController implements IHasRequestContext {
 
@@ -10,5 +11,8 @@ class JobController implements IHasRequestContext {
     new TestJob().start()
     return "Job Started!!!"
   }
-
+  static function startGenerateJob() : String{
+    Generator.generate()
+    return "Job Started!!!"
+  }
 }
