@@ -11,67 +11,50 @@ uses java.math.BigDecimal
  * Time: 1:06 PM
  * To change this template use File | Settings | File Templates.
  */
-class Company {
-  var info : Map<String, Object>
-  var myDataSet : DataSet
+class Company extends DataSetEntry {
 
-  construct(dataSet : DataSet) {
-    info = new HashMap<String, Object>()
-    myDataSet = dataSet
-  }
-
-  // Saves this company info into the mongo dataset
-  function save() {
-    myDataSet.insert(info)
-    return
-  }
-
-  function delete() {
-    myDataSet.remove(info)
-  }
-
-  static function deleteAllCompanies(dataSet : DataSet) {
-    dataSet.drop()
+  construct(dataSetName : String) {
+    super(dataSetName)
   }
 
   property set CompanyName(companyName : String) {
-    info.put("companyName", companyName)
+    super.put("companyName", companyName)
     return
   }
   property get CompanyName() : String {
-    return (String)info.get("companyName")
+    return super.get("companyName") as String
   }
 
   property set ContactName(contactName : String) {
-    info.put("contactName", contactName)
+    super.put("contactName", contactName)
     return
   }
   property get ContactName() : String {
-    return (String)info.get("contactName")
+    return super.get("contactName") as String
   }
 
   property set Email(email : String) {
-    info.put("email", email)
+    super.put("email", email)
     return
   }
   property get Email() : String {
-    return (String)info.get("email")
+    return super.get("email") as String
   }
 
   property set Region(region : String) {
-    info.put("region", region)
+    super.put("region", region)
     return
   }
   property get Region() : String {
-    return (String)info.get("region")
+    return super.get("region") as String
   }
 
   property set Policies(policies : Map<String, BigDecimal>) {
-    info.put("policies", policies)
+    super.put("policies", policies)
     return
   }
   property get Policies() : Map<String, BigDecimal> {
-    return (Map<String, BigDecimal>)info.get("policies")
+    return super.get("policies") as Map<String, BigDecimal>
   }
 
 }

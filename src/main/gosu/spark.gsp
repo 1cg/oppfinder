@@ -1,5 +1,7 @@
 extends sparkgs.SparkFile
 
+Layout = view.Layout
+
 get('/', \-> view.Root.renderToString() )
 
 post('/jobs/test', \-> controller.JobController.startTestJob() )

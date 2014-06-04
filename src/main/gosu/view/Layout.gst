@@ -1,3 +1,4 @@
+<%@ params(body:String) %>
 <html>
   <head>
     <link href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
@@ -43,3 +44,7 @@
       </div>
     </div>
     <div id="main-content" class='container'>
+      ${body}
+    </div>
+  </body>
+</html>

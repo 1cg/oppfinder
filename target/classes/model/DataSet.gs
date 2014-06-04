@@ -7,8 +7,8 @@ class DataSet {
 
   var _collection : DBCollection
 
-  construct(collection : DBCollection) {
-    _collection = collection
+  construct(collectionName : String) {
+    _collection = Database.getCollection(collectionName)
   }
 
   function find(ref : Map<Object, Object>) : List<Map<Object, Object>> {
@@ -25,7 +25,6 @@ class DataSet {
     return _collection.find()
         .toArray().map(\ o -> o.toMap())
   }
-
 
   function insert(o : Map<Object, Object>) : WriteResult {
     return _collection.insert( new BasicDBObject(o), new WriteConcern())
