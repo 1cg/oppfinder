@@ -4,8 +4,13 @@ uses java.lang.Runnable
 uses java.lang.Thread
 uses model.*
 uses java.util.HashMap
+uses java.util.Map
 
 class TestJob extends Job implements Runnable {
+
+  construct(data : Map<String, Object> = null) {
+    super(data)
+  }
 
   override function run() {
     var dataSet = new DataSet("foo")
@@ -22,7 +27,4 @@ class TestJob extends Job implements Runnable {
     print("Test Job Complete")
   }
 
-  static property get Active() : List<JobInfo> {
-    return getActiveJobs()
-  }
 }
