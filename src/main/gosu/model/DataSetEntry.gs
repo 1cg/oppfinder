@@ -22,6 +22,10 @@ class DataSetEntry {
     return info.get("UUID") as UUID
   }
 
+  static property get All() : List<Map> {
+    return myDataSet.find()
+  }
+
   // Saves this company info into the mongo dataset
   function save() {
     myDataSet.insert(info)

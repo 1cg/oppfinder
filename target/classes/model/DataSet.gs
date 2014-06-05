@@ -7,8 +7,8 @@ class DataSet {
 
   var _collection : DBCollection
 
-  construct(collection : DBCollection) {
-    _collection = collection
+  construct(collectionName : String) {
+    _collection = Database.getCollection(collectionName)
   }
 
   function find(ref : Map<Object, Object>) : List<Map<Object, Object>> {

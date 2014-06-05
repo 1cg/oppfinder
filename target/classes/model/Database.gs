@@ -1,21 +1,16 @@
 package model
 
 uses com.mongodb.Mongo
-uses com.mongodb.DB
 uses com.mongodb.DBCollection
 
 class Database {
 
-  var _client : Mongo
-  var _db : DB
+  static final var CLIENT = new Mongo()
+  static final var DB_NAME = "oppFinder"
+  static final var DB = CLIENT.getDB(DB_NAME)
 
-  construct(dbName :String) {
-    _client = new Mongo()
-    _db = _client.getDB(dbName)
-  }
-
-  function getDataSet(collectionName : String) : DataSet {
+  static function getCollection(collectionName : String) : DBCollection {
     //Iff not exists, create collection with default params
-    return new DataSet(_db.createCollection(collectionName, null))
+    return DB.createCollection(collectionName, null)
   }
 }

@@ -1,77 +1,53 @@
 package model
 
 uses java.util.Map
-uses java.util.HashMap
 uses java.math.BigDecimal
 
-/**
- * Created with IntelliJ IDEA.
- * User: jchoi
- * Date: 6/4/14
- * Time: 1:06 PM
- * To change this template use File | Settings | File Templates.
- */
-class Company {
-  var info : Map<String, Object>
-  var myDataSet : DataSet
 
-  construct(dataSet : DataSet) {
-    info = new HashMap<String, Object>()
-    myDataSet = dataSet
-  }
+class Company extends DataSetEntry {
 
-  // Saves this company info into the mongo dataset
-  function save() {
-    myDataSet.insert(info)
-    return
-  }
-
-  function delete() {
-    myDataSet.remove(info)
-  }
-
-  static function deleteAllCompanies(dataSet : DataSet) {
-    dataSet.drop()
+  construct(dataSetName : String) {
+    super(dataSetName)
   }
 
   property set CompanyName(companyName : String) {
-    info.put("companyName", companyName)
+    put("companyName", companyName)
     return
   }
   property get CompanyName() : String {
-    return (String)info.get("companyName")
+    return get("companyName") as String
   }
 
   property set ContactName(contactName : String) {
-    info.put("contactName", contactName)
+    put("contactName", contactName)
     return
   }
   property get ContactName() : String {
-    return (String)info.get("contactName")
+    return get("contactName") as String
   }
 
   property set Email(email : String) {
-    info.put("email", email)
+    put("email", email)
     return
   }
   property get Email() : String {
-    return (String)info.get("email")
+    return get("email") as String
   }
 
   property set Region(region : String) {
-    info.put("region", region)
+    put("region", region)
     return
   }
   property get Region() : String {
-    return (String)info.get("region")
+    return get("region") as String
   }
 
   property set Policies(policies : Map<String, BigDecimal>) {
-    info.put("policies", policies)
+    put("policies", policies)
     return
   }
   property get Policies() : Map<String, BigDecimal> {
-    return (Map<String, BigDecimal>)info.get("policies")
+    return get("policies") as Map<String, BigDecimal>
   }
 
 }

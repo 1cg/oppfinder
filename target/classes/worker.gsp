@@ -4,11 +4,7 @@ uses java.lang.Thread
 
 var config = new ConfigBuilder().build()
 
-var worker = new WorkerImpl(config, {'main'},
-    new MapBasedJobFactory(
-        {"TestJob" -> jobs.TestJob as java.lang.Class}
-    )
-)
+var worker = new WorkerImpl(config, {'main'}, new ReflectiveJobFactory())
 
 new Thread(worker).start()
 

@@ -7,7 +7,6 @@ package view
       <% for (key in entry.keySet()) { %>
       <td> ${key} </td>
       <td> ${entry[key]} </td>
-      <% } %>
     </tr>
   <% } %>
 </table>
