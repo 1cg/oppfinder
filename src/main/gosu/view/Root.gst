@@ -5,17 +5,18 @@
 <p>Would you like to begin a new analysis?</p>
 
 
-<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+<button ic-post-to="/generate" ic-target="#generateFeedback" class="btn btn-lg btn-primary">
   <strong>Generate Data</strong>
 </button>
 
-<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+<a class="btn btn-lg btn-primary" href="/companies">
   <strong>Display Data</strong>
-</button>
+</a>
 
 <button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Analysis &rarr;</strong>
 </button>
+<span id="generateFeedback"></span>
 <span id="feedback"></span>
 <table class="table">
   <thead>
