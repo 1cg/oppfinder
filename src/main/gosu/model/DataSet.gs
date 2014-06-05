@@ -26,7 +26,6 @@ class DataSet {
         .toArray().map(\ o -> o.toMap())
   }
 
-
   function insert(o : Map<Object, Object>) : WriteResult {
     return _collection.insert( new BasicDBObject(o), new WriteConcern())
   }

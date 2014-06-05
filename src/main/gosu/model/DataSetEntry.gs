@@ -23,7 +23,7 @@ class DataSetEntry {
   }
 
   static property get All() : List<Map> {
-    return myDataSet.find()
+    return new DataSet("oppFinder").find()
   }
 
   // Saves this company info into the mongo dataset
@@ -41,11 +41,11 @@ class DataSetEntry {
   }
 
   // put and get are for the child classes to update info
-  function put (s : String, o : Object) {
+  protected function put (s : String, o : Object) {
     info.put(s, o)
   }
 
-  function get (s : String) : Object {
+  protected function get (s : String) : Object {
     return info.get(s)
   }
 

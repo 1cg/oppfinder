@@ -12,7 +12,6 @@ class Company extends DataSetEntry {
 
   property set CompanyName(companyName : String) {
     put("companyName", companyName)
-    return
   }
   property get CompanyName() : String {
     return get("companyName") as String
@@ -20,7 +19,6 @@ class Company extends DataSetEntry {
 
   property set ContactName(contactName : String) {
     put("contactName", contactName)
-    return
   }
   property get ContactName() : String {
     return get("contactName") as String
@@ -28,7 +26,6 @@ class Company extends DataSetEntry {
 
   property set Email(email : String) {
     put("email", email)
-    return
   }
   property get Email() : String {
     return get("email") as String
@@ -36,7 +33,6 @@ class Company extends DataSetEntry {
 
   property set Region(region : String) {
     put("region", region)
-    return
   }
   property get Region() : String {
     return get("region") as String
@@ -44,7 +40,6 @@ class Company extends DataSetEntry {
 
   property set Policies(policies : Map<String, BigDecimal>) {
     put("policies", policies)
-    return
   }
   property get Policies() : Map<String, BigDecimal> {
     return get("policies") as Map<String, BigDecimal>
