@@ -44,6 +44,10 @@ abstract class Job implements Runnable {
     dataStore.update(id,jobInfo)
   }
 
+  property get Type() : String {
+    return (jobInfo['Type'] as String)
+  }
+
   property get UUId() : String {
     return id['UUId'] as String
   }

@@ -14,6 +14,16 @@
 </a>
 
 <button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+  <strong>Generate Data</strong>
+</button>
+
+<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+  <strong>Display Data</strong>
+</button>
+
+<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+
+<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Analysis &rarr;</strong>
 </button>
 <span id="generateFeedback"></span>
@@ -25,6 +35,9 @@
         Job Id
       </th>
       <th>
+        Job Type
+      </th>
+      <th>
         Progress
       </th>
     </tr>
@@ -34,6 +47,9 @@
     <tr>
       <td>
         ${job.UUId}
+      </td>
+       <td>
+        ${job.Type}
       </td>
       <td>
       <div class="progress progress-striped active">
