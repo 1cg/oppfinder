@@ -11,14 +11,15 @@ uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
 uses java.util.ArrayList
+uses gw.lang.reflect.TypeSystem
 
 abstract class Job implements Runnable {
 
   static var dataStore : DataSet = new DataSet('jobs')
   var jobInfo : Map<String, Object>
 
-  construct() {
-    jobInfo = new HashMap<String, Object>()
+  construct(data : Map<String, Object> = null) {
+    jobInfo = data != null ? data : new HashMap<String, Object>()
     this.JobId = UUID.randomUUID().toString()
     this.Progress = 0
   }
@@ -74,11 +75,11 @@ abstract class Job implements Runnable {
     var jobs = dataStore.find()
     for (job in jobs.copy()) {
       print(job)
-      if (job.get('Progress') as Integer == 100) {
+      if (job.get('Progress') as Integer >= 100) {
         jobs.remove(job)
       }
     }
-    print(jobs.size())
+
     return jobs.map(\ j -> new JobInfo(j.get('UUID') as String,j.get('Progress') as Integer))
   }
 
