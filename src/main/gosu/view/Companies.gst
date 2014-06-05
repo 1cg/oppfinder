@@ -10,43 +10,15 @@
 
 <table class="table">
   <thead>
-    <tr>
-      yo...dude
-      <% for (entry in model.DataSetEntry.All) { %>
-  test?
+  </thead>
+  <tbody>
+    <% for (entry in model.DataSetEntry.All) { %>
     <tr>
       <% for (key in entry.keySet()) { %>
       <td> ${key} </td>
       <td> ${entry[key]} </td>
       <% } %>
     </tr>
-  <% } %>
-</table>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>
-        Job Id
-      </th>
-      <th>
-        Progress
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% for(job in jobs.Job.Active) { %>
-    <tr>
-      <td>
-        ${job.UUId}
-      </td>
-      <td>
-      <div class="progress progress-striped active">
-        <div class="progress-bar"  role="progressbar" aria-valuenow="${job.Progress}" aria-valuemin="0" aria-valuemax="100" style="width: ${job.Progress}%">
-          <span class="sr-only">${job.Progress}% Complete</span>
-        </div>
-      </div>
-      </td>
     <% } %>
   </tbody>
 </table>
