@@ -10,6 +10,7 @@ uses java.io.BufferedReader
 uses model.DataSet
 uses model.Company
 uses java.math.BigDecimal
+uses java.lang.System
 
 class GenerateJob extends Job implements Runnable {
   static final var policies = {"Workers Comp", "Business Auto", "Property"}
@@ -31,7 +32,7 @@ class GenerateJob extends Job implements Runnable {
     print("RUNNING!")
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
-      var input = new FileReader(columnMap.get(column))
+      var input = new FileReader(System.getProperty("user.dir")+"/src/main/gosu/datagen/"+columnMap.get(column))
       var bufRead = new BufferedReader(input)
       var myLine = bufRead.readLine()
 
@@ -45,11 +46,11 @@ class GenerateJob extends Job implements Runnable {
 
     // Replace or create new Mongo Collection loaded with this data
 
-    var dataSet = new DataSet("Randomly Generated Data")
+    var dataSet = new DataSet("oppFinder")
     dataSet.drop()
 
     for (name in dataMap.get("Company") index i) {
-      var company = new Company("Ramdomly Generated Data")
+      var company = new Company("oppFinder")
       company.CompanyName = dataMap.get("Company").get(i % dataMap.get("Company").size()) as String
       company.ContactName = dataMap.get("Name").get(i % dataMap.get("Name").size()) as String
       company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String

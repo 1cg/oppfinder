@@ -10,6 +10,11 @@
 
 <table class="table">
   <thead>
+    <tr>
+    <% for (type in model.Company.CompanyDataTypes) { %>
+
+    <% } %>
+    </tr>
   </thead>
   <tbody>
     <% for (entry in model.DataSetEntry.All) { %>
