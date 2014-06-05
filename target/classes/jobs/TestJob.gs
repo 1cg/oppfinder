@@ -8,7 +8,7 @@ uses java.util.Map
 
 class TestJob extends Job implements Runnable {
 
-  construct(data : Map<Object, Object> = null) {
+  construct(data : Map<String, Object> = null) {
     super(data)
   }
 

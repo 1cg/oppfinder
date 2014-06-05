@@ -1,72 +1,77 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.guidewire.interns</groupId>
-  <artifactId>opp_finder</artifactId>
-  <packaging>jar</packaging>
-  <version>0.1</version>
-  <name>OpportunityFinder</name>
+<modelVersion>4.0.0</modelVersion>
+<groupId>com.guidewire.interns</groupId>
+<artifactId>opp_finder</artifactId>
+<packaging>jar</packaging>
+<version>0.1</version>
+<name>OpportunityFinder</name>
 
-  <repositories>
+<repositories>
     <repository>
-      <id>gosu-lang.org-releases</id>
-      <name>Official Gosu website (releases)</name>
-      <url>http://gosu-lang.org/repositories/m2/releases</url>
+        <id>gosu-lang.org-releases</id>
+        <name>Official Gosu website (releases)</name>
+        <url>http://gosu-lang.org/repositories/m2/releases</url>
     </repository>
     <repository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sontatype Snapshots Repo</name>
-      <url>https://oss.sonatype.org/content/groups/public</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+        <id>sonatype-nexus-snapshots</id>
+        <name>Sontatype Snapshots Repo</name>
+        <url>https://oss.sonatype.org/content/groups/public</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
-  </repositories>
+</repositories>
 
-  <dependencies>
+<dependencies>
     <dependency>
-      <groupId>org.gosu-lang.sparkgs</groupId>
-      <artifactId>sparkgs</artifactId>
-      <version>0.1-SNAPSHOT</version>
+        <groupId>org.gosu-lang.sparkgs</groupId>
+        <artifactId>sparkgs</artifactId>
+        <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.gosu-lang.gosu</groupId>
-      <artifactId>gosu</artifactId>
-      <version>0.10.J82</version>
-      <type>pom</type>
-	    <exclusions>
-	        <exclusion>
-	            <artifactId>tools</artifactId>
-	            <groupId>com.sun</groupId>
-	        </exclusion>
-	    </exclusions>
+        <groupId>org.gosu-lang.gosu</groupId>
+        <artifactId>gosu</artifactId>
+        <version>0.10.J82</version>
+        <type>pom</type>
+        <exclusions>
+            <exclusion>
+                <artifactId>tools</artifactId>
+                <groupId>com.sun</groupId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
-      <groupId>net.greghaines</groupId>
-      <artifactId>jesque</artifactId>
-      <version>2.0.0</version>
+        <groupId>net.greghaines</groupId>
+        <artifactId>jesque</artifactId>
+        <version>2.0.0</version>
     </dependency>
-  </dependencies>
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>2.12.2</version>
+    </dependency>
+</dependencies>
 
-  <build>
+<build>
     <sourceDirectory>src/main/gosu</sourceDirectory>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.4</version>
+            <executions>
+                <execution>
+                    <id>copy-dependencies</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>copy-dependencies</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
     </plugins>
-  </build>
+</build>
 
 </project>
