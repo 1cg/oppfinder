@@ -28,6 +28,7 @@ class GenerateJob extends Job implements Runnable {
   }
 
   override function run() {
+    print("RUNNING!")
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
       var input = new FileReader(columnMap.get(column))
@@ -62,7 +63,7 @@ class GenerateJob extends Job implements Runnable {
         }
         coPolicies.put(policyType, new BigDecimal(5000 + rand.nextInt(999500)))
       }
-
+      print("success!")
       company.save()
 
     }
