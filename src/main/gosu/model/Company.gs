@@ -45,4 +45,8 @@ class Company extends DataSetEntry {
     return get("policies") as Map<String, BigDecimal>
   }
 
+  static property get CompanyDataTypes() : List<String> {
+    return {"Company", "Contact Name", "Email", "Region", "Policies"}
+  }
+
 }
