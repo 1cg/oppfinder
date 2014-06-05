@@ -10,16 +10,22 @@ uses java.util.HashMap
 uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
-uses java.util.ArrayList
-uses gw.lang.reflect.TypeSystem
 
 abstract class Job implements Runnable {
 
-  static var dataStore : DataSet = new DataSet('jobs')
-  var jobInfo : Map<String, Object>
+  static var dataStore = new DataSet('jobs')
+  var id : Map<Object, Object>
+  var jobInfo : Map<Object, Object>
 
-  construct(data : Map<String, Object> = null) {
-    jobInfo = data != null ? data : new HashMap<String, Object>()
+  construct(data : Map<Object, Object> = null) {
+    if (data != null) {
+      id = new HashMap<Object,Object>()
+      id['UUId'] = data['UUId']
+      this.jobInfo = data
+      return
+    }
+    jobInfo = new HashMap<Object, Object>()
+    id = new HashMap<Object, Object>()
     this.UUId = UUID.randomUUID().toString()
     this.Progress = 0
     this.Type = this.IntrinsicType.Name
@@ -34,59 +40,44 @@ abstract class Job implements Runnable {
   }
 
   property set Type(type : String) {
-    jobInfo.put('Type', type)
-    dataStore.update(jobInfo,jobInfo)
+    jobInfo['Type'] = type
+    dataStore.update(id,jobInfo)
   }
 
   property get UUId() : String {
-    return jobInfo.get('UUID') as String
+    return id['UUId'] as String
   }
 
-  property set UUId(id : String) {
-    jobInfo.put("UUID", id)
-    dataStore.update(jobInfo,jobInfo)
+  property set UUId(newUUId : String) {
+    jobInfo['UUId'] = newUUId
+    id['UUId'] = newUUId
+    dataStore.save(id)
   }
 
   property get Progress() : int {
-    return dataStore.find(jobInfo).get(0).get('Progress') as Integer
+    return dataStore.find(id).get(0)['Progress'] as Integer
   }
 
   property set Progress(progress : int) {
-    var update = new HashMap<String, Object>()
+    jobInfo['Progress'] = progress
+    dataStore.update(id, jobInfo)
     checkBounds()
-    update.put('Progress', progress)
-    dataStore.update(jobInfo, update)
   }
 
   /*
   * If we are either at the start or the end of the job, log the status
    */
   function checkBounds() {
-    var update = new HashMap<String, Object>()
     if (this.Progress == 0) {
-      update.put("StartTime", System.nanoTime())
+      jobInfo['StartTime'] =  System.nanoTime()
     } else if (this.Progress == 100) {
-      update.put("EndTime", System.nanoTime())
+      jobInfo['EndTime'] = System.nanoTime()
     }
   }
 
   function displayState(state : String) {
-    var update = new HashMap<String, String>()
-    update.put("State", state)
-    dataStore.update(jobInfo, update)
-  }
-
-  //Extremely inefficient
-  static function getActiveJobs() : List<jobs.Job> {
-    var jobs = dataStore.find()
-    for (job in jobs.copy()) {
-      print(job)
-      if (job.get('Progress') as Integer >= 100) {
-        jobs.remove(job)
-      }
-    }
-    print(jobs.size())
-    return jobs.map(\ j -> newUp(j))
+    jobInfo['State'] = state
+    dataStore.update(id, jobInfo)
   }
 
   static function newUp(job : Map<Object, Object>) : jobs.Job {
@@ -97,7 +88,13 @@ abstract class Job implements Runnable {
   }
 
   static property get Active() : List<jobs.Job> {
-    return getActiveJobs()
+    var jobs = dataStore.find()
+    for (job in jobs.copy()) {
+      if (job.get('Progress') as Integer >= 100) {
+        jobs.remove(job)
+      }
+    }
+    return jobs.map(\ j -> newUp(j))
   }
 
 }
