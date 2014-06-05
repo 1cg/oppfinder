@@ -10,34 +10,39 @@ uses java.util.HashMap
 uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
-uses java.util.ArrayList
 
 abstract class Job implements Runnable {
 
   static var dataStore : DataSet = new DataSet('jobs')
   var jobInfo : Map<String, Object>
 
-  construct() {
+  construct(data : Map<Object, Object> = null) {
     jobInfo = new HashMap<String, Object>()
-    this.JobId = UUID.randomUUID().toString()
+    this.UUId = UUID.randomUUID().toString()
     this.Progress = 0
+    this.Type = this.IntrinsicType.Name
   }
 
   function start() {
     var config = new ConfigBuilder().build()
     var testJob = new Job(this.IntrinsicType.Name,{})
     var client = new ClientImpl(config)
-    client.enqueue("main", testJob)
+    client.enqueue('main', testJob)
     client.end()
   }
 
-  property get JobId() : String {
+  property set Type(type : String) {
+    jobInfo.put('Type', type)
+    dataStore.update(jobInfo,jobInfo)
+  }
+
+  property get UUId() : String {
     return jobInfo.get('UUID') as String
   }
 
-  property set JobId(id : String) {
+  property set UUId(id : String) {
     jobInfo.put("UUID", id)
-    dataStore.insert(jobInfo)
+    dataStore.update(jobInfo,jobInfo)
   }
 
   property get Progress() : int {
@@ -47,7 +52,7 @@ abstract class Job implements Runnable {
   property set Progress(progress : int) {
     var update = new HashMap<String, Object>()
     checkBounds()
-    update.put("Progress", progress)
+    update.put('Progress', progress)
     dataStore.update(jobInfo, update)
   }
 
@@ -70,7 +75,7 @@ abstract class Job implements Runnable {
   }
 
   //Extremely inefficient
-  static function getActiveJobs() : List<JobInfo> {
+  static function getActiveJobs() : List<jobs.Job> {
     var jobs = dataStore.find()
     for (job in jobs.copy()) {
       print(job)
@@ -79,7 +84,18 @@ abstract class Job implements Runnable {
       }
     }
     print(jobs.size())
-    return jobs.map(\ j -> new JobInfo(j.get('UUID') as String,j.get('Progress') as Integer))
+    return jobs.map(\ j -> newUp(j))
+  }
+
+  static function newUp(job : Map<Object, Object>) : jobs.Job {
+    if (job.get('Type') as String == 'TestJob') {
+      return new TestJob(job)
+    }
+    return new TestJob(job)
+  }
+
+  static property get Active() : List<jobs.Job> {
+    return getActiveJobs()
   }
 
 }

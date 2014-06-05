@@ -1,7 +1,6 @@
 package controller
 
 uses sparkgs.util.IHasRequestContext
-uses jobs.Job
 uses jobs.TestJob
 
 class JobController implements IHasRequestContext {
