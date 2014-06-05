@@ -1,3 +1,5 @@
+uses view.Companies
+
 extends sparkgs.SparkFile
 
 Layout = view.Layout

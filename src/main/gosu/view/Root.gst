@@ -4,6 +4,15 @@
 
 <p>Would you like to begin a new analysis?</p>
 
+
+<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+  <strong>Generate Data</strong>
+</button>
+
+<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+  <strong>Display Data</strong>
+</button>
+
 <button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Analysis &rarr;</strong>
 </button>

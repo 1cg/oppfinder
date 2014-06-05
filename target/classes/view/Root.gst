@@ -7,8 +7,14 @@
 <button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Analysis &rarr;</strong>
 </button>
+
+
+<button ic-post-to="/jobs/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+  <strong>Generate Data</strong>
+</button>
+
+
 <span id="feedback"></span>
-YO YO YO
 <table class="table">
   <thead>
     <tr>
