@@ -17,13 +17,13 @@ abstract class Job implements Runnable {
   var id : Map<Object, Object>
   var jobInfo : Map<Object, Object>
 
-  construct(data : Map<Object, Object> = null) {
-    if (data != null) {
-      id = new HashMap<Object,Object>()
-      id['UUId'] = data['UUId']
-      this.jobInfo = data
-      return
-    }
+  construct(data : Map<Object, Object>) {
+    id = new HashMap<Object,Object>()
+    id['UUId'] = data['UUId']
+    this.jobInfo = data
+  }
+
+  construct() {
     jobInfo = new HashMap<Object, Object>()
     id = new HashMap<Object, Object>()
     this.UUId = UUID.randomUUID().toString()

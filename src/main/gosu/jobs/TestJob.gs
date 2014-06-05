@@ -8,12 +8,14 @@ uses java.util.Map
 
 class TestJob extends Job implements Runnable {
 
-  construct(data : Map<Object, Object> = null) {
+  construct(data : Map<Object, Object> ) {
     super(data)
   }
 
+  construct() {
+    super()
+  }
   override function run() {
-    print('Picked up by redis worker')
     var dataSet = new DataSet("foo")
     var a = new Analysis()
     var iterations = 30
