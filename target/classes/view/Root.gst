@@ -27,10 +27,10 @@
     </tr>
   </thead>
   <tbody>
-    <% for(job in jobs.TestJob.Active) { %>
+    <% for(job in jobs.Job.Active) { %>
     <tr>
       <td>
-        ${job.UUID}
+        ${job.UUId}
       </td>
       <td>
       <div class="progress progress-striped active">
