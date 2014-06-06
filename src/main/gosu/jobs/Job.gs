@@ -10,14 +10,17 @@ uses java.util.HashMap
 uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
+uses java.lang.Long
 
 abstract class Job implements Runnable {
 
+  static final var MAX_PROGRESS = 100
   static var dataStore = new DataSet('jobs')
   var id : Map<Object, Object>
   var jobInfo : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {
+    if (data == null) {return}
     id = new HashMap<Object,Object>()
     id['UUId'] = data['UUId']
     this.jobInfo = data
@@ -33,10 +36,15 @@ abstract class Job implements Runnable {
 
   function start() {
     var config = new ConfigBuilder().build()
-    var testJob = new Job(this.IntrinsicType.Name,{})
+    var args = {jobInfo}
+    var testJob = new Job(this.IntrinsicType.Name,args)
     var client = new ClientImpl(config)
     client.enqueue('main', testJob)
     client.end()
+  }
+
+  property get Type() : String {
+    return (jobInfo['Type'] as String)
   }
 
   property set Type(type : String) {
@@ -44,8 +52,23 @@ abstract class Job implements Runnable {
     dataStore.update(id,jobInfo)
   }
 
-  property get Type() : String {
-    return (jobInfo['Type'] as String)
+  property get StartTime() : Long {
+    return (jobInfo['StartTime'] as Long)
+  }
+
+  property set StartTime(time : Long) {
+    jobInfo['StartTime'] = time
+    dataStore.update(id,jobInfo)
+  }
+
+  property get EndTime() : Long {
+    var time = jobInfo['EndTime'] as Long
+    return time
+  }
+
+  property set EndTime(time : Long) {
+    jobInfo['EndTime'] = time
+    dataStore.update(id,jobInfo)
   }
 
   property get UUId() : String {
@@ -59,13 +82,17 @@ abstract class Job implements Runnable {
   }
 
   property get Progress() : int {
-    return dataStore.find(id).get(0)['Progress'] as Integer
+    return dataStore.findOne(id)['Progress'] as Integer
   }
 
   property set Progress(progress : int) {
     jobInfo['Progress'] = progress
-    dataStore.update(id, jobInfo)
     checkBounds()
+    dataStore.update(id, jobInfo)
+  }
+
+  property get ElapsedTime() : String {
+    return (((this.EndTime ?: System.nanoTime()) - this.StartTime) / 1000000000) as String + " Seconds"
   }
 
   /*
@@ -73,9 +100,9 @@ abstract class Job implements Runnable {
    */
   function checkBounds() {
     if (this.Progress == 0) {
-      jobInfo['StartTime'] =  System.nanoTime()
-    } else if (this.Progress == 100) {
-      jobInfo['EndTime'] = System.nanoTime()
+      this.StartTime =  System.nanoTime()
+    } else if (this.Progress == MAX_PROGRESS) {
+      this.EndTime = System.nanoTime()
     }
   }
 
@@ -94,7 +121,17 @@ abstract class Job implements Runnable {
   static property get Active() : List<jobs.Job> {
     var jobs = dataStore.find()
     for (job in jobs.copy()) {
-      if (job.get('Progress') as Integer >= 100) {
+      if ((job.get('Progress') as Integer) >= MAX_PROGRESS) {
+        jobs.remove(job)
+      }
+    }
+    return jobs.map(\ j -> newUp(j))
+  }
+
+  static property get Complete() : List<jobs.Job> {
+    var jobs = dataStore.find()
+    for (job in jobs.copy()) {
+      if ((job.get('Progress') as Integer) < MAX_PROGRESS) {
         jobs.remove(job)
       }
     }
