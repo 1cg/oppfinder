@@ -10,29 +10,29 @@ uses java.io.BufferedReader
 uses model.DataSet
 uses model.Company
 uses java.math.BigDecimal
-uses java.lang.System
 
 class GenerateJob extends Job implements Runnable {
   static final var policies = {"Workers Comp", "Business Auto", "Property"}
   static final var columnMap = {
       "Company" -> "Companies.txt",
-      "Name" -> "Names.txt",
+      "Contact Name" -> "Names.txt",
       "Email" -> "Emails.txt",
       "Region" -> "Regions.txt"
   }
   static final var dataMap = new HashMap<String, List>()
   static final var rand = new Random()
 
-
-  construct(data : Map<Object, Object> = null) {
+  construct() {
+    super()
+  }
+  construct(data : Map<Object, Object>) {
     super(data)
   }
 
   override function run() {
-    print("RUNNING!")
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
-      var input = new FileReader(System.getProperty("user.dir")+"/src/main/gosu/datagen/"+columnMap.get(column))
+      var input = new FileReader("datagen/"+columnMap.get(column))
       var bufRead = new BufferedReader(input)
       var myLine = bufRead.readLine()
 
@@ -40,7 +40,6 @@ class GenerateJob extends Job implements Runnable {
         data.add(myLine)
         myLine = bufRead.readLine()
       }
-
       dataMap.put(column, data)
     }
 
@@ -48,27 +47,30 @@ class GenerateJob extends Job implements Runnable {
 
     var dataSet = new DataSet("oppFinder")
     dataSet.drop()
-
     for (name in dataMap.get("Company") index i) {
       var company = new Company("oppFinder")
       company.CompanyName = dataMap.get("Company").get(i % dataMap.get("Company").size()) as String
-      company.ContactName = dataMap.get("Name").get(i % dataMap.get("Name").size()) as String
+      company.ContactName = dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String
       company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String
       company.Region = dataMap.get("Region").get(i % dataMap.get("Region").size()) as String
 
       var coPolicies = new HashMap<String, BigDecimal>();
-
-      for (policyType in policies) {
-        if (rand.nextInt(2) == 0) {
+      for (policyType in policies index j) {
+        if (rand.nextInt(2) == 0 || j+1 == policies.size()) {
+          coPolicies.put(policies[rand.nextInt(policies.size())], new BigDecimal(5000+ rand.nextInt(999500)))
+        } else {
           continue
         }
-        coPolicies.put(policyType, new BigDecimal(5000 + rand.nextInt(999500)))
       }
-      print("success!")
+      var coPoliciesString = ""
+      for (entry in coPolicies.entrySet()) {
+        coPoliciesString += entry.toString()+"\n"
+      }
+      company.Policies = coPoliciesString
       company.save()
-
     }
   }
+
 
 
 

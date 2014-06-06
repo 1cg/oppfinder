@@ -6,7 +6,7 @@ uses java.util.UUID
 
 class DataSetEntry {
   var myDataSet : DataSet
-  var info : Map<String, Object>
+  var info : Map<Object, Object>
 
   construct(dataSetName : String) {
     myDataSet = new DataSet(dataSetName)
@@ -41,11 +41,11 @@ class DataSetEntry {
   }
 
   // put and get are for the child classes to update info
-  protected function put (s : String, o : Object) {
+  protected function put (s : Object, o : Object) {
     info.put(s, o)
   }
 
-  protected function get (s : String) : Object {
+  protected function get (s : Object) : Object {
     return info.get(s)
   }
 

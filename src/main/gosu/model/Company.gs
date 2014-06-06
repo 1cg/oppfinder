@@ -11,38 +11,38 @@ class Company extends DataSetEntry {
   }
 
   property set CompanyName(companyName : String) {
-    put("companyName", companyName)
+    put("Company", companyName)
   }
   property get CompanyName() : String {
-    return get("companyName") as String
+    return get("Company") as String
   }
 
   property set ContactName(contactName : String) {
-    put("contactName", contactName)
+    put("Contact Name", contactName)
   }
   property get ContactName() : String {
-    return get("contactName") as String
+    return get("Contact Name") as String
   }
 
   property set Email(email : String) {
-    put("email", email)
+    put("Email", email)
   }
   property get Email() : String {
-    return get("email") as String
+    return get("Email") as String
   }
 
   property set Region(region : String) {
-    put("region", region)
+    put("Region", region)
   }
   property get Region() : String {
-    return get("region") as String
+    return get("Region") as String
   }
 
-  property set Policies(policies : Map<String, BigDecimal>) {
-    put("policies", policies)
+  property set Policies(policies : /* Map<String, BigDecimal> */ String) {
+    put("Policies", policies)
   }
-  property get Policies() : Map<String, BigDecimal> {
-    return get("policies") as Map<String, BigDecimal>
+  property get Policies() : /*Map<String, BigDecimal>*/ String {
+    return get("Policies") /*as Map<String, BigDecimal>*/as String
   }
 
   static property get CompanyDataTypes() : List<String> {

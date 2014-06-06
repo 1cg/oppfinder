@@ -14,7 +14,7 @@ class Generator {
   static final var policies = {"Workers Comp", "Business Auto", "Property"}
   static final var columnMap = {
       "Company" -> "Companies.txt",
-      "Name" -> "Names.txt",
+      "Contact Name" -> "Names.txt",
       "Email" -> "Emails.txt",
       "Region" -> "Regions.txt"
   }
@@ -24,7 +24,7 @@ class Generator {
   static function generate() {
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
-      var input = new FileReader(System.getProperty("user.dir")+"/src/main/gosu/datagen/"+columnMap.get(column))
+      var input = new FileReader("datagen/"+columnMap.get(column))
       var bufRead = new BufferedReader(input)
       var myLine = bufRead.readLine()
 
@@ -44,7 +44,7 @@ class Generator {
     for (name in dataMap.get("Company") index i) {
       var company = new Company("oppFinder")
       company.CompanyName = dataMap.get("Company").get(i % dataMap.get("Company").size()) as String
-      company.ContactName = dataMap.get("Name").get(i % dataMap.get("Name").size()) as String
+      company.ContactName = dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String
       company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String
       company.Region = dataMap.get("Region").get(i % dataMap.get("Region").size()) as String
 
@@ -56,11 +56,10 @@ class Generator {
         }
         coPolicies.put(policyType, new BigDecimal(5000 + rand.nextInt(999500)))
       }
-      company.Policies = coPolicies
+      company.Policies = coPolicies.toString()
       company.save()
 
     }
-    print(dataSet.Count)
 
   }
 }
