@@ -11,7 +11,6 @@ uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
-uses view.JobDrillDown
 
 abstract class Job implements Runnable {
 
@@ -96,12 +95,25 @@ abstract class Job implements Runnable {
     checkBounds()
   }
 
-  property get IsCancelled() : boolean {
-    return jobInfo['isCancelled'] as Boolean
+  static property set Cancel(UUID : String) {
+    for (job in Active) {
+      if (job.UUId.toString() == UUID) {
+        job.IsCancelled = true
+        break
+      }
+    }
+    // Get the worker working on the job. Then tell it to stop.
+    var IdOfWorkerToCancel = JobWorkerTracker.Get(UUID)
+    // How do you get worker by workerID? There is no "getworker"
+    /*worker.end(true)*/
   }
 
   property set IsCancelled(status : boolean) {
     jobInfo['isCancelled'] = status
+  }
+
+  property get IsCancelled() : boolean {
+    return jobInfo['isCancelled'] as Boolean
   }
 
   property get ElapsedTime() : String {
