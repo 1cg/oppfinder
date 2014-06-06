@@ -95,6 +95,14 @@ abstract class Job implements Runnable {
     dataStore.update(id, jobInfo)
   }
 
+  property get IsCancelled() : boolean {
+    return jobInfo['isCancelled'] as Boolean
+  }
+
+  property set IsCancelled(status : boolean) {
+    jobInfo['isCancelled'] = status
+  }
+
   property get ElapsedTime() : String {
     return (((this.EndTime ?: System.nanoTime()) - this.StartTime) / 1000000000) as String + " Seconds"
   }
