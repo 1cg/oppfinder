@@ -16,6 +16,9 @@ class TestJob extends Job implements Runnable {
     super()
   }
   override function run() {
+    if (IsCancelled) {
+      return
+    }
     var dataSet = new DataSet("foo")
     var a = new Analysis()
     var iterations = 30
@@ -25,6 +28,9 @@ class TestJob extends Job implements Runnable {
       a.analyzeDataSet(dataSet)
       Thread.sleep(1 * 1000)
       this.Progress = (i * 100)/iterations
+      if (IsCancelled) {
+        return
+      }
     }
     this.Progress = 100
     print("Test Job Complete")

@@ -19,7 +19,7 @@ class JobController implements IHasRequestContext {
     return "Click Display Data to view company information."
   }
   static function cancelJob(UUID : String) : String{
-    Job.Cancel = UUID
+    Job.cancel(UUID)
     return "Job Cancelled"
   }
 }
