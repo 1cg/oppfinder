@@ -5,5 +5,9 @@
     <strong>Oops! </strong> This doesn't appear to be a valid job id
   </div>
 <% return } %>
-${JobTable.renderToString({job}, "Job info for job: "  + job.UUId, "complete")}
+<h1>Specific job details: (${job.UUId})</h1>
+<br>
+<h3>Job Id: <span class="label label-default">${job.UUId}</span></h3>
+<h3>Job Type: <span class="label label-default">${job.Type}</span></h3>
+<h3>Elapsed Time: <span class="label label-default">${job.ElapsedTime}</span></h3>
 ${job.renderToString()}

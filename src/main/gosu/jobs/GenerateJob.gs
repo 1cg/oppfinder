@@ -73,7 +73,7 @@ class GenerateJob extends Job implements Runnable {
   }
 
   override function renderToString() : String {
-    return "Placeholder"
+    return view.GenerateJob.renderToString(this)
   }
 
 }
