@@ -5,7 +5,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://s3.amazonaws.com/intercoolerjs.org/release/intercooler-0.3.2.min.js"></script>
-      <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <style>
       body {
         margin-top:50px;
@@ -29,10 +29,10 @@
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/">Currently Running</a>
+              <a href="/jobs/running">Currently Running</a>
             </li>
             <li>
-              <a href="/">Completed</a>
+              <a href="/jobs/complete">Completed</a>
             </li>
           </ul>
 

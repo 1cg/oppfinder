@@ -24,7 +24,7 @@ class TestJob extends Job implements Runnable {
       print("Test Job On Iteration ${i}")
       a.analyzeDataSet(dataSet)
       Thread.sleep(1 * 1000)
-      this.Progress = i/iterations * 100
+      this.Progress = (i * 100)/iterations
     }
     this.Progress = 100
     print("Test Job Complete")
