@@ -72,7 +72,8 @@ class GenerateJob extends Job implements Runnable {
     this.Progress = 100
   }
 
-
-
+  override function renderToString() : String {
+    return view.GenerateJob.renderToString(this)
+  }
 
 }

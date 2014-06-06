@@ -1,7 +1,5 @@
-<h2>The table of generated data to be analyzed is displayed below.</h2><br>
-<a class="btn btn-lg btn-primary" href="/">
-  <strong>Go Back</strong>
-</a>
+<%@ params(genJob: jobs.GenerateJob) %>
+<h3>Number of generated entries: <span class="label label-default">${model.DataSetEntry.All.size()}</span></h3>
 <table class="table">
   <thead>
     <tr>

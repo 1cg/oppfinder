@@ -11,7 +11,6 @@ uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
-uses model.JobWorkerTracker
 
 abstract class Job implements Runnable {
 
@@ -92,8 +91,8 @@ abstract class Job implements Runnable {
 
   property set Progress(progress : int) {
     jobInfo['Progress'] = progress
-    checkBounds()
     dataStore.update(id, jobInfo)
+    checkBounds()
   }
 
   static property set Cancel(UUID : String) {
@@ -138,8 +137,12 @@ abstract class Job implements Runnable {
   }
 
   static function newUp(job : Map<Object, Object>) : jobs.Job {
-    if (job.get('Type') as String == 'TestJob') {
+    if (job == null) {
+      return null
+    } else if (job['Type'] as String == 'jobs.TestJob') {
       return new TestJob(job)
+    } else if (job['Type'] as String == 'jobs.GenerateJob') {
+      return new GenerateJob(job)
     }
     return new TestJob(job)
   }
@@ -163,5 +166,11 @@ abstract class Job implements Runnable {
     }
     return jobs.map(\ j -> newUp(j))
   }
+
+  static function renderToString(uuid : String) : String {
+    return JobDrillDown.renderToString(newUp(dataStore.findOne({'UUId' -> uuid})))
+  }
+
+  abstract function renderToString() : String
 
 }

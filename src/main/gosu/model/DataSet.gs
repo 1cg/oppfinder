@@ -27,7 +27,7 @@ class DataSet {
   }
 
   function findOne(ref : Map<Object, Object>) : Map<Object, Object> {
-    return _collection.findOne(new BasicDBObject(ref)).toMap()
+    return _collection.findOne(new BasicDBObject(ref))?.toMap()
   }
 
   function insert(o : Map<Object, Object>) : WriteResult {

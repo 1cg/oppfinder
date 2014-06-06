@@ -30,4 +30,8 @@ class TestJob extends Job implements Runnable {
     print("Test Job Complete")
   }
 
+  override function renderToString() : String {
+    return view.TestJob.renderToString()
+  }
+
 }
