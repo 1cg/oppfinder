@@ -44,7 +44,7 @@ class GenerateJob extends Job implements Runnable {
     }
 
     // Replace or create new Mongo Collection loaded with this data
-
+    this.Progress = 50
     var dataSet = new DataSet("oppFinder")
     dataSet.drop()
     for (name in dataMap.get("Company") index i) {
@@ -69,6 +69,7 @@ class GenerateJob extends Job implements Runnable {
       company.Policies = coPoliciesString
       company.save()
     }
+    this.Progress = 100
   }
 
 

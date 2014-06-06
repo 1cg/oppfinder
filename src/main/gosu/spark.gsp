@@ -13,3 +13,5 @@ get('/jobs/:id/percent_done', \-> view.Root.renderToString() )
 
 post('/jobs/test', \-> controller.JobController.startTestJob() )
 post('/generate', \-> controller.JobController.startGenerateJob() )
+
+post('/jobs/:id/cancel', \-> controller.JobController.cancelJob() )
