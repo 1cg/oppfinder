@@ -13,5 +13,6 @@ get('/jobs/:id/percent_done', \-> jobs.Job.getUUIDProgress(Params['id']))
 /* Start Jobs */
 post('/jobs/test', \-> controller.JobController.startTestJob())
 post('/jobs/generate', \-> controller.JobController.startGenerateJob())
+post('/jobs/:id/cancel', \-> controller.JobController.cancelJob(Params['id']))
 
 get('/companies', \-> view.Companies.renderToString() )

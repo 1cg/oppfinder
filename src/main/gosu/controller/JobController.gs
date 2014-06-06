@@ -18,13 +18,8 @@ class JobController implements IHasRequestContext {
     new GenerateJob().start()
     return "Click Display Data to view company information."
   }
-  static function cancelJob(id : UUID) : String{
-    for (job in Job.Active) {
-      if (job.UUId == id) {
-
-        break
-      }
-    }
+  static function cancelJob(UUID : String) : String{
+    Job.Cancel = UUID
     return "Job Cancelled"
   }
 }
