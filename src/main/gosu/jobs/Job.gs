@@ -85,6 +85,10 @@ abstract class Job implements Runnable {
     return dataStore.findOne(id)['Progress'] as Integer
   }
 
+  static function getUUIDProgress(UUID : String) : Long {
+    return dataStore.findOne({'UUId' -> UUID})['Progress'] as Long
+  }
+
   property set Progress(progress : int) {
     jobInfo['Progress'] = progress
     checkBounds()

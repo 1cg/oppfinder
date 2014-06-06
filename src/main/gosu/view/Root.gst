@@ -5,7 +5,7 @@
 <p>Would you like to begin a new analysis?</p>
 
 
-<button ic-post-to="/generate" ic-target="#generateFeedback" class="btn btn-lg btn-primary">
+<button ic-post-to="/jobs/generate" ic-target="#generateFeedback" class="btn btn-lg btn-primary">
   <strong>Generate Data</strong>
 </button>
 
