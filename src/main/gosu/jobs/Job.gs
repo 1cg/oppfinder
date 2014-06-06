@@ -11,6 +11,8 @@ uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
+uses model.JobWorkerTracker
+uses view.JobDrillDown
 
 abstract class Job implements Runnable {
 
@@ -95,7 +97,7 @@ abstract class Job implements Runnable {
     checkBounds()
   }
 
-  static property set Cancel(UUID : String) {
+  static function cancel(UUID : String) {
     for (job in Active) {
       if (job.UUId.toString() == UUID) {
         job.IsCancelled = true
@@ -110,6 +112,7 @@ abstract class Job implements Runnable {
 
   property set IsCancelled(status : boolean) {
     jobInfo['isCancelled'] = status
+    dataStore.update(id, jobInfo)
   }
 
   property get IsCancelled() : boolean {

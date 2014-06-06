@@ -46,7 +46,7 @@
       </td>
     <% if (job.Progress < 100) { %>
       <td>
-        <p><a href="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;</b></a></p>
+        <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;</b></button>
       </td>
    <% } }
 } %>

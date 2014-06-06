@@ -1,9 +1,6 @@
 package model
 
 uses net.greghaines.jesque.worker.*
-uses java.util.Map
-uses java.util.concurrent.ConcurrentHashMap
-uses redis.clients.jedis.Jedis
 uses redis.clients.jedis.JedisPool
 uses redis.clients.jedis.JedisPoolConfig
 uses java.lang.Exception
@@ -11,7 +8,7 @@ uses net.greghaines.jesque.Job
 uses redis.clients.jedis.JedisMonitor
 
 class JobWorkerTracker implements WorkerListener {
-  static var pool : JedisPool = new JedisPool(new JedisPoolConfig(), "localhost")
+  static var pool = new JedisPool(new JedisPoolConfig(), "localhost")
 
   construct() {
   }
@@ -40,7 +37,7 @@ class JobWorkerTracker implements WorkerListener {
     var jedis = pool.getResource()
     if (jedis.scard("WorkerSet") < 1) {
       jedis.monitor(new JedisMonitor() {
-        function onCommand(command : String) {
+        override function onCommand(command : String) {
     //      if (command == "")
         }
       })
