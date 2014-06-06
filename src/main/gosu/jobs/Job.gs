@@ -107,6 +107,7 @@ abstract class Job implements Runnable {
 
   property set IsCancelled(status : boolean) {
     jobInfo['isCancelled'] = status
+    dataStore.update(id, jobInfo)
   }
 
   property get IsCancelled() : boolean {

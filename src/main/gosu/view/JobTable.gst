@@ -38,13 +38,17 @@
         ${job.ElapsedTime}
       </td>
       <td>
-      <div class="progress progress-striped active">
-        <div class="progress-bar"  role="progressbar" aria-valuenow="${job.Progress}" aria-valuemin="0" aria-valuemax="100" style="width: ${job.Progress}%">
-          <span class="sr-only">${job.Progress}% Complete</span>
+        <div class="progress progress-striped active">
+          <div class="progress-bar"  role="progressbar" aria-valuenow="${job.Progress}" aria-valuemin="0" aria-valuemax="100" style="width: ${job.Progress}%">
+            <span class="sr-only">${job.Progress}% Complete</span>
+          </div>
         </div>
-      </div>
       </td>
-    <% }
+    <% if (job.Progress < 100) { %>
+      <td>
+        <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;</b></button>
+      </td>
+   <% } }
 } %>
   </tbody>
 </table>

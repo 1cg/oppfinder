@@ -1,5 +1,6 @@
 <%@ params( job: jobs.Job) %>
 <% if (job == null) { %>
+  <br><br>
   <div class="alert alert-danger alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>Oops! </strong> This doesn't appear to be a valid job id

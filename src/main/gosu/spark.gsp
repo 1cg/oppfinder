@@ -12,6 +12,7 @@ get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 /* Start Jobs */
 post('/jobs/test', \-> controller.JobController.startTestJob())
 post('/jobs/generate', \-> controller.JobController.startGenerateJob())
-post('/jobs/:id/cancel', \-> controller.JobController.cancelJob(Params['id']))
+post('/jobs/:id/cancel', \-> jobs.Job.cancel(Params['id']))
 
 get('/companies', \-> view.Companies.renderToString() )
+get("*", \-> view.BadPath.renderToString())
