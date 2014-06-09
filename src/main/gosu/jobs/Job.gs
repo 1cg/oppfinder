@@ -50,7 +50,6 @@ abstract class Job implements Runnable {
   }
 
   property set Type(type : String) {
-    jobInfo = dataStore.findOne(id)
     jobInfo['Type'] = type
     dataStore.update(id,jobInfo)
   }
@@ -60,7 +59,6 @@ abstract class Job implements Runnable {
   }
 
   property set StartTime(time : Long) {
-    jobInfo = dataStore.findOne(id)
     jobInfo['StartTime'] = time
     dataStore.update(id,jobInfo)
   }
@@ -71,7 +69,6 @@ abstract class Job implements Runnable {
   }
 
   property set EndTime(time : Long) {
-    jobInfo = dataStore.findOne(id)
     jobInfo['EndTime'] = time
     dataStore.update(id,jobInfo)
   }
@@ -95,7 +92,6 @@ abstract class Job implements Runnable {
   }
 
   property set Progress(progress : int) {
-    jobInfo = dataStore.findOne(id)
     jobInfo['Progress'] = progress
     dataStore.update(id, jobInfo)
     checkBounds()

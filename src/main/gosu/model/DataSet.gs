@@ -54,8 +54,14 @@ class DataSet {
     return _collection.save(new BasicDBObject(o))
   }
 
-  function update(q : Map<Object, Object>, o : Map<Object, Object>) : WriteResult {
-    return _collection.update(new BasicDBObject(q), new BasicDBObject(o))
+  function update(q : Map<Object, Object>, o : Map<Object, Object>) {
+    var current = _collection.findOne(q)
+    if (current != null) {
+      current.putAll(new BasicDBObject(o))
+    } else {
+      current = new BasicDBObject(o)
+    }
+    _collection.update(new BasicDBObject(q), current)
   }
 
 
