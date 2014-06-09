@@ -12,7 +12,6 @@ class JobController implements IHasRequestContext {
     return "Job Started!!!"
   }
   static function startGenerateJob() : String{
-//    Generator.generate()
     new GenerateJob().start()
     return "Click Display Data to view company information."
   }

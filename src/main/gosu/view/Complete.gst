@@ -1,1 +1,1 @@
-${JobTable.renderToString(jobs.Job.Complete, "Completed Jobs", "complete")}
+${JobTable.renderToString(jobs.Job.CompleteJobs, "Completed Jobs", "complete")}

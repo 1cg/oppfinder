@@ -33,7 +33,7 @@
     </tr>
   </thead>
   <tbody>
-    <% for(job in jobs.Job.Active) { %>
+    <% for(job in jobs.Job.ActiveJobs) { %>
     <tr>
       <td>
         ${job.UUId}
