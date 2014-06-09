@@ -1,0 +1,1 @@
+${JobTable.renderToString(jobs.Job.CancelledJobs, "Cancelled Jobs", "cancelled")}

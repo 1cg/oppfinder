@@ -21,6 +21,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
@@ -33,6 +34,9 @@
             </li>
             <li>
               <a href="/jobs/complete">Completed</a>
+            </li>
+            <li>
+              <a href="/jobs/cancelled">Cancelled</a>
             </li>
           </ul>
 

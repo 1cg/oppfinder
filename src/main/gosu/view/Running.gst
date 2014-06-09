@@ -1,1 +1,1 @@
- ${JobTable.renderToString(jobs.Job.Active, "Currently Running Jobs", "running")}
+ ${JobTable.renderToString(jobs.Job.ActiveJobs, "Currently Running Jobs", "running")}

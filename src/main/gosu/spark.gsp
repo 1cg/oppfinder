@@ -6,6 +6,7 @@ Layout = view.Layout
 get('/', \-> view.Root.renderToString() )
 get('/jobs/running', \-> view.Running.renderToString())
 get('/jobs/complete', \-> view.Complete.renderToString())
+get('/jobs/cancelled', \-> view.Cancelled.renderToString())
 get('/jobs/:id/percent_done', \-> jobs.Job.getUUIDProgress(Params['id']))
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 

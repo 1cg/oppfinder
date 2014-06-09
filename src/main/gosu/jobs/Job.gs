@@ -16,7 +16,7 @@ uses view.JobDrillDown
 
 abstract class Job implements Runnable {
 
-  static final var MAX_PROGRESS = 100
+  static final var MAX_PROGRESS_VALUE = 100
   static var dataStore = new DataSet('jobs')
   var id : Map<Object, Object>
   var jobInfo : Map<Object, Object>
@@ -115,7 +115,7 @@ abstract class Job implements Runnable {
   }
 
   static function cancel(UUID : String) {
-    for (job in Active) {
+    for (job in ActiveJobs) {
       if (job.UUId.toString() == UUID) {
         job.Cancelled = true
         break
@@ -124,6 +124,7 @@ abstract class Job implements Runnable {
   }
 
   property set Cancelled(status : boolean) {
+    EndTime = System.nanoTime()
     jobInfo = dataStore.findOne(id)
     if (status) this.Progress = -1
     else this.Progress = 0 // this happens when we reset
@@ -149,7 +150,7 @@ abstract class Job implements Runnable {
   function checkBounds() {
     if (this.Progress == 0) {
       this.StartTime =  System.nanoTime()
-    } else if (this.Progress == MAX_PROGRESS) {
+    } else if (this.Progress == MAX_PROGRESS_VALUE) {
       this.EndTime = System.nanoTime()
     }
   }
@@ -170,24 +171,27 @@ abstract class Job implements Runnable {
     return new TestJob(job)
   }
 
-  static property get Active() : List<jobs.Job> {
+  /*
+  * Depending on how bloated the jobs collection gets, we might consider adding a field that
+  * indicates an active job so that this O(n) filtering doesn't have to happen
+   */
+  static property get ActiveJobs() : List<jobs.Job> {
     var jobs = dataStore.find()
     for (job in jobs.copy()) {
-      if ((job.get('Progress') as Integer) >= MAX_PROGRESS) {
+      if ((job.get('Progress') as Integer) == MAX_PROGRESS_VALUE
+           || (job.get('Cancelled') as Boolean) == true) {
         jobs.remove(job)
       }
     }
     return jobs.map(\ j -> newUp(j))
   }
 
-  static property get Complete() : List<jobs.Job> {
-    var jobs = dataStore.find()
-    for (job in jobs.copy()) {
-      if ((job.get('Progress') as Integer) < MAX_PROGRESS) {
-        jobs.remove(job)
-      }
-    }
-    return jobs.map(\ j -> newUp(j))
+  static property get CompleteJobs() : List<jobs.Job> {
+    return dataStore.find({'Progress' -> MAX_PROGRESS_VALUE}).map(\ j -> newUp(j))
+  }
+
+  static property get CancelledJobs() : List<jobs.Job> {
+    return dataStore.find({"Cancelled" -> true}).map(\ j -> newUp(j))
   }
 
   static function renderToString(uuid : String) : String {
