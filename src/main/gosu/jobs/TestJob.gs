@@ -20,7 +20,7 @@ class TestJob extends Job implements Runnable {
     if (this.Cancelled) return
     var dataSet = new DataSet("foo")
     var a = new Analysis()
-    var iterations = 90
+    var iterations = 30
     for(var i in 1..iterations) {
       if (this.Cancelled) return
       dataSet.insert(new HashMap())
@@ -32,6 +32,8 @@ class TestJob extends Job implements Runnable {
     this.Progress = 100
     print("Test Job Complete")
   }
+
+  override function reset() {}
 
   override function renderToString() : String {
     return view.TestJob.renderToString()

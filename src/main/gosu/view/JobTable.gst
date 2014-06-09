@@ -1,4 +1,4 @@
-<%@ params(jobs: List<jobs.Job>, header : String, type : String) %>
+<%@ params(jobs: java.util.Iterator<jobs.Job>, header : String, type : String) %>
 <div class="page-header">
   <h1>${header}</h1>
 </div>
@@ -20,7 +20,7 @@
     </tr>
   </thead>
   <tbody>
-    <% if (jobs.size() == 0) { %>
+    <% if (!jobs.hasNext()) { %>
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Attention: </strong> There are currently no ${type} jobs in the database

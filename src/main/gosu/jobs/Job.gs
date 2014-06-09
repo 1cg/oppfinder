@@ -12,7 +12,9 @@ uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
+uses java.util.Iterator
 uses view.JobDrillDown
+uses model.TransformationIterator
 
 abstract class Job implements Runnable {
 
@@ -42,20 +44,16 @@ abstract class Job implements Runnable {
   }
 
   static function reset(UUID : String) {
-    // set up start time
-    // set up end time
-    // update progress
-    // perhaps abstract class to be implemented by the job for
-    for (job in CancelledJobs) {
-      if (job.UUId.toString() == UUID) {
-        job.Cancelled = false
-        job.Progress = 0
-        job.EndTime = null
-        job.start()
-        break
-      }
-    }
+    var job = newUp(dataStore.findOne({'UUId' -> UUID}))
+    job.Cancelled = false
+    job.Progress = 0
+    job.EndTime = null
+    job.reset()
+    job.start()
   }
+
+  abstract function reset()
+
   property get Type() : String {
     return (this.IntrinsicType.Name)
   }
@@ -103,12 +101,7 @@ abstract class Job implements Runnable {
   }
 
   static function cancel(UUID : String) {
-    for (job in ActiveJobs) {
-      if (job.UUId.toString() == UUID) {
-        job.Cancelled = true
-        break
-      }
-    }
+    newUp(dataStore.findOne({'UUId' -> UUID})).Cancelled = true
   }
 
   property set Cancelled(status : boolean) {
@@ -170,23 +163,25 @@ abstract class Job implements Runnable {
   * Depending on how bloated the jobs collection gets, we might consider adding a field that
   * indicates an active job so that this O(n) filtering doesn't have to happen
    */
-  static property get ActiveJobs() : List<jobs.Job> {
-    var jobs = dataStore.find()
-    for (job in jobs.copy()) {
-      if ((job.get('Progress') as Integer) == MAX_PROGRESS_VALUE
-           || (job.get('Cancelled') as Boolean) == true) {
-        jobs.remove(job)
+  static property get ActiveJobs() : Iterator<jobs.Job> {
+    var active = new java.util.ArrayList<jobs.Job>()
+    for (job in dataStore.find()) {
+      if (((job.get('Progress') as Integer) < MAX_PROGRESS_VALUE)
+           && ((job.get('Cancelled') as Boolean) ?: false) == false) {
+        active.add(newUp(job))
       }
     }
-    return jobs.map(\ j -> newUp(j))
+    return active.iterator()
   }
 
-  static property get CompleteJobs() : List<jobs.Job> {
-    return dataStore.find({'Progress' -> MAX_PROGRESS_VALUE}).map(\ j -> newUp(j))
+  static property get CompleteJobs() : Iterator<jobs.Job> {
+    return new TransformationIterator<Map<Object,Object>,jobs.Job>(
+        dataStore.find({'Progress' -> MAX_PROGRESS_VALUE}), \ m -> newUp(m))
   }
 
-  static property get CancelledJobs() : List<jobs.Job> {
-    return dataStore.find({"Cancelled" -> true}).map(\ j -> newUp(j))
+  static property get CancelledJobs() : Iterator<jobs.Job> {
+    return new TransformationIterator<Map<Object,Object>,jobs.Job>(
+        dataStore.find({"Cancelled" -> true}), \ m -> newUp(m))
   }
 
   static function renderToString(uuid : String) : String {
