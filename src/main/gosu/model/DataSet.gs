@@ -64,14 +64,6 @@ class DataSet {
     _collection.update(new BasicDBObject(q), current)
   }
 
-  function remove(q : Map<Object, Object>, key : String) {
-    var current = _collection.findOne(q)
-    if (current != null) {
-      current.removeField(key)
-      _collection.update(new BasicDBObject(q),current)
-    }
-  }
-
   function drop() {
     _collection.drop()
   }
