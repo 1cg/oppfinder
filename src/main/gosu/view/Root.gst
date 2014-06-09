@@ -6,6 +6,7 @@
 
 <span class="btn btn-file">Upload Data<input type="file" /></span>
 
+
 <button ic-post-to="/jobs/generate" ic-target="#generateFeedback" class="btn btn-lg btn-primary">
   <strong>Generate Data</strong>
 </button>
