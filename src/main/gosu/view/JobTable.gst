@@ -50,7 +50,7 @@
       </td>
    <% } if (job.Cancelled) { %>
       <td>
-        <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-danger btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Reset&nbsp;&nbsp;&nbsp;</b></button>
+        <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Reset&nbsp;&nbsp;&nbsp;</b></button>
       </td>
    <% } }
 } %>
