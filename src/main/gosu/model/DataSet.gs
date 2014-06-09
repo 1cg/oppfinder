@@ -55,7 +55,7 @@ class DataSet {
   }
 
   function update(q : Map<Object, Object>, o : Map<Object, Object>) {
-    var current = _collection.findOne(q)
+    var current = _collection.findOne(new BasicDBObject(q))
     if (current != null) {
       current.putAll(new BasicDBObject(o))
     } else {

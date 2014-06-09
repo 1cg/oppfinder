@@ -19,17 +19,14 @@ abstract class Job implements Runnable {
   static final var MAX_PROGRESS_VALUE = 100
   static var dataStore = new DataSet('jobs')
   var id : Map<Object, Object>
-  var jobInfo : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {
     if (data == null) {return}
     id = new HashMap<Object,Object>()
     id['UUId'] = data['UUId']
-    this.jobInfo = data
   }
 
   construct() {
-    jobInfo = new HashMap<Object, Object>()
     id = new HashMap<Object, Object>()
     this.UUId = UUID.randomUUID().toString()
     this.Progress = 0
@@ -38,8 +35,7 @@ abstract class Job implements Runnable {
 
   function start() {
     var config = new ConfigBuilder().build()
-    var args = {jobInfo}
-    var testJob = new Job(this.IntrinsicType.Name,args)
+    var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
     var client = new ClientImpl(config)
     client.enqueue('main', testJob)
     client.end()
@@ -61,12 +57,11 @@ abstract class Job implements Runnable {
     }
   }
   property get Type() : String {
-    return (jobInfo['Type'] as String)
+    return (this.IntrinsicType.Name)
   }
 
   property set Type(type : String) {
-    jobInfo['Type'] = type
-    dataStore.update(id,jobInfo)
+    dataStore.update(id,{'Type' -> type})
   }
 
   property get StartTime() : Long {
@@ -74,8 +69,7 @@ abstract class Job implements Runnable {
   }
 
   property set StartTime(time : Long) {
-    jobInfo['StartTime'] = time
-    dataStore.update(id,jobInfo)
+    dataStore.update(id,{'StartTime' -> time})
   }
 
   property get EndTime() : Long {
@@ -83,8 +77,7 @@ abstract class Job implements Runnable {
   }
 
   property set EndTime(time : Long) {
-    jobInfo['EndTime'] = time
-    dataStore.update(id,jobInfo)
+    dataStore.update(id,{'EndTime' -> time})
   }
 
   property get UUId() : String {
@@ -92,23 +85,21 @@ abstract class Job implements Runnable {
   }
 
   property set UUId(newUUId : String) {
-    jobInfo['UUId'] = newUUId
     id['UUId'] = newUUId
     dataStore.save(id)
   }
 
   property get Progress() : int {
-    return dataStore.findOne(id)['Progress'] as Integer
+    return dataStore.findOne(id)?.get('Progress') as Integer ?: 0
+  }
+
+  property set Progress(progress : int) {
+    dataStore.update(id, {'Progress' -> progress})
+    checkBounds()
   }
 
   static function getUUIDProgress(UUID : String) : Long {
     return dataStore.findOne({'UUId' -> UUID})['Progress'] as Long
-  }
-
-  property set Progress(progress : int) {
-    jobInfo['Progress'] = progress
-    dataStore.update(id, jobInfo)
-    checkBounds()
   }
 
   static function cancel(UUID : String) {
@@ -122,9 +113,7 @@ abstract class Job implements Runnable {
 
   property set Cancelled(status : boolean) {
     EndTime = System.nanoTime()
-    jobInfo = dataStore.findOne(id)
-    jobInfo['Cancelled'] = status
-    dataStore.update(id, jobInfo)
+    dataStore.update(id, {'Cancelled' -> status})
   }
 
   property get Cancelled() : boolean {
@@ -155,9 +144,7 @@ abstract class Job implements Runnable {
   * If we are either at the start or the end of the job, log the status
    */
   function checkBounds() {
-    print("checking bounds")
     if (this.Progress == 0) {
-      print("setting start time")
       this.StartTime =  System.nanoTime()
     } else if (this.Progress == MAX_PROGRESS_VALUE) {
       this.EndTime = System.nanoTime()
@@ -165,8 +152,7 @@ abstract class Job implements Runnable {
   }
 
   function displayState(state : String) {
-    jobInfo['State'] = state
-    dataStore.update(id, jobInfo)
+    dataStore.update(id, {'State' -> state})
   }
 
   static function newUp(job : Map<Object, Object>) : jobs.Job {
