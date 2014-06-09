@@ -1,5 +1,4 @@
 <%@ params(genJob: jobs.GenerateJob) %>
-<h3>Number of generated entries: <span class="label label-default">${model.DataSetEntry.All.size()}</span></h3>
 <table class="table">
   <thead>
     <tr>

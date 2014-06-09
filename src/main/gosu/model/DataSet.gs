@@ -2,6 +2,7 @@ package model
 
 uses com.mongodb.*
 uses java.util.Map
+uses java.util.Iterator
 
 class DataSet {
 
@@ -11,19 +12,17 @@ class DataSet {
     _collection = Database.getCollection(collectionName)
   }
 
-  function find(ref : Map<Object, Object>) : List<Map<Object, Object>> {
-     return _collection.find(new BasicDBObject(ref))
-                       .toArray().map(\ o -> o.toMap())
+  function find(ref : Map<Object, Object>) : Iterator<Map<Object,Object>> {
+     return new TransformationIterator<DBObject, Map<Object,Object>>(_collection.find(new BasicDBObject(ref)).iterator(), \ o -> o.toMap())
   }
 
-  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : List<Map<Object, Object>> {
-    return _collection.find(new BasicDBObject(ref),new BasicDBObject(keys))
-        .toArray().map(\ o -> o.toMap())
+  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : Iterator<Map<Object,Object>> {
+    return new TransformationIterator<DBObject, Map<Object,Object>>(_collection.find(new BasicDBObject(ref),new BasicDBObject(keys)), \ o -> o.toMap())
+
   }
 
-  function find() : List<Map<Object, Object>> {
-    return _collection.find()
-        .toArray().map(\ o -> o.toMap())
+  function find() : Iterator<Map<Object,Object>> {
+    return new TransformationIterator<DBObject, Map<Object,Object>>(_collection.find(), \ o -> o.toMap())
   }
 
   function findOne(ref : Map<Object, Object>) : Map<Object, Object> {
@@ -34,7 +33,7 @@ class DataSet {
     return _collection.insert( new BasicDBObject(o), new WriteConcern())
   }
 
-  function insert(objects : List<Map<Object, Object>>) :WriteResult {
+  function insert(objects : List<Map<Object, Object>>) : WriteResult {
     return _collection.insert(objects.map(\ o -> new BasicDBObject(o)))
   }
 
