@@ -50,9 +50,11 @@ abstract class Job implements Runnable {
     // set up end time
     // update progress
     // perhaps abstract class to be implemented by the job for
-    for (job in Active) {
+    for (job in CancelledJobs) {
       if (job.UUId.toString() == UUID) {
         job.Cancelled = false
+        job.Progress = 0
+//        job.checkBounds()
         job.start()
         break
       }
@@ -126,8 +128,6 @@ abstract class Job implements Runnable {
   property set Cancelled(status : boolean) {
     EndTime = System.nanoTime()
     jobInfo = dataStore.findOne(id)
-    if (status) this.Progress = -1
-    else this.Progress = 0 // this happens when we reset
     jobInfo['Cancelled'] = status
     dataStore.update(id, jobInfo)
   }
@@ -148,7 +148,9 @@ abstract class Job implements Runnable {
   * If we are either at the start or the end of the job, log the status
    */
   function checkBounds() {
+    print("checking bounds")
     if (this.Progress == 0) {
+      print("setting start time")
       this.StartTime =  System.nanoTime()
     } else if (this.Progress == MAX_PROGRESS_VALUE) {
       this.EndTime = System.nanoTime()
