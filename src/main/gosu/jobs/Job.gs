@@ -125,7 +125,19 @@ abstract class Job implements Runnable {
   }
 
   property get ElapsedTime() : String {
-    return (((this.EndTime ?: System.nanoTime()) - this.StartTime) / 1000000000) as String + " Seconds"
+    var totalSeconds = (((this.EndTime ?: System.nanoTime()) - this.StartTime) / 1000000000)
+    var returnString = ""
+    if (totalSeconds > 3600) {
+      var hours = totalSeconds / 3600
+      returnString += hours + " Hours "
+      totalSeconds -= hours*3600
+    }
+    if (totalSeconds > 60) {
+      var minutes = totalSeconds / 60
+      returnString += minutes + " Minutes "
+      totalSeconds -= minutes*60
+    }
+    return returnString + totalSeconds + " Seconds"
   }
 
   /*
