@@ -11,6 +11,7 @@ uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
+uses java.lang.Thread
 uses model.JobWorkerTracker
 uses view.JobDrillDown
 
@@ -50,6 +51,7 @@ abstract class Job implements Runnable {
   }
 
   property set Type(type : String) {
+    jobInfo = dataStore.findOne(id)
     jobInfo['Type'] = type
     dataStore.update(id,jobInfo)
   }
@@ -59,6 +61,7 @@ abstract class Job implements Runnable {
   }
 
   property set StartTime(time : Long) {
+    jobInfo = dataStore.findOne(id)
     jobInfo['StartTime'] = time
     dataStore.update(id,jobInfo)
   }
@@ -69,6 +72,7 @@ abstract class Job implements Runnable {
   }
 
   property set EndTime(time : Long) {
+    jobInfo = dataStore.findOne(id)
     jobInfo['EndTime'] = time
     dataStore.update(id,jobInfo)
   }
@@ -92,6 +96,7 @@ abstract class Job implements Runnable {
   }
 
   property set Progress(progress : int) {
+    jobInfo = dataStore.findOne(id)
     jobInfo['Progress'] = progress
     dataStore.update(id, jobInfo)
     checkBounds()
@@ -100,7 +105,7 @@ abstract class Job implements Runnable {
   static function cancel(UUID : String) {
     for (job in Active) {
       if (job.UUId.toString() == UUID) {
-        job.IsCancelled = true
+        job.Cancelled = true
         break
       }
     }
@@ -110,13 +115,19 @@ abstract class Job implements Runnable {
     /*worker.end(true)*/
   }
 
-  property set IsCancelled(status : boolean) {
-    jobInfo['isCancelled'] = status
+  property set Cancelled(status : boolean) {
+    jobInfo = dataStore.findOne(id)
+    if (status) this.Progress = -1
+    jobInfo['Cancelled'] = status
     dataStore.update(id, jobInfo)
   }
 
-  property get IsCancelled() : boolean {
-    return jobInfo['isCancelled'] as Boolean
+  property get Cancelled() : boolean {
+    if (Thread.currentThread().isInterrupted()) {
+      this.Cancelled = true
+      return true
+    }
+    return dataStore.findOne(id)['Cancelled'] as Boolean ?: false
   }
 
   property get ElapsedTime() : String {

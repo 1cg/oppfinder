@@ -58,6 +58,7 @@ class DataSet {
     return _collection.update(new BasicDBObject(q), new BasicDBObject(o))
   }
 
+
   function drop() {
     _collection.drop()
   }

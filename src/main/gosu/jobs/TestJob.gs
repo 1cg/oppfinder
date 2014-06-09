@@ -15,11 +15,14 @@ class TestJob extends Job implements Runnable {
   construct() {
     super()
   }
+
   override function run() {
+    if (this.Cancelled) return
     var dataSet = new DataSet("foo")
     var a = new Analysis()
     var iterations = 30
     for(var i in 1..iterations) {
+      if (this.Cancelled) return
       dataSet.insert(new HashMap())
       print("Test Job On Iteration ${i}")
       a.analyzeDataSet(dataSet)
