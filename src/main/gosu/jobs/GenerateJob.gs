@@ -30,6 +30,9 @@ class GenerateJob extends Job implements Runnable {
   }
 
   override function run() {
+    if (IsCancelled) {
+      return
+    }
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
       var input = new FileReader("datagen/"+columnMap.get(column))
@@ -45,6 +48,9 @@ class GenerateJob extends Job implements Runnable {
 
     // Replace or create new Mongo Collection loaded with this data
     this.Progress = 50
+    if (IsCancelled) {
+      return
+    }
     var dataSet = new DataSet("oppFinder")
     dataSet.drop()
     for (name in dataMap.get("Company") index i) {
@@ -68,6 +74,9 @@ class GenerateJob extends Job implements Runnable {
       }
       company.Policies = coPoliciesString
       company.save()
+    }
+    if (IsCancelled) {
+      return
     }
     this.Progress = 100
   }

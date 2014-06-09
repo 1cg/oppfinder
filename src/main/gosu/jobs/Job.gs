@@ -12,7 +12,6 @@ uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
-uses model.JobWorkerTracker
 uses view.JobDrillDown
 
 abstract class Job implements Runnable {
