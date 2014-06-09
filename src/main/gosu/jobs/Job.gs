@@ -45,6 +45,19 @@ abstract class Job implements Runnable {
     client.end()
   }
 
+  static function reset(UUID : String) {
+    // set up start time
+    // set up end time
+    // update progress
+    // perhaps abstract class to be implemented by the job for
+    for (job in Active) {
+      if (job.UUId.toString() == UUID) {
+        job.Cancelled = false
+        job.start()
+        break
+      }
+    }
+  }
   property get Type() : String {
     return (jobInfo['Type'] as String)
   }
@@ -113,6 +126,7 @@ abstract class Job implements Runnable {
   property set Cancelled(status : boolean) {
     jobInfo = dataStore.findOne(id)
     if (status) this.Progress = -1
+    else this.Progress = 0 // this happens when we reset
     jobInfo['Cancelled'] = status
     dataStore.update(id, jobInfo)
   }

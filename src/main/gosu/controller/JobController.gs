@@ -20,4 +20,9 @@ class JobController implements IHasRequestContext {
     Job.cancel(UUID)
     return "Job Cancelled"
   }
+
+  static function resetJob(UUID : String) : String{
+    Job.reset(UUID)
+    return "Job Reset"
+  }
 }
