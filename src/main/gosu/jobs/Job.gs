@@ -45,6 +45,21 @@ abstract class Job implements Runnable {
     client.end()
   }
 
+  static function reset(UUID : String) {
+    // set up start time
+    // set up end time
+    // update progress
+    // perhaps abstract class to be implemented by the job for
+    for (job in CancelledJobs) {
+      if (job.UUId.toString() == UUID) {
+        job.Cancelled = false
+        job.Progress = 0
+        job.EndTime = null
+        job.start()
+        break
+      }
+    }
+  }
   property get Type() : String {
     return (jobInfo['Type'] as String)
   }
@@ -128,7 +143,9 @@ abstract class Job implements Runnable {
   * If we are either at the start or the end of the job, log the status
    */
   function checkBounds() {
+    print("checking bounds")
     if (this.Progress == 0) {
+      print("setting start time")
       this.StartTime =  System.nanoTime()
     } else if (this.Progress == MAX_PROGRESS_VALUE) {
       this.EndTime = System.nanoTime()
