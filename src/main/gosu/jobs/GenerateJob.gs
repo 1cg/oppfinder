@@ -30,7 +30,7 @@ class GenerateJob extends Job implements Runnable {
   }
 
   override function run() {
-    if (IsCancelled) {
+    if (Cancelled) {
       return
     }
     for (column in columnMap.Keys) {
@@ -48,7 +48,7 @@ class GenerateJob extends Job implements Runnable {
 
     // Replace or create new Mongo Collection loaded with this data
     this.Progress = 50
-    if (IsCancelled) {
+    if (Cancelled) {
       return
     }
     var dataSet = new DataSet("oppFinder")
@@ -75,7 +75,7 @@ class GenerateJob extends Job implements Runnable {
       company.Policies = coPoliciesString
       company.save()
     }
-    if (IsCancelled) {
+    if (Cancelled) {
       return
     }
     this.Progress = 100

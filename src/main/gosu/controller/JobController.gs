@@ -3,8 +3,6 @@ package controller
 uses sparkgs.util.IHasRequestContext
 uses jobs.TestJob
 uses jobs.GenerateJob
-uses datagen.Generator
-uses java.util.UUID
 uses jobs.Job
 
 class JobController implements IHasRequestContext {
