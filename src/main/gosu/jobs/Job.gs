@@ -55,7 +55,7 @@ abstract class Job implements Runnable {
   }
 
   property get StartTime() : Long {
-    return (jobInfo['StartTime'] as Long)
+    return dataStore.findOne(id)['StartTime'] as Long
   }
 
   property set StartTime(time : Long) {
@@ -64,8 +64,7 @@ abstract class Job implements Runnable {
   }
 
   property get EndTime() : Long {
-    var time = jobInfo['EndTime'] as Long
-    return time
+    return dataStore.findOne(id)['EndTime'] as Long
   }
 
   property set EndTime(time : Long) {
