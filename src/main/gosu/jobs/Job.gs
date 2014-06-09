@@ -54,7 +54,7 @@ abstract class Job implements Runnable {
       if (job.UUId.toString() == UUID) {
         job.Cancelled = false
         job.Progress = 0
-//        job.checkBounds()
+        job.EndTime = null
         job.start()
         break
       }
