@@ -1,4 +1,5 @@
-<%@ params(jobs: java.util.Iterator<jobs.Job>, header : String, type : String) %>
+<%@ params(jobs: java.util.Iterator<jobs.Job>, header : String, type : String, page : int)%>
+<% var pager = new model.Pager(jobs) %>
 <div class="page-header">
   <h1>${header}</h1>
 </div>
@@ -20,13 +21,19 @@
     </tr>
   </thead>
   <tbody>
-    <% if (!jobs.hasNext()) { %>
+    <%
+     if (!pager.validPage(page) && page == 1) { %>
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Attention: </strong> There are currently no ${type} jobs in the database
       </div>
-    <%  } else {
-    for(job in jobs) { %>
+    <%  } else if (!pager.validPage(page)) { %>
+      <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Attention: </strong> There are not this many ${type} jobs in the database; please go to an earlier page
+      </div>
+    <% } else {
+    for(job in pager.getPage(page)) { %>
     <tr>
       <td>
         <a href='/jobs/${job.UUId}/info'>${job.UUId}</a>
@@ -46,13 +53,26 @@
       </td>
     <% if (job.Progress < 100 && !job.Cancelled) { %>
       <td>
-        <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;</b></button>
+        <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>Cancel</b></button>
       </td>
    <% } if (job.Cancelled) { %>
       <td>
-        <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>&nbsp;&nbsp;&nbsp;Reset&nbsp;&nbsp;&nbsp;</b></button>
+        <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>Reset</b></button>
       </td>
    <% } }
 } %>
   </tbody>
 </table>
+<ul class="pagination navbar-right">
+  <li class=${pager.checkStatus(pager.Current -1)}>
+    <a href="/jobs/${type}/${pager.Current -1}">&laquo;</a>
+  </li>
+  <% for (i in -2..2) { %>
+  <li class=${pager.checkStatus(java.lang.Math.max(pager.Current + i, i + 3))}>
+    <a href="/jobs/${type}/${java.lang.Math.max(pager.Current +i, i + 3)}">${java.lang.Math.max(pager.Current + i,  i + 3)}</a>
+  </li>
+  <% } %>
+  <li class=${pager.checkStatus(pager.Current +1)}>
+    <a href="/jobs/${type}/${pager.Current +1}">&raquo;</a>
+  </li>
+</ul>

@@ -1,9 +1,5 @@
 package model
 
-uses java.util.Map
-uses java.math.BigDecimal
-
-
 class Company extends DataSetEntry {
 
   construct(dataSetName : String) {
@@ -38,11 +34,11 @@ class Company extends DataSetEntry {
     return get("Region") as String
   }
 
-  property set Policies(policies : /* Map<String, BigDecimal> */ String) {
+  property set Policies(policies : String) {
     put("Policies", policies)
   }
-  property get Policies() : /*Map<String, BigDecimal>*/ String {
-    return get("Policies") /*as Map<String, BigDecimal>*/as String
+  property get Policies() : String {
+    return get("Policies") as String
   }
 
   static property get CompanyDataTypes() : List<String> {
