@@ -96,8 +96,10 @@ abstract class Job implements Runnable {
     checkBounds()
   }
 
-  static function getUUIDProgress(UUID : String) : Long {
-    return dataStore.findOne({'UUId' -> UUID})['Progress'] as Long
+  static function getUUIDProgress(UUID : String) : String {
+    var prog = dataStore.findOne({'UUId' -> UUID})['Progress'] as String
+    prog += "%"
+    return prog
   }
 
   static function cancel(UUID : String) {
