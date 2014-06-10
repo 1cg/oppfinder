@@ -7,8 +7,14 @@ get('/', \-> view.Root.renderToString() )
 get('/jobs/running/:page', \-> view.Running.renderToString(Params['page'].toInt()))
 get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toInt()))
 get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toInt()))
-get('/jobs/:id/percent_done', \-> { Layout = null
-                                     return jobs.Job.getUUIDProgress(Params['id'])})
+get('/jobs/:id/percent_done', \-> {
+  Layout = null
+  return jobs.Job.getUUIDProgress(Params['id'])
+})
+get('/jobs/:id/elapsed_time', \-> {
+  Layout = null
+  return jobs.Job.getUUIDElapsedTime(Params['id'])
+})
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> { Layout = null
                     return view.JobTableBody.renderToString(Params['type'], Params['page'].toInt())})
