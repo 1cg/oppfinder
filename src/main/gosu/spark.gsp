@@ -9,9 +9,11 @@ get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toIn
 get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toInt()))
 get('/jobs/:id/percent_done', \-> {
   Layout = null
-  var gr8 = jobs.Job.getUUIDProgress(Params['id'])
-  Response.Writer.write(gr8)
-
+  return jobs.Job.getUUIDProgress(Params['id'])
+})
+get('/jobs/:id/elapsed_time', \-> {
+  Layout = null
+  return jobs.Job.getUUIDElapsedTime(Params['id'])
 })
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> view.JobTableBody.renderToString(Params['type'], Params['page'].toInt()))

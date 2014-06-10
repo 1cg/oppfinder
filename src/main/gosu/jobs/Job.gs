@@ -105,6 +105,12 @@ abstract class Job implements Runnable {
     return prog
   }
 
+  static function getUUIDElapsedTime(UUID : String) : String {
+    var start = dataStore.findOne({'UUId' -> UUID})['StartTime'] as Long
+    var end = dataStore.findOne({'UUId' -> UUID})['EndTime'] as Long
+    return calculateElapsedTime(start, end)
+  }
+
   static function cancel(UUID : String) {
     newUp(dataStore.findOne({'UUId' -> UUID})).Cancelled = true
   }
@@ -133,7 +139,11 @@ abstract class Job implements Runnable {
   }
 
   property get ElapsedTime() : String {
-    var totalSeconds = (((this.EndTime ?: System.nanoTime()) - this.StartTime) / 1000000000)
+    return calculateElapsedTime(this.StartTime, this.EndTime)
+  }
+
+  private static function calculateElapsedTime(start : Long, end : Long) : String {
+    var totalSeconds = (((end ?: System.nanoTime()) - start) / 1000000000)
     var returnString = ""
     if (totalSeconds > 3600) {
       var hours = totalSeconds / 3600
