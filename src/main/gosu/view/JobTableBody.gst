@@ -46,7 +46,7 @@
         ${job.Type}
       </td>
       <td>
-        <div ic-src="/jobs/${job.UUId}/elapsed_time" ic-transition="none" ic-poll="1s">Starting...</div>
+        <div ic-src="/jobs/${job.UUId}/elapsed_time" ic-transition="none" ic-poll="1s"></div>
       </td>
       <td>
         <div class="progress progress-striped active">
