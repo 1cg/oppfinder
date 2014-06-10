@@ -12,9 +12,9 @@ uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
-uses java.util.Iterator
 uses view.JobDrillDown
-uses model.TransformationIterator
+uses util.TransformationIterator
+uses util.SkipIterator
 
 abstract class Job implements Runnable {
 
@@ -92,6 +92,9 @@ abstract class Job implements Runnable {
   }
 
   property set Progress(progress : int) {
+    if (progress == MAX_PROGRESS_VALUE) {
+      this.Status = 'Complete'
+    }
     dataStore.update(id, {'Progress' -> progress})
     checkBounds()
   }
@@ -108,7 +111,9 @@ abstract class Job implements Runnable {
 
   property set Cancelled(status : boolean) {
     EndTime = System.nanoTime()
-    dataStore.update(id, {'Cancelled' -> status})
+    if (status) {
+      dataStore.update(id, {'Status' -> 'Cancelled'})
+    }
   }
 
   property get Cancelled() : boolean {
@@ -116,7 +121,15 @@ abstract class Job implements Runnable {
       this.Cancelled = true
       return true
     }
-    return dataStore.findOne(id)['Cancelled'] as Boolean ?: false
+    return (dataStore.findOne(id)['Status'] as String == 'Cancelled')
+  }
+
+  property get Status() : String {
+    return dataStore.findOne(id)?.get('Status') as String
+  }
+
+  property set Status(status : String) {
+    dataStore.update(id, {'Status' -> status})
   }
 
   property get ElapsedTime() : String {
@@ -141,7 +154,9 @@ abstract class Job implements Runnable {
   function checkBounds() {
     if (this.Progress == 0) {
       this.StartTime =  System.nanoTime()
+      this.Status = 'Active'
     } else if (this.Progress == MAX_PROGRESS_VALUE) {
+      this.Status = 'Complete'
       this.EndTime = System.nanoTime()
     }
   }
@@ -167,25 +182,19 @@ abstract class Job implements Runnable {
   * Depending on how bloated the jobs collection gets, we might consider adding a field that
   * indicates an active job so that this O(n) filtering doesn't have to happen
    */
-  static property get ActiveJobs() : Iterator<jobs.Job> {
-    var active = new java.util.ArrayList<jobs.Job>()
-    for (job in dataStore.find()) {
-      if (((job.get('Progress') as Integer) < MAX_PROGRESS_VALUE)
-           && ((job.get('Cancelled') as Boolean) ?: false) == false) {
-        active.add(newUp(job))
-      }
-    }
-    return active.iterator()
+  static property get ActiveJobs() : SkipIterator<jobs.Job> {
+    return new TransformationIterator<jobs.Job>(
+        dataStore.find({'Status' -> 'Active'}), \ m -> newUp(m))
   }
 
-  static property get CompleteJobs() : Iterator<jobs.Job> {
-    return new TransformationIterator<Map<Object,Object>,jobs.Job>(
-        dataStore.find({'Progress' -> MAX_PROGRESS_VALUE}), \ m -> newUp(m))
+  static property get CompleteJobs() : SkipIterator<jobs.Job> {
+    return new TransformationIterator<jobs.Job>(
+        dataStore.find({'Status' -> 'Complete'}), \ m -> newUp(m))
   }
 
-  static property get CancelledJobs() : Iterator<jobs.Job> {
-    return new TransformationIterator<Map<Object,Object>,jobs.Job>(
-        dataStore.find({"Cancelled" -> true}), \ m -> newUp(m))
+  static property get CancelledJobs() : SkipIterator<jobs.Job> {
+    return new TransformationIterator<jobs.Job>(
+        dataStore.find({'Status' -> 'Cancelled'}), \ m -> newUp(m))
   }
 
   static function renderToString(uuid : String) : String {

@@ -3,6 +3,7 @@ package model
 uses com.mongodb.*
 uses java.util.Map
 uses java.util.Iterator
+uses util.TransformationIterator
 
 class DataSet {
 
@@ -12,20 +13,20 @@ class DataSet {
     _collection = Database.getCollection(collectionName)
   }
 
-  function find(ref : Map<Object, Object>) : Iterator<Map<Object,Object>> {
-     return new TransformationIterator<DBObject, Map<Object,Object>>(
-         _collection.find(new BasicDBObject(ref)).iterator(), \ o -> o.toMap())
+  function find(ref : Map<Object, Object>) : TransformationIterator<Map<Object,Object>> {
+     return new TransformationIterator<Map<Object,Object>>(
+         _collection.find(new BasicDBObject(ref)), \ o -> o)
   }
 
-  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : Iterator<Map<Object,Object>> {
-    return new TransformationIterator<DBObject, Map<Object,Object>>(
-        _collection.find(new BasicDBObject(ref),new BasicDBObject(keys)), \ o -> o.toMap())
+  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : TransformationIterator<Map<Object,Object>> {
+    return new TransformationIterator<Map<Object,Object>>(
+        _collection.find(new BasicDBObject(ref),new BasicDBObject(keys)), \ o -> o)
 
   }
 
   function find() : Iterator<Map<Object,Object>> {
-    return new TransformationIterator<DBObject, Map<Object,Object>>(
-        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o.toMap())
+    return new TransformationIterator<Map<Object,Object>>(
+        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
   }
 
   function findOne(ref : Map<Object, Object>) : Map<Object, Object> {

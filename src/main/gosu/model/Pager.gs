@@ -1,70 +1,51 @@
 package model
 
-uses java.util.Iterator
-uses java.lang.Math
+uses util.SkipIterator
 
-/*
-* For most use cases, this will do a good job of paging the results and keeping *most* of the
-* results out of memory. In the case where there are 1 million results and the user jumps to page
-* 100k, this will blow up the memory. The assumption is that this won't happen.
- */
 class Pager {
 
-  var pageSize = 10
-  var iterate : Iterator<jobs.Job>
+  var pageSize : int
+  var iterate : SkipIterator<jobs.Job>
+  var copy : SkipIterator<jobs.Job>
   var jobs : List<jobs.Job>
-  var cachedPage : int
-  var currentPage : int as Current
-  var end : boolean
+  var page : int as Current
+  var processed : boolean
 
-  construct(i : Iterator<jobs.Job>, size : int) {
+  construct(i : SkipIterator<jobs.Job>, size : int) {
     iterate = i
+    copy = i.copy()
     pageSize = size
-    cachedPage = 0
     jobs = {}
   }
 
-  function getPage(page : int) : List<jobs.Job> {
-    if (validPage(page)) {
-      this.currentPage = page
-      return jobs.subList((page -1) * pageSize, Math.min(page * pageSize, jobs.size()))
-    }
-    return null
-  }
-
-  function validPage(page : int) : boolean {
-    if (page <= 0) {
-      return false
-    } else if (fetchToPage(page)) {
-      return true
-    } else if ((page - 1) * pageSize >= jobs.size() || jobs.size() == 0) {
-      return false
-    }
-    return true
-  }
-
-  private function fetchToPage(newPage : int) : boolean {
-    while (cachedPage < newPage) {
-      for (i in 0..|pageSize) {
-        if (iterate.hasNext()) {
-          jobs.add(iterate.next())
-        } else {
-          end = true
-          return false
-        }
+  function getPage(p : int) : List<jobs.Job> {
+    if (processed || p < 1) return jobs
+    iterate.skip((p -1) * pageSize)
+    for (i in 0..|pageSize) {
+      if (!iterate.hasNext()) {
+        break
       }
-      cachedPage++
+      jobs.add(iterate.next())
     }
-    return true
+    this.page = p
+    processed = true
+    return jobs
   }
 
-  function checkStatus(page : int) : String {
-    if (page == currentPage) {
+  function validPage(p : int) : boolean {
+    if (p < 1) return false
+    var tmp = copy.copy()
+    tmp.skip((p - 1) * pageSize)
+    return tmp.hasNext()
+  }
+
+  function checkStatus(p : int) : String {
+    if (p == page) {
       return "active"
-    } else if (!validPage(page)) {
-      return "disabled"
+    } else if (validPage(p)) {
+      return ""
     }
-    return ""
+    return "disabled"
   }
 
 }

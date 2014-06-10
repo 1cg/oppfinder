@@ -14,8 +14,9 @@ get('/jobs/:id/percent_done', \-> {
 
 })
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
-get('/companies', \-> view.Companies.renderToString() )
-get('/jobs/upload', \-> view.Companies.renderToString() )
+get('/jobs/table/:type/:page', \-> view.JobTableBody.renderToString(Params['type'], Params['page'].toInt()))
+get('/companies', \-> view.Companies.renderToString())
+get('/jobs/upload', \-> view.Companies.renderToString())
 
 /* Start Jobs */
 post('/jobs/test', \-> controller.JobController.startTestJob())
@@ -23,5 +24,7 @@ post('/jobs/generate', \-> controller.JobController.startGenerateJob())
 post('/jobs/upload', \-> controller.JobController.startUploadJob(Request.Body))
 post('/jobs/:id/cancel', \-> jobs.Job.cancel(Params['id']))
 post('/jobs/:id/reset', \-> jobs.Job.reset(Params['id']))
+post('/jobs/table/:type/:page', \ -> void)
 
+get('/companies', \-> view.Companies.renderToString() )
 get("*", \-> view.BadPath.renderToString())
