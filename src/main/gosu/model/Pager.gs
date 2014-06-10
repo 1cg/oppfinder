@@ -2,11 +2,6 @@ package model
 
 uses util.SkipIterator
 
-/*
-* For most use cases, this will do a good job of paging the results and keeping *most* of the
-* results out of memory. In the case where there are 1 million results and the user jumps to page
-* 100k, this will blow up the memory. The assumption is that this won't happen.
- */
 class Pager {
 
   var pageSize : int
