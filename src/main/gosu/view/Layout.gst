@@ -39,13 +39,13 @@
               <a href="/companies">Input Data</a>
             </li>
             <li>
-              <a href="/jobs/running">Currently Running</a>
+              <a href="/jobs/running/1">Currently Running</a>
             </li>
             <li>
-              <a href="/jobs/complete">Completed</a>
+              <a href="/jobs/complete/1">Completed</a>
             </li>
             <li>
-              <a href="/jobs/cancelled">Cancelled</a>
+              <a href="/jobs/cancelled/1">Cancelled</a>
             </li>
           </ul>
 

@@ -4,9 +4,9 @@ Layout = view.Layout
 
 /* Getters for job information */
 get('/', \-> view.Root.renderToString() )
-get('/jobs/running', \-> view.Running.renderToString())
-get('/jobs/complete', \-> view.Complete.renderToString())
-get('/jobs/cancelled', \-> view.Cancelled.renderToString())
+get('/jobs/running/:page', \-> view.Running.renderToString(Params['page'].toInt()))
+get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toInt()))
+get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toInt()))
 get('/jobs/:id/percent_done', \-> jobs.Job.getUUIDProgress(Params['id']))
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/companies', \-> view.Companies.renderToString() )
