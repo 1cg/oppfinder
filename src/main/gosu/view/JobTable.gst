@@ -1,5 +1,5 @@
 <%@ params(jobs: java.util.Iterator<jobs.Job>, header : String, type : String, page : int)%>
-<% var pager = new model.Pager(jobs) %>
+<% var pager = new model.Pager(jobs, 10) %>
 <div class="page-header">
   <h1>${header}</h1>
 </div>
@@ -55,7 +55,7 @@
       <td>
         <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>Cancel</b></button>
       </td>
-   <% } if (job.Cancelled) { %>
+   <% } else if (job.Cancelled) { %>
       <td>
         <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>Reset</b></button>
       </td>
@@ -65,7 +65,7 @@
 </table>
 <ul class="pagination navbar-right">
   <li class=${pager.checkStatus(pager.Current -1)}>
-    <a href="/jobs/${type}/${pager.Current -1}">&laquo;</a>
+    <a href="/jobs/${type}/${java.lang.Math.max(pager.Current -1, 1)}">&laquo;</a>
   </li>
   <% for (i in -2..2) { %>
   <li class=${pager.checkStatus(java.lang.Math.max(pager.Current + i, i + 3))}>

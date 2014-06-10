@@ -3,17 +3,23 @@ package model
 uses java.util.Iterator
 uses java.lang.Math
 
+/*
+* For most use cases, this will do a good job of paging the results and keeping *most* of the
+* results out of memory. In the case where there are 1 million results and the user jumps to page
+* 100k, this will blow up the memory. The assumption is that this won't happen.
+ */
 class Pager {
 
-  static var PAGE_SIZE = 10
+  var pageSize = 10
   var iterate : Iterator<jobs.Job>
   var jobs : List<jobs.Job>
   var cachedPage : int
   var currentPage : int as Current
   var end : boolean
 
-  construct(i : Iterator<jobs.Job>) {
+  construct(i : Iterator<jobs.Job>, size : int) {
     iterate = i
+    pageSize = size
     cachedPage = 0
     jobs = {}
   }
@@ -21,7 +27,7 @@ class Pager {
   function getPage(page : int) : List<jobs.Job> {
     if (validPage(page)) {
       this.currentPage = page
-      return jobs.subList((page -1) * PAGE_SIZE, Math.min(page * PAGE_SIZE, jobs.size()))
+      return jobs.subList((page -1) * pageSize, Math.min(page * pageSize, jobs.size()))
     }
     return null
   }
@@ -31,7 +37,7 @@ class Pager {
       return false
     } else if (fetchToPage(page)) {
       return true
-    } else if ((page - 1) * PAGE_SIZE >= jobs.size() || jobs.size() == 0) {
+    } else if ((page - 1) * pageSize >= jobs.size() || jobs.size() == 0) {
       return false
     }
     return true
@@ -39,7 +45,7 @@ class Pager {
 
   private function fetchToPage(newPage : int) : boolean {
     while (cachedPage < newPage) {
-      for (i in 0..|PAGE_SIZE) {
+      for (i in 0..|pageSize) {
         if (iterate.hasNext()) {
           jobs.add(iterate.next())
         } else {
