@@ -7,14 +7,11 @@ get('/', \-> view.Root.renderToString() )
 get('/jobs/running/:page', \-> view.Running.renderToString(Params['page'].toInt()))
 get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toInt()))
 get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toInt()))
-get('/jobs/:id/percent_done', \-> {
-  Layout = null
-  var gr8 = jobs.Job.getUUIDProgress(Params['id'])
-  Response.Writer.write(gr8)
-
-})
+get('/jobs/:id/percent_done', \-> { Layout = null
+                                    Response.Writer.write(jobs.Job.getUUIDProgress(Params['id']))})
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
-get('/jobs/table/:type/:page', \-> view.JobTableBody.renderToString(Params['type'], Params['page'].toInt()))
+get('/jobs/table/:type/:page', \-> { Layout = null
+          view.JobTableBody.renderToString(Params['type'], Params['page'].toInt())})
 get('/companies', \-> view.Companies.renderToString())
 get('/jobs/upload', \-> view.Companies.renderToString())
 
@@ -24,7 +21,7 @@ post('/jobs/generate', \-> controller.JobController.startGenerateJob())
 post('/jobs/upload', \-> controller.JobController.startUploadJob(Request.Body))
 post('/jobs/:id/cancel', \-> jobs.Job.cancel(Params['id']))
 post('/jobs/:id/reset', \-> jobs.Job.reset(Params['id']))
-post('/jobs/table/:type/:page', \ -> void)
+post('/jobs/table/:type/:page', \ -> {Layout = null})
 
 get('/companies', \-> view.Companies.renderToString() )
 get("*", \-> view.BadPath.renderToString())
