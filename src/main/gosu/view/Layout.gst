@@ -6,6 +6,11 @@
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://s3.amazonaws.com/intercoolerjs.org/release/intercooler-0.3.2.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
     <style>
       body {
         margin-top:50px;
@@ -22,12 +27,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
           <ul class="nav navbar-nav">
             <li>
               <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/companies">Input Data</a>
             </li>
             <li>
               <a href="/jobs/running/1">Currently Running</a>
