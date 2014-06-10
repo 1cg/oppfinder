@@ -4,6 +4,7 @@ uses sparkgs.util.IHasRequestContext
 uses jobs.TestJob
 uses jobs.GenerateJob
 uses jobs.Job
+uses jobs.UploadJob
 
 class JobController implements IHasRequestContext {
 
@@ -13,7 +14,7 @@ class JobController implements IHasRequestContext {
   }
   static function startGenerateJob() : String{
     new GenerateJob().start()
-    return "Click Display Data to view company information."
+    return "Company information listed below."
   }
   static function cancelJob(UUID : String) : String{
     Job.cancel(UUID)
@@ -24,4 +25,10 @@ class JobController implements IHasRequestContext {
     Job.reset(UUID)
     return "Job Reset"
   }
+
+  static function startUploadJob(requestBody : String) : String {
+    new UploadJob(requestBody).start()
+    return "whut"
+  }
+
 }
