@@ -11,11 +11,11 @@
 </h3>
 <form method="post" enctype="multipart/form-data" action="/jobs/upload">
   <div class="fileinput fileinput-new" data-provides="fileinput">
-    <span class="btn btn-lg btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
-    <span class="fileinput-filename"></span>
-    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+  <span class="btn btn-lg btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
+  <span class="fileinput-filename"></span>
+  <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
 
-    <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
+  <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
   </div>
 </form>
 

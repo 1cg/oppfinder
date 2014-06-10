@@ -155,6 +155,8 @@ abstract class Job implements Runnable {
       return new TestJob(job)
     } else if (job['Type'] as String == 'jobs.GenerateJob') {
       return new GenerateJob(job)
+    } else if (job['Type'] as String == 'jobs.UploadJob') {
+      return new UploadJob(job)
     }
     return new TestJob(job)
   }

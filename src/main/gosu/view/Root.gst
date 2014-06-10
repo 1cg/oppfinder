@@ -1,4 +1,4 @@
-<h1><i class="fa fa-search"></i> <span>Opportunity</span><span>Finder!!!  </span></h1>
+<h1><i class="fa fa-search"></i> <span>Opportunity</span><span>Finder  </span></h1>
 
 <p>Welcome to OpportunityFinder, the 2014 Gosu Summer If Intern Project!</p>
 

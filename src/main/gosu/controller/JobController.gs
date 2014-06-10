@@ -28,7 +28,7 @@ class JobController implements IHasRequestContext {
 
   static function startUploadJob(requestBody : String) : String {
     new UploadJob(requestBody).start()
-    return "whut"
+    return view.Companies.renderToString()
   }
 
 }
