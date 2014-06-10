@@ -1,2 +1,2 @@
 <%@ params(page : int)%>
-${JobTable.renderToString(jobs.Job.CancelledJobs, "Cancelled Jobs", "cancelled", page)}
+${JobTable.renderToString("Cancelled Jobs", "cancelled", page)}
