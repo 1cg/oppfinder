@@ -12,7 +12,7 @@
 <div class="page-header">
   <h1>${header}</h1>
 </div>
-<div ic-src="/jobs/table/${type}/${page}">
+<div ic-src="/jobs/table/${type}/${page}" ic-poll="10s" ic-transition="none">
   ${view.JobTableBody.renderToString(type, page)}
 </div>
 <ul class="pagination navbar-right">
