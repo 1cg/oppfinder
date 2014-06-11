@@ -18,8 +18,9 @@ get('/jobs/:id/elapsed_time', \-> {
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> { Layout = null
                     return view.JobTableBody.renderToString(Params['type'], Params['page'].toInt())})
-get('/companies', \-> view.Companies.renderToString())
-get('/jobs/upload', \-> view.Companies.renderToString())
+get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toInt()))
+get('/jobs/upload', \-> view.Companies.renderToString(1))
+get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Start Jobs */
 post('/jobs/test', \-> controller.JobController.startTestJob())
@@ -29,5 +30,4 @@ post('/jobs/:id/cancel', \-> jobs.Job.cancel(Params['id']))
 post('/jobs/:id/reset', \-> jobs.Job.reset(Params['id']))
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
-get('/companies', \-> view.Companies.renderToString() )
 get("*", \-> view.BadPath.renderToString())

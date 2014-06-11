@@ -4,7 +4,7 @@
 
 <p>Would you like to begin a new analysis?</p>
 
-<a class="btn btn-lg btn-primary" href="/companies">
+<a class="btn btn-lg btn-primary" href="/companies/">
   <strong>Upload or generate data</strong>
 </a>
 

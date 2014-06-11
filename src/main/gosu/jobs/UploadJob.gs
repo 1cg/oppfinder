@@ -83,7 +83,7 @@ class UploadJob extends Job implements Runnable {
   override function reset() {}
 
   override function renderToString() : String {
-    return view.Companies.renderToString()
+    return view.Companies.renderToString(1)
   }
 
 }

@@ -1,11 +1,11 @@
 <%@ params(type: String, page: int ) %>
-<% var pager : model.Pager
+<% var pager : model.Pager<jobs.Job>
   if (type == "complete") {
-    pager = new model.Pager(jobs.Job.CompleteJobs,10)
+    pager = new model.Pager<jobs.Job>(jobs.Job.CompleteJobs,10)
 } else if (type == "running") {
-    pager = new model.Pager(jobs.Job.ActiveJobs,10)
+    pager = new model.Pager<jobs.Job>(jobs.Job.ActiveJobs,10)
 } else {
-    pager = new model.Pager(jobs.Job.CancelledJobs,10)
+    pager = new model.Pager<jobs.Job>(jobs.Job.CancelledJobs,10)
   }%>
 <table class="table">
   <thead>

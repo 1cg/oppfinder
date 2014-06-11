@@ -36,7 +36,7 @@
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/companies">Input Data</a>
+              <a href="/companies/1">Input Data</a>
             </li>
             <li>
               <a href="/jobs/running/1">Currently Running</a>

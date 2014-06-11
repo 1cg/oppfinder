@@ -2,23 +2,23 @@ package model
 
 uses util.SkipIterator
 
-class Pager {
+class Pager<T> {
 
   var pageSize : int
-  var iterate : SkipIterator<jobs.Job>
-  var copy : SkipIterator<jobs.Job>
-  var jobs : List<jobs.Job>
+  var iterate : SkipIterator<T>
+  var copy : SkipIterator<T>
+  var jobs : List<T>
   var page : int as Current
   var processed : boolean
 
-  construct(i : SkipIterator<jobs.Job>, size : int) {
+  construct(i : SkipIterator<T>, size : int) {
     iterate = i
     copy = i.copy()
     pageSize = size
     jobs = {}
   }
 
-  function getPage(p : int) : List<jobs.Job> {
+  function getPage(p : int) : List<T> {
     if (processed || p < 1) return jobs
     iterate.skip((p -1) * pageSize)
     for (i in 0..|pageSize) {

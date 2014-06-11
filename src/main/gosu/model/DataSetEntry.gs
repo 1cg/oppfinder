@@ -3,7 +3,7 @@ package model
 uses java.util.HashMap
 uses java.util.Map
 uses java.util.UUID
-uses java.util.Iterator
+uses util.SkipIterator
 
 class DataSetEntry {
   var myDataSet : DataSet
@@ -23,7 +23,7 @@ class DataSetEntry {
     return info.get("UUID") as UUID
   }
 
-  static property get All() : Iterator<Map> {
+  static property get All() : SkipIterator<Map> {
     return new DataSet("oppFinder").find()
   }
 

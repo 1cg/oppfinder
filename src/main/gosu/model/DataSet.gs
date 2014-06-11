@@ -2,7 +2,6 @@ package model
 
 uses com.mongodb.*
 uses java.util.Map
-uses java.util.Iterator
 uses util.TransformationIterator
 
 class DataSet {
@@ -24,7 +23,7 @@ class DataSet {
 
   }
 
-  function find() : Iterator<Map<Object,Object>> {
+  function find() : TransformationIterator<Map<Object,Object>> {
     return new TransformationIterator<Map<Object,Object>>(
         _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
   }
