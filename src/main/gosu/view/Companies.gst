@@ -4,14 +4,14 @@
 <p>The table of data is displayed below.</p><br>
 
 
-<button ic-post-to="/jobs/generate" ic-target="#generateFeedback" class="btn btn-lg btn-primary">
+<button ic-post-to="/jobs/start/generate" ic-target="#generateFeedback" class="btn btn-lg btn-primary">
   Generate Data
 </button>
 <span id="generateFeedback"></span>
 <h3>
   OR
 </h3>
-<form method="post" enctype="multipart/form-data" action="/jobs/upload">
+<form method="post" enctype="multipart/form-data" action="/jobs/start/upload">
   <div class="fileinput fileinput-new" data-provides="fileinput">
   <span class="btn btn-lg btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
   <span class="fileinput-filename"></span>

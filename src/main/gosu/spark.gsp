@@ -23,11 +23,11 @@ get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Start Jobs */
-post('/jobs/test', \-> controller.JobController.startTestJob())
-post('/jobs/generate', \-> controller.JobController.startGenerateJob())
-post('/jobs/upload', \-> controller.JobController.startUploadJob(Request.Body))
-post('/jobs/:id/cancel', \-> jobs.Job.cancel(Params['id']))
-post('/jobs/:id/reset', \-> jobs.Job.reset(Params['id']))
+post('/jobs/start/test', \-> controller.JobController.startTestJob())
+post('/jobs/start/generate', \-> controller.JobController.startGenerateJob())
+post('/jobs/start/upload', \-> controller.JobController.startUploadJob(Request.Body))
+post('/jobs/state/:id/cancel', \-> jobs.Job.cancel(Params['id']))
+post('/jobs/state/:id/reset', \-> jobs.Job.reset(Params['id']))
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
 get("*", \-> view.BadPath.renderToString())
