@@ -15,7 +15,7 @@ class MahoutUtil {
     var fields = ds.find({}, {field -> 1, 'Policies' -> 1})
     var idMap = new FastByIDMap<PreferenceArray>()
     for (f in fields) {
-      var policies = (f['Policies'] as String).split(" ")
+      var policies = (f['Policies'] as String).split(",")
       var preferences = new GenericUserPreferenceArray(policies.length)
       for (policy in policies index i) {
         preferences.set(i,new GenericPreference(f['_id'] as Long ,policyMap(policy), transformation(f['field'] as String)))
@@ -26,7 +26,10 @@ class MahoutUtil {
   }
 
   static function policyMap(policy : String) : long {
-    return 0
+    var policies = {'Business Auto' -> 1,
+                    'Property' -> 2,
+                    'Workers Comp' -> 3}
+    return policies[policy.split("=")[0]]
   }
 
 }
