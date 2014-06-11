@@ -27,6 +27,8 @@ class DataSetEntry {
     return new DataSet("oppFinder").find()
   }
 
+
+
   // Saves this company info into the mongo dataset
   function save() {
     myDataSet.insert(info)

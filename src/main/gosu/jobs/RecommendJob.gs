@@ -21,6 +21,7 @@ class RecommendJob extends Job implements Runnable {
   override function run() {
     if (this.Cancelled) return
 
+    // DURING MERGE, DON'T TAKE THIS VERSION :)
 
     var model = new FileDataModel(new File("recommender/dataset.csv"))
     var similarity = new PearsonCorrelationSimilarity(model) // Replace this with appropriate models for each job

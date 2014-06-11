@@ -87,6 +87,23 @@ abstract class Job implements Runnable {
     dataStore.save(id)
   }
 
+  property set RecommendTaskFile(filePath : String) {
+    dataStore.update(id, {'File' -> filePath})
+  }
+
+  property get RecommendTaskFile() : String {
+    return dataStore.findOne(id)?.get('File') as String
+  }
+
+  property set RecommendTaskSimilarity(similarity : String) {
+    dataStore.update(id, {'Similarity' -> similarity})
+  }
+
+  property get RecommendTaskSimilarity() : String {
+    return dataStore.findOne(id)?.get('Similarity') as String
+  }
+
+
   property get Progress() : int {
     return dataStore.findOne(id)?.get('Progress') as Integer ?: 0
   }
