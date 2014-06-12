@@ -34,7 +34,7 @@ class JobController implements IHasRequestContext {
 
   static function startRecommendJob() : String {
     new RecommendJob().start()
-    return "lol"
+    return "Recommend Job Started"
   }
 
 }

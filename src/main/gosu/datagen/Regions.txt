@@ -1,263 +1,385 @@
-AF: Afghanistan
-AL: Albania
-DZ: Algeria
-AS: American Samoa
-AD: Andorra
-AO: Angola
-AI: Anguilla
-AQ: Antarctica
-AG: Antigua and Barbuda
-AR: Argentina
-AM: Armenia
-AW: Aruba
-AU: Australia
-AT: Austria
-AZ: Azerbaijan
-BS: Bahamas
-BH: Bahrain
-BD: Bangladesh
-BB: Barbados
-BY: Belarus
-BE: Belgium
-BZ: Belize
-BJ: Benin
-BM: Bermuda
-BT: Bhutan
-BO: Bolivia
-BA: Bosnia and Herzegovina
-BW: Botswana
-BV: Bouvet Island
-BR: Brazil
-BQ: British Antarctic Territory
-IO: British Indian Ocean Territory
-VG: British Virgin Islands
-BN: Brunei
-BG: Bulgaria
-BF: Burkina Faso
-BI: Burundi
-KH: Cambodia
-CM: Cameroon
-CA: Canada
-CT: Canton and Enderbury Islands
-CV: Cape Verde
-KY: Cayman Islands
-CF: Central African Republic
-TD: Chad
-CL: Chile
-CN: China
-CX: Christmas Island
-CC: Cocos [Keeling] Islands
-CO: Colombia
-KM: Comoros
-CG: Congo - Brazzaville
-CD: Congo - Kinshasa
-CK: Cook Islands
-CR: Costa Rica
-HR: Croatia
-CU: Cuba
-CY: Cyprus
-CZ: Czech Republic
-CI: Côte d’Ivoire
-DK: Denmark
-DJ: Djibouti
-DM: Dominica
-DO: Dominican Republic
-NQ: Dronning Maud Land
-DD: East Germany
-EC: Ecuador
-EG: Egypt
-SV: El Salvador
-GQ: Equatorial Guinea
-ER: Eritrea
-EE: Estonia
-ET: Ethiopia
-FK: Falkland Islands
-FO: Faroe Islands
-FJ: Fiji
-FI: Finland
-FR: France
-GF: French Guiana
-PF: French Polynesia
-TF: French Southern Territories
-FQ: French Southern and Antarctic Territories
-GA: Gabon
-GM: Gambia
-GE: Georgia
-DE: Germany
-GH: Ghana
-GI: Gibraltar
-GR: Greece
-GL: Greenland
-GD: Grenada
-GP: Guadeloupe
-GU: Guam
-GT: Guatemala
-GG: Guernsey
-GN: Guinea
-GW: Guinea-Bissau
-GY: Guyana
-HT: Haiti
-HM: Heard Island and McDonald Islands
-HN: Honduras
-HK: Hong Kong SAR China
-HU: Hungary
-IS: Iceland
-IN: India
-ID: Indonesia
-IR: Iran
-IQ: Iraq
-IE: Ireland
-IM: Isle of Man
-IL: Israel
-IT: Italy
-JM: Jamaica
-JP: Japan
-JE: Jersey
-JT: Johnston Island
-JO: Jordan
-KZ: Kazakhstan
-KE: Kenya
-KI: Kiribati
-KW: Kuwait
-KG: Kyrgyzstan
-LA: Laos
-LV: Latvia
-LB: Lebanon
-LS: Lesotho
-LR: Liberia
-LY: Libya
-LI: Liechtenstein
-LT: Lithuania
-LU: Luxembourg
-MO: Macau SAR China
-MK: Macedonia
-MG: Madagascar
-MW: Malawi
-MY: Malaysia
-MV: Maldives
-ML: Mali
-MT: Malta
-MH: Marshall Islands
-MQ: Martinique
-MR: Mauritania
-MU: Mauritius
-YT: Mayotte
-FX: Metropolitan France
-MX: Mexico
-FM: Micronesia
-MI: Midway Islands
-MD: Moldova
-MC: Monaco
-MN: Mongolia
-ME: Montenegro
-MS: Montserrat
-MA: Morocco
-MZ: Mozambique
-MM: Myanmar [Burma]
-NA: Namibia
-NR: Nauru
-NP: Nepal
-NL: Netherlands
-AN: Netherlands Antilles
-NT: Neutral Zone
-NC: New Caledonia
-NZ: New Zealand
-NI: Nicaragua
-NE: Niger
-NG: Nigeria
-NU: Niue
-NF: Norfolk Island
-KP: North Korea
-VD: North Vietnam
-MP: Northern Mariana Islands
-NO: Norway
-OM: Oman
-PC: Pacific Islands Trust Territory
-PK: Pakistan
-PW: Palau
-PS: Palestinian Territories
-PA: Panama
-PZ: Panama Canal Zone
-PG: Papua New Guinea
-PY: Paraguay
-YD: People's Democratic Republic of Yemen
-PE: Peru
-PH: Philippines
-PN: Pitcairn Islands
-PL: Poland
-PT: Portugal
-PR: Puerto Rico
-QA: Qatar
-RO: Romania
-RU: Russia
-RW: Rwanda
-RE: Réunion
-BL: Saint Barthélemy
-SH: Saint Helena
-KN: Saint Kitts and Nevis
-LC: Saint Lucia
-MF: Saint Martin
-PM: Saint Pierre and Miquelon
-VC: Saint Vincent and the Grenadines
-WS: Samoa
-SM: San Marino
-SA: Saudi Arabia
-SN: Senegal
-RS: Serbia
-CS: Serbia and Montenegro
-SC: Seychelles
-SL: Sierra Leone
-SG: Singapore
-SK: Slovakia
-SI: Slovenia
-SB: Solomon Islands
-SO: Somalia
-ZA: South Africa
-GS: South Georgia and the South Sandwich Islands
-KR: South Korea
-ES: Spain
-LK: Sri Lanka
-SD: Sudan
-SR: Suriname
-SJ: Svalbard and Jan Mayen
-SZ: Swaziland
-SE: Sweden
-CH: Switzerland
-SY: Syria
-ST: São Tomé and Príncipe
-TW: Taiwan
-TJ: Tajikistan
-TZ: Tanzania
-TH: Thailand
-TL: Timor-Leste
-TG: Togo
-TK: Tokelau
-TO: Tonga
-TT: Trinidad and Tobago
-TN: Tunisia
-TR: Turkey
-TM: Turkmenistan
-TC: Turks and Caicos Islands
-TV: Tuvalu
-UM: U.S. Minor Outlying Islands
-PU: U.S. Miscellaneous Pacific Islands
-VI: U.S. Virgin Islands
-UG: Uganda
-UA: Ukraine
-SU: Union of Soviet Socialist Republics
-AE: United Arab Emirates
-GB: United Kingdom
-US: United States
-ZZ: Unknown or Invalid Region
-UY: Uruguay
-UZ: Uzbekistan
-VU: Vanuatu
-VA: Vatican City
-VE: Venezuela
-VN: Vietnam
-WK: Wake Island
-WF: Wallis and Futuna
-EH: Western Sahara
-YE: Yemen
-ZM: Zambia
-ZW: Zimbabwe
+Aberdeen, Aberdeen City, UK
+Abilene, TX, USA
+Akron, OH, USA
+Albany, NY, USA
+Albuquerque, NM, USA
+Alexandria, VA, USA
+Allentown, PA, USA
+Amarillo, TX, USA
+Anaheim, CA, USA
+Anchorage, AK, USA
+Ann Arbor, MI, USA
+Antioch, CA, USA
+Apple Valley, CA, USA
+Appleton, WI, USA
+Arlington, TX, USA
+Arvada, CO, USA
+Asheville, NC, USA
+Athens, Greece
+Atlanta, GA, USA
+Atlantic City, NJ, USA
+Augusta, GA, USA
+Aurora, CO, USA
+Austin, TX, USA
+Bakersfield, CA, USA
+Baltimore, MD, USA
+Barnstable, MA, USA
+Baton Rouge, LA, USA
+Beaumont, TX, USA
+Bel Air, Mauritius
+Bellevue, WA, USA
+Berkeley, CA, USA
+Bethlehem, PA, USA
+Billings, MT, USA
+Birmingham, AL, USA
+Bloomington, IN, USA
+Boise, ID, USA
+Boise, ID, USA
+Bonita Springs, FL, USA
+Boston, MA, USA
+Boulder, CO, USA
+Bradenton, FL, USA
+Bremerton, WA, USA
+Bridgeport, CT, USA
+Brighton, The City of Brighton and Hove, UK
+Brownsville, TX, USA
+Bryan, TX, USA
+Buffalo, NY, USA
+Burbank, CA, USA
+Burlington, VT, USA
+Cambridge, MA, USA
+Guangzhou, Guangdong, China
+Cape Coral, FL, USA
+Carrollton, TX, USA
+Cary, NC, USA
+Cathedral City, CA, USA
+Cedar Rapids, IA, USA
+Champaign, IL, USA
+Chandler, AZ, USA
+Charleston, SC, USA
+Charlotte, NC, USA
+Chattanooga, TN, USA
+Chesapeake, VA, USA
+Chicago, IL, USA
+Chula Vista, CA, USA
+Cincinnati, OH, USA
+Clarke County Airport, Quitman, MS 39355, USA
+Clarksville, TN, USA
+Clearwater, FL, USA
+Cleveland, OH, USA
+College Station, TX, USA
+Colorado Springs, CO, USA
+Colombia
+Columbus, OH, USA
+Concord, CA, USA
+Coral Springs, FL, USA
+Corona, CA, USA
+Corpus Christi, TX, USA
+Costa Mesa, CA, USA
+Dallas, TX, USA
+Daly City, CA, USA
+Danbury, CT, USA
+Davenport, IA, USA
+Davidson County, NC, USA
+Dayton, OH, USA
+Daytona Beach, FL, USA
+Deltona, FL, USA
+Denton, TX, USA
+Denver, CO, USA
+Des Moines, IA, USA
+Detroit, MI, USA
+Downey, CA, USA
+Duluth, MN, USA
+Durham, NC, USA
+El Monte, CA, USA
+El Paso, TX, USA
+Elizabeth, NJ, USA
+Elk Grove, CA, USA
+Elkhart, IN, USA
+Erie, PA, USA
+Escondido, CA, USA
+Eugene, OR, USA
+Evansville, IN, USA
+Fairfield, CA, USA
+Fargo, ND, USA
+Fayetteville, AR, USA
+Fitchburg, MA, USA
+Flint, MI, USA
+Fontana, CA, USA
+Fort Collins, CO, USA
+Fort Lauderdale, FL, USA
+Fort Smith, AR, USA
+Fort Walton Beach, FL, USA
+Fort Wayne, IN, USA
+Fort Worth, TX, USA
+Frederick, MD, USA
+Fremont, CA, USA
+Fresno, CA, USA
+Fullerton, CA, USA
+Gainesville, FL, USA
+Garden Grove, CA, USA
+Garland, TX, USA
+Gastonia, NC, USA
+Gilbert, AZ, USA
+Glendale, CA, USA
+Grand Prairie, TX, USA
+Grand Rapids, MI, USA
+Grayslake, IL, USA
+Green Bay, WI, USA
+Green Bay, WI, USA
+Greensboro, NC, USA
+Greenville, SC, USA
+Gulfport-Biloxi International Airport, 14035 Airport Road, Gulfport, MS 39503, USA
+Hagerstown, MD, USA
+Hampton, VA, USA
+Harlingen, The Netherlands
+Harrisburg, PA, USA
+Hartford, CT, USA
+Havre de Grace, MD, USA
+Hayward, CA, USA
+Hemet, CA, USA
+Henderson, NV, USA
+Hesperia, CA, USA
+Hialeah, FL, USA
+Hickory, NC, USA
+High Point, NC, USA
+Hollywood, Los Angeles, CA, USA
+Honolulu, HI, USA
+Houma, LA, USA
+Houston, TX, USA
+Howell, MI, USA
+Huntington, WV, USA
+Huntington Beach, CA, USA
+Huntsville, AL, USA
+Independence, MO, USA
+Indianapolis, IN, USA
+Inglewood, CA, USA
+Irvine, CA, USA
+Irving, TX, USA
+Jackson, MS, USA
+Jacksonville, FL, USA
+Mount Jefferson, Oregon, USA
+Jersey City, NJ, USA
+Johnson City, TN, USA
+Joliet, IL, USA
+Kailua, HI, USA
+Kalamazoo, MI, USA
+Kaneohe, HI, USA
+Kansas City, MO, USA
+Kennewick, WA, USA
+Kenosha, WI, USA
+Killeen, TX, USA
+Kissimmee, FL, USA
+Knoxville, TN, USA
+Lacey, WA, USA
+Lafayette, LA, USA
+Lake Charles, LA, USA
+Lakeland, FL, USA
+Lakewood, CO, USA
+Lancaster, CA, USA
+Lansing, MI, USA
+Laredo, TX, USA
+Las Cruces, NM, USA
+Las Vegas, NV, USA
+Layton, UT, USA
+Leominster, Herefordshire HR6, UK
+Lewisville, TX, USA
+Lexington, KY, USA
+Lincoln, NE, USA
+Little Rock, AR, USA
+Long Beach, CA, USA
+Lorain, OH, USA
+Los Angeles, CA, USA
+Louisville, KY, USA
+Lowell, MA, USA
+Lubbock, TX, USA
+Macon, GA, USA
+Madison, WI, USA
+Manchester, UK
+Marina, Saint Leonards, Saint Leonards-on-sea, East Sussex TN38 0BJ, UK
+Marysville VIC 3779, Australia
+McAllen, TX, USA
+McHenry, IL, USA
+Medford, OR, USA
+Melbourne VIC, Australia
+Memphis, TN, USA
+Merced, CA, USA
+Mesa, AZ, USA
+Mesquite, TX, USA
+Miami, FL, USA
+Milwaukee, WI, USA
+Minneapolis, MN, USA
+Miramar, FL, USA
+Mission Viejo, CA, USA
+Mobile, AL, USA
+Modesto, CA, USA
+Monroe, LA, USA
+Monterey, CA, USA
+Montgomery, AL, USA
+Moreno Valley, CA, USA
+Murfreesboro, TN, USA
+Murrieta, CA, USA
+Muskegon, MI, USA
+Myrtle Beach, SC, USA
+Naperville, IL, USA
+Naples, FL, USA
+Nashua, NH, USA
+Nashville, TN, USA
+New Bedford, MA, USA
+New Haven, CT, USA
+New London, CT, USA
+New Orleans, LA, USA
+New York, NY, USA
+New York, NY, USA
+Newark, NJ, USA
+Newburgh, NY, USA
+Newport News, VA, USA
+Norfolk, VA, USA
+Normal, IL, USA
+Norman, OK, USA
+North Charleston, SC, USA
+North Las Vegas, NV, USA
+North Port, FL, USA
+Norwalk, CT, USA
+Norwich, Norfolk, UK
+Oakland, CA, USA
+Ocala, FL, USA
+Oceanside, CA, USA
+Odessa, Odessa Oblast, Ukraine
+Ogden, UT, USA
+Oklahoma City, OK, USA
+Olathe, KS, USA
+Olympia, WA, USA
+Omaha, NE, USA
+Ontario, Canada
+Orange, CA, USA
+Orem, UT, USA
+Orlando, FL, USA
+Overland Park, KS, USA
+Oxnard, CA, USA
+Palm Bay, FL, USA
+Palm Springs, CA, USA
+Palmdale, CA, USA
+Panama
+Pasadena, CA, USA
+Paterson, NJ, USA
+Pembroke Pines, FL, USA
+Pensacola, FL, USA
+Peoria, IL, USA
+Philadelphia, PA, USA
+Phoenix, AZ, USA
+Pittsburgh, PA, USA
+Plano, TX, USA
+Pomona, CA, USA
+Pompano Beach, FL, USA
+Port Arthur TAS 7182, Australia
+Port Orange, FL, USA
+Port St Lucie, FL, USA
+Port St Lucie, FL, USA
+Portland, OR, USA
+Portsmouth, UK
+Poughkeepsie, NY, USA
+Providence, RI, USA
+Provo, UT, USA
+Pueblo, CO, USA
+Punta Gorda, FL, USA
+Racine, WI, USA
+Raleigh, NC, USA
+Rancho Cucamonga, CA, USA
+Reading, PA, USA
+Redding, CA, USA
+Reno, NV, USA
+Richland, WA, USA
+Richmond, VA, USA
+Richmond County, NS, Canada
+Riverside, CA, USA
+Roanoke, VA, USA
+Rochester, NY, USA
+Rockford, IL, USA
+Roseville, CA, USA
+Round Lake Beach, IL, USA
+Sacramento, CA, USA
+Saginaw, MI, USA
+St Louis, MO, USA
+Saint Paul, MN, USA
+Saint Petersburg, Russia
+Salem, MA, USA
+Salinas, CA, USA
+Salt Lake City, UT, USA
+San Antonio, TX, USA
+San Bernardino, CA, USA
+Ventura, CA, USA
+San Diego, CA, USA
+San Francisco, CA, USA
+San Jose, CA, USA
+Santa Ana, CA, USA
+Santa Barbara, CA, USA
+Santa Clara, CA, USA
+Santa Clarita, CA, USA
+Santa Cruz, CA, USA
+Santa Maria, CA, USA
+Santa Rosa, CA, USA
+Sarasota, FL, USA
+Savannah, GA, USA
+Scottsdale, AZ, USA
+Scranton, PA, USA
+Seaside, CA, USA
+Seattle, WA, USA
+Sebastian, FL, USA
+Shreveport, LA, USA
+Simi Valley, CA, USA
+Sioux City, IA, USA
+Sioux Falls, SD, USA
+South Bend, IN, USA
+South Lyon, MI 48178, USA
+Spartanburg, SC, USA
+Spokane, WA, USA
+Springdale, AR, USA
+Springfield, MA, USA
+St Louis, MO, USA
+Saint Paul, MN, USA
+St Petersburg, FL, USA
+Stamford, CT, USA
+Sterling Heights, MI, USA
+Stockton, CA, USA
+Sunnyvale, CA, USA
+Syracuse, NY, USA
+Tacoma, WA, USA
+Tallahassee, FL, USA
+Tampa, FL, USA
+Temecula, CA, USA
+Tempe, AZ, USA
+Thornton, CO, USA
+Thousand Oaks, CA, USA
+Toledo, OH, USA
+Topeka, KS, USA
+Torrance, CA, USA
+Trenton, NJ, USA
+Tucson, AZ, USA
+Tulsa, OK, USA
+Tuscaloosa, AL, USA
+Tyler, TX, USA
+Utica, NY, USA
+Vallejo, CA, USA
+Vancouver, BC, Canada
+Vero Beach, FL, USA
+Victorville, CA, USA
+Virginia Beach, VA, USA
+Visalia, CA, USA
+Waco, TX, USA
+Warren, MI, USA
+Washington, DC, USA
+Waterbury, CT, USA
+Waterloo, ON, Canada
+West Covina, CA, USA
+West Valley City, UT, USA
+Westminster, CO, USA
+Wichita, KS, USA
+Wilmington, NC, USA
+Winston, FL 33815, USA
+Winter Haven, FL, USA
+Worcester, MA, USA
+Yakima, WA, USA
+Yonkers, NY, USA
+York, UK
+Youngstown, OH, USA

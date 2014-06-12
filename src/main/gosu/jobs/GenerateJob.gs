@@ -18,7 +18,7 @@ class GenerateJob extends Job implements Runnable {
       "Company" -> "Companies.txt",
       "Contact Name" -> "Names.txt",
       "Email" -> "Emails.txt",
-      "Region" -> "LatLng.txt"
+      "Region" -> "Regions.txt"
   }
   static final var dataMap = new HashMap<String, List>()
   static final var rand = new Random()
@@ -91,7 +91,7 @@ class GenerateJob extends Job implements Runnable {
       var split = myLine.split(":")
       var city = split[0]
       var coords = split[1].substring(1)
-      dataStore.insert({city -> coords})
+      dataStore.insert({"City" -> city, "Coords" -> coords})
       myLine = bufRead.readLine()
     }
 
