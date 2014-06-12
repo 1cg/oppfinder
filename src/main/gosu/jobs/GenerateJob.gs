@@ -82,8 +82,7 @@ class GenerateJob extends Job implements Runnable {
       company.save()
     }
 
-
-    var coordInput = new FileReader("LatLng.txt")
+    var coordInput = new FileReader("datagen/LatLng.txt")
     var bufRead = new BufferedReader(coordInput)
     var myLine = bufRead.readLine()
     var dataStore = new DataSet(DataSetEntry.REGIONCOORDINATES)
@@ -95,7 +94,6 @@ class GenerateJob extends Job implements Runnable {
       dataStore.insert({city -> coords})
       myLine = bufRead.readLine()
     }
-
 
     if (Cancelled) {
       return
