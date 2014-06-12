@@ -1,0 +1,385 @@
+Aberdeen, Aberdeen City, UK: 57, -2
+Abilene, TX, USA: 32, -99
+Akron, OH, USA: 41, -81
+Albany, NY, USA: 42, -73
+Albuquerque, NM, USA: 35, -106
+Alexandria, VA, USA: 38, -77
+Allentown, PA, USA: 40, -75
+Amarillo, TX, USA: 35, -101
+Anaheim, CA, USA: 33, -117
+Anchorage, AK, USA: 61, -149
+Ann Arbor, MI, USA: 42, -83
+Antioch, CA, USA: 38, -121
+Apple Valley, CA, USA: 34, -117
+Appleton, WI, USA: 44, -88
+Arlington, TX, USA: 32, -97
+Arvada, CO, USA: 39, -105
+Asheville, NC, USA: 35, -82
+Athens, Greece: 37, 23
+Atlanta, GA, USA: 33, -84
+Atlantic City, NJ, USA: 39, -74
+Augusta, GA, USA: 33, -82
+Aurora, CO, USA: 39, -104
+Austin, TX, USA: 30, -97
+Bakersfield, CA, USA: 35, -119
+Baltimore, MD, USA: 39, -76
+Barnstable, MA, USA: 41, -70
+Baton Rouge, LA, USA: 30, -91
+Beaumont, TX, USA: 30, -94
+Bel Air, Mauritius: -20, 57
+Bellevue, WA, USA: 47, -122
+Berkeley, CA, USA: 37, -122
+Bethlehem, PA, USA: 40, -75
+Billings, MT, USA: 45, -108
+Birmingham, AL, USA: 33, -86
+Bloomington, IN, USA: 39, -86
+Boise, ID, USA: 43, -116
+Boise, ID, USA: 43, -116
+Bonita Springs, FL, USA: 26, -81
+Boston, MA, USA: 42, -71
+Boulder, CO, USA: 40, -105
+Bradenton, FL, USA: 27, -82
+Bremerton, WA, USA: 47, -122
+Bridgeport, CT, USA: 41, -73
+Brighton, The City of Brighton and Hove, UK: 50, 0
+Brownsville, TX, USA: 25, -97
+Bryan, TX, USA: 30, -96
+Buffalo, NY, USA: 42, -78
+Burbank, CA, USA: 34, -118
+Burlington, VT, USA: 44, -73
+Cambridge, MA, USA: 42, -71
+Guangzhou, Guangdong, China: 23, 113
+Cape Coral, FL, USA: 26, -81
+Carrollton, TX, USA: 32, -96
+Cary, NC, USA: 35, -78
+Cathedral City, CA, USA: 33, -116
+Cedar Rapids, IA, USA: 41, -91
+Champaign, IL, USA: 40, -88
+Chandler, AZ, USA: 33, -111
+Charleston, SC, USA: 32, -79
+Charlotte, NC, USA: 35, -80
+Chattanooga, TN, USA: 35, -85
+Chesapeake, VA, USA: 36, -76
+Chicago, IL, USA: 41, -87
+Chula Vista, CA, USA: 32, -117
+Cincinnati, OH, USA: 39, -84
+Clarke County Airport, Quitman, MS 39355, USA: 32, -88
+Clarksville, TN, USA: 36, -87
+Clearwater, FL, USA: 27, -82
+Cleveland, OH, USA: 41, -81
+College Station, TX, USA: 30, -96
+Colorado Springs, CO, USA: 38, -104
+Colombia: 4, -74
+Columbus, OH, USA: 39, -82
+Concord, CA, USA: 37, -122
+Coral Springs, FL, USA: 26, -80
+Corona, CA, USA: 33, -117
+Corpus Christi, TX, USA: 27, -97
+Costa Mesa, CA, USA: 33, -117
+Dallas, TX, USA: 32, -96
+Daly City, CA, USA: 37, -122
+Danbury, CT, USA: 41, -73
+Davenport, IA, USA: 41, -90
+Davidson County, NC, USA: 35, -80
+Dayton, OH, USA: 39, -84
+Daytona Beach, FL, USA: 29, -81
+Deltona, FL, USA: 28, -81
+Denton, TX, USA: 33, -97
+Denver, CO, USA: 39, -104
+Des Moines, IA, USA: 41, -93
+Detroit, MI, USA: 42, -83
+Downey, CA, USA: 33, -118
+Duluth, MN, USA: 46, -92
+Durham, NC, USA: 35, -78
+El Monte, CA, USA: 34, -118
+El Paso, TX, USA: 31, -106
+Elizabeth, NJ, USA: 40, -74
+Elk Grove, CA, USA: 38, -121
+Elkhart, IN, USA: 41, -85
+Erie, PA, USA: 42, -80
+Escondido, CA, USA: 33, -117
+Eugene, OR, USA: 44, -123
+Evansville, IN, USA: 37, -87
+Fairfield, CA, USA: 38, -122
+Fargo, ND, USA: 46, -96
+Fayetteville, AR, USA: 36, -94
+Fitchburg, MA, USA: 42, -71
+Flint, MI, USA: 43, -83
+Fontana, CA, USA: 34, -117
+Fort Collins, CO, USA: 40, -105
+Fort Lauderdale, FL, USA: 26, -80
+Fort Smith, AR, USA: 35, -94
+Fort Walton Beach, FL, USA: 30, -86
+Fort Wayne, IN, USA: 41, -85
+Fort Worth, TX, USA: 32, -97
+Frederick, MD, USA: 39, -77
+Fremont, CA, USA: 37, -121
+Fresno, CA, USA: 36, -119
+Fullerton, CA, USA: 33, -117
+Gainesville, FL, USA: 29, -82
+Garden Grove, CA, USA: 33, -117
+Garland, TX, USA: 32, -96
+Gastonia, NC, USA: 35, -81
+Gilbert, AZ, USA: 33, -111
+Glendale, CA, USA: 34, -118
+Grand Prairie, TX, USA: 32, -96
+Grand Rapids, MI, USA: 42, -85
+Grayslake, IL, USA: 42, -88
+Green Bay, WI, USA: 44, -88
+Green Bay, WI, USA: 44, -88
+Greensboro, NC, USA: 36, -79
+Greenville, SC, USA: 34, -82
+Gulfport-Biloxi International Airport, 14035 Airport Road, Gulfport, MS 39503, USA: 30, -89
+Hagerstown, MD, USA: 39, -77
+Hampton, VA, USA: 37, -76
+Harlingen, The Netherlands: 53, 5
+Harrisburg, PA, USA: 40, -76
+Hartford, CT, USA: 41, -72
+Havre de Grace, MD, USA: 39, -76
+Hayward, CA, USA: 37, -122
+Hemet, CA, USA: 33, -116
+Henderson, NV, USA: 36, -114
+Hesperia, CA, USA: 34, -117
+Hialeah, FL, USA: 25, -80
+Hickory, NC, USA: 35, -81
+High Point, NC, USA: 35, -80
+Hollywood, Los Angeles, CA, USA: 34, -118
+Honolulu, HI, USA: 21, -157
+Houma, LA, USA: 29, -90
+Houston, TX, USA: 29, -95
+Howell, MI, USA: 42, -83
+Huntington, WV, USA: 38, -82
+Huntington Beach, CA, USA: 33, -117
+Huntsville, AL, USA: 34, -86
+Independence, MO, USA: 39, -94
+Indianapolis, IN, USA: 39, -86
+Inglewood, CA, USA: 33, -118
+Irvine, CA, USA: 33, -117
+Irving, TX, USA: 32, -96
+Jackson, MS, USA: 32, -90
+Jacksonville, FL, USA: 30, -81
+Mount Jefferson, Oregon, USA: 44, -121
+Jersey City, NJ, USA: 40, -74
+Johnson City, TN, USA: 36, -82
+Joliet, IL, USA: 41, -88
+Kailua, HI, USA: 21, -157
+Kalamazoo, MI, USA: 42, -85
+Kaneohe, HI, USA: 21, -157
+Kansas City, MO, USA: 39, -94
+Kennewick, WA, USA: 46, -119
+Kenosha, WI, USA: 42, -87
+Killeen, TX, USA: 31, -97
+Kissimmee, FL, USA: 28, -81
+Knoxville, TN, USA: 35, -83
+Lacey, WA, USA: 47, -122
+Lafayette, LA, USA: 30, -92
+Lake Charles, LA, USA: 30, -93
+Lakeland, FL, USA: 28, -81
+Lakewood, CO, USA: 39, -105
+Lancaster, CA, USA: 34, -118
+Lansing, MI, USA: 42, -84
+Laredo, TX, USA: 27, -99
+Las Cruces, NM, USA: 32, -106
+Las Vegas, NV, USA: 36, -115
+Layton, UT, USA: 41, -111
+Leominster, Herefordshire HR6, UK: 52, -2
+Lewisville, TX, USA: 33, -96
+Lexington, KY, USA: 38, -84
+Lincoln, NE, USA: 40, -96
+Little Rock, AR, USA: 34, -92
+Long Beach, CA, USA: 33, -118
+Lorain, OH, USA: 41, -82
+Los Angeles, CA, USA: 34, -118
+Louisville, KY, USA: 38, -85
+Lowell, MA, USA: 42, -71
+Lubbock, TX, USA: 33, -101
+Macon, GA, USA: 32, -83
+Madison, WI, USA: 43, -89
+Manchester, UK: 53, -2
+Marina, Saint Leonards, Saint Leonards-on-sea, East Sussex TN38 0BJ, UK: 50, 0
+Marysville VIC 3779, Australia: -37, 145
+McAllen, TX, USA: 26, -98
+McHenry, IL, USA: 42, -88
+Medford, OR, USA: 42, -122
+Melbourne VIC, Australia: -37, 144
+Memphis, TN, USA: 35, -90
+Merced, CA, USA: 37, -120
+Mesa, AZ, USA: 33, -111
+Mesquite, TX, USA: 32, -96
+Miami, FL, USA: 25, -80
+Milwaukee, WI, USA: 43, -87
+Minneapolis, MN, USA: 44, -93
+Miramar, FL, USA: 25, -80
+Mission Viejo, CA, USA: 33, -117
+Mobile, AL, USA: 30, -88
+Modesto, CA, USA: 37, -120
+Monroe, LA, USA: 32, -92
+Monterey, CA, USA: 36, -121
+Montgomery, AL, USA: 32, -86
+Moreno Valley, CA, USA: 33, -117
+Murfreesboro, TN, USA: 35, -86
+Murrieta, CA, USA: 33, -117
+Muskegon, MI, USA: 43, -86
+Myrtle Beach, SC, USA: 33, -78
+Naperville, IL, USA: 41, -88
+Naples, FL, USA: 26, -81
+Nashua, NH, USA: 42, -71
+Nashville, TN, USA: 36, -86
+New Bedford, MA, USA: 41, -70
+New Haven, CT, USA: 41, -72
+New London, CT, USA: 41, -72
+New Orleans, LA, USA: 29, -90
+New York, NY, USA: 40, -74
+New York, NY, USA: 40, -74
+Newark, NJ, USA: 40, -74
+Newburgh, NY, USA: 41, -74
+Newport News, VA, USA: 37, -76
+Norfolk, VA, USA: 36, -76
+Normal, IL, USA: 40, -88
+Norman, OK, USA: 35, -97
+North Charleston, SC, USA: 32, -79
+North Las Vegas, NV, USA: 36, -115
+North Port, FL, USA: 27, -82
+Norwalk, CT, USA: 41, -73
+Norwich, Norfolk, UK: 52, 1
+Oakland, CA, USA: 37, -122
+Ocala, FL, USA: 29, -82
+Oceanside, CA, USA: 33, -117
+Odessa, Odessa Oblast, Ukraine: 46, 30
+Ogden, UT, USA: 41, -111
+Oklahoma City, OK, USA: 35, -97
+Olathe, KS, USA: 38, -94
+Olympia, WA, USA: 47, -122
+Omaha, NE, USA: 41, -95
+Ontario, Canada: 51, -85
+Orange, CA, USA: 33, -117
+Orem, UT, USA: 40, -111
+Orlando, FL, USA: 28, -81
+Overland Park, KS, USA: 38, -94
+Oxnard, CA, USA: 34, -119
+Palm Bay, FL, USA: 28, -80
+Palm Springs, CA, USA: 33, -116
+Palmdale, CA, USA: 34, -118
+Panama: 8, -79
+Pasadena, CA, USA: 34, -118
+Paterson, NJ, USA: 40, -74
+Pembroke Pines, FL, USA: 26, -80
+Pensacola, FL, USA: 30, -87
+Peoria, IL, USA: 40, -89
+Philadelphia, PA, USA: 39, -75
+Phoenix, AZ, USA: 33, -112
+Pittsburgh, PA, USA: 40, -79
+Plano, TX, USA: 33, -96
+Pomona, CA, USA: 34, -117
+Pompano Beach, FL, USA: 26, -80
+Port Arthur TAS 7182, Australia: -43, 147
+Port Orange, FL, USA: 29, -80
+Port St. Lucie, FL, USA: 27, -80
+Port St. Lucie, FL, USA: 27, -80
+Portland, OR, USA: 45, -122
+Portsmouth, UK: 50, -1
+Poughkeepsie, NY, USA: 41, -73
+Providence, RI, USA: 41, -71
+Provo, UT, USA: 40, -111
+Pueblo, CO, USA: 38, -104
+Punta Gorda, FL, USA: 26, -82
+Racine, WI, USA: 42, -87
+Raleigh, NC, USA: 35, -78
+Rancho Cucamonga, CA, USA: 34, -117
+Reading, PA, USA: 40, -75
+Redding, CA, USA: 40, -122
+Reno, NV, USA: 39, -119
+Richland, WA, USA: 46, -119
+Richmond, VA, USA: 37, -77
+Richmond County, NS, Canada: 45, -60
+Riverside, CA, USA: 33, -117
+Roanoke, VA, USA: 37, -79
+Rochester, NY, USA: 43, -77
+Rockford, IL, USA: 42, -89
+Roseville, CA, USA: 38, -121
+Round Lake Beach, IL, USA: 42, -88
+Sacramento, CA, USA: 38, -121
+Saginaw, MI, USA: 43, -83
+St. Louis, MO, USA: 38, -90
+Saint Paul, MN, USA: 44, -93
+Saint Petersburg, Russia: 59, 30
+Salem, MA, USA: 42, -70
+Salinas, CA, USA: 36, -121
+Salt Lake City, UT, USA: 40, -111
+San Antonio, TX, USA: 29, -98
+San Bernardino, CA, USA: 34, -117
+Ventura, CA, USA: 34, -119
+San Diego, CA, USA: 32, -117
+San Francisco, CA, USA: 37, -122
+San Jose, CA, USA: 37, -121
+Santa Ana, CA, USA: 33, -117
+Santa Barbara, CA, USA: 34, -119
+Santa Clara, CA, USA: 37, -121
+Santa Clarita, CA, USA: 34, -118
+Santa Cruz, CA, USA: 36, -122
+Santa Maria, CA, USA: 34, -120
+Santa Rosa, CA, USA: 38, -122
+Sarasota, FL, USA: 27, -82
+Savannah, GA, USA: 32, -81
+Scottsdale, AZ, USA: 33, -111
+Scranton, PA, USA: 41, -75
+Seaside, CA, USA: 36, -121
+Seattle, WA, USA: 47, -122
+Sebastian, FL, USA: 27, -80
+Shreveport, LA, USA: 32, -93
+Simi Valley, CA, USA: 34, -118
+Sioux City, IA, USA: 42, -96
+Sioux Falls, SD, USA: 43, -96
+South Bend, IN, USA: 41, -86
+South Lyon, MI 48178, USA: 42, -83
+Spartanburg, SC, USA: 34, -81
+Spokane, WA, USA: 47, -117
+Springdale, AR, USA: 36, -94
+Springfield, MA, USA: 42, -72
+St. Louis, MO, USA: 38, -90
+Saint Paul, MN, USA: 44, -93
+St. Petersburg, FL, USA: 27, -82
+Stamford, CT, USA: 41, -73
+Sterling Heights, MI, USA: 42, -83
+Stockton, CA, USA: 37, -121
+Sunnyvale, CA, USA: 37, -122
+Syracuse, NY, USA: 43, -76
+Tacoma, WA, USA: 47, -122
+Tallahassee, FL, USA: 30, -84
+Tampa, FL, USA: 27, -82
+Temecula, CA, USA: 33, -117
+Tempe, AZ, USA: 33, -111
+Thornton, CO, USA: 39, -104
+Thousand Oaks, CA, USA: 34, -118
+Toledo, OH, USA: 41, -83
+Topeka, KS, USA: 39, -95
+Torrance, CA, USA: 33, -118
+Trenton, NJ, USA: 40, -74
+Tucson, AZ, USA: 32, -110
+Tulsa, OK, USA: 36, -95
+Tuscaloosa, AL, USA: 33, -87
+Tyler, TX, USA: 32, -95
+Utica, NY, USA: 43, -75
+Vallejo, CA, USA: 38, -122
+Vancouver, BC, Canada: 49, -123
+Vero Beach, FL, USA: 27, -80
+Victorville, CA, USA: 34, -117
+Virginia Beach, VA, USA: 36, -75
+Visalia, CA, USA: 36, -119
+Waco, TX, USA: 31, -97
+Warren, MI, USA: 42, -83
+Washington, DC, USA: 38, -77
+Waterbury, CT, USA: 41, -73
+Waterloo, ON, Canada: 43, -80
+West Covina, CA, USA: 34, -117
+West Valley City, UT, USA: 40, -112
+Westminster, CO, USA: 39, -105
+Wichita, KS, USA: 37, -97
+Wilmington, NC, USA: 34, -77
+Winston, FL 33815, USA: 28, -82
+Winter Haven, FL, USA: 28, -81
+Worcester, MA, USA: 42, -71
+Yakima, WA, USA: 46, -120
+Yonkers, NY, USA: 40, -73
+York, UK: 53, -1
+Youngstown, OH, USA: 41, -80
