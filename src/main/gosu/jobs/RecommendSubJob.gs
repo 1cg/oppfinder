@@ -28,6 +28,7 @@ class RecommendSubJob extends Job implements Runnable {
   }
 
   construct(field : String){
+    super()
     this.RecommendTaskField = field
   }
 
@@ -49,6 +50,8 @@ class RecommendSubJob extends Job implements Runnable {
     for (user in model.getUserIDs()) {
       var recommendations = recommender.recommend(user, 3)
       myRecommendations.insert({user.toString() -> recommendations.toString()})
+      print(user.toString())
+      print(recommendations.toString())
 
     }
     // For each UUID, store the intermediate results (which item # and their value) in the JOB UUID's own dataset
