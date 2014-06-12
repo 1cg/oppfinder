@@ -19,8 +19,6 @@ class DataSetEntry {
     return new DataSet(COLLECTION).find()
   }
 
-
-
   // Saves this company info into the mongo dataset
   function save() {
     myDataSet.insert(info)
