@@ -7,6 +7,7 @@ uses util.SkipIterator
 class DataSetEntry {
 
   public static var COLLECTION : String = "oppFinder"
+  public static var REGIONCOORDINATES : String = "regionCoordinates"
   var myDataSet : DataSet
   var info : Map<Object, Object>
 
