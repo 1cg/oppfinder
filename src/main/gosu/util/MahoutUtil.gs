@@ -24,7 +24,7 @@ class MahoutUtil {
       var companyPolicies = (companyData['Policies'] as String).split(",")
       var preferences = new GenericUserPreferenceArray(companyPolicies.length * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
-      ds.update({'_id' -> companyData['_id]']}, {'longID' -> id})
+      ds.update({'_id' -> companyData['_id']}, {'longID' -> id})
       for (policy in companyPolicies index i) {
         var policyNum = policyToLong(policy)
         preferences.set(i,new GenericPreference(id as Long, policyNum, t1(companyData[field] as String)))

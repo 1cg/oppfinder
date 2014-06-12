@@ -5,12 +5,15 @@ uses java.util.Map
 uses java.lang.Thread
 uses model.DataSet
 uses java.lang.Float
+uses model.DataSetEntry
+uses util.MahoutUtil
 
 class RecommendJob extends Job implements Runnable {
 
   var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl"}//, "recommender.ReachFieldImpl","recommender.IndustryFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
+  public static var RESULTS_COLLECTION : String = 'recommendations'
 
   construct(data : Map<Object, Object> ) {
     super(data)
@@ -32,7 +35,8 @@ class RecommendJob extends Job implements Runnable {
     if (Cancelled) return
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
-      for (companyRecommendations in new DataSet(jobID).find()) {
+      var ds = new DataSet(jobID)
+      for (companyRecommendations in ds.find()) {
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
         if (recommendations.containsKey(entry.Key)) {
@@ -42,6 +46,20 @@ class RecommendJob extends Job implements Runnable {
           recommendations.put(entry.Key as String,entry.Value as Float)
         }
       }
+      ds.drop() //Get rid of the temp data
+    }
+    var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue())
+    var finalResults = new DataSet(RESULTS_COLLECTION)
+    var companyDB = new DataSet(DataSetEntry.COLLECTION)
+    for (each in sorted.iterator() index i) {
+      if (i == 20) break
+      var result : Map<Object, Object> = {}
+      var info = each.Key.split(",")
+      var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1})
+      result.put('Company', company.next()['Company'])
+      result.put('Policy',MahoutUtil.longToPolicy(info[1].toLong()))
+      result.put('Value', each.Value)
+      finalResults.insert(result)
     }
     this.Progress = 100
   }
