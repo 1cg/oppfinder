@@ -8,6 +8,7 @@ uses model.DataSet
 uses model.DataSetEntry
 uses com.google.code.geocoder.Geocoder
 uses com.google.code.geocoder.GeocoderRequestBuilder
+uses java.lang.Long
 
 class LocationFieldImpl implements Field {
 
@@ -15,7 +16,7 @@ class LocationFieldImpl implements Field {
 
   override function getModel(): DataModel {
     return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Region",
-        \ l -> locationToLat(l),\ l -> locationToLng(l) )
+        \ l -> locationToLat(l),\ l -> locationToLng(l))
   }
 
   override function getSimilarity(model : DataModel): UserSimilarity {
@@ -24,11 +25,11 @@ class LocationFieldImpl implements Field {
 
   function locationToLat(l : String) : long {
     var geocoderRequest = new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest();
-    return geocoderRequest.Location.Lat.longValue()
+    return geocoder.geocode(geocoderRequest).Results.get(0).Geometry.Location.Lat.longValue()
   }
 
   function locationToLng(l : String) : long {
     var geocoderRequest = new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest();
-    return geocoderRequest.Location.Lng.longValue()
+    return geocoder.geocode(geocoderRequest).Results.get(0).Geometry.Location.Lng.longValue()
   }
 }

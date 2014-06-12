@@ -8,9 +8,9 @@ uses org.apache.mahout.cf.taste.impl.model.GenericPreference
 uses java.lang.Long
 uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.impl.model.GenericDataModel
-uses java.util.UUID
 uses org.bson.types.ObjectId
 uses java.math.BigInteger
+uses java.lang.Thread
 
 class MahoutUtil {
 
@@ -25,15 +25,16 @@ class MahoutUtil {
       var companyPolicies = (companyData['Policies'] as String).split(",")
       var preferences = new GenericUserPreferenceArray(companyPolicies.length * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
+      ds.update({'_id' -> companyData['_id]']}, {'longID' -> id})
       for (policy in companyPolicies index i) {
+        print("processed")
         var policyNum = policyToLong(policy)
-        var value = t1(companyData[field] as String)
-        preferences.set(i,new GenericPreference(id as Long, policyNum, value))
-        if (t2 != null) preferences.set(i,new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
+        preferences.set(i,new GenericPreference(id as Long, policyNum, t1(companyData[field] as String)))
+        if (t2 != null) preferences.set(i,new GenericPreference(id,policyNum, t2(companyData[field] as String)))
+        Thread.sleep(100)
       }
       idMap.put(id, preferences)
     }
-
     return new GenericDataModel(idMap)
   }
 

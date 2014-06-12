@@ -26,10 +26,8 @@ class RecommendSubJob extends Job implements Runnable {
     if (this.Cancelled) return
     var c = Class.forName(this.RecommendTaskField)
     var field = c.newInstance() as Field
-
     var model = field.getModel()
     var similarity = field.getSimilarity(model)
-
     var neighborhood = new ThresholdUserNeighborhood(0.3, similarity, model)
     var recommender = new GenericUserBasedRecommender(model, neighborhood, similarity)
 
