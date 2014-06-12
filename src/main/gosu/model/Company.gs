@@ -2,10 +2,6 @@ package model
 
 class Company extends DataSetEntry {
 
-  construct(dataSetName : String) {
-    super(dataSetName)
-  }
-
   property set CompanyName(companyName : String) {
     put("Company", companyName)
   }

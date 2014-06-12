@@ -8,7 +8,7 @@ uses java.util.Random
 uses model.Company
 uses model.DataSet
 uses java.math.BigDecimal
-uses java.lang.System
+uses model.DataSetEntry
 
 class Generator {
   static final var policies = {"Workers Comp", "Business Auto", "Property"}
@@ -38,11 +38,11 @@ class Generator {
 
     // Replace or create new Mongo Collection loaded with this data
 
-    var dataSet = new DataSet("oppFinder")
+    var dataSet = new DataSet(DataSetEntry.COLLECTION)
     dataSet.drop()
 
     for (name in dataMap.get("Company") index i) {
-      var company = new Company("oppFinder")
+      var company = new Company()
       company.CompanyName = dataMap.get("Company").get(i % dataMap.get("Company").size()) as String
       company.ContactName = dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String
       company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String
