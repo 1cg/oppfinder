@@ -10,8 +10,7 @@ uses model.DataSetEntry
 
 class SizeFieldImpl implements Field {
   override function getModel(): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Size", \ o -> o.toLong())
-
+    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Size", \ o -> o.toLong(), null)
   }
 
   override function getSimilarity(model : DataModel): UserSimilarity {

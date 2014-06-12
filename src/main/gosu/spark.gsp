@@ -29,5 +29,6 @@ post('/jobs/start/upload', \-> controller.JobController.startUploadJob(Request.B
 post('/jobs/state/:id/cancel', \-> jobs.Job.cancel(Params['id']))
 post('/jobs/state/:id/reset', \-> jobs.Job.reset(Params['id']))
 post('/jobs/table/:type/:page', \ -> {Layout = null})
+post('/jobs/start/recommend', \-> controller.JobController.startRecommendJob())
 
 get("*", \-> view.BadPath.renderToString())

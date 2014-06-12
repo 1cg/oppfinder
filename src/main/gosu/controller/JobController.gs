@@ -5,6 +5,7 @@ uses jobs.TestJob
 uses jobs.GenerateJob
 uses jobs.Job
 uses jobs.UploadJob
+uses jobs.RecommendJob
 
 class JobController implements IHasRequestContext {
 
@@ -29,6 +30,11 @@ class JobController implements IHasRequestContext {
   static function startUploadJob(requestBody : String) : String {
     new UploadJob(requestBody).start()
     return view.Companies.renderToString(1)
+  }
+
+  static function startRecommendJob() : String {
+    new RecommendJob().start()
+    return "lol"
   }
 
 }

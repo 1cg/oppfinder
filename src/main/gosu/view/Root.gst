@@ -9,7 +9,11 @@
 </a>
 
 <button ic-post-to="/jobs/start/test" ic-target="#feedback" class="btn btn-lg btn-primary">
-  <strong>Begin Analysis &rarr;</strong>
+  <strong>Begin Test &rarr;</strong>
+</button>
+
+<button ic-post-to="/jobs/start/recommend" ic-target="#feedback" class="btn btn-lg btn-primary">
+  <strong>Begin Recommendation Analysis &rarr;</strong>
 </button>
 
 <span id="feedback"></span>
