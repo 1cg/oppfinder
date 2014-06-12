@@ -63,7 +63,7 @@ class UploadJob extends Job implements Runnable {
         company.ContactName = obj.get("Contact Name") as String
         company.Email = obj.get("Email") as String
         company.Region = obj.get("Region") as String
-
+        company.Size = obj.get("Size") as String
         company.Policies = obj.get("policies") as String
         company.save()
 

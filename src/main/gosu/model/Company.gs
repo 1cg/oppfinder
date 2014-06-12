@@ -30,6 +30,14 @@ class Company extends DataSetEntry {
     return get("Region") as String
   }
 
+  property set Size(size : String) {
+    put("Size", size)
+  }
+
+  property get Size() : String {
+    return get("Size") as String
+  }
+
   property set Policies(policies : String) {
     put("Policies", policies)
   }
