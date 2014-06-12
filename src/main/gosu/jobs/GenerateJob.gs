@@ -81,6 +81,20 @@ class GenerateJob extends Job implements Runnable {
       company.Policies = coPoliciesString
       company.save()
     }
+
+    var coordInput = new FileReader("datagen/LatLng.txt")
+    var bufRead = new BufferedReader(coordInput)
+    var myLine = bufRead.readLine()
+    var dataStore = new DataSet(DataSetEntry.REGIONCOORDINATES)
+    dataStore.drop()
+    while (myLine != null) {
+      var split = myLine.split(":")
+      var city = split[0]
+      var coords = split[1].substring(1)
+      dataStore.insert({city -> coords})
+      myLine = bufRead.readLine()
+    }
+
     if (Cancelled) {
       return
     }

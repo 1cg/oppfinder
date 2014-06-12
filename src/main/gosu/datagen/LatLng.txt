@@ -274,8 +274,8 @@ Pomona, CA, USA: 34, -117
 Pompano Beach, FL, USA: 26, -80
 Port Arthur TAS 7182, Australia: -43, 147
 Port Orange, FL, USA: 29, -80
-Port St. Lucie, FL, USA: 27, -80
-Port St. Lucie, FL, USA: 27, -80
+Port St Lucie, FL, USA: 27, -80
+Port St Lucie, FL, USA: 27, -80
 Portland, OR, USA: 45, -122
 Portsmouth, UK: 50, -1
 Poughkeepsie, NY, USA: 41, -73
@@ -300,7 +300,7 @@ Roseville, CA, USA: 38, -121
 Round Lake Beach, IL, USA: 42, -88
 Sacramento, CA, USA: 38, -121
 Saginaw, MI, USA: 43, -83
-St. Louis, MO, USA: 38, -90
+St Louis, MO, USA: 38, -90
 Saint Paul, MN, USA: 44, -93
 Saint Petersburg, Russia: 59, 30
 Salem, MA, USA: 42, -70
@@ -336,9 +336,9 @@ Spartanburg, SC, USA: 34, -81
 Spokane, WA, USA: 47, -117
 Springdale, AR, USA: 36, -94
 Springfield, MA, USA: 42, -72
-St. Louis, MO, USA: 38, -90
+St Louis, MO, USA: 38, -90
 Saint Paul, MN, USA: 44, -93
-St. Petersburg, FL, USA: 27, -82
+St Petersburg, FL, USA: 27, -82
 Stamford, CT, USA: 41, -73
 Sterling Heights, MI, USA: 42, -83
 Stockton, CA, USA: 37, -121
