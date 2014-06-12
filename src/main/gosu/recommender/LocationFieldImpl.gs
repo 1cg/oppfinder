@@ -1,0 +1,5 @@
+package recommender
+
+class LocationFieldImpl {
+
+}

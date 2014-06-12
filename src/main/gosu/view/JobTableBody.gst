@@ -57,11 +57,11 @@
       </td>
     <% if (job.Progress < 100 && !job.Cancelled) { %>
       <td>
-        <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>Cancel</b></button>
+        <button ic-post-to="/jobs/state/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>Cancel</b></button>
       </td>
    <% } else if (job.Cancelled) { %>
       <td>
-        <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>Reset</b></button>
+        <button ic-post-to="/jobs/state/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>Reset</b></button>
       </td>
    <% } %>
    </tr>
