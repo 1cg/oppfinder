@@ -18,7 +18,7 @@ class GenerateJob extends Job implements Runnable {
       "Company" -> "Companies.txt",
       "Contact Name" -> "Names.txt",
       "Email" -> "Emails.txt",
-      "Region" -> "Regions.txt"
+      "Region" -> "LatLng.txt"
   }
   static final var dataMap = new HashMap<String, List>()
   static final var rand = new Random()
@@ -60,7 +60,7 @@ class GenerateJob extends Job implements Runnable {
       company.CompanyName = dataMap.get("Company").get(i % dataMap.get("Company").size()) as String
       company.ContactName = dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String
       company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String
-      company.Region = dataMap.get("Region").get(i % dataMap.get("Region").size()) as String
+      company.Region = dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String
       company.Size = (50 + rand.nextInt(40000)) as String
       var coPolicies = new HashMap<String, BigDecimal>();
       for (policyType in policies index j) {
