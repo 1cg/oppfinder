@@ -71,8 +71,12 @@ class GenerateJob extends Job implements Runnable {
         }
       }
       var coPoliciesString = ""
-      for (entry in coPolicies.entrySet()) {
-        coPoliciesString += entry.toString()+"\n"
+      for (entry in coPolicies.entrySet() index k) {
+        if (k == coPolicies.entrySet().size()-1) {
+          coPoliciesString += entry.toString()
+        } else {
+        coPoliciesString += entry.toString()+","
+          }
       }
       company.Policies = coPoliciesString
       company.save()

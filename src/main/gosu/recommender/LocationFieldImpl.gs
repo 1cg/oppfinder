@@ -14,7 +14,7 @@ class LocationFieldImpl implements Field {
   final static var geocoder = new Geocoder()
 
   override function getModel(): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Location",
+    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Region",
         \ l -> locationToLat(l),\ l -> locationToLng(l) )
   }
 

@@ -7,7 +7,7 @@ uses model.DataSet
 
 class RecommendJob extends Job implements Runnable {
 
-  var subJobs = {"LocationFieldImpl, IndustryFieldImpl, SizeFieldImpl, ReachFieldImpl"}
+  var subJobs = {/*"recommender.LocationFieldImpl", "recommender.IndustryFieldImpl",*/ "recommender.SizeFieldImpl"}//, "recommender.ReachFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
@@ -32,6 +32,7 @@ class RecommendJob extends Job implements Runnable {
     for (jobID in subJobsID) {
       var dataSet = new DataSet(jobID)
     }
+    this.Progress = 100
   }
 
   override function reset() {
