@@ -2,20 +2,10 @@ package jobs
 
 uses java.lang.Runnable
 uses java.util.Map
-uses org.apache.mahout.cf.taste.impl.model.file.FileDataModel
-uses java.io.File
-uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 uses org.apache.mahout.cf.taste.impl.neighborhood.ThresholdUserNeighborhood
 uses model.DataSet
-uses org.apache.mahout.cf.taste.similarity.UserSimilarity
-uses org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity
 uses java.lang.Class
-uses org.apache.mahout.cf.taste.model.DataModel
-uses org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity
-uses org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity
-uses org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity
 uses org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender
-uses util.MahoutUtil
 uses recommender.Field
 
 class RecommendSubJob extends Job implements Runnable {
