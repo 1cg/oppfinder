@@ -15,16 +15,17 @@ class MahoutUtil {
     'Property' -> 2,
     'Workers Comp' -> 3}
 
-  static function toDataModel(ds : DataSet, field : String, transformation(f : String) : float) : DataModel {
-    var fields = ds.find({}, {field -> 1, 'Policies' -> 1})
+  static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
+    var companies = ds.find({}, {field -> 1, 'Policies' -> 1})
     var idMap = new FastByIDMap<PreferenceArray>()
-    for (f in fields) {
-      var companyPolicies = (f['Policies'] as String).split(",")
-      var preferences = new GenericUserPreferenceArray(companyPolicies.length)
+    for (companyData in companies) {
+      var companyPolicies = (companyData['Policies'] as String).split(",")
+      var preferences = new GenericUserPreferenceArray(companyPolicies.length * 2)
       for (policy in companyPolicies index i) {
-        preferences.set(i,new GenericPreference(f['_id'] as Long ,policyToLong(policy), transformation(f['field'] as String)))
+        preferences.set(i,new GenericPreference(companyData['_id'] as Long ,policyToLong(policy), t1(companyData[field] as String)))
+        if (t2 != null) preferences.set(i,new GenericPreference(companyData['_id'] as Long ,policyToLong(policy), t2(companyData[field] as String)))
       }
-      idMap.put(f['_id'] as Long, preferences)
+      idMap.put(companyData['_id'] as Long, preferences)
     }
     return new GenericDataModel(idMap)
   }
