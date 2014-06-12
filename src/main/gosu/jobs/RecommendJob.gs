@@ -30,7 +30,7 @@ class RecommendJob extends Job implements Runnable {
     poll() //Blocks until sub-tasks are complete
     if (Cancelled) return
     for (jobID in subJobsID) {
-      var dataSet = new DataSet("oppFinder")
+      var dataSet = new DataSet(jobID)
     }
   }
 
