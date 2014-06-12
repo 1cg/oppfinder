@@ -13,7 +13,6 @@ class RecommendJob extends Job implements Runnable {
   var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl"}//, "recommender.ReachFieldImpl","recommender.IndustryFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
-  public static var RESULTS_COLLECTION : String = 'recommendations'
 
   construct(data : Map<Object, Object> ) {
     super(data)
@@ -49,7 +48,7 @@ class RecommendJob extends Job implements Runnable {
       ds.drop() //Get rid of the temp data
     }
     var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue())
-    var finalResults = new DataSet(RESULTS_COLLECTION)
+    var finalResults = new DataSet('Results:'+UUId)
     var companyDB = new DataSet(DataSetEntry.COLLECTION)
     for (each in sorted.iterator() index i) {
       if (i == 20) break
@@ -64,6 +63,10 @@ class RecommendJob extends Job implements Runnable {
     this.Progress = 100
   }
 
+  property get ResultsData() : DataSet {
+    return new DataSet('Results:'+UUId)
+  }
+
   override function reset() {
     for (jobID in subJobsID) {
       new DataSet(jobID).drop()
@@ -71,7 +74,7 @@ class RecommendJob extends Job implements Runnable {
   }
 
   override function renderToString() : String {
-    return view.TestJob.renderToString()
+    return view.RecommendJob.renderToString(this)
   }
 
   function poll() {

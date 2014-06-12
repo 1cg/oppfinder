@@ -54,6 +54,10 @@ abstract class Job implements Runnable {
 
   abstract function reset()
 
+  function update(update : Map<Object,Object>) {
+    dataStore.update(id, update)
+  }
+
   property get Type() : String {
     return (this.IntrinsicType.Name)
   }
