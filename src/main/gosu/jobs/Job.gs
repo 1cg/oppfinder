@@ -18,7 +18,7 @@ uses util.SkipIterator
 
 abstract class Job implements Runnable {
 
-  static final var MAX_PROGRESS_VALUE = 100
+  protected static final var MAX_PROGRESS_VALUE : int = 100
   static var dataStore = new DataSet('jobs')
   var id : Map<Object, Object>
 

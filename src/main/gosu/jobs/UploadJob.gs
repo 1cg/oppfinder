@@ -57,7 +57,7 @@ class UploadJob extends Job implements Runnable {
       var iterations = array.size()
 
       for (var j in 0..iterations-1) {
-        var company = new Company("oppFinder")
+        var company = new Company()
         var obj = array[j] as JSONObject
         company.CompanyName = obj.get("Company") as String
         company.ContactName = obj.get("Contact Name") as String

@@ -27,9 +27,8 @@ class RecommendSubJob extends Job implements Runnable {
     super()
   }
 
-  construct(field : String, userSimilarity : String){
+  construct(field : String){
     this.RecommendTaskField = field
-    this.RecommendTaskSimilarity = userSimilarity
   }
 
   override function run() {
