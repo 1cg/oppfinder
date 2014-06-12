@@ -87,6 +87,7 @@ class GenerateJob extends Job implements Runnable {
     var bufRead = new BufferedReader(coordInput)
     var myLine = bufRead.readLine()
     var dataStore = new DataSet(DataSetEntry.REGIONCOORDINATES)
+    dataStore.drop()
     while (myLine != null) {
       var split = myLine.split(":")
       var city = split[0]
