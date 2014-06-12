@@ -10,7 +10,6 @@ uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.impl.model.GenericDataModel
 uses org.bson.types.ObjectId
 uses java.math.BigInteger
-uses java.lang.Thread
 
 class MahoutUtil {
 
@@ -27,11 +26,9 @@ class MahoutUtil {
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id]']}, {'longID' -> id})
       for (policy in companyPolicies index i) {
-        print("processed")
         var policyNum = policyToLong(policy)
         preferences.set(i,new GenericPreference(id as Long, policyNum, t1(companyData[field] as String)))
         if (t2 != null) preferences.set(i,new GenericPreference(id,policyNum, t2(companyData[field] as String)))
-        Thread.sleep(100)
       }
       idMap.put(id, preferences)
     }

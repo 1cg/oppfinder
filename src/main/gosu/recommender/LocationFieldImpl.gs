@@ -13,6 +13,7 @@ uses java.lang.Long
 class LocationFieldImpl implements Field {
 
   final static var geocoder = new Geocoder()
+  final static var location = geocoder.geocode(new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest()).Results.get(0).Geometry.Location
 
   override function getModel(): DataModel {
     return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Region",
@@ -24,12 +25,14 @@ class LocationFieldImpl implements Field {
   }
 
   function locationToLat(l : String) : long {
-    var geocoderRequest = new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest();
-    return geocoder.geocode(geocoderRequest).Results.get(0).Geometry.Location.Lat.longValue()
+    //var geocoderRequest = new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest()
+    //return geocoder.geocode(geocoderRequest).Results.get(0).Geometry.Location.Lat.longValue()
+    return location.Lat.longValue()
   }
 
   function locationToLng(l : String) : long {
-    var geocoderRequest = new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest();
-    return geocoder.geocode(geocoderRequest).Results.get(0).Geometry.Location.Lng.longValue()
+    //var geocoderRequest = new GeocoderRequestBuilder().setAddress("Paris, France").setLanguage("en").getGeocoderRequest()
+    //return geocoder.geocode(geocoderRequest).Results.get(0).Geometry.Location.Lng.longValue()
+    return location.Lng.longValue()
   }
 }

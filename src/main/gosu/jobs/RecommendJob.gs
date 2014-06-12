@@ -4,10 +4,11 @@ uses java.lang.Runnable
 uses java.util.Map
 uses java.lang.Thread
 uses model.DataSet
+uses java.lang.Float
 
 class RecommendJob extends Job implements Runnable {
 
-  var subJobs = {"recommender.LocationFieldImpl"}//, "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.IndustryFieldImpl"}
+  var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl"}//, "recommender.ReachFieldImpl","recommender.IndustryFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
@@ -29,16 +30,24 @@ class RecommendJob extends Job implements Runnable {
     }
     poll() //Blocks until sub-tasks are complete
     if (Cancelled) return
+    var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
-      var dataSet = new DataSet(jobID)
-      print(dataSet.find().toList())
+      for (companyRecommendations in new DataSet(jobID).find()) {
+        companyRecommendations.remove('_id')
+        var entry = companyRecommendations.entrySet().first()
+        if (recommendations.containsKey(entry.Key)) {
+          var value = recommendations.get(entry.Key)
+          recommendations.put(entry.Key as String, (value + entry.Value as Float) / 2)
+        } else {
+          recommendations.put(entry.Key as String,entry.Value as Float)
+        }
+      }
     }
     this.Progress = 100
   }
 
   override function reset() {
     for (jobID in subJobsID) {
-      Job.cancel(jobID)
       new DataSet(jobID).drop()
     }
   }
