@@ -8,6 +8,13 @@ uses java.lang.Thread
 uses model.DataSetEntry
 uses model.DataSet
 
+/*
+  This program is meant to be used once so we could work on the rest of the program without having to worry about
+  Google Geocoder's limit of 10 requests per second and 2400 requests per day. This inserts the cities and coordinates
+  into a mongo collection.
+ */
+
+
 var input = new FileReader("Cities.txt")
 var bufRead = new BufferedReader(input)
 var myLine = bufRead.readLine()
