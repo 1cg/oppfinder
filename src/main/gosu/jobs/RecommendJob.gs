@@ -7,6 +7,7 @@ uses model.DataSet
 uses java.lang.Float
 uses model.DataSetEntry
 uses util.MahoutUtil
+uses java.lang.System
 
 class RecommendJob extends Job implements Runnable {
 
@@ -46,6 +47,7 @@ class RecommendJob extends Job implements Runnable {
       ds.drop() //Get rid of the temp data
     }
     storeTopRecommendations(recommendations)
+    print(System.currentTimeMillis())
     this.Progress = 100
   }
 
