@@ -26,6 +26,7 @@ class Company extends DataSetEntry {
   property set Region(region : String) {
     put("Region", region)
   }
+
   property get Region() : String {
     return get("Region") as String
   }
@@ -36,6 +37,14 @@ class Company extends DataSetEntry {
 
   property get Size() : String {
     return get("Size") as String
+  }
+
+  property get Reach() : String {
+    return get("Reach") as String
+  }
+
+  property set Reach(reach : String) {
+    put("Reach", reach)
   }
 
   property set Policies(policies : String) {
