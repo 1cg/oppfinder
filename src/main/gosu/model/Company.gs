@@ -47,6 +47,14 @@ class Company extends DataSetEntry {
     put("Reach", reach)
   }
 
+  property get Revenue() : String {
+    return get("Revenue") as String
+  }
+
+  property set Revenue(revenue : String) {
+    put("Revenue", revenue)
+  }
+
   property set Policies(policies : String) {
     put("Policies", policies)
   }
