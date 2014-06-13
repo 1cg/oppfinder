@@ -11,6 +11,7 @@ uses util.MahoutUtil
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
+  public static final var DELIMITER : String = ","
   var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl"}//, "recommender.ReachFieldImpl","recommender.IndustryFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
@@ -35,8 +36,8 @@ class RecommendJob extends Job implements Runnable {
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
         if (recommendations.containsKey(entry.Key)) {
-          var value = recommendations.get(entry.Key)
-          recommendations.put(entry.Key as String, (value + entry.Value as Float) / 2)
+          var value = recommendations.get(entry.Key) as Float
+          recommendations.put(entry.Key as String, (value + (entry.Value as Float)) / 2)
         } else {
           recommendations.put(entry.Key as String,entry.Value as Float)
         }
@@ -64,19 +65,20 @@ class RecommendJob extends Job implements Runnable {
   * Those recommendations that are the strongest will be stored.
    */
   function storeTopRecommendations(recommendations : Map<String, Float>) {
-    var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue())
-    var finalResults = new DataSet('Results:'+UUId)
+    var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue().reversed())
+    var finalResults : List<Map<Object, Object>>= {}
     var companyDB = new DataSet(DataSetEntry.COLLECTION)
     for (each in sorted.iterator() index i) {
-      if (i == NUM_RECOMMENDATIONS) return
+      if (i == NUM_RECOMMENDATIONS) break
       var result : Map<Object, Object> = {}
-      var info = each.Key.split(",")
+      var info = each.Key.split(DELIMITER)
       var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1}).next()
       result.put('Company', company['Company'])
       result.put('Policy',MahoutUtil.longToPolicy(info[1].toLong()))
       result.put('Value', each.Value)
-      finalResults.insert(result)
+      finalResults.add(result)
     }
+    new DataSet('Results:'+UUId).insert(finalResults.reverse())
   }
 
   property get ResultsData() : DataSet {
