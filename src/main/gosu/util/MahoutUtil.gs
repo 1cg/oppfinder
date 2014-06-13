@@ -15,7 +15,10 @@ class MahoutUtil {
 
   static var policies = {'Business Auto' -> 1,
     'Property' -> 2,
-    'Workers Comp' -> 3}
+    'Workers Comp' -> 3,
+    'Earthquake' -> 4,
+    'Tsunami' -> 5,
+    'Godzilla' -> 6}
 
   static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1})
