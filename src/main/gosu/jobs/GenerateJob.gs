@@ -65,7 +65,7 @@ class GenerateJob extends Job implements Runnable {
       company.Region = dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String
       company.Size = (50 + rand.nextInt(40000)) as String
       company.Reach = REACHES[rand.nextInt(3)]
-      company.Revenue = new BigDecimal(10 + rand.nextInt(162000))
+      company.Revenue = (new BigDecimal(10 + rand.nextInt(162000))).toString()
       var coPolicies = new HashMap<String, BigDecimal>();
       for (policyType in POLICIES index j) {
         if (rand.nextInt(2) == 0 || j+1 == POLICIES.size()) {
