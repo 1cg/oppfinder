@@ -68,6 +68,9 @@ class RecommendSubJob extends Job implements Runnable {
     var userIDs = model.getUserIDs()
     var user = userIDs.skip(this.Start)
     for (i in 0..|this.Number) {
+      if (!userIDs.hasNext()) {
+        break
+      }
       user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
       for (recommendation in recommendations) {
