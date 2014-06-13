@@ -82,6 +82,7 @@ class GenerateJob extends Job implements Runnable {
       company.save()
     }
 
+    // We stored the cities and coordinates in a file to work around the Google Geocoder request limit.
     var coordInput = new FileReader("datagen/LatLng.txt")
     var bufRead = new BufferedReader(coordInput)
     var myLine = bufRead.readLine()
