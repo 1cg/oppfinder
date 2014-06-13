@@ -13,7 +13,7 @@ uses java.math.BigDecimal
 uses model.DataSetEntry
 
 class GenerateJob extends Job implements Runnable {
-  static final var policies = {"Workers Comp", "Business Auto", "Property"}
+  static final var policies = {"Workers Comp", "Business Auto", "Property", "Earthquake", "Tsunami", "Godzilla"}
   static final var columnMap = {
       "Company" -> "Companies.txt",
       "Contact Name" -> "Names.txt",
