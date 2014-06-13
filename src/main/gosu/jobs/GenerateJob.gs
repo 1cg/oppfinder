@@ -14,6 +14,7 @@ uses model.DataSetEntry
 
 class GenerateJob extends Job implements Runnable {
   public static final var POLICIES: List<String> = {"Workers Comp", "Business Auto", "Property", "Earthquake", "Tsunami", "Godzilla"}
+  public static final var REACHES: List<String> = {"Regional", "National", "Global"}
   public static final var DELIMITER : String = ","
   static final var columnMap = {
       "Company" -> "Companies.txt",
@@ -63,6 +64,8 @@ class GenerateJob extends Job implements Runnable {
       company.Email = dataMap.get("Email").get(i % dataMap.get("Email").size()) as String
       company.Region = dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String
       company.Size = (50 + rand.nextInt(40000)) as String
+      company.Reach = REACHES[rand.nextInt(3)]
+
       var coPolicies = new HashMap<String, BigDecimal>();
       for (policyType in POLICIES index j) {
         if (rand.nextInt(2) == 0 || j+1 == POLICIES.size()) {
