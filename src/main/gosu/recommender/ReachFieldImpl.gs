@@ -1,7 +1,7 @@
 package recommender
 
 uses org.apache.mahout.cf.taste.model.DataModel
-uses org.apache.mahout.cf.taste.similarity.UserSimilarity
+uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses util.MahoutUtil
 uses model.DataSet
 uses model.DataSetEntry
@@ -19,7 +19,7 @@ class ReachFieldImpl implements Field {
        \ o -> reachToLong(o), null)
   }
 
-  override function getSimilarity(model: DataModel): UserSimilarity {
+  override function getSimilarity(model: DataModel): ItemSimilarity {
     return new PearsonCorrelationSimilarity(model)
   }
 

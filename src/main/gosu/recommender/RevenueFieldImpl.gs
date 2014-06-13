@@ -1,7 +1,7 @@
 package recommender
 
 uses org.apache.mahout.cf.taste.model.DataModel
-uses org.apache.mahout.cf.taste.similarity.UserSimilarity
+uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses util.MahoutUtil
 uses model.DataSet
 uses model.DataSetEntry
@@ -12,7 +12,7 @@ class RevenueFieldImpl implements Field {
     return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Revenue", \ o -> o.toLong(), null)
   }
 
-  override function getSimilarity(model : DataModel): UserSimilarity {
+  override function getSimilarity(model : DataModel): ItemSimilarity {
     return new PearsonCorrelationSimilarity(model)
   }
 }

@@ -2,13 +2,12 @@ package jobs
 
 uses java.lang.Runnable
 uses java.util.Map
-uses org.apache.mahout.cf.taste.impl.neighborhood.ThresholdUserNeighborhood
 uses model.DataSet
 uses java.lang.Class
-uses org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender
 uses recommender.Field
 uses java.lang.Float
 uses java.lang.Math
+uses org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
 
 class RecommendSubJob extends Job implements Runnable {
 
@@ -40,8 +39,9 @@ class RecommendSubJob extends Job implements Runnable {
     var field = c.newInstance() as Field
     var model = field.getModel()
     var similarity = field.getSimilarity(model)
-    var neighborhood = new ThresholdUserNeighborhood(0.3, similarity, model)
-    var recommender = new GenericUserBasedRecommender(model, neighborhood, similarity)
+    //var neighborhood = new ThresholdUserNeighborhood(0.3, similarity, model)
+    var recommender = new GenericItemBasedRecommender(model, similarity)
+    //var recommender = new GenericUserBasedRecommender(model, neighborhood, similarity)
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
     for (user in model.getUserIDs()) {
       var recommendations = recommender.recommend(user, 3)

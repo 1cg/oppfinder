@@ -26,6 +26,7 @@ class MahoutUtil {
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
       for (policy in companyPolicies index i) { //Map each field to a long value and then add it as a preference
+        var data = companyData[field]
         preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData[field] as String)))
         if (t2 != null) preferences.set(i+companyPolicies.length,new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
       }
