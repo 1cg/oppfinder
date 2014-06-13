@@ -46,6 +46,10 @@ class RecommendSubJob extends Job implements Runnable {
 
   override function reset() {}
 
+  override property set Status(status : String) {
+    update({'Status' -> 'Subjob'})
+  }
+
   override function renderToString() : String {
     return view.TestJob.renderToString()
   }

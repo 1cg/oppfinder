@@ -8,11 +8,11 @@
   <strong>Upload or generate data</strong>
 </a>
 
-<button ic-post-to="/jobs/start/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+<button ic-post-to="/jobs/action/start/test" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Test &rarr;</strong>
 </button>
 
-<button ic-post-to="/jobs/start/recommend" ic-target="#feedback" class="btn btn-lg btn-primary">
+<button ic-post-to="/jobs/action/start/recommend" ic-target="#feedback" class="btn btn-lg btn-primary">
   <strong>Begin Recommendation Analysis &rarr;</strong>
 </button>
 
