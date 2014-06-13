@@ -12,7 +12,7 @@ uses jobs.GenerateJob
 
 class ReachFieldImpl implements Field {
 
-  static final var policies = makeReachMap()
+  static final var reachMap = makeReachMap()
 
   override function getModel(): DataModel {
     return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Reach",
@@ -24,17 +24,14 @@ class ReachFieldImpl implements Field {
   }
 
   function reachToLong(reach : String) : long {
-    var reaches = {'Regional' -> 1,
-                   'National' -> 2,
-                   'Global' -> 3}
-    return reaches[reach]
+    return reachMap[reach]
   }
 
   static function makeReachMap() : Map<String, Integer> {
-    var reachMap : Map<String,Integer> = {}
+    var map : Map<String,Integer> = {}
     for (reach in GenerateJob.REACHES index i) {
-      reachMap[reach] = i
+      map[reach] = i
     }
-    return reachMap
+    return map
   }
 }
