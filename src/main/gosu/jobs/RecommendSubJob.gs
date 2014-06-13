@@ -8,6 +8,7 @@ uses recommender.Field
 uses java.lang.Float
 uses java.lang.Math
 uses org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
+uses java.lang.Long
 
 class RecommendSubJob extends Job implements Runnable {
 
@@ -26,10 +27,29 @@ class RecommendSubJob extends Job implements Runnable {
   * Takes in the class name of the recommender.Field implementation that should be used
   * for analysis of the data set
   */
-  construct(field : String){
+  construct(field : String, start : long, number : long){
     super()
     this.FieldName = field
+    this.Start = start
+    this.Number = number
   }
+
+  property get Start() : long {
+    return search('Start') as Long
+  }
+
+  property set Start(start : long) {
+    update({'Start' -> start})
+  }
+
+  property get Number() : long {
+    return search('Number') as Long
+  }
+
+  property set Number(start : long) {
+    update({'Number' -> start})
+  }
+
 
   override function run() {
     maxRecommendation = Float.MIN_VALUE
@@ -39,9 +59,7 @@ class RecommendSubJob extends Job implements Runnable {
     var field = c.newInstance() as Field
     var model = field.getModel()
     var similarity = field.getSimilarity(model)
-    //var neighborhood = new ThresholdUserNeighborhood(0.3, similarity, model)
     var recommender = new GenericItemBasedRecommender(model, similarity)
-    //var recommender = new GenericUserBasedRecommender(model, neighborhood, similarity)
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
     for (user in model.getUserIDs()) {
       var recommendations = recommender.recommend(user, 3)

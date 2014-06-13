@@ -11,6 +11,7 @@ uses util.MahoutUtil
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
+  static final var NUM_BUCKETS = 4
   public static final var DELIMITER : String = ","
   var subJobs = {/*"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl",*/"recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
@@ -52,11 +53,14 @@ class RecommendJob extends Job implements Runnable {
   * Runs each of the sub jobs that analyze the selected fields
    */
   function startSubJobs() {
+    var size = (new DataSet(DataSetEntry.COLLECTION).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
     for (jobName in subJobs) {
-      var job = new RecommendSubJob(jobName)
-      job.start()
-      subJobsID.add(job.UUId)
-      if (Cancelled) return
+      for (i in 0..|NUM_BUCKETS) {
+        var job = new RecommendSubJob(jobName, i * size, size)
+        job.start()
+        subJobsID.add(job.UUId)
+        if (Cancelled) return
+      }
     }
   }
 

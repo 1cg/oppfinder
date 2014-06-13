@@ -60,6 +60,10 @@ abstract class Job implements Runnable {
     dataStore.update(id, update)
   }
 
+  function search(field : String) : Object {
+    return dataStore.findOne(id)[field]
+  }
+
   property get Type() : String {
     return (this.IntrinsicType.Name)
   }
