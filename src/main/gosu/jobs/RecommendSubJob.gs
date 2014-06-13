@@ -17,30 +17,31 @@ class RecommendSubJob extends Job implements Runnable {
     super()
   }
 
+  /*
+  * Takes in the class name of the recommender.Field implementation that should be used
+  * for analysis of the data set
+  */
   construct(field : String){
     super()
-    this.RecommendTaskField = field
+    this.FieldName = field
   }
 
   override function run() {
     if (this.Cancelled) return
-    var c = Class.forName(this.RecommendTaskField)
+    var c = Class.forName(this.FieldName)
     var field = c.newInstance() as Field
     var model = field.getModel()
     var similarity = field.getSimilarity(model)
     var neighborhood = new ThresholdUserNeighborhood(0.3, similarity, model)
     var recommender = new GenericUserBasedRecommender(model, neighborhood, similarity)
-
     var myRecommendations = new DataSet(this.UUId) // The recommended items for all users from this particular job
-
-
     for (user in model.getUserIDs()) {
       var recommendations = recommender.recommend(user, 3)
       for (recommendation in recommendations) {
+        //Store the id in the table as well as the recommendation (a policy) and value
         myRecommendations.insert({user.toString()+","+recommendation.ItemID -> recommendation.Value})
       }
     }
-    // For each UUID, store the intermediate results (which item # and their value) in the JOB UUID's own dataset
     this.Progress = 100
   }
 

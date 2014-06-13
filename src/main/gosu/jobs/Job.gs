@@ -15,6 +15,7 @@ uses java.lang.Thread
 uses view.JobDrillDown
 uses util.TransformationIterator
 uses util.SkipIterator
+uses java.lang.Class
 
 abstract class Job implements Runnable {
 
@@ -91,23 +92,6 @@ abstract class Job implements Runnable {
     dataStore.save(id)
   }
 
-  property set RecommendTaskField(field : String) {
-    dataStore.update(id, {'Field' -> field})
-  }
-
-  property get RecommendTaskField() : String {
-    return dataStore.findOne(id)?.get('Field') as String
-  }
-
-  property set RecommendTaskSimilarity(similarity : String) {
-    dataStore.update(id, {'Similarity' -> similarity})
-  }
-
-  property get RecommendTaskSimilarity() : String {
-    return dataStore.findOne(id)?.get('Similarity') as String
-  }
-
-
   property get Progress() : int {
     return dataStore.findOne(id)?.get('Progress') as Integer ?: 0
   }
@@ -118,6 +102,14 @@ abstract class Job implements Runnable {
     }
     dataStore.update(id, {'Progress' -> progress})
     checkBounds()
+  }
+
+  property set FieldName(field: String) {
+    dataStore.update(id, {'Field' -> field})
+  }
+
+  property get FieldName() : String {
+    return dataStore.findOne(id)?.get('Field') as String
   }
 
   static function getUUIDProgress(UUID : String) : String {
@@ -196,27 +188,16 @@ abstract class Job implements Runnable {
     dataStore.update(id, {'State' -> state})
   }
 
+  /*
+  * Instantiates an object through the provided class name
+  */
   static function newUp(job : Map<Object, Object>) : jobs.Job {
-    if (job == null) {
-      return null
-    } else if (job['Type'] as String == 'jobs.TestJob') {
-      return new TestJob(job)
-    } else if (job['Type'] as String == 'jobs.GenerateJob') {
-      return new GenerateJob(job)
-    } else if (job['Type'] as String == 'jobs.UploadJob') {
-      return new UploadJob(job)
-    } else if (job['Type'] as String == 'jobs.RecommendJob') {
-      return new RecommendJob(job)
-    } else if (job['Type'] as String == 'jobs.RecommendSubJob') {
-      return new RecommendSubJob(job)
-    }
-    return new TestJob(job)
+    if (job == null) return null
+    return Class.forName(job['Type'] as String)
+                      .getConstructor({Map.Type.IntrinsicClass})
+                      .newInstance({job}) as jobs.Job
   }
 
-  /*
-  * Depending on how bloated the jobs collection gets, we might consider adding a field that
-  * indicates an active job so that this O(n) filtering doesn't have to happen
-   */
   static property get ActiveJobs() : SkipIterator<jobs.Job> {
     return new TransformationIterator<jobs.Job>(
         dataStore.find({'Status' -> 'Active'}), \ m -> newUp(m))
