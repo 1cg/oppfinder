@@ -13,7 +13,8 @@ uses java.math.BigDecimal
 uses model.DataSetEntry
 
 class GenerateJob extends Job implements Runnable {
-  static final var policies = {"Workers Comp", "Business Auto", "Property", "Earthquake", "Tsunami", "Godzilla"}
+  public static final var POLICIES: List<String> = {"Workers Comp", "Business Auto", "Property", "Earthquake", "Tsunami", "Godzilla"}
+  public static final var DELIMITER : String = ","
   static final var columnMap = {
       "Company" -> "Companies.txt",
       "Contact Name" -> "Names.txt",
@@ -63,9 +64,9 @@ class GenerateJob extends Job implements Runnable {
       company.Region = dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String
       company.Size = (50 + rand.nextInt(40000)) as String
       var coPolicies = new HashMap<String, BigDecimal>();
-      for (policyType in policies index j) {
-        if (rand.nextInt(2) == 0 || j+1 == policies.size()) {
-          coPolicies.put(policies[rand.nextInt(policies.size())], new BigDecimal(5000+ rand.nextInt(999500)))
+      for (policyType in POLICIES index j) {
+        if (rand.nextInt(2) == 0 || j+1 == POLICIES.size()) {
+          coPolicies.put(POLICIES[rand.nextInt(POLICIES.size())], new BigDecimal(5000+ rand.nextInt(999500)))
         } else {
           continue
         }
@@ -75,7 +76,7 @@ class GenerateJob extends Job implements Runnable {
         if (k == coPolicies.entrySet().size()-1) {
           coPoliciesString += entry.toString()
         } else {
-        coPoliciesString += entry.toString()+","
+        coPoliciesString += entry.toString()+DELIMITER
           }
       }
       company.Policies = coPoliciesString

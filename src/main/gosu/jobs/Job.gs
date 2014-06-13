@@ -19,8 +19,9 @@ uses java.lang.Class
 
 abstract class Job implements Runnable {
 
+  static final var COLLECTION = 'jobs'
   protected static final var MAX_PROGRESS_VALUE : int = 100
-  static var dataStore = new DataSet('jobs')
+  static var dataStore = new DataSet(COLLECTION)
   var id : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {

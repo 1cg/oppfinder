@@ -5,43 +5,46 @@ uses org.apache.mahout.cf.taste.impl.common.FastByIDMap
 uses org.apache.mahout.cf.taste.model.PreferenceArray
 uses org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray
 uses org.apache.mahout.cf.taste.impl.model.GenericPreference
-uses java.lang.Long
 uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.impl.model.GenericDataModel
 uses org.bson.types.ObjectId
 uses java.math.BigInteger
+uses java.util.Map
+uses java.lang.Integer
+uses jobs.GenerateJob
 
 class MahoutUtil {
 
-  static var policies = {'Business Auto' -> 1,
-    'Property' -> 2,
-    'Workers Comp' -> 3,
-    'Earthquake' -> 4,
-    'Tsunami' -> 5,
-    'Godzilla' -> 6}
+  static final var policies = makePolicyMap()
 
   static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
-    var companies = ds.find({}, {field -> 1, 'Policies' -> 1})
+    var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
-      var companyPolicies = (companyData['Policies'] as String).split(",")
+      var companyPolicies = (companyData['Policies'] as String).split(GenerateJob.DELIMITER)
       var preferences = new GenericUserPreferenceArray(companyPolicies.length * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
-      ds.update({'_id' -> companyData['_id']}, {'longID' -> id})
-      for (policy in companyPolicies index i) {
-        var policyNum = policyToLong(policy)
-        preferences.set(i,new GenericPreference(id as Long, policyNum, t1(companyData[field] as String)))
-        if (t2 != null) preferences.set(i,new GenericPreference(id,policyNum, t2(companyData[field] as String)))
+      ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
+      for (policy in companyPolicies index i) { //Map each field to a long value and then add it as a preference
+        preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData[field] as String)))
+        if (t2 != null) preferences.set(i+companyPolicies.length,new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
       }
       idMap.put(id, preferences)
     }
     return new GenericDataModel(idMap)
   }
 
+  /*
+  * Takes a policy and maps it to a long value for analysis by the mahout library
+   */
   static function policyToLong(policy : String) : long {
     return policies[policy.split("=")[0]]
   }
 
+  /*
+  * Takes a long value that has been mapped from makePolicyMap and maps its back to a policy
+  * longToPolicy(policyToLong(<<My Valid Policy>>)) == <<My Valid Policy>>
+   */
   static function longToPolicy(mapping : long) : String {
     for (entry in policies.entrySet()) {
       if (entry.Value == mapping) {
@@ -51,5 +54,12 @@ class MahoutUtil {
     return null
   }
 
+  static function makePolicyMap() : Map<String, Integer> {
+    var policyMap : Map<String,Integer> = {}
+    for (policy in GenerateJob.POLICIES index i) {
+      policyMap[policy] = i
+    }
+    return policyMap
+  }
 
 }
