@@ -12,7 +12,7 @@ uses java.lang.System
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
-  static final var NUM_BUCKETS = 4
+  static final var NUM_BUCKETS = 6
   public static final var DELIMITER : String = ","
   var subJobs = {/*"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl",*/"recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
@@ -28,6 +28,7 @@ class RecommendJob extends Job implements Runnable {
 
   override function run() {
     if (Cancelled) return
+    var startTime = System.currentTimeMillis()
     startSubJobs()
     poll() //Blocks until sub-tasks are complete
     if (Cancelled) return
@@ -47,7 +48,7 @@ class RecommendJob extends Job implements Runnable {
       ds.drop() //Get rid of the temp data
     }
     storeTopRecommendations(recommendations)
-    print(System.currentTimeMillis())
+    print("OVERALL: "+(System.currentTimeMillis()-startTime))
     this.Progress = 100
   }
 
