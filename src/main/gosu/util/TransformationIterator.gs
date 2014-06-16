@@ -31,11 +31,16 @@ class TransformationIterator<T> implements Iterator<T>, SkipIterator<T> {
     cursor.remove()
   }
 
-  override function skip(n: int) {
-    cursor.skip(n)
+  override function skip(n: long) {
+    cursor.skip(n as int)
   }
 
   override function copy(): SkipIterator<T> {
     return new TransformationIterator<T>(cursor.copy(), transformation)
   }
+
+  override property get Count(): long {
+    return cursor.count()
+  }
+
 }

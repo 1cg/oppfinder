@@ -4,21 +4,21 @@ uses util.SkipIterator
 
 class Pager<T> {
 
-  var pageSize : int
+  var pageSize : long
   var iterate : SkipIterator<T>
   var copy : SkipIterator<T>
   var jobs : List<T>
-  var page : int as Current
+  var page : long as Current
   var processed : boolean
 
-  construct(i : SkipIterator<T>, size : int) {
+  construct(i : SkipIterator<T>, size : long) {
     iterate = i
     copy = i.copy()
     pageSize = size
     jobs = {}
   }
 
-  function getPage(p : int) : List<T> {
+  function getPage(p : long) : List<T> {
     if (processed || p < 1) return jobs
     iterate.skip((p -1) * pageSize)
     for (i in 0..|pageSize) {
@@ -32,20 +32,24 @@ class Pager<T> {
     return jobs
   }
 
-  function validPage(p : int) : boolean {
+  function validPage(p : long) : boolean {
     if (p < 1) return false
     var tmp = copy.copy()
     tmp.skip((p - 1) * pageSize)
     return tmp.hasNext()
   }
 
-  function checkStatus(p : int) : String {
+  function checkStatus(p : long) : String {
     if (p == page) {
       return "active"
     } else if (validPage(p)) {
       return ""
     }
     return "disabled"
+  }
+
+  function lastPage() : long {
+    return iterate.Count / pageSize
   }
 
 }

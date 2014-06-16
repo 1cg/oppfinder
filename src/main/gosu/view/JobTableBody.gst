@@ -1,4 +1,4 @@
-<%@ params(type: String, page: int ) %>
+<%@ params(type: String, page: long) %>
 <% var pager : model.Pager<jobs.Job>
   if (type == "complete") {
     pager = new model.Pager<jobs.Job>(jobs.Job.CompleteJobs,10)
@@ -31,12 +31,10 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Attention: </strong> There are currently no ${type} jobs in the database
       </div>
-    <%  } else if (!pager.validPage(page)) { %>
-      <div class="alert alert-info alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong>Attention: </strong> There are not this many ${type} jobs in the database; please go to an earlier page
-      </div>
     <% } else {
+    if (!pager.validPage(page)) {
+      page = pager.lastPage()
+    }
     for(job in pager.getPage(page))  {%>
     <tr>
       <td>

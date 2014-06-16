@@ -1,2 +1,2 @@
-<%@ params(page : int)%>
+<%@ params(page : long)%>
 ${JobTable.renderToString("Currently Running Jobs", "running", page)}
