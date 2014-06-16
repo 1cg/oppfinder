@@ -4,9 +4,9 @@ Layout = view.Layout
 
 /* Getters for job information */
 get('/', \-> view.Root.renderToString() )
-get('/jobs/running/:page', \-> view.Running.renderToString(Params['page'].toInt()))
-get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toInt()))
-get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toInt()))
+get('/jobs/running/:page', \-> view.Running.renderToString(Params['page'].toLong()))
+get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toLong()))
+get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toLong()))
 get('/jobs/:id/percent_done', \-> {
   Layout = null
   return jobs.Job.getUUIDProgress(Params['id'])
@@ -17,8 +17,10 @@ get('/jobs/:id/elapsed_time', \-> {
 })
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> { Layout = null
-                    return view.JobTableBody.renderToString(Params['type'], Params['page'].toInt())})
-get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toInt()))
+                    return view.JobTableBody.renderToString(Params['type'], Params['page'].toLong())})
+get('/jobs/table/pager/:type/:page', \-> { Layout = null
+  return view.Pager.renderToString(Params['type'], Params['page'].toLong())})
+get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/*', \-> view.Companies.renderToString(1))
 

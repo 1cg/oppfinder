@@ -1,4 +1,4 @@
-<%@ params(page : int)%>
+<%@ params(page : long)%>
 <% var pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10) %>
 <h2>Either randomly generate or upload your own data.</h2>
 <p>The table of data is displayed below.</p><br>
