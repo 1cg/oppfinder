@@ -40,7 +40,7 @@ class GenerateRandom {
     var bigArray = new JSONArray()
     for (name in dataMap.get("Company") index i) {
       var company = new JSONObject()
-      company.put("Company", dataMap.get("Company").get(i % dataMap.get("Company").size()) as String)
+      company.put("Company", name)
       company.put("Contact Name", dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String)
       company.put("Email", dataMap.get("Email").get(i % dataMap.get("Email").size()) as String)
       company.put("Region", dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String)
