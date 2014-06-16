@@ -9,11 +9,16 @@ uses model.DataSetEntry
 uses org.json.simple.parser.JSONParser
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
+uses java.lang.System
 
 class GenerateJob extends Job implements Runnable {
 
   construct(data : Map<Object, Object>) {
     super(data)
+  }
+
+  construct() {
+    super()
   }
 
   construct(path : String) {
@@ -23,6 +28,7 @@ class GenerateJob extends Job implements Runnable {
 
   override function run() {
     if (Cancelled) return
+    print("Generate: " + System.getProperty('user.dir'))
     var path = search('Path') as String
     var parser = new JSONParser()
     var dataSet = new DataSet(DataSetEntry.COLLECTION)

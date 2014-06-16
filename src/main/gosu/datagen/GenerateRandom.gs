@@ -11,6 +11,7 @@ uses org.json.simple.JSONArray
 uses java.io.File
 uses java.io.FileWriter
 uses datagen.assets.AssetLibrarian
+uses java.lang.System
 
 class GenerateRandom {
   /*
@@ -18,14 +19,14 @@ class GenerateRandom {
    * Number of companies is dependent on the length of Companies.txt
    * output : The file path to write and place the JSON file.
    */
-  static function generateRandom(output : String) {
-
+  function generateRandom(output : String) {
     var columnMap = AssetLibrarian.COLUMNMAP
     var rand = new Random()
     var dataMap = new HashMap<String, List>()
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
-      var input = new FileReader("datagen/"+columnMap.get(column))
+      print(System.getProperty('user.dir'))
+      var input = new FileReader("datagen/assets/"+columnMap.get(column))
       var bufRead = new BufferedReader(input)
       var myLine = bufRead.readLine()
 
@@ -44,7 +45,7 @@ class GenerateRandom {
       company.put("Contact Name", dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String)
       company.put("Email", dataMap.get("Email").get(i % dataMap.get("Email").size()) as String)
       company.put("Region", dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String)
-      company.put("Reach", dataMap.get("Reach").get(rand.nextInt(dataMap.get("Region").size())) as String)
+      company.put("Reach", dataMap.get("Reach").get(rand.nextInt(dataMap.get("Reach").size())) as String)
       var coPolicies = new JSONArray();
       for (policyType in dataMap.get("Policy") index j) {
         if (rand.nextInt(2) == 0 || j+1 == dataMap.get("Policy").size()) {
