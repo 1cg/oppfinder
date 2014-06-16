@@ -41,7 +41,7 @@ class MahoutUtil {
   * Takes a policy and maps it to a long value for analysis by the mahout library
    */
   static function policyToLong(policy : JSONObject) : long {
-    return policies[policy['type'] as String]
+    return policies[policy['Type'] as String]
   }
 
   /*

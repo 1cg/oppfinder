@@ -48,8 +48,8 @@ class GenerateRandom {
       for (policyType in dataMap.get("Policy") index j) {
         if (rand.nextInt(2) == 0 || j+1 == dataMap.get("Policy").size()) {
           var policy = new JSONObject()
-          policy.put("type", policyType as String)
-          policy.put("premium", (5000 + rand.nextInt(999500)))
+          policy.put("Type", policyType as String)
+          policy.put("Premium", (5000 + rand.nextInt(999500)))
           coPolicies.add(policy)
         } else {
           continue
