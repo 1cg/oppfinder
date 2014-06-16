@@ -14,8 +14,9 @@ class JobController implements IHasRequestContext {
     new TestJob().start()
     return "Job Started!!!"
   }
-  static function startGenerateJob() : String{
-    new GenerateRandom().start()
+  static function startGenerateJob() : String {
+    new GenerateRandom().generateRandom('datagen/assets/data.json')
+    new GenerateJob('datagen/assets/data.json').start()
     return "Company information listed below."
   }
   static function cancelJob(UUID : String) : String{
