@@ -22,6 +22,8 @@ get('/jobs/table/pager/:type/:page', \-> { Layout = null
   return view.Pager.renderToString(Params['type'], Params['page'].toLong())})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/jobs/upload', \-> view.Companies.renderToString(1))
+get('/companies/table/:page', \-> { Layout = null
+    return view.CompanyTable.renderToString(Params['page'].toLong())})
 get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Start Jobs */
