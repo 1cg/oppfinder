@@ -25,7 +25,6 @@ class GenerateRandom {
     var dataMap = new HashMap<String, List>()
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
-      print(System.getProperty('user.dir'))
       var input = new FileReader("src/main/gosu/datagen/assets/"+columnMap.get(column))
       var bufRead = new BufferedReader(input)
       var myLine = bufRead.readLine()
@@ -41,7 +40,7 @@ class GenerateRandom {
     var bigArray = new JSONArray()
     for (name in dataMap.get("Company") index i) {
       var company = new JSONObject()
-      company.put("Company", name)
+      company.put("Company", dataMap.get("Company").get(i % dataMap.get("Company").size()) as String)
       company.put("Contact Name", dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String)
       company.put("Email", dataMap.get("Email").get(i % dataMap.get("Email").size()) as String)
       company.put("Region", dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String)
@@ -66,7 +65,7 @@ class GenerateRandom {
     }
 
 
-    var outputFile = new FileWriter(new File(output))
+    var outputFile = new FileWriter(new File("src/main/gosu/" + output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()
