@@ -1,0 +1,5 @@
+package datagen
+
+class GenerateRandom {
+
+}

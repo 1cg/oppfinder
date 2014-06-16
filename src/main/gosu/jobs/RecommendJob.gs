@@ -7,6 +7,7 @@ uses model.DataSet
 uses java.lang.Float
 uses model.DataSetEntry
 uses util.MahoutUtil
+uses java.lang.System
 
 class RecommendJob extends Job implements Runnable {
 
