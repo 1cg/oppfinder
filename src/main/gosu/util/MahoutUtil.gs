@@ -18,6 +18,7 @@ uses datagen.assets.AssetLibrarian
 class MahoutUtil {
 
   static final var policies = makePolicyMap()
+  static var temp = new AssetLibrarian()
 
   static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
@@ -59,7 +60,7 @@ class MahoutUtil {
 
   static function makePolicyMap() : Map<String, Integer> {
     var policyMap : Map<String,Integer> = {}
-    for (policy in AssetLibrarian.POLICIES index i) {
+    for (policy in temp.POLICIES index i) {
       policyMap[policy] = i
     }
     return policyMap

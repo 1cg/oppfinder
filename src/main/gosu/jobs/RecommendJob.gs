@@ -7,12 +7,11 @@ uses model.DataSet
 uses java.lang.Float
 uses model.DataSetEntry
 uses util.MahoutUtil
-uses java.lang.System
 
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
-  static final var NUM_BUCKETS = 1
+  static final var NUM_BUCKETS = 6
   public static final var DELIMITER : String = ","
   var subJobs = {/*"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl",*/"recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
@@ -27,6 +26,7 @@ class RecommendJob extends Job implements Runnable {
   }
 
   override function run() {
+    print("starting recommend job")
     if (Cancelled) return
     startSubJobs()
     poll() //Blocks until sub-tasks are complete
@@ -38,7 +38,7 @@ class RecommendJob extends Job implements Runnable {
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
         if (recommendations.containsKey(entry.Key)) {
-          var value = recommendations.get(entry.Key) as Float
+          var value = recommendations.get(entry.Key)
           recommendations.put(entry.Key as String, (value + (entry.Value as Float)) / 2)
         } else {
           recommendations.put(entry.Key as String,entry.Value as Float)
