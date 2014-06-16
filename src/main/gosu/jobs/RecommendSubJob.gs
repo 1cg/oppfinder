@@ -8,7 +8,6 @@ uses recommender.Field
 uses java.lang.Float
 uses java.lang.Math
 uses org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
-uses java.lang.System
 uses java.lang.Long
 
 class RecommendSubJob extends Job implements Runnable {
@@ -25,7 +24,7 @@ class RecommendSubJob extends Job implements Runnable {
   }
 
   /*
-  * Takes in the class name of the recommender.Field implementation that should be used
+  * Takes in the class name of the <<recommender.Field>> implementation that should be used
   * for analysis of the data set
   */
   construct(field : String, start : long, number : long){
@@ -57,40 +56,15 @@ class RecommendSubJob extends Job implements Runnable {
     minRecommendation = Float.MAX_VALUE
     if (this.Cancelled) return
     var c = Class.forName(this.FieldName)
-
-    // TIME THE MODEL GENERATION
-    var startTime = System.currentTimeMillis();
     var field = c.newInstance() as Field
     var model = field.getModel()
-    var endTime = System.currentTimeMillis();
-    print("MODEL TIMING: "+(endTime-startTime))
-
-    startTime = System.currentTimeMillis()
     var similarity = field.getSimilarity(model)
-    endTime = System.currentTimeMillis()
-    print("SIMILARITY TIMING: "+(endTime - startTime))
-
-    startTime = System.currentTimeMillis()
-    //var neighborhood = new ThresholdUserNeighborhood(0.3, similarity, model)
     var recommender = new GenericItemBasedRecommender(model, similarity)
-    endTime = System.currentTimeMillis()
-    print("RECOMMENDER TIMING: "+(endTime - startTime))
-
-    startTime = System.currentTimeMillis()
-    //var recommender = new GenericUserBasedRecommender(model, neighborhood, similarity)
-
-
-    /*
-     * The following nested for loop needs to be parallelized.
-     */
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
-
     var userIDs = model.getUserIDs()
     userIDs.skip(this.Start as int)
     for (i in 0..|this.Number) {
-      if (!userIDs.hasNext()) {
-        break
-      }
+      if (!userIDs.hasNext()) break
       var user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
       for (recommendation in recommendations) {
@@ -100,8 +74,6 @@ class RecommendSubJob extends Job implements Runnable {
         myRecommendations.add({user.toString()+RecommendJob.DELIMITER+recommendation.ItemID -> recommendation.Value})
       }
     }
-    endTime = System.currentTimeMillis()
-    print("RECOMMENDATIONS TIMING: "+(endTime - startTime))
     myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
     new DataSet(this.UUId).insert(myRecommendations)
     this.Progress = 100
