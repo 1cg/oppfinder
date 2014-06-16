@@ -12,6 +12,8 @@ uses java.math.BigInteger
 uses java.util.Map
 uses java.lang.Integer
 uses jobs.GenerateJob
+uses org.json.simple.JSONArray
+uses org.json.simple.JSONObject
 
 class MahoutUtil {
 
@@ -21,14 +23,14 @@ class MahoutUtil {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
-      var companyPolicies = (companyData['Policies'] as String).split(GenerateJob.DELIMITER)
-      var preferences = new GenericUserPreferenceArray(companyPolicies.length * 2)
+      var companyPolicies = companyData['Policies'] as JSONArray
+      var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
-      for (policy in companyPolicies index i) { //Map each field to a long value and then add it as a preference
+      for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
         var data = companyData[field]
         preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData[field] as String)))
-        if (t2 != null) preferences.set(i+companyPolicies.length,new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
+        if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
       }
       idMap.put(id, preferences)
     }
@@ -38,8 +40,8 @@ class MahoutUtil {
   /*
   * Takes a policy and maps it to a long value for analysis by the mahout library
    */
-  static function policyToLong(policy : String) : long {
-    return policies[policy.split("=")[0]]
+  static function policyToLong(policy : JSONObject) : long {
+    return policies[policy['type'] as String]
   }
 
   /*
