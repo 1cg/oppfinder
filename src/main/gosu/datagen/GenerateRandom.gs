@@ -11,7 +11,6 @@ uses org.json.simple.JSONArray
 uses java.io.File
 uses java.io.FileWriter
 uses datagen.assets.AssetLibrarian
-uses java.lang.System
 
 class GenerateRandom {
   /*
@@ -56,7 +55,7 @@ class GenerateRandom {
           continue
         }
       }
-      company.put("policies", coPolicies)
+      company.put("Policies", coPolicies)
 
       company.put("Revenue", (new BigDecimal(10 + rand.nextInt(162000))).toString())
       company.put("Size", (50 + rand.nextInt(40000)) as String)
