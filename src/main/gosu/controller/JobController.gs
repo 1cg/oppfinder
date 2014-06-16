@@ -6,6 +6,7 @@ uses jobs.GenerateJob
 uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
+uses datagen.GenerateRandom
 
 class JobController implements IHasRequestContext {
 
@@ -14,7 +15,7 @@ class JobController implements IHasRequestContext {
     return "Job Started!!!"
   }
   static function startGenerateJob() : String{
-    new GenerateJob().start()
+    new GenerateRandom().start()
     return "Company information listed below."
   }
   static function cancelJob(UUID : String) : String{
