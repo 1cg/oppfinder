@@ -4,9 +4,10 @@
 <modelVersion>4.0.0</modelVersion>
 <groupId>com.guidewire.interns</groupId>
 <artifactId>opp_finder</artifactId>
-<packaging>jar</packaging>
+<packaging>pom</packaging>
 <version>0.1</version>
-<name>OpportunityFinder</name>
+
+    <name>OpportunityFinder</name>
 
 <repositories>
     <repository>
