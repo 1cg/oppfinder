@@ -9,6 +9,7 @@ uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 uses java.util.Map
 uses java.lang.Integer
 uses jobs.GenerateJob
+uses datagen.assets.AssetLibrarian
 
 class ReachFieldImpl implements Field {
 
@@ -29,7 +30,7 @@ class ReachFieldImpl implements Field {
 
   static function makeReachMap() : Map<String, Integer> {
     var map : Map<String,Integer> = {}
-    for (reach in GenerateJob.REACHES index i) {
+    for (reach in AssetLibrarian.REACHES index i) {
       map[reach] = i
     }
     return map

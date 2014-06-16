@@ -11,9 +11,9 @@ uses org.bson.types.ObjectId
 uses java.math.BigInteger
 uses java.util.Map
 uses java.lang.Integer
-uses jobs.GenerateJob
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
+uses datagen.assets.AssetLibrarian
 
 class MahoutUtil {
 
@@ -59,7 +59,7 @@ class MahoutUtil {
 
   static function makePolicyMap() : Map<String, Integer> {
     var policyMap : Map<String,Integer> = {}
-    for (policy in GenerateJob.POLICIES index i) {
+    for (policy in AssetLibrarian.POLICIES index i) {
       policyMap[policy] = i
     }
     return policyMap
