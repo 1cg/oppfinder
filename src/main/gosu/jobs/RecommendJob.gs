@@ -62,7 +62,7 @@ class RecommendJob extends Job implements Runnable {
     var size = (new DataSet(DataSetEntry.COLLECTION).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
     for (jobName in subJobs) {
       for (i in 0..|NUM_BUCKETS) {
-        var job = new RecommendSubJob(jobName, i * size, size)
+        var job = new RecommendSubJob(jobName,i * size, size)
         job.start()
         subJobsID.add(job.UUId)
         if (Cancelled) return
