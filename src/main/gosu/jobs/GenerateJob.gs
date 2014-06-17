@@ -31,6 +31,7 @@ class GenerateJob extends Job implements Runnable {
     var path = search('Path') as String
     var parser = new JSONParser()
     var dataSet = new DataSet(DataSetEntry.COLLECTION)
+    dataSet.drop()
     dataSet.insert((parser.parse(
         new FileReader(path)) as JSONArray)
         .map(\ o -> o as JSONObject))

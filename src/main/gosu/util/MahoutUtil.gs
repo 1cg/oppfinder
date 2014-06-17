@@ -13,6 +13,7 @@ uses java.util.Map
 uses java.lang.Integer
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
+uses org.json.simple.JSONValue
 uses datagen.assets.AssetLibrarian
 
 class MahoutUtil {
@@ -22,7 +23,7 @@ class MahoutUtil {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
-      var companyPolicies = companyData['Policies'] as JSONArray
+      var companyPolicies = JSONValue.parse(companyData['Policies'] as String) as JSONArray
       var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
