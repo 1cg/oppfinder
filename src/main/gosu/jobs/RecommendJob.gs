@@ -47,6 +47,7 @@ class RecommendJob extends Job implements Runnable {
       }
       ds.drop() //Get rid of the temp data
     }
+    print("recommend completed")
     storeTopRecommendations(recommendations)
     this.Progress = 100
   }
