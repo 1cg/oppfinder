@@ -89,7 +89,9 @@ class RecommendJob extends Job implements Runnable {
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    new DataSet('Results:'+UUId).insert(finalResults.reverse())
+    if (finalResults.size() > 0) {
+      new DataSet('Results:'+UUId).insert(finalResults.reverse())
+    }
   }
 
   property get ResultsData() : DataSet {

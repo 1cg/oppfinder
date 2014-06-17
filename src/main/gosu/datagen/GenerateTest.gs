@@ -3,7 +3,6 @@ package datagen
 
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses java.lang.System
 uses java.io.FileWriter
 uses java.io.File
 
@@ -30,7 +29,7 @@ class GenerateTest {
 
   /*
    * Generates JSON of companies with arbitrary details except for two companies with clear similarities in
-   * reach. The Recommendation Job should recommend company RECOMMENDEE to policy DESIREDPOLICY
+   * reach. The Recommendation Job should recommend company RECOMMENDEE to GODZILLA
    */
   function generateTest(output : String, testVar : String) {
     print(output)
@@ -38,15 +37,15 @@ class GenerateTest {
     for (1..400 index j) {
       var company = new JSONObject()
 
-      if (j == 10) {
+      if (j == 399) {
         company.put("Company", "RECOMMENDEE (test success)")
-      } else if (j == 11) {
+      } else if (j == 398) {
         company.put("Company", "RECOMMENDER")
       } else {
-        company.put("Company", "foo")
+        company.put("Company", "Control")
       }
       for (key in controlVariables.keySet()) {
-        if (key == testVar && (j == 10 || j == 11)) { // only the recommendee (this needs to be changed)
+        if (key == testVar && (j == 399 || j == 398)) {
           // INDEPENDENT VARIABLE
           company.put(key, independentVariables[key])
         } else {
@@ -55,7 +54,7 @@ class GenerateTest {
       }
       var coPolicies = new JSONArray()
       var policy = new JSONObject()
-      if(j == 10) {
+      if(j == 399) {
         policy.put("Type", "Property")
       } else {
         policy.put("Type", "Godzilla")

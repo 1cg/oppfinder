@@ -24,7 +24,7 @@ class MahoutUtil {
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
       var companyPolicies = JSONValue.parse(companyData['Policies'] as String) as JSONArray
-      var preferences = new GenericUserPreferenceArray(companyPolicies.size() * (t2 == null ? 1 : 2))
+      var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
       for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
