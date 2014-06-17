@@ -61,7 +61,7 @@ class GenerateTest {
       company.put("Policies", coPolicies)
       bigArray.add(company)
     }
-    var outputFile = new FileWriter(new File("src/main/gosu/" + output))
+    var outputFile = new FileWriter(new File(output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()
