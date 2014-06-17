@@ -8,9 +8,7 @@ uses java.io.File
 
 class GenerateTest {
 
-  static final var companies = {"RECOMMENDER (match)", "RECOMMENDEE (test success)",
-      "control1", "control2", "control3", "control4",
-      "control5", "control6", "control7", "control8"}
+  static final var numCompanies = 2400
   static final var controlVariables = {
       "Contact Name" -> "john doe",
       "Email" -> "johndoe@email",
@@ -32,20 +30,19 @@ class GenerateTest {
    * reach. The Recommendation Job should recommend company RECOMMENDEE to GODZILLA
    */
   function generateTest(output : String, testVar : String) {
-    print(output)
     var bigArray = new JSONArray()
-    for (1..400 index j) {
+    for (1..numCompanies index j) {
       var company = new JSONObject()
 
-      if (j == 399) {
+      if (j == numCompanies-1) {
         company.put("Company", "RECOMMENDEE (test success)")
-      } else if (j == 398) {
+      } else if (j == numCompanies-2) {
         company.put("Company", "RECOMMENDER")
       } else {
         company.put("Company", "Control")
       }
       for (key in controlVariables.keySet()) {
-        if (key == testVar && (j == 399 || j == 398)) {
+        if (key == testVar && (j == numCompanies-1 || j == numCompanies-2)) {
           // INDEPENDENT VARIABLE
           company.put(key, independentVariables[key])
         } else {
@@ -54,7 +51,7 @@ class GenerateTest {
       }
       var coPolicies = new JSONArray()
       var policy = new JSONObject()
-      if(j == 399) {
+      if(j == numCompanies-1) {
         policy.put("Type", "Property")
       } else {
         policy.put("Type", "Godzilla")
