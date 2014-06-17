@@ -52,6 +52,7 @@ class RecommendSubJob extends Job implements Runnable {
 
 
   override function run() {
+    try {
     maxRecommendation = Float.MIN_VALUE
     minRecommendation = Float.MAX_VALUE
     if (this.Cancelled) return
@@ -77,8 +78,11 @@ class RecommendSubJob extends Job implements Runnable {
     }
     myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
     new DataSet(this.UUId).insert(myRecommendations)
-    print("sub completed")
     this.Progress = 100
+    } catch(e) {
+      e.printStackTrace()
+      throw e
+    }
   }
 
   function normalize(value : Float) : Float {

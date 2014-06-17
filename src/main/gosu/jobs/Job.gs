@@ -25,7 +25,7 @@ abstract class Job implements Runnable {
   var id : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {
-    if (data == null) {return}
+    if (data == null) return
     id = new HashMap<Object,Object>()
     id['UUId'] = data['UUId']
   }
@@ -118,9 +118,9 @@ abstract class Job implements Runnable {
   }
 
   static function getUUIDProgress(UUID : String) : String {
-    var prog = dataStore.findOne({'UUId' -> UUID})['Progress'] as String
-    prog += "%"
-    return prog
+    var job = dataStore.findOne({'UUId' -> UUID})
+    if (job == null || job['Progress'] == null) return "0%"
+    return (job['Progress'] as String) + "%"
   }
 
   static function getUUIDElapsedTime(UUID : String) : String {
