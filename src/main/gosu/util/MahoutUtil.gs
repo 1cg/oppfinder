@@ -13,18 +13,18 @@ uses java.util.Map
 uses java.lang.Integer
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses datagen.assets.AssetLibrarian
 uses org.json.simple.JSONValue
+uses datagen.assets.AssetLibrarian
 
 class MahoutUtil {
-  static final var assetLibrarian = new AssetLibrarian()
   static final var policies = makePolicyMap()
+  static var assetLibrarian = new AssetLibrarian()
 
   static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
-      var companyPolicies = new JSONValue().parse(companyData['Policies'].toString()) as JSONArray
+      var companyPolicies = JSONValue.parse(companyData['Policies'] as String) as JSONArray
       var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
@@ -60,7 +60,7 @@ class MahoutUtil {
 
   static function makePolicyMap() : Map<String, Integer> {
     var policyMap : Map<String,Integer> = {}
-    for (policy in assetLibrarian.POLICIES index i) {
+    for (policy in AssetLibrarian.INSTANCE.POLICIES index i) {
       policyMap[policy] = i
     }
     return policyMap

@@ -13,7 +13,6 @@ uses datagen.assets.AssetLibrarian
 class ReachFieldImpl implements Field {
 
   static final var reachMap = makeReachMap()
-  static var temp = new AssetLibrarian()
 
   override function getModel(): DataModel {
     return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Reach",
@@ -30,7 +29,7 @@ class ReachFieldImpl implements Field {
 
   static function makeReachMap() : Map<String, Integer> {
     var map : Map<String,Integer> = {}
-    for (reach in temp.REACHES index i) {
+    for (reach in AssetLibrarian.INSTANCE.REACHES index i) {
       map[reach] = i
     }
     return map

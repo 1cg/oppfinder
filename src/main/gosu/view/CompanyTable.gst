@@ -2,8 +2,10 @@
 <% var pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10)
    var r1 = '\\{'
    var r2 = '\\}'
-   var r3 = '"'%>
-
+   var r3 = '"'
+   if (!pager.validPage(page) && page > 1) {
+     page = pager.lastPage()
+   } %>
 <table class="table">
   <thead>
     <tr>
