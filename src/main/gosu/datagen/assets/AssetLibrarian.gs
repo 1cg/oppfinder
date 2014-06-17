@@ -12,7 +12,7 @@ class AssetLibrarian {
 
   var _COLUMNMAP : Map<String, String> as readonly COLUMNMAP
 
-  property get INSTANCE() : AssetLibrarian {
+  static property get INSTANCE() : AssetLibrarian {
     return _INSTANCE
   }
 

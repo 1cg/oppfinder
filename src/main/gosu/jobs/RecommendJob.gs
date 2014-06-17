@@ -26,7 +26,6 @@ class RecommendJob extends Job implements Runnable {
   }
 
   override function run() {
-    print("starting recommend job")
     if (Cancelled) return
     startSubJobs()
     poll() //Blocks until sub-tasks are complete
