@@ -15,7 +15,7 @@ class RecommendJob extends Job implements Runnable {
   static final var NUM_BUCKETS = 1
   public static final var DELIMITER : String = ","
   //var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
-  var subJobs = {"recommender.ReachFieldImpl"}
+  var subJobs = {"recommender.LocationFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
@@ -90,7 +90,9 @@ class RecommendJob extends Job implements Runnable {
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    new DataSet('Results:'+UUId).insert(finalResults.reverse())
+    if (finalResults.size() > 0) {
+      new DataSet('Results:'+UUId).insert(finalResults.reverse())
+    }
   }
 
   property get ResultsData() : DataSet {

@@ -34,6 +34,7 @@ class GenerateReachTest {
   function generateReachTest(output : String) {
     print(output)
     var bigArray = new JSONArray()
+    for (1..30 index j) {
     for (name in companies index i) {
       var company = new JSONObject()
       company.put("Company", name)
@@ -42,19 +43,19 @@ class GenerateReachTest {
       company.put("Region", controlVariables["Region"])
       company.put("Revenue", 100)
       company.put("Size", 100)
+      company.put("Reach", controlVariables["Reach"])
 
-      if(name == "RECOMMENDER (match)" || name == "RECOMMENDEE (test success)") {
-        company.put("Reach", "Global")
 
-      } else {
-        company.put("Reach", controlVariables["Reach"])
-      }
 
       var coPolicies = new JSONArray();
       var policy = new JSONObject()
-      if(name == "RECOMMENDER (match)") {
+      if(i == 3 && j == 10) {
         policy.put("Type", "Property")
       } else {
+        policy.put("Type", "Property")
+        policy.put("Premium", 100)
+        coPolicies.add(policy)
+        policy = new JSONObject()
         policy.put("Type", "Godzilla")
       }
       policy.put("Premium", 100)
@@ -67,6 +68,7 @@ class GenerateReachTest {
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()
+    }
   }
 
 

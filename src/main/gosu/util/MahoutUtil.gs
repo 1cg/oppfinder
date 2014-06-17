@@ -18,23 +18,24 @@ uses datagen.assets.AssetLibrarian
 
 class MahoutUtil {
   static final var policies = makePolicyMap()
-  static var assetLibrarian = new AssetLibrarian()
 
   static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
       var companyPolicies = JSONValue.parse(companyData['Policies'] as String) as JSONArray
-      var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
+      var preferences = new GenericUserPreferenceArray(companyPolicies.size() * (t2 == null ? 1 : 2))
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
       for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
+        print(policy.toString())
         var data = companyData[field]
         preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData[field] as String)))
         if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
       }
       idMap.put(id, preferences)
     }
+    print(idMap.toString())
     return new GenericDataModel(idMap)
   }
 
