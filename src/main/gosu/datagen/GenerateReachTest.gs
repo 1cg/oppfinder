@@ -54,7 +54,7 @@ class GenerateReachTest {
 
       bigArray.add(company)
     }
-    var outputFile = new FileWriter(new File(output))
+    var outputFile = new FileWriter(new File("src/main/gosu/"+output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()

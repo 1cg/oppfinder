@@ -40,9 +40,13 @@ class GenerateTest {
 
       if (j == 10) {
         company.put("Company", "RECOMMENDEE (test success)")
+      } else if (j == 11) {
+        company.put("Company", "RECOMMENDER")
+      } else {
+        company.put("Company", "foo")
       }
       for (key in controlVariables.keySet()) {
-        if (key == testVar && j == 10) { // only the recommendee (this needs to be changed)
+        if (key == testVar && (j == 10 || j == 11)) { // only the recommendee (this needs to be changed)
           // INDEPENDENT VARIABLE
           company.put(key, independentVariables[key])
         } else {
@@ -51,15 +55,13 @@ class GenerateTest {
       }
       var coPolicies = new JSONArray()
       var policy = new JSONObject()
-      policy.put("Type", "Godzilla")
+      if(j == 10) {
+        policy.put("Type", "Property")
+      } else {
+        policy.put("Type", "Godzilla")
+      }
       policy.put("Premium", "100")
       coPolicies.add(policy)
-      if(j == 10) {
-        policy = new JSONObject()
-        policy.put("Type", "Property")
-        policy.put("Premium", "100")
-        coPolicies.add(policy)
-      }
       company.put("Policies", coPolicies)
       bigArray.add(company)
     }

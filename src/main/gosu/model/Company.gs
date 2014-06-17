@@ -63,7 +63,7 @@ class Company extends DataSetEntry {
   }
 
   static property get CompanyDataTypes() : List<String> {
-    return {"Company", "Contact Name", "Email", "Region", "Policies"}
+    return {"Company", "Contact Name", "Email", "Region", "Policies", "Reach", "Revenue", "Size"}
   }
 
 }

@@ -74,7 +74,6 @@ class RecommendSubJob extends Job implements Runnable {
       if (!userIDs.hasNext()) break
       var user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
-      print("Recommendations: "+recommendations)
       for (recommendation in recommendations) {
         maxRecommendation = Math.max(recommendation.Value, maxRecommendation)
         minRecommendation = Math.min(recommendation.Value, minRecommendation)
@@ -83,7 +82,9 @@ class RecommendSubJob extends Job implements Runnable {
       }
     }
     myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
-    new DataSet(this.UUId).insert(myRecommendations)
+    if (myRecommendations.size() > 0) {
+      new DataSet(this.UUId).insert(myRecommendations)
+    }
     this.Progress = 100
     } catch(e) {
       e.printStackTrace()
