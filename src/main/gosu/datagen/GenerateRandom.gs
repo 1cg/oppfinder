@@ -19,7 +19,7 @@ class GenerateRandom {
    * output : The file path to write and place the JSON file.
    */
   function generateRandom(output : String) {
-    var columnMap = AssetLibrarian.COLUMNMAP
+    var columnMap = new AssetLibrarian().COLUMNMAP
     var rand = new Random()
     var dataMap = new HashMap<String, List>()
     for (column in columnMap.Keys) {
