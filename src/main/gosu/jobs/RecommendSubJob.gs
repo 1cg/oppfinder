@@ -7,10 +7,7 @@ uses java.lang.Class
 uses recommender.Field
 uses java.lang.Float
 uses java.lang.Math
-uses org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
 uses java.lang.Long
-uses org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender
-uses org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender
 uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer
 uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender
 
