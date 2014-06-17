@@ -11,7 +11,7 @@ uses util.MahoutUtil
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
-  static final var NUM_BUCKETS = 6
+  static final var NUM_BUCKETS = 1
   public static final var DELIMITER : String = ","
   var subJobs = {/*"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl",*/"recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
@@ -26,7 +26,6 @@ class RecommendJob extends Job implements Runnable {
   }
 
   override function run() {
-    print("starting recommend job")
     if (Cancelled) return
     startSubJobs()
     poll() //Blocks until sub-tasks are complete
@@ -46,6 +45,7 @@ class RecommendJob extends Job implements Runnable {
       }
       ds.drop() //Get rid of the temp data
     }
+    print("recommend completed")
     storeTopRecommendations(recommendations)
     this.Progress = 100
   }

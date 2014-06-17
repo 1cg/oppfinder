@@ -76,6 +76,7 @@ class RecommendSubJob extends Job implements Runnable {
     }
     myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
     new DataSet(this.UUId).insert(myRecommendations)
+    print("sub completed")
     this.Progress = 100
   }
 
