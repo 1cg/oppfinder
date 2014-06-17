@@ -7,11 +7,13 @@ uses model.DataSet
 uses java.lang.Float
 uses model.DataSetEntry
 uses util.MahoutUtil
+uses java.util.Arrays
+uses java.util.ArrayList
 
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
-  static final var NUM_BUCKETS = 1
+  static final var NUM_BUCKETS = 4
   public static final var DELIMITER : String = ","
   var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
@@ -62,6 +64,7 @@ class RecommendJob extends Job implements Runnable {
         if (Cancelled) return
       }
     }
+    update({'SubJobs' -> subJobsID.toString()})
   }
 
   /*
@@ -108,21 +111,30 @@ class RecommendJob extends Job implements Runnable {
   function poll() {
     var finished = false
     while (true) {
+      var sum = 0
       if (Cancelled) {
         return
       }
       finished = true
       for (jobID in subJobsID) {
-        if (Job.getUUIDProgress(jobID) < Job.MAX_PROGRESS_VALUE) {
+        var progress = Job.getUUIDProgress(jobID).remove("%").toInt()
+        sum += progress
+        if (progress < Job.MAX_PROGRESS_VALUE) {
           finished = false
-          break
         }
       }
+      Progress = sum / subJobsID.size()
       if (finished) {
         return
       }
       Thread.sleep(SLEEP_TIME)
     }
+  }
+
+  property get SubJobs() : List<jobs.Job> {
+    var stringArray = search('SubJobs') as String
+    var array = Arrays.asList(stringArray.substring(1, stringArray.length() - 1).split(", "))
+    return array.map(\ j -> newUp({'UUId' -> j, 'Type' -> 'jobs.RecommendSubJob'}))
   }
 
 }
