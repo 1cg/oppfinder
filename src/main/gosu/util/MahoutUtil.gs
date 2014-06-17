@@ -14,6 +14,7 @@ uses java.lang.Integer
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses datagen.assets.AssetLibrarian
+uses org.json.simple.JSONValue
 
 class MahoutUtil {
   static final var assetLibrarian = new AssetLibrarian()
@@ -23,9 +24,14 @@ class MahoutUtil {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
-      var companyPolicies = companyData['Policies'] as JSONArray
+      print("mahout"+typeof(companyData.get("Policies")))
+      print(companyData['Policies'].toString())
+      var companyPolicies = new JSONValue().parse(companyData['Policies'].toString()) as JSONArray
+      print("what")
       var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
+      print("the")
       var id = new BigInteger((new ObjectId(companyData['_id'] as String)).toHexString() , 16).longValue()
+      print("gr8")
       ds.update({'_id' -> companyData['_id']}, {'longID' -> id})  //Add our calculated id to the database for lookup
       for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
         var data = companyData[field]
@@ -34,6 +40,7 @@ class MahoutUtil {
       }
       idMap.put(id, preferences)
     }
+    print("mahoutdone")
     return new GenericDataModel(idMap)
   }
 
