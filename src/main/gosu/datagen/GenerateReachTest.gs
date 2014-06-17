@@ -23,7 +23,6 @@ class GenerateReachTest {
    * reach. The Recommendation Job should recommend company RECOMMENDEE to policy DESIREDPOLICY
    */
   function generateReachTest(output : String) {
-    print(output)
     var bigArray = new JSONArray()
     for (name in companies index i) {
       var company = new JSONObject()
@@ -58,7 +57,7 @@ class GenerateReachTest {
       }
       bigArray.add(company)
     }
-    var outputFile = new FileWriter(new File(output))
+    var outputFile = new FileWriter(new File("src/main/gosu/"+output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()

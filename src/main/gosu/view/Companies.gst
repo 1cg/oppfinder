@@ -6,8 +6,17 @@
 <button ic-post-to="/jobs/action/start/generate" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
   Generate Random
 </button>
-<button ic-post-to="/jobs/action/start/generateTestReaches" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
+<button ic-post-to="/jobs/action/start/generateTest/Reach" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
   Generate Test Reaches
+</button>
+<button ic-post-to="/jobs/action/start/generateTest/Region" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
+  Generate Test Regions
+</button>
+<button ic-post-to="/jobs/action/start/generateTest/Revenue" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
+  Generate Test Revenues
+</button>
+<button ic-post-to="/jobs/action/start/generateTest/Size" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
+  Generate Test Sizes
 </button>
 
 <h3>
