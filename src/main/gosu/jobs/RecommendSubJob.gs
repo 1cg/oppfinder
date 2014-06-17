@@ -64,6 +64,7 @@ class RecommendSubJob extends Job implements Runnable {
     var userIDs = model.getUserIDs()
     userIDs.skip(this.Start as int)
     for (i in 0..|this.Number) {
+      Progress = ((i* 100)/Number) as int
       if (!userIDs.hasNext()) break
       var user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
@@ -83,7 +84,6 @@ class RecommendSubJob extends Job implements Runnable {
     return (value - minRecommendation) / (maxRecommendation - minRecommendation)
   }
 
-
   override function reset() {}
 
   override property set Status(status : String) {
@@ -93,6 +93,5 @@ class RecommendSubJob extends Job implements Runnable {
   override function renderToString() : String {
     return view.TestJob.renderToString()
   }
-
 
 }
