@@ -1,5 +1,8 @@
 <%@ params(page : long)%>
-<% var pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10) %>
+<% var pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10)
+   var r1 = '\\{'
+   var r2 = '\\}'
+   var r3 = '"'%>
 
 <table class="table">
   <thead>
@@ -13,7 +16,11 @@
     <% for (entry in pager.getPage(page)) { %>
       <tr>
         <% for (type in model.Company.CompanyDataTypes) { %>
-          <td> ${entry[type]} </td>
+          <td> <% if (type == 'Policies') {
+            for (var o in (org.json.simple.JSONValue.parse(entry[type] as String) as org.json.simple.JSONArray).map(\ o -> o as String)) { %>
+             ${(o.replaceAll(r1,'').replaceAll(r2,'').replaceAll(r3, ''))}<br>
+         <% }}  else { %>
+             ${entry[type]} <% } %> </td>
         <% } %>
       </tr>
     <% } %>
