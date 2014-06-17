@@ -3,9 +3,9 @@ package recommender
 uses org.apache.mahout.cf.taste.model.DataModel
 uses util.MahoutUtil
 uses model.DataSet
-uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 uses model.DataSetEntry
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
+uses org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity
 
 class SizeFieldImpl implements Field {
   override function getModel(): DataModel {
@@ -13,6 +13,7 @@ class SizeFieldImpl implements Field {
   }
 
   override function getSimilarity(model : DataModel): ItemSimilarity {
-    return new PearsonCorrelationSimilarity(model)
+    return new LogLikelihoodSimilarity(model)
   }
+
 }

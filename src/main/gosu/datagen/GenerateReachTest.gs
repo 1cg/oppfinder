@@ -3,17 +3,8 @@ package datagen
 
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses java.lang.System
 uses java.io.FileWriter
 uses java.io.File
-uses datagen.assets.AssetLibrarian
-uses java.util.Random
-uses java.util.HashMap
-uses java.util.LinkedList
-uses java.io.FileReader
-uses java.io.BufferedReader
-uses java.math.BigDecimal
-
 class GenerateReachTest {
 
   static final var companies = {"RECOMMENDER (match)", "RECOMMENDEE (test success)",
@@ -63,7 +54,7 @@ class GenerateReachTest {
 
       bigArray.add(company)
     }
-    var outputFile = new FileWriter(new File("src/main/gosu/" + output))
+    var outputFile = new FileWriter(new File(output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()
