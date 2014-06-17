@@ -13,9 +13,10 @@ uses java.util.ArrayList
 class RecommendJob extends Job implements Runnable {
 
   static final var NUM_RECOMMENDATIONS = 20
-  static final var NUM_BUCKETS = 4
+  static final var NUM_BUCKETS = 1
   public static final var DELIMITER : String = ","
-  var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
+  //var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
+  var subJobs = {"recommender.ReachFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 

@@ -4,8 +4,12 @@
 
 
 <button ic-post-to="/jobs/action/start/generate" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
-  Generate Data
+  Generate Random
 </button>
+<button ic-post-to="/jobs/action/start/generateTestReaches" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
+  Generate Test Reaches
+</button>
+
 <h3>
   OR
 </h3>

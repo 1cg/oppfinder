@@ -11,6 +11,7 @@ uses org.json.simple.JSONArray
 uses java.io.File
 uses java.io.FileWriter
 uses datagen.assets.AssetLibrarian
+uses java.lang.System
 
 class GenerateRandom {
   /*
@@ -19,6 +20,7 @@ class GenerateRandom {
    * output : The file path to write and place the JSON file.
    */
   function generateRandom(output : String) {
+    print(output)
     var columnMap = AssetLibrarian.INSTANCE.COLUMNMAP
     var rand = new Random()
     var dataMap = new HashMap<String, List>()
@@ -63,7 +65,7 @@ class GenerateRandom {
       bigArray.add(company)
     }
 
-
+    print(System.getProperty("user.dir"))
     var outputFile = new FileWriter(new File("src/main/gosu/" + output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()

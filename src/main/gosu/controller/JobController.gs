@@ -7,6 +7,7 @@ uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
 uses datagen.GenerateRandom
+uses datagen.GenerateReachTest
 
 class JobController implements IHasRequestContext {
 
@@ -17,6 +18,11 @@ class JobController implements IHasRequestContext {
   static function startGenerateJob() : String {
     new GenerateRandom().generateRandom('datagen/assets/data.json')
     new GenerateJob('datagen/assets/data.json').start()
+    return "Company information listed below."
+  }
+  static function startGenerateReachTestJob() : String {
+    new GenerateReachTest().generateReachTest('datagen/assets/dataReach.json')
+    new GenerateJob('datagen/assets/dataReach.json').start()
     return "Company information listed below."
   }
   static function cancelJob(UUID : String) : String{

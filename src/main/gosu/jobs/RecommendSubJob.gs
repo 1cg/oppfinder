@@ -68,6 +68,7 @@ class RecommendSubJob extends Job implements Runnable {
       if (!userIDs.hasNext()) break
       var user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
+      print("Recommendations: "+recommendations)
       for (recommendation in recommendations) {
         maxRecommendation = Math.max(recommendation.Value, maxRecommendation)
         minRecommendation = Math.min(recommendation.Value, minRecommendation)

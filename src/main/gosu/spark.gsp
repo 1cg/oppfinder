@@ -29,6 +29,7 @@ get('/companies/*', \-> view.Companies.renderToString(1))
 /* Start Jobs */
 post('/jobs/action/start/test', \-> controller.JobController.startTestJob())
 post('/jobs/action/start/generate', \-> controller.JobController.startGenerateJob())
+post('/jobs/action/start/generateTestReaches', \-> controller.JobController.startGenerateReachTestJob())
 post('/jobs/action/start/upload', \-> controller.JobController.startUploadJob(Request.Body))
 post('/jobs/action/start/recommend', \-> controller.JobController.startRecommendJob())
 post('/jobs/action/state/:id/cancel', \-> jobs.Job.cancel(Params['id']))
