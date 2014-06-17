@@ -23,7 +23,6 @@ class GenerateReachTest {
    * reach. The Recommendation Job should recommend company RECOMMENDEE to policy DESIREDPOLICY
    */
   function generateReachTest(output : String) {
-    print(output)
     var bigArray = new JSONArray()
     for (name in companies index i) {
       var company = new JSONObject()
