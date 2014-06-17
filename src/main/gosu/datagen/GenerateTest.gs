@@ -8,7 +8,7 @@ uses java.io.File
 
 class GenerateTest {
 
-  static final var numCompanies = 2000
+  static final var numCompanies = 2400
   static final var controlVariables = {
       "Contact Name" -> "john doe",
       "Email" -> "johndoe@email",
