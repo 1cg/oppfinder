@@ -66,6 +66,9 @@ class RecommendSubJob extends Job implements Runnable {
       print(item)
     }
     var similarity = field.getSimilarity(model)
+    for (item in model.ItemIDs) {
+      print(item + " similar to " + similarity.allSimilarItemIDs(item))
+    }
     var recommender = new GenericItemBasedRecommender(model, similarity)
    // var recommender = new GenericUserBasedRecommender(model, similarity)
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
