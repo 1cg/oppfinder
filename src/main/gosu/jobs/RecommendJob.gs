@@ -8,7 +8,6 @@ uses java.lang.Float
 uses model.DataSetEntry
 uses util.MahoutUtil
 uses java.util.Arrays
-uses java.util.ArrayList
 
 class RecommendJob extends Job implements Runnable {
 
@@ -29,6 +28,7 @@ class RecommendJob extends Job implements Runnable {
   }
 
   override function run() {
+    try {
     if (Cancelled) return
     startSubJobs()
     poll() //Blocks until sub-tasks are complete
@@ -50,6 +50,10 @@ class RecommendJob extends Job implements Runnable {
     }
     storeTopRecommendations(recommendations)
     this.Progress = 100
+    } catch(e) {
+      e.printStackTrace()
+      throw e
+    }
   }
 
   /*
@@ -59,7 +63,7 @@ class RecommendJob extends Job implements Runnable {
     var size = (new DataSet(DataSetEntry.COLLECTION).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
     for (jobName in subJobs) {
       for (i in 0..|NUM_BUCKETS) {
-        var job = new RecommendSubJob(jobName, i * size, size)
+        var job = new RecommendSubJob(jobName,i * size, size)
         job.start()
         subJobsID.add(job.UUId)
         if (Cancelled) return
