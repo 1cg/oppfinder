@@ -37,12 +37,19 @@ abstract class Job implements Runnable {
     this.Type = this.IntrinsicType.Name
   }
 
-  function start() {
+  function start() : jobs.Job {
     var config = new ConfigBuilder().build()
     var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
     var client = new ClientImpl(config)
     client.enqueue('main', testJob)
     client.end()
+    return this
+  }
+
+  function join() {
+    while(this.Progress < 100) {
+      Thread.sleep(100)
+    }
   }
 
   static function reset(UUID : String) {

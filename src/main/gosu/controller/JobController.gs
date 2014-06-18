@@ -1,17 +1,20 @@
 package controller
 
 uses sparkgs.util.IHasRequestContext
+
 uses jobs.GenerateJob
 uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
 uses datagen.GenerateRandom
 uses datagen.GenerateTest
+uses gw.lang.reflect.ReflectUtil
 
 class JobController implements IHasRequestContext {
 
   static function startTestJob() : String{
-    new TestJob().start()
+    var testJob = ReflectUtil.construct<Job>("TestJob", {})
+    testJob.start()
     return "Job Started!!!"
   }
   static function startGenerateJob() : String {
