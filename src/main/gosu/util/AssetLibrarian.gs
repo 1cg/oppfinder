@@ -11,6 +11,7 @@ class AssetLibrarian {
 
   var _POLICIES: List<String>  as readonly POLICIES
   var _REACHES: List<String> as readonly REACHES
+  var _LATLNG: String as readonly LATLNG
   var _COLUMNMAP : Map<String, String> as readonly COLUMNMAP
   var classLoader : ClassLoader
 
@@ -18,6 +19,7 @@ class AssetLibrarian {
     classLoader = (typeof(this) as java.lang.Class).ClassLoader
     _POLICIES = FileUtils.readLines(new File(getPath("PolicyTypes.txt")))
     _REACHES = FileUtils.readLines(new File(getPath("Reaches.txt")))
+    _LATLNG = classLoader.getResource("LatLng.txt").Path
     _COLUMNMAP = {
       "Company" -> "Companies.txt",
       "Contact Name" -> "Names.txt",

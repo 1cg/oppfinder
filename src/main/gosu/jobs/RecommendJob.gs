@@ -14,7 +14,8 @@ class RecommendJob extends Job implements Runnable {
   static final var NUM_RECOMMENDATIONS = 20
   static final var NUM_BUCKETS = 4
   public static final var DELIMITER : String = ","
-  var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
+  //var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
+  var subJobs = {"recommender.LocationFieldImpl"}//, "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
@@ -47,8 +48,9 @@ class RecommendJob extends Job implements Runnable {
       }
       ds.drop() //Get rid of the temp data
     }
-    storeTopRecommendations(recommendations)
+      storeTopRecommendations(recommendations)
     this.Progress = 100
+      print("recommend done")
     } catch(e) {
       e.printStackTrace()
       throw e
@@ -90,12 +92,16 @@ class RecommendJob extends Job implements Runnable {
       finalResults.add(result)
     }
     if (finalResults.size() > 0) {
-      new DataSet('Results:'+UUId).insert(finalResults.reverse())
+      var ds = new DataSet('Results:'+UUId)
+      for (result in finalResults.reverse()) {
+       ds.insert(result)
+      } // We unbatched this guy to prevent a race condition.
     }
   }
 
   property get ResultsData() : DataSet {
-    return new DataSet('Results:'+UUId)
+    var ds = new DataSet('Results:'+UUId)
+    return ds
   }
 
   /*

@@ -1,27 +1,30 @@
 package controller
 
 uses sparkgs.util.IHasRequestContext
+
 uses jobs.GenerateJob
 uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
 uses datagen.GenerateRandom
 uses datagen.GenerateTest
+uses gw.lang.reflect.ReflectUtil
 
 class JobController implements IHasRequestContext {
 
   static function startTestJob() : String{
-    new TestJob().start()
+    var testJob = ReflectUtil.construct<Job>("TestJob", {})
+    testJob.start()
     return "Job Started!!!"
   }
   static function startGenerateJob() : String {
-    new GenerateRandom().generateRandom('datagen/assets/data.json')
-    new GenerateJob('datagen/assets/data.json').start()
+    new GenerateRandom().generateRandom('src/main/gosu/datagen/assets/data.json')
+    new GenerateJob('src/main/gosu/datagen/assets/data.json').start()
     return "Company information listed below."
   }
   static function startGenerateTestJob(testVar : String) : String {
-    new GenerateTest().generateTest('datagen/assets/dataReach.json', testVar)
-    new GenerateJob('datagen/assets/dataReach.json').start()
+    new GenerateTest().generateTest('src/main/gosu/datagen/assets/dataReach.json', testVar)
+    new GenerateJob('src/main/gosu/datagen/assets/dataReach.json').start()
     return "Company information listed below."
   }
   static function cancelJob(UUID : String) : String{

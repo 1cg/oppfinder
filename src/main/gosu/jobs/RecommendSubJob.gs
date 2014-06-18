@@ -83,6 +83,7 @@ class RecommendSubJob extends Job implements Runnable {
       new DataSet(this.UUId).insert(myRecommendations)
     }
     this.Progress = 100
+    print("Recommend subjob DONE")
     } catch(e) {
       e.printStackTrace()
       throw e
