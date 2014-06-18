@@ -140,7 +140,7 @@ abstract class Job implements Runnable {
   }
 
   property set Cancelled(status : boolean) {
-    EndTime = System.nanoTime()
+    EndTime = System.currentTimeMillis()
     if (status) {
       dataStore.update(id, {'Status' -> 'Cancelled'})
     }
@@ -187,7 +187,7 @@ abstract class Job implements Runnable {
    */
   private function checkBounds() {
     if (this.Progress == 0) {
-      this.StartTime =  System.nanoTime()
+      this.StartTime =  System.currentTimeMillis()
       this.Status = 'Active'
     } else if (this.Progress == MAX_PROGRESS_VALUE) {
       this.Status = 'Complete'
