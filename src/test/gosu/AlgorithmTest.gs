@@ -3,15 +3,15 @@ uses datagen.GenerateTest
 uses jobs.GenerateJob
 uses jobs.RecommendJob
 uses java.lang.Thread
-uses controller.JobController
-uses jobs.TestJob
 
 class AlgorithmTest extends TestCase {
+  static final var numCompanies = 1000
 
   public function testReaches() {
-
-    new GenerateTest().generateTest('src/main/gosu/datagen/assets/dataReach.json', "Reach")
-    var generateJob = new GenerateJob('datagen/assets/dataReach.json')
+  for (1..80 index i) {
+    print("iteration: "+i)
+    new GenerateTest().generateTest('src/main/gosu/datagen/assets/dataReach.json', "Reach", numCompanies)
+    var generateJob = new GenerateJob('src/main/gosu/datagen/assets/dataReach.json')
     var gJobID = generateJob.UUId
     generateJob.start()
     while(jobs.Job.ActiveJobs.toList().map(\ j -> j.UUId).contains(gJobID)) {
@@ -21,14 +21,14 @@ class AlgorithmTest extends TestCase {
     var rJobID = recommendJob.UUId
     recommendJob.start()
     while(jobs.Job.ActiveJobs.toList().map(\ j -> j.UUId).contains(rJobID)) {
-      print("waiting on recommend...")
       Thread.sleep(1000)
     }
+    print(recommendJob.ResultsData.Count)
 
-    var recommendations = recommendJob.ResultsData.find()
-    print(recommendations.toString())
+    var recommendations = recommendJob.ResultsData.find().next()
+    print(recommendations)
  //   assertTrue(topRecommendation.)
-
+}
   }
 
 
