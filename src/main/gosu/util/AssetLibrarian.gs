@@ -6,7 +6,7 @@ uses java.util.Map
 uses java.lang.ClassLoader
 
 class AssetLibrarian {
-
+  
   static final var _INSTANCE : AssetLibrarian = new AssetLibrarian()
 
   var _POLICIES: List<String>  as readonly POLICIES
@@ -14,7 +14,7 @@ class AssetLibrarian {
   var _LATLNG: String as readonly LATLNG
   var _COLUMNMAP : Map<String, String> as readonly COLUMNMAP
   var classLoader : ClassLoader
-
+  
   construct() {
     classLoader = (typeof(this) as java.lang.Class).ClassLoader
     _POLICIES = FileUtils.readLines(new File(getPath("PolicyTypes.txt")))
