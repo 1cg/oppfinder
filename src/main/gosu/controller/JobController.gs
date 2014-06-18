@@ -1,7 +1,6 @@
 package controller
 
 uses sparkgs.util.IHasRequestContext
-uses jobs.TestJob
 uses jobs.GenerateJob
 uses jobs.Job
 uses jobs.UploadJob

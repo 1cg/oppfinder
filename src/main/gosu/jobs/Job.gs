@@ -61,7 +61,7 @@ abstract class Job implements Runnable {
   }
 
   function search(field : String) : Object {
-    return dataStore.findOne(id)[field]
+    return dataStore.findOne(id)?[field]
   }
 
   property get Type() : String {
@@ -73,7 +73,7 @@ abstract class Job implements Runnable {
   }
 
   property get StartTime() : Long {
-    return dataStore.findOne(id)['StartTime'] as Long
+    return dataStore.findOne(id)?['StartTime'] as Long
   }
 
   property set StartTime(time : Long) {
@@ -81,7 +81,7 @@ abstract class Job implements Runnable {
   }
 
   property get EndTime() : Long {
-    return dataStore.findOne(id)['EndTime'] as Long
+    return dataStore.findOne(id)?['EndTime'] as Long
   }
 
   property set EndTime(time : Long) {
@@ -89,11 +89,11 @@ abstract class Job implements Runnable {
   }
 
   property get UUId() : String {
-    return id['UUId'] as String
+    return id?['UUId'] as String
   }
 
   property set UUId(newUUId : String) {
-    id['UUId'] = newUUId
+    id?['UUId'] = newUUId
     dataStore.save(id)
   }
 
@@ -119,8 +119,7 @@ abstract class Job implements Runnable {
 
   static function getUUIDProgress(UUID : String) : String {
     var job = dataStore.findOne({'UUId' -> UUID})
-    if (job == null || job['Progress'] == null) return "0%"
-    return (job['Progress'] as String) + "%"
+    return job == null ? null : (job['Progress'] as String) + "%"
   }
 
   static function getUUIDElapsedTime(UUID : String) : String {
@@ -145,7 +144,7 @@ abstract class Job implements Runnable {
       this.Cancelled = true
       return true
     }
-    return (dataStore.findOne(id)['Status'] as String == 'Cancelled')
+    return (dataStore.findOne(id)?['Status'] as String == 'Cancelled')
   }
 
   property get Status() : String {
@@ -179,7 +178,7 @@ abstract class Job implements Runnable {
   /*
   * If we are either at the start or the end of the job, log the status
    */
-  function checkBounds() {
+  private function checkBounds() {
     if (this.Progress == 0) {
       this.StartTime =  System.nanoTime()
       this.Status = 'Active'
