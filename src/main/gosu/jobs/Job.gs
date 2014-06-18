@@ -167,7 +167,7 @@ abstract class Job implements Runnable {
   }
 
   private static function calculateElapsedTime(start : Long, end : Long) : String {
-    var totalSeconds = (((end ?: System.nanoTime()) - start) / 1000000000)
+    var totalSeconds = (((end ?: System.currentTimeMillis()) - start) / 1000)
     var returnString = ""
     if (totalSeconds > 3600) {
       var hours = totalSeconds / 3600
@@ -191,7 +191,7 @@ abstract class Job implements Runnable {
       this.Status = 'Active'
     } else if (this.Progress == MAX_PROGRESS_VALUE) {
       this.Status = 'Complete'
-      this.EndTime = System.nanoTime()
+      this.EndTime = System.currentTimeMillis()
     }
   }
 
