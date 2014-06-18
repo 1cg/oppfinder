@@ -1,7 +1,5 @@
 uses java.lang.Runnable
 uses java.lang.Thread
-uses model.*
-uses java.util.HashMap
 uses java.util.Map
 uses jobs.Job
 
@@ -17,14 +15,10 @@ class TestJob extends Job implements Runnable {
 
   override function run() {
     if (this.Cancelled) return
-    var dataSet = new DataSet("foo")
-    var a = new Analysis()
     var iterations = 30
     for(var i in 1..iterations) {
       if (this.Cancelled) return
-      dataSet.insert(new HashMap())
       print("Test Job On Iteration ${i}")
-      a.analyzeDataSet(dataSet)
       Thread.sleep(1 * 1000)
       this.Progress = (i * 100)/iterations
     }
