@@ -4,22 +4,19 @@ uses jobs.GenerateJob
 uses jobs.RecommendJob
 uses java.lang.Thread
 uses controller.JobController
+uses jobs.TestJob
 
 class AlgorithmTest extends TestCase {
 
   public function testReaches() {
 
-
-    new GenerateTest().generateTest('datagen/assets/dataReach.json', "Reach")
-    var generateJob = new GenerateJob('datagen/assets/datareach.json')
+    new GenerateTest().generateTest('src/main/gosu/datagen/assets/dataReach.json', "Reach")
+    var generateJob = new GenerateJob('datagen/assets/dataReach.json')
     var gJobID = generateJob.UUId
     generateJob.start()
     while(jobs.Job.ActiveJobs.toList().map(\ j -> j.UUId).contains(gJobID)) {
-      print(jobs.Job.getUUIDProgress(gJobID))
-      print("waiting on generate...")
-      Thread.sleep(1000)
+      Thread.sleep(100)
     }
-
     var recommendJob = new RecommendJob()
     var rJobID = recommendJob.UUId
     recommendJob.start()
