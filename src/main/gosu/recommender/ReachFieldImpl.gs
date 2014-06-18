@@ -8,7 +8,7 @@ uses model.DataSetEntry
 uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 uses java.util.Map
 uses java.lang.Integer
-uses datagen.assets.AssetLibrarian
+uses util.AssetLibrarian
 
 class ReachFieldImpl implements Field {
 

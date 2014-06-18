@@ -10,7 +10,7 @@ uses java.math.BigDecimal
 uses org.json.simple.JSONArray
 uses java.io.File
 uses java.io.FileWriter
-uses datagen.assets.AssetLibrarian
+uses util.AssetLibrarian
 
 class GenerateRandom {
   /*

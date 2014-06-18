@@ -3,8 +3,13 @@ uses net.greghaines.jesque.worker.*
 uses java.lang.Thread
 uses java.lang.System
 
-var config = new ConfigBuilder().build()
-var workers = System.getenv("JESQUE_WORKERS")?.toInt()
+var builder = new ConfigBuilder()
+var host = System.Env['REDIS_HOST']
+if (host != null) {
+  builder.withHost(host)
+}
+var config = builder.build()
+var workers = System.Env["JESQUE_WORKERS"]?.toInt()
 
 for (i in 0..|((workers == 0) ? 4 : workers)) {
   var worker = new WorkerImpl(config, {'main'}, new ReflectiveJobFactory())

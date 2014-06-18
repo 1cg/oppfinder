@@ -14,7 +14,7 @@ uses java.lang.Integer
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
-uses datagen.assets.AssetLibrarian
+uses util.AssetLibrarian
 
 class MahoutUtil {
   static final var policies = makePolicyMap()

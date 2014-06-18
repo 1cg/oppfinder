@@ -9,7 +9,7 @@ class DataSet {
   var _collection : DBCollection
 
   construct(collectionName : String) {
-    _collection = Database.getCollection(collectionName)
+    _collection = Database.INSTANCE.getCollection(collectionName)
   }
 
  /* Automatically sorts from oldest to newest */
