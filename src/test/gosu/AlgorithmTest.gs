@@ -4,7 +4,6 @@ uses jobs.GenerateJob
 uses jobs.RecommendJob
 uses java.lang.Thread
 uses controller.JobController
-uses jobs.TestJob
 
 class AlgorithmTest extends TestCase {
 
