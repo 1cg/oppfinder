@@ -26,8 +26,7 @@ class AlgorithmTest extends TestCase {
     }
 
     var recommendations = recommendJob.ResultsData.find().next()
-    print(recommendations)
- //   assertTrue(topRecommendation.)
+    assertEquals(recommendations.get("Company"), "RECOMMENDEE (test success)")
 
   }
   }

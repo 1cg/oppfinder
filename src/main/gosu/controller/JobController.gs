@@ -15,13 +15,13 @@ class JobController implements IHasRequestContext {
     return "Job Started!!!"
   }
   static function startGenerateJob() : String {
-    new GenerateRandom().generateRandom('datagen/assets/data.json')
-    new GenerateJob('datagen/assets/data.json').start()
+    new GenerateRandom().generateRandom('src/main/gosu/datagen/assets/data.json')
+    new GenerateJob('src/main/gosu/datagen/assets/data.json').start()
     return "Company information listed below."
   }
   static function startGenerateTestJob(testVar : String) : String {
-    new GenerateTest().generateTest('datagen/assets/dataReach.json', testVar)
-    new GenerateJob('datagen/assets/dataReach.json').start()
+    new GenerateTest().generateTest('src/main/gosu/datagen/assets/dataReach.json', testVar)
+    new GenerateJob('src/main/gosu/datagen/assets/dataReach.json').start()
     return "Company information listed below."
   }
   static function cancelJob(UUID : String) : String{
