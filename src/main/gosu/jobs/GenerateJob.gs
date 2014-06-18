@@ -10,7 +10,7 @@ uses org.json.simple.parser.JSONParser
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses java.io.File
-uses datagen.assets.AssetLibrarian
+uses util.AssetLibrarian
 
 class GenerateJob extends Job implements Runnable {
 
