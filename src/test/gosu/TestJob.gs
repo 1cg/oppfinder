@@ -1,10 +1,9 @@
-package jobs
-
 uses java.lang.Runnable
 uses java.lang.Thread
 uses model.*
 uses java.util.HashMap
 uses java.util.Map
+uses jobs.Job
 
 class TestJob extends Job implements Runnable {
 
