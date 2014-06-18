@@ -14,21 +14,21 @@ class AlgorithmTest extends TestCase {
     var generateJob = new GenerateJob('src/main/gosu/datagen/assets/dataReach.json')
     var gJobID = generateJob.UUId
     generateJob.start()
-    while(jobs.Job.ActiveJobs.toList().map(\ j -> j.UUId).contains(gJobID)) {
+    while(generateJob.Progress < 100) {
       Thread.sleep(100)
     }
     var recommendJob = new RecommendJob()
     var rJobID = recommendJob.UUId
     recommendJob.start()
-    while(jobs.Job.ActiveJobs.toList().map(\ j -> j.UUId).contains(rJobID)) {
-      Thread.sleep(1000)
+    while(recommendJob.Progress < 100) {
+      print("waiting on recommend...")
+      Thread.sleep(100)
     }
-    print(recommendJob.ResultsData.Count)
 
     var recommendations = recommendJob.ResultsData.find().next()
     print(recommendations)
  //   assertTrue(topRecommendation.)
-}
+
   }
 
 
