@@ -10,6 +10,7 @@ uses org.json.simple.parser.JSONParser
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses java.lang.System
+uses java.io.File
 
 class GenerateJob extends Job implements Runnable {
 
@@ -32,6 +33,8 @@ class GenerateJob extends Job implements Runnable {
     var parser = new JSONParser()
     var dataSet = new DataSet(DataSetEntry.COLLECTION)
     dataSet.drop()
+    print(path)
+    new File(path)
     dataSet.insert((parser.parse(
         new FileReader(path)) as JSONArray)
         .map(\ o -> o as JSONObject))
