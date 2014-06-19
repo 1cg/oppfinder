@@ -12,7 +12,7 @@ uses java.lang.Long
 class LocationFieldImpl implements Field {
 
   final static var geocoder = new Geocoder()
-  final static var coordinates = new DataSet(DataSetEntry.REGIONCOORDINATES).find().toList()
+  final static var coordinates = new DataSet(DataSetEntry.REGIONCOORDINATES).find().next()
 
   override function getModel(): DataModel {
     return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), 'Region',
@@ -24,8 +24,7 @@ class LocationFieldImpl implements Field {
   }
 
   function coords(location : String) : String {
-    var city = coordinates.firstWhere(\ c -> c.containsValue(location))
-    return city['Coords'] as String
+    return coordinates[location] as String
   }
 
   function locationToLat(l : String) : long {

@@ -9,7 +9,6 @@ uses model.DataSetEntry
 uses org.json.simple.parser.JSONParser
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses java.io.File
 uses util.AssetLibrarian
 uses java.util.UUID
 
@@ -61,13 +60,15 @@ class GenerateJob extends Job implements Runnable {
     var myLine = bufRead.readLine()
     var dataStore = new DataSet(DataSetEntry.REGIONCOORDINATES)
     dataStore.drop()
+    var locationMap : Map<String, String> = {}
     while (myLine != null) {
       var split = myLine.split(":")
       var city = split[0]
       var coords = split[1].substring(1)
-      dataStore.insert({"City" -> city, "Coords" -> coords})
+      locationMap[city] = coords
       myLine = bufRead.readLine()
     }
+    dataStore.insert(locationMap)
   }
 
 }

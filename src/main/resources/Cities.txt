@@ -275,7 +275,7 @@ Pompano Beach
 Port Arthur
 Port Orange
 Port Saint Lucie
-Port St. Lucie
+Port St Lucie
 Portland
 Portsmouth
 Poughkeepsie
@@ -336,9 +336,9 @@ Spartanburg
 Spokane
 Springdale
 Springfield
-St. Louis
-St. Paul
-St. Petersburg
+St Louis
+St Paul
+St Petersburg
 Stamford
 Sterling Heights
 Stockton

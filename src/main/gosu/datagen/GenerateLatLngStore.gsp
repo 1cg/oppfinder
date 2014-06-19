@@ -2,11 +2,11 @@ uses java.io.FileReader
 uses java.io.BufferedReader
 uses com.google.code.geocoder.GeocoderRequestBuilder
 uses com.google.code.geocoder.Geocoder
-uses java.io.File
-uses java.io.FileWriter
 uses java.lang.Thread
 uses model.DataSetEntry
 uses model.DataSet
+uses java.util.Map
+uses util.AssetLibrarian
 
 /*
   This program is meant to be used once so we could work on the rest of the program without having to worry about
@@ -15,25 +15,20 @@ uses model.DataSet
  */
 
 
-var input = new FileReader("Cities.txt")
+var input = new FileReader(AssetLibrarian.INSTANCE.getPath("Cities.txt"))
 var bufRead = new BufferedReader(input)
 var myLine = bufRead.readLine()
 var geocoder = new Geocoder()
 
-var outputRough = new FileWriter(new File("LatLng.txt"))
 var dataStore = new DataSet(DataSetEntry.REGIONCOORDINATES)
+dataStore.drop()
+var locationMap : Map<String, String> = {}
 while (myLine != null) {
-  print(myLine)
   var geocoderRequest = new GeocoderRequestBuilder().setAddress(myLine).setLanguage("en").getGeocoderRequest();
   var resultSLoc = geocoder.geocode(geocoderRequest).Results.get(0)
   var result = resultSLoc.Geometry.Location
-  outputRough.write(resultSLoc.FormattedAddress + ": " + result.Lat.longValue() + ", "+result.Lng.longValue() + "\n")
-
-  dataStore.insert({"City" -> resultSLoc.FormattedAddress, "Coords" -> result.Lat.longValue() + ", "+result.Lng.longValue()})
-
+  locationMap[resultSLoc.FormattedAddress.replaceAll('\\.','')] = result.Lat.longValue() + ", "+result.Lng.longValue()
   myLine = bufRead.readLine()
   Thread.sleep(150)
 }
-
-outputRough.flush()
-outputRough.close()
+dataStore.insert(locationMap)
