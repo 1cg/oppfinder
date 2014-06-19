@@ -16,17 +16,15 @@ get('/jobs/:id/elapsed_time', \-> {
   return controller.JobController.getUUIDElapsedTime(Params['id'])
 })
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
-get('/jobs/table/:type/:page', \-> {
-  Layout = null
-  return view.JobTableBody.renderToString(Params['type'], Params['page'].toLong(), controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
-get('/jobs/table/pager/:type/:page', \-> {
-  Layout = null
+get('/jobs/table/:type/:page', \-> { Layout = null
+                    return view.JobTableBody.renderToString(Params['type'], Params['page'].toLong(), controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
+get('/jobs/table/pager/:type/:page', \-> { Layout = null
   return controller.PagerController.renderPager(Params['type'], Params['page'].toLong())})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(Params['page'].toLong())})
+  return view.CompanyTable.renderToString(Params['page'].toLong(), controller.PagerController.getCompanyPager(Params['page'].toLong()))})
 get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Start Jobs */

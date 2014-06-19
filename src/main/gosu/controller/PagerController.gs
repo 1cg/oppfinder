@@ -2,6 +2,7 @@ package controller
 
 uses jobs.Job
 uses model.Pager
+uses java.util.Map
 
 class PagerController {
 
@@ -14,6 +15,16 @@ class PagerController {
     } else {
       pager = new Pager<Job>(Job.CancelledJobs,10)
     }
+    if (!pager.validPage(page)) {
+      page = pager.lastPage()
+    }
+    pager.getPage(page)
+    return pager
+  }
+
+  static function getCompanyPager(page : long) : Pager<Map<Object,Object>> {
+    var pager : Pager<Map<Object,Object>>
+    pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10)
     if (!pager.validPage(page)) {
       page = pager.lastPage()
     }
