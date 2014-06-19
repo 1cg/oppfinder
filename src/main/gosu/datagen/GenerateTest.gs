@@ -28,7 +28,7 @@ class GenerateTest {
    * Generates JSON of companies with arbitrary details except for two companies with clear similarities in
    * reach. The Recommendation Job should recommend company RECOMMENDEE to GODZILLA
    */
-  function generateTest(output : String, testVar : String, numCompanies : int = 2400) {
+  function generateTest(output : String, testVar : String, numCompanies : int = 10000) {
     var bigArray = new JSONArray()
     for (1..numCompanies index j) {
       var company = new JSONObject()
