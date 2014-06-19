@@ -70,7 +70,7 @@ class Company extends DataSetEntry {
   }
 
   static function PolicyBreakdown(entryPolicy : String) : List<String>{
-    var policies : List<String>
+    var policies : List<String> = {}
     for (var o in (JSONValue.parse(entryPolicy) as JSONArray).map(\ o -> o as String)) {
       policies.add(o.replaceAll('\\{', '').replaceAll('\\}','').replaceAll('"',''))
     }

@@ -1,16 +1,7 @@
-<%@ params(type : String, page : long) %>
-<% var pager : model.Pager
-    if (type == "complete") {
-      pager = new model.Pager(jobs.Job.CompleteJobs,10)
-    } else if (type == "running") {
-      pager = new model.Pager(jobs.Job.ActiveJobs,10)
-    } else {
-      pager = new model.Pager(jobs.Job.CancelledJobs,10)
-    }
-    if (!pager.validPage(page)) {
-      page = pager.lastPage()
-    }
-    pager.getPage(page)
+<%@ params(type : String, page : long, pager : model.Pager) %>
+<% if (!pager.validPage(page)) {
+     page = pager.lastPage()
+   }
 %>
 <ul class="pagination navbar-right">
   <li><button ic-post-to="/jobs/table/${type}/${page}" class="btn btn-info btn-md" role="button"><b>Refresh</b></button></li>

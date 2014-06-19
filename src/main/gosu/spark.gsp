@@ -19,7 +19,7 @@ get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> { Layout = null
                     return view.JobTableBody.renderToString(Params['type'], Params['page'].toLong())})
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
-  return view.PagerView.renderToString(Params['type'], Params['page'].toLong())})
+  return controller.PagerController.renderPager(Params['type'], Params['page'].toLong())})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/table/:page', \-> { Layout = null
