@@ -15,8 +15,6 @@
     </tr>
   </thead>
   <tbody>
-  Count: ${job.ResultsData.Count}
-  Job: ${job.UUId}
   <% for (result in ds.find()) {%>
     <tr>
       <td>

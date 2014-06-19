@@ -1,5 +1,4 @@
-<%@ params(type: String, page: long) %>
-<% var pager = controller.PagerController.getPager(type)%>
+<%@ params(type: String, page: long, pager: model.Pager<jobs.Job>) %>
 <table class="table">
   <thead>
     <tr>
