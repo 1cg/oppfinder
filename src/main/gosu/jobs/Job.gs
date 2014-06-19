@@ -38,7 +38,12 @@ abstract class Job implements Runnable {
   }
 
   function start() : jobs.Job {
-    var config = new ConfigBuilder().build()
+    var builder = new ConfigBuilder()
+    var host = System.Env['REDIS_HOST']
+    if (host != null) {
+      builder.withHost(host)
+    }
+    var config = builder.build()
     var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
     var client = new ClientImpl(config)
     client.enqueue('main', testJob)

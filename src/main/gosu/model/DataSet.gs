@@ -11,7 +11,6 @@ class DataSet {
 
   construct(collectionName : String) {
     _collection = Database.INSTANCE.getCollection(collectionName)
-    Thread.sleep(50)
   }
 
  /* Automatically sorts from oldest to newest */
