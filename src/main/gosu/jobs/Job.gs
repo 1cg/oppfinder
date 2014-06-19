@@ -118,7 +118,7 @@ abstract class Job implements Runnable {
       this.Status = 'Complete'
     }
     dataStore.update(id, {'Progress' -> progress})
-    checkBounds()
+    checkBounds(progress)
   }
 
   property set FieldName(field: String) {
@@ -190,11 +190,11 @@ abstract class Job implements Runnable {
   /*
   * If we are either at the start or the end of the job, log the status
    */
-  private function checkBounds() {
-    if (this.Progress == 0) {
+  private function checkBounds(progress : int) {
+    if (progress == 0) {
       this.StartTime =  System.currentTimeMillis()
       this.Status = 'Active'
-    } else if (this.Progress == MAX_PROGRESS_VALUE) {
+    } else if (progress == MAX_PROGRESS_VALUE) {
       this.Status = 'Complete'
       this.EndTime = System.currentTimeMillis()
     }

@@ -23,7 +23,7 @@ class JobController implements IHasRequestContext {
     return "Company information listed below."
   }
   static function startGenerateTestJob(testVar : String) : String {
-    new GenerateTest().generateTest('src/main/resources/dataReach.json', testVar)
+    new GenerateTest().generateTest('src/main/resources/dataReach.json', testVar, 40000)
     new GenerateJob('src/main/resources/dataReach.json').start()
     return "Company information listed below."
   }
