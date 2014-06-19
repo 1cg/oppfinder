@@ -4,22 +4,22 @@ Layout = view.Layout
 
 /* Getters for job information */
 get('/', \-> view.Root.renderToString() )
-get('/jobs/running/:page', \-> view.Running.renderToString(Params['page'].toLong()))
-get('/jobs/complete/:page', \-> view.Complete.renderToString(Params['page'].toLong()))
-get('/jobs/cancelled/:page', \-> view.Cancelled.renderToString(Params['page'].toLong()))
+get('/jobs/running/:page', \-> controller.TableController.getRunningTable(Params['page'].toLong()))
+get('/jobs/complete/:page', \-> controller.TableController.getCompleteTable(Params['page'].toLong()))
+get('/jobs/cancelled/:page', \-> controller.TableController.getCancelledTable(Params['page'].toLong()))
 get('/jobs/:id/percent_done', \-> {
   Layout = null
-  return jobs.Job.getUUIDProgress(Params['id'])
+  return controller.JobController.getUUIDProgress(Params['id'])
 })
 get('/jobs/:id/elapsed_time', \-> {
   Layout = null
-  return jobs.Job.getUUIDElapsedTime(Params['id'])
+  return controller.JobController.getUUIDElapsedTime(Params['id'])
 })
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> { Layout = null
                     return view.JobTableBody.renderToString(Params['type'], Params['page'].toLong())})
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
-  return view.Pager.renderToString(Params['type'], Params['page'].toLong())})
+  return view.PagerView.renderToString(Params['type'], Params['page'].toLong())})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/table/:page', \-> { Layout = null
@@ -34,8 +34,8 @@ post('/jobs/action/start/upload', \-> controller.JobController.startUploadJob(Re
 post('/jobs/action/start/recommend', \-> controller.JobController.startRecommendJob())
 post('/jobs/action/deleteCancelled', \-> controller.JobController.deleteJobs('Cancelled'))
 post('/jobs/action/deleteCompleted', \-> controller.JobController.deleteJobs('Complete'))
-post('/jobs/action/state/:id/cancel', \-> jobs.Job.cancel(Params['id']))
-post('/jobs/action/state/:id/reset', \-> jobs.Job.reset(Params['id']))
+post('/jobs/action/state/:id/cancel', \-> controller.JobController.cancelJob(Params['id']))
+post('/jobs/action/state/:id/reset', \-> controller.JobController.resetJob(Params['id']))
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
 get("*", \-> view.BadPath.renderToString())

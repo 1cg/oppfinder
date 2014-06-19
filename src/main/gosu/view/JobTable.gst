@@ -6,5 +6,5 @@
   ${view.JobTableBody.renderToString(type, page)}
 </div>
 <div ic-src="/jobs/table/pager/${type}/${page}" ic-poll="4s" ic-transition="none" ic-deps="/jobs/action">
-  ${view.Pager.renderToString(type, page)}
+  ${view.PagerView.renderToString(type, page)}
 </div>

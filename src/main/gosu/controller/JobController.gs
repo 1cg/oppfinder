@@ -42,6 +42,14 @@ class JobController implements IHasRequestContext {
     return "Delete"
   }
 
+  static function getUUIDProgress(UUID : String) : String {
+    return Job.getUUIDProgress(UUID)
+  }
+
+  static function getUUIDElapsedTime(UUID : String) : String {
+    return Job.getUUIDElapsedTime(UUID)
+  }
+
   static function startUploadJob(requestBody : String) : String {
     new UploadJob(requestBody).start()
     return view.Companies.renderToString(1)
