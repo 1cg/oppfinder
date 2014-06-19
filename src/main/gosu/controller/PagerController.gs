@@ -4,6 +4,7 @@ uses jobs.Job
 uses model.Pager
 
 class PagerController {
+
   static function getPager(type : String, page : long) : Pager<Job> {
     var pager : Pager<Job>
     if (type == "complete") {
@@ -18,5 +19,10 @@ class PagerController {
     }
     pager.getPage(page)
     return pager
+  }
+
+  static function renderPager(type : String, page : long) : String {
+    var pager = getPager(type,page)
+    return view.PagerView.renderToString(type,page,pager)
   }
 }
