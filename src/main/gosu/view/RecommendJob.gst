@@ -1,5 +1,4 @@
 <%@ params(job : jobs.RecommendJob) %>
-<% var ds : model.DataSet = job.ResultsData %>
 <table class="table">
   <thead>
     <tr>
@@ -15,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-  <% for (result in ds.find()) {%>
+  <% for (result in job.ResultsData.find()) {%>
     <tr>
       <td>
         ${result.get('Company')}
