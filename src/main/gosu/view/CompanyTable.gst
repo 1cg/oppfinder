@@ -1,8 +1,4 @@
-<%@ params(page : long)%>
-<% var pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10)
-   if (!pager.validPage(page) && page > 1) {
-     page = pager.lastPage()
-   } %>
+<%@ params(page : long, pager : model.Pager<java.util.Map<Object,Object>>)%>
 <table class="table">
   <thead>
     <tr>

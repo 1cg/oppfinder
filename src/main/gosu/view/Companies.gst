@@ -33,6 +33,6 @@
 </form>
 
 <div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
-  ${CompanyTable.renderToString(page)}
+  ${CompanyTable.renderToString(page, controller.PagerController.getCompanyPager(page))}
 </div>
 
