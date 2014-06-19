@@ -11,6 +11,7 @@ uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses java.io.File
 uses util.AssetLibrarian
+uses java.util.UUID
 
 class GenerateJob extends Job implements Runnable {
 
@@ -33,10 +34,15 @@ class GenerateJob extends Job implements Runnable {
     var parser = new JSONParser()
     var dataSet = new DataSet(DataSetEntry.COLLECTION)
     dataSet.drop()
-    new File(path)
-    dataSet.insert((parser.parse(
+    var companies = (parser.parse(
         new FileReader(path)) as JSONArray)
-        .map(\ o -> o as JSONObject))
+        .map(\ o -> o as JSONObject)
+    for (company in companies) {
+      var uuid = UUID.randomUUID()
+      company.put('UUId', uuid.toString())
+      company.put('longID', uuid.LeastSignificantBits)
+    }
+    dataSet.insert(companies)
     writeLatLng()
     if (Cancelled) return
     this.Progress = 100

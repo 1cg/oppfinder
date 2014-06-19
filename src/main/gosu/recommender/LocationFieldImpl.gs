@@ -12,9 +12,10 @@ uses java.lang.Long
 class LocationFieldImpl implements Field {
 
   final static var geocoder = new Geocoder()
+  final static var coordinates = new DataSet(DataSetEntry.REGIONCOORDINATES).find().toList()
 
   override function getModel(): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Region",
+    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), 'Region',
         \ l -> locationToLat(l),\ l -> locationToLng(l))
   }
 
@@ -22,8 +23,9 @@ class LocationFieldImpl implements Field {
     return new EuclideanDistanceSimilarity(model)
   }
 
-  function coords(city : String) : String {
-    return new DataSet(DataSetEntry.REGIONCOORDINATES).findOne({'City' -> city}).get("Coords") as String
+  function coords(location : String) : String {
+    var city = coordinates.firstWhere(\ c -> c.containsValue(location))
+    return city['Coords'] as String
   }
 
   function locationToLat(l : String) : long {

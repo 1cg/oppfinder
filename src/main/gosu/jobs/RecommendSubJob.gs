@@ -66,8 +66,9 @@ class RecommendSubJob extends Job implements Runnable {
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
     var userIDs = model.getUserIDs()
     userIDs.skip(this.Start as int)
-    for (i in 0..|this.Number) {
-      Progress = ((i* 100)/Number) as int
+    var number = this.Number
+    for (i in 0..|number) {
+      if (i % 50 == 0) Progress = ((i* 100)/number) as int //Reduce write load
       if (!userIDs.hasNext()) break
       var user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
@@ -83,7 +84,6 @@ class RecommendSubJob extends Job implements Runnable {
       new DataSet(this.UUId).insert(myRecommendations)
     }
     this.Progress = 100
-    print("Recommend subjob DONE")
     } catch(e) {
       e.printStackTrace()
       throw e

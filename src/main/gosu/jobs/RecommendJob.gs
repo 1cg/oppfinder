@@ -49,7 +49,6 @@ class RecommendJob extends Job implements Runnable {
     }
       storeTopRecommendations(recommendations)
     this.Progress = 100
-      print("recommend done")
     } catch(e) {
       e.printStackTrace()
       throw e
