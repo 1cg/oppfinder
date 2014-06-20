@@ -39,7 +39,11 @@
         <div ic-src="/jobs/${job.UUId}/elapsed_time" ic-transition="none" ic-poll="1s">${job.ElapsedTime}</div>
       </td>
       <td>
+        <% if (job.Cancelled) { %>
+        <div class="progress">
+        <% }else{ %>
         <div class="progress progress-striped active">
+        <% } %>
           <div class="progress-bar"
             ic-style-src="width:/jobs/${job.UUId}/percent_done"
             ic-poll="1s" style="width:${jobs.Job.getUUIDProgress(job.UUId)}"></div>
