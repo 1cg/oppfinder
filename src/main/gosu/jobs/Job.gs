@@ -66,11 +66,8 @@ abstract class Job implements Runnable {
     job.start()
   }
 
-  // jobStatus should be Cancelled or Complete
-  static function deleteByStatus(jobStatus : String) {
-    for (job in dataStore.find({'Status' -> jobStatus})){
-      dataStore.remove(job)
-    }
+  static function delete(UUId : String) {
+    dataStore.remove(dataStore.findOne({'UUId' -> UUId}))
   }
 
   abstract function reset()
