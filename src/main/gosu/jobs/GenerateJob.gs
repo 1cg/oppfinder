@@ -51,6 +51,7 @@ class GenerateJob extends Job {
     dataSet.insert(companies)
     this.StatusFeed = "Company information inserted"
     writeLatLng()
+    this.StatusFeed = "Done"
   }
 
   override function reset() {}
