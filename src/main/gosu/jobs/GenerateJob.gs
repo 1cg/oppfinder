@@ -11,8 +11,10 @@ uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses util.AssetLibrarian
 uses java.util.UUID
+uses util.AssetLibrarian
+uses java.io.BufferedReader
 
-class GenerateJob extends Job implements Runnable {
+class GenerateJob extends Job {
 
   construct(data : Map<Object, Object>) {
     super(data)
@@ -22,13 +24,13 @@ class GenerateJob extends Job implements Runnable {
     super()
   }
 
-  construct(path : String) {
+  construct(path: String) {
     super()
     update({'Path' -> path})
   }
 
-  override function run() {
-    if (Cancelled) return
+  override function executeJob() {
+    checkCancellation()
     var path = search('Path') as String
     var parser = new JSONParser()
     this.StatusFeed = "Dropping previous dataset"
@@ -37,17 +39,18 @@ class GenerateJob extends Job implements Runnable {
     var companies = (parser.parse(
         new FileReader(path)) as JSONArray)
         .map(\ o -> o as JSONObject)
+    checkCancellation()
     this.StatusFeed = "Parsed company information"
-    for (company in companies) {
+    for (company in companies index i) {
+      if (i % 100 == 0) this.Progress = (i * 100) / companies.size()
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
     }
+    checkCancellation()
     dataSet.insert(companies)
     this.StatusFeed = "Company information inserted"
     writeLatLng()
-    if (Cancelled) return
-    this.Progress = 100
   }
 
   override function reset() {}

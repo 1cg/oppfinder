@@ -17,6 +17,8 @@ uses util.TransformationIterator
 uses util.SkipIterator
 uses java.lang.Class
 uses view.JobStatusFeedList
+uses java.lang.Exception
+uses util.CancellationException
 
 abstract class Job implements Runnable {
 
@@ -37,6 +39,29 @@ abstract class Job implements Runnable {
     this.Progress = 0
     this.Type = this.IntrinsicType.Name
   }
+
+  override final function run() {
+    try {
+      executeJob()
+      this.Progress = 100
+    } catch(ce : CancellationException) {
+      //Do nothing
+    } catch(e : Exception) {
+      handleErrorState(e)
+    }
+  }
+
+  function checkCancellation() {
+    if (Cancelled) throw new CancellationException()
+  }
+
+  function handleErrorState(e : Exception) {
+    update({'Exception' -> e.StackTraceAsString})
+    Status = 'Failed'
+    e.printStackTrace()
+  }
+
+  abstract function executeJob()
 
   function start() : jobs.Job {
     var builder = new ConfigBuilder()

@@ -1,6 +1,5 @@
 package jobs
 
-uses java.lang.Runnable
 uses java.util.Map
 uses model.DataSet
 uses java.lang.Class
@@ -11,7 +10,7 @@ uses java.lang.Long
 uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer
 uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender
 
-class RecommendSubJob extends Job implements Runnable {
+class RecommendSubJob extends Job {
 
   var maxRecommendation : Float
   var minRecommendation : Float
@@ -52,23 +51,24 @@ class RecommendSubJob extends Job implements Runnable {
   }
 
 
-  override function run() {
-    try {
+  override function executeJob() {
     maxRecommendation = Float.MIN_VALUE
     minRecommendation = Float.MAX_VALUE
-    if (this.Cancelled) return
+    checkCancellation()
     var c = Class.forName(this.FieldName)
     var field = c.newInstance() as Field
     var model = field.getModel()
-    //var similarity = field.getSimilarity(model)
-    //var recommender = new GenericItemBasedRecommender(model, similarity)
+    checkCancellation()
     var recommender = new SVDRecommender(model, new SVDPlusPlusFactorizer(model,10,10))
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
     var userIDs = model.getUserIDs()
     userIDs.skip(this.Start as int)
     var number = this.Number
     for (i in 0..|number) {
-      if (i % 50 == 0) Progress = ((i* 100)/number) as int //Reduce write load
+      if (i % 50 == 0) {
+        Progress = ((i* 100)/number) as int //Reduce write load
+        checkCancellation()
+      }
       if (!userIDs.hasNext()) break
       var user = userIDs.next()
       var recommendations = recommender.recommend(user, 3)
@@ -82,11 +82,6 @@ class RecommendSubJob extends Job implements Runnable {
     myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
     if (myRecommendations.size() > 0) {
       new DataSet(this.UUId).insert(myRecommendations)
-    }
-    this.Progress = 100
-    } catch(e) {
-      e.printStackTrace()
-      throw e
     }
   }
 

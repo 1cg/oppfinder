@@ -1,6 +1,5 @@
 package jobs
 
-uses java.lang.Runnable
 uses java.util.Map
 uses java.lang.Thread
 uses model.DataSet
@@ -9,7 +8,7 @@ uses model.DataSetEntry
 uses util.MahoutUtil
 uses java.util.Arrays
 
-class RecommendJob extends Job implements Runnable {
+class RecommendJob extends Job {
 
   static final var NUM_RECOMMENDATIONS = 20
   static final var NUM_BUCKETS = 4
@@ -26,16 +25,15 @@ class RecommendJob extends Job implements Runnable {
     super()
   }
 
-  override function run() {
-    try {
-    if (Cancelled) return
+  override function executeJob() {
+    checkCancellation()
     startSubJobs()
     poll() //Blocks until sub-tasks are complete
-    if (Cancelled) return
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
       var ds = new DataSet(jobID)
-      for (companyRecommendations in ds.find()) {
+      for (companyRecommendations in ds.find() index i) {
+        if (i % 200 == 0) checkCancellation()
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
         if (recommendations.containsKey(entry.Key)) {
@@ -47,12 +45,7 @@ class RecommendJob extends Job implements Runnable {
       }
       ds.drop() //Get rid of the temp data
     }
-      storeTopRecommendations(recommendations)
-    this.Progress = 100
-    } catch(e) {
-      e.printStackTrace()
-      throw e
-    }
+    storeTopRecommendations(recommendations)
   }
 
   /*
@@ -77,6 +70,7 @@ class RecommendJob extends Job implements Runnable {
    */
   function storeTopRecommendations(recommendations : Map<String, Float>) {
     var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue().reversed())
+    checkCancellation()
     var finalResults : List<Map<Object, Object>>= {}
     var companyDB = new DataSet(DataSetEntry.COLLECTION)
     for (each in sorted.iterator() index i) {
@@ -122,9 +116,7 @@ class RecommendJob extends Job implements Runnable {
     var finished = false
     while (true) {
       var sum = 0
-      if (Cancelled) {
-        return
-      }
+      checkCancellation()
       finished = true
       for (jobID in subJobsID) {
         var progress = Job.getUUIDProgress(jobID).remove("%").toInt()
