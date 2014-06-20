@@ -46,9 +46,14 @@
       <td>
         <button ic-post-to="/jobs/action/state/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>Cancel</b></button>
       </td>
-   <% } else if (job.Cancelled) { %>
+    <% } else {
+       if (job.Cancelled) { %>
+        <td>
+          <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
+        </td>
+        <% } %>
       <td>
-        <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><b>Reset</b></button>
+        <button ic-post-to="/jobs/action/delete/${job.UUId}" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
       </td>
    <% } %>
    </tr>

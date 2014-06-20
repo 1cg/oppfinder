@@ -37,8 +37,8 @@ class JobController implements IHasRequestContext {
     return "Job Reset"
   }
 
-  static function deleteJobs(jobStatus : String) : String{
-    Job.deleteByStatus(jobStatus)
+  static function deleteJob(UUID : String) : String{
+    Job.delete(UUID)
     return "Delete"
   }
 
