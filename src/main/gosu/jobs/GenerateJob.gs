@@ -31,17 +31,20 @@ class GenerateJob extends Job implements Runnable {
     if (Cancelled) return
     var path = search('Path') as String
     var parser = new JSONParser()
+    this.StatusFeed = "Dropping previous dataset"
     var dataSet = new DataSet(DataSetEntry.COLLECTION)
     dataSet.drop()
     var companies = (parser.parse(
         new FileReader(path)) as JSONArray)
         .map(\ o -> o as JSONObject)
+    this.StatusFeed = "Parsed company information"
     for (company in companies) {
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
     }
     dataSet.insert(companies)
+    this.StatusFeed = "Company information inserted"
     writeLatLng()
     if (Cancelled) return
     this.Progress = 100

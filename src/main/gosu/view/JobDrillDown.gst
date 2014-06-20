@@ -12,3 +12,4 @@
 <h3>Job Type: <span class="label label-default">${job.Type}</span></h3>
 <h3>Elapsed Time: <span class="label label-default">${job.ElapsedTime}</span></h3>
 ${job.renderToString()}
+<div ic-src="/jobs/${job.UUId}/status_feed" ic-poll="1s" ic-transition="none"></div>

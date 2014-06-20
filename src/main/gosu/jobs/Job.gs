@@ -16,6 +16,7 @@ uses view.JobDrillDown
 uses util.TransformationIterator
 uses util.SkipIterator
 uses java.lang.Class
+uses view.JobStatusFeedList
 
 abstract class Job implements Runnable {
 
@@ -123,6 +124,19 @@ abstract class Job implements Runnable {
     }
     dataStore.update(id, {'Progress' -> progress})
     checkBounds(progress)
+  }
+
+  property get StatusFeed() : String {
+    return dataStore.findOne(id)?.get('StatusFeed') as String ?: ""
+  }
+
+  property set StatusFeed(feedUpdate : String) {
+    dataStore.update(id, {'StatusFeed' -> this.StatusFeed+feedUpdate+"\n"})
+  }
+
+  static function getStatusFeed(UUID : String) : String {
+    var job = dataStore.findOne({'UUId' -> UUID})
+    return JobStatusFeedList.renderToString(job?.get('StatusFeed') as String ?: "", job?.get('Progress') as Integer ?: 0)
   }
 
   property set FieldName(field: String) {
