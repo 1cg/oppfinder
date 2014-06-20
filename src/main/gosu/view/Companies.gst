@@ -2,21 +2,11 @@
 <h2>Either randomly generate or upload your own data.</h2>
 <p>The table of data is displayed below.</p><br>
 
-
 <button ic-post-to="/jobs/action/start/generate" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
   Generate Random
 </button>
 <button ic-post-to="/jobs/action/start/generateTest/Reach" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
   Generate Test Reaches
-</button>
-<button ic-post-to="/jobs/action/start/generateTest/Region" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
-  Generate Test Regions
-</button>
-<button ic-post-to="/jobs/action/start/generateTest/Revenue" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
-  Generate Test Revenues
-</button>
-<button ic-post-to="/jobs/action/start/generateTest/Size" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
-  Generate Test Sizes
 </button>
 <h3>
   OR
@@ -30,6 +20,10 @@
   <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
   </div>
 </form>
+<div class="progress progress-striped active">
+  <div class="progress-bar" ic-style-src="width:/jobs/1/percent_done" ic-poll="1s" style="width:10%}">
+  </div>
+</div>
 <div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
   ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
 </div>

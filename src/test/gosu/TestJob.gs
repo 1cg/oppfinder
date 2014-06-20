@@ -14,13 +14,13 @@ class TestJob extends Job {
   }
 
   override function executeJob() {
-    if (this.Cancelled) return
+    checkCancellation()
     this.StatusFeed = "Starting"
 
     var iterations = 30
     for(var i in 1..iterations) {
       if (i == iterations/2) this.StatusFeed = "50% Complete"
-      if (this.Cancelled) return
+      checkCancellation()
       print("Test Job On Iteration ${i}")
       Thread.sleep(1 * 1000)
       this.Progress = (i * 100)/iterations

@@ -37,7 +37,7 @@ class GenerateJob extends Job {
     var dataSet = new DataSet(DataSetEntry.COLLECTION)
     dataSet.drop()
     var companies = (parser.parse(
-        new FileReader(path)) as JSONArray)
+        new FileReader(AssetLibrarian.INSTANCE.getPath(path))) as JSONArray)
         .map(\ o -> o as JSONObject)
     checkCancellation()
     this.StatusFeed = "Parsed company information"
@@ -56,7 +56,7 @@ class GenerateJob extends Job {
   override function reset() {}
 
   override function renderToString() : String {
-    return view.GenerateJob.renderToString(this)
+    return ""
   }
 
   // We stored the cities and coordinates in a file to work around the Google Geocoder request limit.
