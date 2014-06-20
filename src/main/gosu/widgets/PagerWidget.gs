@@ -4,7 +4,8 @@ uses model.Pager
 
 class PagerWidget {
 
-  function renderWidget(pager : Pager) : String {
-
+  static function renderWidget(pager : Pager, path : String) : String {
+    return PagerView.renderToString(pager, path)
   }
+
 }
