@@ -17,4 +17,4 @@
 </button>
 
 <span id="feedback"></span>
-${view.JobTable.renderToString("Running Jobs", "running", 1)}
+${controller.TableController.getRunningTable(1)}

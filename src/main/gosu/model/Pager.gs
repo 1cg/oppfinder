@@ -11,23 +11,23 @@ class Pager<T> {
   var page : long as Current
   var processed : boolean
 
-  construct(i : SkipIterator<T>, size : long) {
+  construct(i : SkipIterator<T>, size : long, p : long) {
     iterate = i
     copy = i.copy()
     pageSize = size
     jobs = {}
+    page = (validPage(p)) ? p : lastPage()
   }
 
-  function getPage(p : long) : List<T> {
-    if (processed || p < 1) return jobs
-    iterate.skip((p -1) * pageSize)
+  function getPage() : List<T> {
+    if (processed) return jobs
+    iterate.skip((page -1) * pageSize)
     for (i in 0..|pageSize) {
       if (!iterate.hasNext()) {
         break
       }
       jobs.add(iterate.next())
     }
-    this.page = p
     processed = true
     return jobs
   }

@@ -18,7 +18,6 @@
 <button ic-post-to="/jobs/action/start/generateTest/Size" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
   Generate Test Sizes
 </button>
-
 <h3>
   OR
 </h3>
@@ -31,8 +30,7 @@
   <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
   </div>
 </form>
-
 <div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
-  ${CompanyTable.renderToString(page, controller.PagerController.getCompanyPager(page))}
+  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
 </div>
 

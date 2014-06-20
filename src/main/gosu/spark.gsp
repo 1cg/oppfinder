@@ -17,14 +17,14 @@ get('/jobs/:id/elapsed_time', \-> {
 })
 get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
 get('/jobs/table/:type/:page', \-> { Layout = null
-                    return view.JobTableBody.renderToString(Params['type'], Params['page'].toLong(), controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
+                    return view.JobTableBody.renderToString(Params['type'], controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
   return controller.PagerController.renderPager(Params['type'], Params['page'].toLong())})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(Params['page'].toLong(), controller.PagerController.getCompanyPager(Params['page'].toLong()))})
+  return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong()))})
 get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Start Jobs */
@@ -37,6 +37,7 @@ post('/jobs/action/deleteCancelled', \-> controller.JobController.deleteJobs('Ca
 post('/jobs/action/deleteCompleted', \-> controller.JobController.deleteJobs('Complete'))
 post('/jobs/action/state/:id/cancel', \-> controller.JobController.cancelJob(Params['id']))
 post('/jobs/action/state/:id/reset', \-> controller.JobController.resetJob(Params['id']))
+post('/jobs/action/refresh', \-> {Layout = null})
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
 get("*", \-> view.BadPath.renderToString())

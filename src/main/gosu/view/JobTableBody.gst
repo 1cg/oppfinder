@@ -1,4 +1,4 @@
-<%@ params(type: String, page: long, pager: model.Pager<jobs.Job>) %>
+<%@ params(type: String, pager: model.Pager<jobs.Job>) %>
 <table class="table">
   <thead>
     <tr>
@@ -18,16 +18,13 @@
   </thead>
   <tbody>
     <%
-     if (!pager.validPage(page) && page == 1) { %>
+     if (pager.Current == 0) { %>
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Attention: </strong> There are currently no ${type} jobs in the database
       </div>
     <% } else {
-    if (!pager.validPage(page)) {
-      page = pager.lastPage()
-    }
-    for(job in pager.getPage(page))  {%>
+    for(job in pager.getPage())  {%>
     <tr>
       <td>
         <a href='/jobs/${job.UUId}/info'>${job.UUId}</a>
