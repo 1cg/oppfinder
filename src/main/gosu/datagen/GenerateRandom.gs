@@ -24,7 +24,7 @@ class GenerateRandom {
     var dataMap = new HashMap<String, List>()
     for (column in columnMap.Keys) {
       var data = new LinkedList<String>()
-      var input = new FileReader("datagen/assets/"+columnMap.get(column))
+      var input = new FileReader(AssetLibrarian.INSTANCE.getPath(columnMap.get(column)))
       var bufRead = new BufferedReader(input)
       var myLine = bufRead.readLine()
 
@@ -62,9 +62,9 @@ class GenerateRandom {
 
       bigArray.add(company)
     }
-
-
-    var outputFile = new FileWriter(new File(output))
+    var path = AssetLibrarian.INSTANCE.getPath("Cities.txt")
+    path = path.substring(0,path.lastIndexOf("/")+1)
+    var outputFile = new FileWriter(new File(path + output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()

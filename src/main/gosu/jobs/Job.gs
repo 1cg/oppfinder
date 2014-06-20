@@ -62,7 +62,7 @@ abstract class Job implements Runnable {
 
   abstract function executeJob()
 
-  function start() : jobs.Job {
+  final function start() : jobs.Job {
     var builder = new ConfigBuilder()
     var host = System.Env['REDIS_HOST']
     if (host != null) {
@@ -97,7 +97,7 @@ abstract class Job implements Runnable {
 
   abstract function reset()
 
-  function update(update : Map<Object,Object>) {
+  final function update(update : Map<Object,Object>) {
     dataStore.update(id, update)
   }
 

@@ -20,7 +20,7 @@ class Pager<T> {
   }
 
   function getPage() : List<T> {
-    if (processed) return jobs
+    if (processed || page == 0) return jobs
     iterate.skip((page -1) * pageSize)
     for (i in 0..|pageSize) {
       if (!iterate.hasNext()) {
