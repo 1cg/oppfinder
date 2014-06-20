@@ -3,7 +3,7 @@ uses java.lang.Thread
 uses java.util.Map
 uses jobs.Job
 
-class TestJob extends Job implements Runnable {
+class TestJob extends Job {
 
   construct(data : Map<Object, Object> ) {
     super(data)
@@ -13,7 +13,7 @@ class TestJob extends Job implements Runnable {
     super()
   }
 
-  override function run() {
+  override function executeJob() {
     if (this.Cancelled) return
     this.StatusFeed = "Starting"
 
