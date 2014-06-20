@@ -39,7 +39,7 @@
         <div ic-src="/jobs/${job.UUId}/elapsed_time" ic-transition="none" ic-poll="1s">${job.ElapsedTime}</div>
       </td>
       <td>
-        <% if (job.Cancelled) { %>
+        <% if (job.Cancelled || job.Progress == 100) { %>
         <div class="progress">
         <% }else{ %>
         <div class="progress progress-striped active">
