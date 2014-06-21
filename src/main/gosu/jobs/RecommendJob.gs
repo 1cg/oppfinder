@@ -28,7 +28,9 @@ class RecommendJob extends Job {
   override function executeJob() {
     checkCancellation()
     startSubJobs()
+    this.StatusFeed = "Started Sub Jobs"
     poll() //Blocks until sub-tasks are complete
+    this.StatusFeed = "Sub Jobs Complete"
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
       var ds = new DataSet(jobID)
@@ -45,7 +47,10 @@ class RecommendJob extends Job {
       }
       ds.drop() //Get rid of the temp data
     }
+    this.StatusFeed = "Recommendations Calculated"
     storeTopRecommendations(recommendations)
+    this.StatusFeed = "Recommendations Stored"
+    this.StatusFeed = "Done"
   }
 
   /*
