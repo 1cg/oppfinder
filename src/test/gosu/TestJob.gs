@@ -1,4 +1,4 @@
-uses java.lang.Runnable
+
 uses java.lang.Thread
 uses java.util.Map
 uses jobs.Job
@@ -16,7 +16,6 @@ class TestJob extends Job {
   override function executeJob() {
     checkCancellation()
     this.StatusFeed = "Starting"
-
     var iterations = 30
     for(var i in 1..iterations) {
       if (i == iterations/2) this.StatusFeed = "50% Complete"

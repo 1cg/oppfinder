@@ -15,6 +15,7 @@
       body {
         margin-top:50px;
       }
+      .green {color: green}
     </style>
   </head>
   <body>
@@ -23,6 +24,7 @@
         <div class="navbar-header">
           <a href="/" class="navbar-brand"><i class="fa fa-search"></i> OppFinder</a>
           <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -46,6 +48,9 @@
             </li>
             <li>
               <a href="/jobs/cancelled/1">Cancelled</a>
+            </li>
+            <li>
+              <a href="/jobs/failed/1">Failed</a>
             </li>
           </ul>
 

@@ -58,6 +58,7 @@ abstract class Job implements Runnable {
   function handleErrorState(e : Exception) {
     update({'Exception' -> e.StackTraceAsString})
     Status = 'Failed'
+    EndTime = System.currentTimeMillis()
     e.printStackTrace()
   }
 
@@ -271,6 +272,12 @@ abstract class Job implements Runnable {
     return new TransformationIterator<jobs.Job>(
         dataStore.find({'Status' -> 'Cancelled'}), \ m -> newUp(m))
   }
+
+  static property get FailedJobs() : SkipIterator<jobs.Job> {
+    return new TransformationIterator<jobs.Job>(
+        dataStore.find({'Status' -> 'Failed'}), \ m -> newUp(m))
+  }
+
 
   static function renderToString(uuid : String) : String {
     return JobDrillDown.renderToString(newUp(dataStore.findOne({'UUId' -> uuid})))

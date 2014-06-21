@@ -19,7 +19,7 @@ class Pager<T> {
     page = (validPage(p)) ? p : lastPage()
   }
 
-  function getPage() : List<T> {
+  final property get Page() : List<T> {
     if (processed || page == 0) return jobs
     iterate.skip((page -1) * pageSize)
     for (i in 0..|pageSize) {
@@ -32,14 +32,14 @@ class Pager<T> {
     return jobs
   }
 
-  function validPage(p : long) : boolean {
+  final function validPage(p : long) : boolean {
     if (p < 1) return false
     var tmp = copy.copy()
     tmp.skip((p - 1) * pageSize)
     return tmp.hasNext()
   }
 
-  function checkStatus(p : long) : String {
+  final function checkStatus(p : long) : String {
     if (p == page) {
       return "active"
     } else if (validPage(p)) {
@@ -48,7 +48,7 @@ class Pager<T> {
     return "disabled"
   }
 
-  function lastPage() : long {
+  final function lastPage() : long {
     return iterate.Count / pageSize
   }
 

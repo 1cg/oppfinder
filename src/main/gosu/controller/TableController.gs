@@ -18,4 +18,10 @@ class TableController {
     var pager = controller.PagerController.getPager("cancelled",page)
     return JobTable.renderToString("Cancelled Jobs", "cancelled", pager)
   }
+
+  static function getFailedTable(page : long) : String {
+    var pager = controller.PagerController.getPager("failed",page)
+    return JobTable.renderToString("Failed Jobs", "failed", pager)
+  }
+
 }

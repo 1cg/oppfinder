@@ -5,7 +5,7 @@
 <div ic-src="/jobs/table/${type}/${pager.Current}" ic-poll="10s" ic-transition="none" ic-deps="/jobs/action">
   ${view.JobTableBody.renderToString(type, pager)}
 </div>
-<button ic-post-to="/jobs/table/${type}/${pager.Current}" class="btn btn-info btn-md" role="button"><b>Refresh</b></button>
+<button ic-post-to="/jobs/table/${type}/${pager.Current}" class="btn btn-primary btn-md" role="button"><b>Refresh</b></button>
 <div ic-src="/jobs/table/pager/${type}/${pager.Current}" ic-poll="4s" ic-transition="none" ic-deps="/jobs/action">
   ${controller.PagerController.renderPager(type,pager.Current)}
 </div>

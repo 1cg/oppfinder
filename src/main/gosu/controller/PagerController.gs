@@ -12,7 +12,9 @@ class PagerController {
       pager = new Pager<Job>(Job.CompleteJobs,10,page)
     } else if (type == "running") {
       pager = new Pager<Job>(Job.ActiveJobs,10,page)
-    } else {
+    } else if (type == "failed") {
+      pager = new Pager<Job>(Job.FailedJobs,10,page)
+    }  else {
       pager = new Pager<Job>(Job.CancelledJobs,10,page)
     }
     return pager

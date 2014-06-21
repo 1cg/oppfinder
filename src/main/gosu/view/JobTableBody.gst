@@ -24,7 +24,7 @@
         <strong>Attention: </strong> There are currently no ${type} jobs in the database
       </div>
     <% } else {
-    for(job in pager.getPage())  {%>
+    for(job in pager.Page)  {%>
     <tr>
       <td>
         <a href='/jobs/${job.UUId}/info'>${job.UUId}</a>
@@ -54,11 +54,11 @@
     <% } else {
        if (job.Cancelled) { %>
         <td>
-          <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
+          <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-primary btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
         </td>
         <% } %>
       <td>
-        <button ic-post-to="/jobs/action/delete/${job.UUId}" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
+        <button ic-post-to="/jobs/action/delete/${job.UUId}" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
       </td>
    <% } %>
    </tr>

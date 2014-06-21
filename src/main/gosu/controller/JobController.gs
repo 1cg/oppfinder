@@ -12,21 +12,40 @@ uses gw.lang.reflect.ReflectUtil
 
 class JobController implements IHasRequestContext {
 
+  static var UUId : String
+
   static function startTestJob() : String{
     var testJob = ReflectUtil.construct<Job>("TestJob", {})
     testJob.start()
     return "Job Started!!!"
   }
+
   static function startGenerateJob() : String {
     new GenerateRandom().generateRandom('data.json')
-    new GenerateJob('data.json').start()
+    var job = new GenerateJob('data.json').start()
+    UUId = job.UUId
     return "Company information listed below."
   }
+
   static function startGenerateTestJob(testVar : String) : String {
     new GenerateTest().generateTest('dataReach.json', testVar, 40000)
-    new GenerateJob('dataReach.json').start()
+    var job = new GenerateJob('dataReach.json').start()
+    UUId = job.UUId
     return "Company information listed below."
   }
+
+  static property get LocalGenerateProgress() : String {
+    return Job.getUUIDProgress(UUId)
+  }
+
+  static property get LocalGenerateComplete() : String {
+    if (Job.getUUIDProgress(UUId) == "100%") {
+      return '<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>'
+    } else {
+      return '<div></div>'
+    }
+  }
+
   static function cancelJob(UUID : String) : String{
     Job.cancel(UUID)
     return "Job Cancelled"

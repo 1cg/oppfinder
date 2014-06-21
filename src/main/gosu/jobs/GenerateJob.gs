@@ -1,6 +1,5 @@
 package jobs
 
-uses java.lang.Runnable
 uses java.util.Map
 uses java.io.FileReader
 uses java.io.BufferedReader
@@ -11,8 +10,7 @@ uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses util.AssetLibrarian
 uses java.util.UUID
-uses util.AssetLibrarian
-uses java.io.BufferedReader
+uses java.lang.Thread
 
 class GenerateJob extends Job {
 
@@ -42,7 +40,8 @@ class GenerateJob extends Job {
     checkCancellation()
     this.StatusFeed = "Parsed company information"
     for (company in companies index i) {
-      if (i % 100 == 0) this.Progress = (i * 100) / companies.size()
+      Thread.sleep(10)
+      if (i % 20 == 0) this.Progress = (i * 100) / companies.size()
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
