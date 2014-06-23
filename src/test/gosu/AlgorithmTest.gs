@@ -12,13 +12,13 @@ class AlgorithmTest extends TestCase {
     new GenerateTest().generateTest('dataReach.json', "Reach", numCompanies)
     new GenerateJob('dataReach.json').start().join()
 
-    var recommendJob = new RecommendJob()
-    recommendJob.start().join()
+      var recommendJob = new RecommendJob()
+      recommendJob.start().join()
 
-    var recommendations = recommendJob.ResultsData.find().next()
-    assertEquals(recommendations.get("Company"), "RECOMMENDEE (test success)")
+      var recommendations = recommendJob.ResultsData.find().next()
+      assertEquals(recommendations.get("Company"), "RECOMMENDEE (test success)")
 
-  }
+    }
   }
 
 
