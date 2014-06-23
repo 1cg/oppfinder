@@ -29,8 +29,8 @@ class GenerateJob extends Job {
 */
   construct(path: String, dataSet : String) {
     super()
-    update({'DataSetCollection' -> dataSet})
     update({'Path' -> path})
+    update({'DataSetCollection' -> dataSet})
   }
 
   override function executeJob() {
@@ -57,6 +57,7 @@ class GenerateJob extends Job {
     dataSet.insert(companies)
     this.StatusFeed = "Company information inserted"
     writeLatLng()
+    new DataSetEntry(collection)
     this.StatusFeed = "Done"
   }
 

@@ -13,6 +13,7 @@ uses view.JobDrillDown
 uses view.FailedJobView
 uses view.JobStatusFeedList
 uses model.DataSetEntry
+uses java.util.UUID
 
 class JobController implements IHasRequestContext {
 
@@ -24,16 +25,16 @@ class JobController implements IHasRequestContext {
     return
   }
 
-  static function startGenerateJob(collection : String) {
+  static function startGenerateJob() {
     new GenerateRandom().generateRandom('data.json')
-    var job = new GenerateJob('data.json', collection).start()
+    var job = new GenerateJob('data.json', UUID.randomUUID().toString()).start()
     UUId = job.UUId
     return
   }
 
-  static function startGenerateTestJob(testVar : String, collection : String) {
+  static function startGenerateTestJob(testVar : String) {
     new GenerateTest().generateTest('dataReach.json', testVar, 40000)
-    var job = new GenerateJob('dataReach.json', collection).start()
+    var job = new GenerateJob('dataReach.json', UUID.randomUUID().toString()).start()
     UUId = job.UUId
     return
   }
@@ -97,16 +98,6 @@ class JobController implements IHasRequestContext {
     response += JobStatusFeedList.renderToString(job)
     if (!failed) response += job.renderToString()
     return response
-  }
-
-  static function selectCollection(requestBody : String) : String {
-    var collection = requestBody.split("=")[1]
-    DataSetEntry.CurrentCollection = collection
-    return collection
-  }
-
-  static function getCurrentCollection() : String {
-    return DataSetEntry.CurrentCollection
   }
 
 }

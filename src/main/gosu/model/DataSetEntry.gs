@@ -17,7 +17,6 @@ class DataSetEntry {
     collection = "defaultDataSet"
     myDataSet = new DataSet(collection)
     new DataSet(MASTER_DATA_SET).insert({"name" -> collection})
-    DataSetEntry.CurrentCollection = collection
     info = new HashMap<String, Object>()
   }
 
@@ -25,11 +24,10 @@ class DataSetEntry {
     collection = _collection
     myDataSet = new DataSet(collection)
     new DataSet(MASTER_DATA_SET).insert({"name" -> collection})
-    DataSetEntry.CurrentCollection = collection
     info = new HashMap<String, Object>()
   }
 
-  static function All(_collection : String) : SkipIterator<Map> {
+  static function All(_collection : String = "defaultDataSet") : SkipIterator<Map> {
     return new DataSet(_collection).find()
   }
 
@@ -42,14 +40,13 @@ class DataSetEntry {
     return returnList
   }
 
-  static property get CurrentCollection() : String {
-    return new DataSet(CURRENT_DATA_SET_REF).find().next().get('current') as String
-  }
-
-  static property set CurrentCollection(col : String) {
-    var current = new DataSet(CURRENT_DATA_SET_REF)
-    current.drop()
-    current.insert({'current' -> col})
+  static function mostRecentlyAdded() : String {
+    var ds = new DataSet(MASTER_DATA_SET).find()
+    if (ds.hasNext()) {
+      return ds.next().get('name') as String
+    } else {
+      return "empty"
+    }
   }
 
   // Saves this company info into the mongo dataset
