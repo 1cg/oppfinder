@@ -1,24 +1,24 @@
 package model
 
-uses com.mongodb.Mongo
 uses com.mongodb.DBCollection
 uses com.mongodb.DB
 uses java.lang.System
+uses com.mongodb.MongoClient
 
 class Database {
 
   static final var _INSTANCE : Database as readonly INSTANCE = new Database()
 
-  final var CLIENT : Mongo
+  final var CLIENT : MongoClient
   final var DB_NAME : String
   final var DB : DB
 
   private construct() {
     var host = System.Env['MONGO_HOST']
     if (host != null) {
-      CLIENT = new Mongo(host)
+      CLIENT = new MongoClient(host)
     } else {
-      CLIENT = new Mongo()
+      CLIENT = new MongoClient()
     }
     DB_NAME = "oppFinder"
     DB = CLIENT.getDB(DB_NAME)

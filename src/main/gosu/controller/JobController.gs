@@ -9,6 +9,7 @@ uses jobs.RecommendJob
 uses datagen.GenerateRandom
 uses datagen.GenerateTest
 uses gw.lang.reflect.ReflectUtil
+uses view.JobDrillDown
 
 class JobController implements IHasRequestContext {
 
@@ -82,7 +83,7 @@ class JobController implements IHasRequestContext {
   static function renderJobInfo(UUID: String) : String {
     var job = Job.newUp(UUID,null)
     if (job == null) return "Oops, this appears to be an invalid UUID"
-    var response = ""
+    var response = JobDrillDown.renderToString(job)
     if (job.Failed) return ""
     return response
   }

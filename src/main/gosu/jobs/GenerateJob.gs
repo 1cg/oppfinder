@@ -40,7 +40,7 @@ class GenerateJob extends Job {
     checkCancellation()
     this.StatusFeed = "Parsed company information"
     for (company in companies index i) {
-      Thread.sleep(10)
+      //Thread.sleep(10)
       if (i % 20 == 0) this.Progress = (i * 100) / companies.size()
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
