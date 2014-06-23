@@ -10,7 +10,6 @@ uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses util.AssetLibrarian
 uses java.util.UUID
-uses java.lang.Thread
 
 class GenerateJob extends Job {
 

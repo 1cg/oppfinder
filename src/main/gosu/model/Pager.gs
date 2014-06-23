@@ -1,6 +1,7 @@
 package model
 
 uses util.SkipIterator
+uses java.lang.Math
 
 class Pager<T> {
 
@@ -49,7 +50,7 @@ class Pager<T> {
   }
 
   final function lastPage() : long {
-    return iterate.Count / pageSize
+    return Math.max(iterate.Count / pageSize,1)
   }
 
 }

@@ -17,24 +17,24 @@ class JobController implements IHasRequestContext {
 
   static var UUId : String
 
-  static function startTestJob() : String{
+  static function startTestJob() {
     var testJob = ReflectUtil.construct<Job>("TestJob", {})
     testJob.start()
-    return "Job Started!!!"
+    return
   }
 
-  static function startGenerateJob() : String {
+  static function startGenerateJob() {
     new GenerateRandom().generateRandom('data.json')
     var job = new GenerateJob('data.json').start()
     UUId = job.UUId
-    return "Company information listed below."
+    return
   }
 
-  static function startGenerateTestJob(testVar : String) : String {
+  static function startGenerateTestJob(testVar : String) {
     new GenerateTest().generateTest('dataReach.json', testVar, 40000)
     var job = new GenerateJob('dataReach.json').start()
     UUId = job.UUId
-    return "Company information listed below."
+    return
   }
 
   static property get LocalGenerateProgress() : String {
@@ -49,19 +49,19 @@ class JobController implements IHasRequestContext {
     }
   }
 
-  static function cancelJob(UUID : String) : String{
+  static function cancelJob(UUID : String) {
     Job.cancel(UUID)
-    return "Job Cancelled"
+    return
   }
 
-  static function resetJob(UUID : String) : String{
+  static function resetJob(UUID : String) {
     Job.reset(UUID)
-    return "Job Reset"
+    return
   }
 
-  static function deleteJob(UUID : String) : String{
+  static function deleteJob(UUID : String) {
     Job.delete(UUID)
-    return "Delete"
+    return
   }
 
   static function getUUIDProgress(UUID : String) : String {
@@ -77,9 +77,9 @@ class JobController implements IHasRequestContext {
     return view.Companies.renderToString(1)
   }
 
-  static function startRecommendJob() : String {
+  static function startRecommendJob() {
     new RecommendJob().start()
-    return "Recommend Job Started"
+    return
   }
 
   static function getStatusFeed(UUID : String) : String {
