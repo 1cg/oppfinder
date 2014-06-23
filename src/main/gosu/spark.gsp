@@ -3,7 +3,10 @@ extends sparkgs.SparkFile
 Layout = view.Layout
 
 /* Getters for job information */
-get('/', \-> view.Root.renderToString() )
+get('/', \-> view.Root.renderToString())
+get('/jobs/home/:page', \-> {
+  Layout = null
+  controller.TableController.getRunningTable(Params['page'].toLong())})
 get('/jobs/running/:page', \-> controller.TableController.getRunningTable(Params['page'].toLong()))
 get('/jobs/complete/:page', \-> controller.TableController.getCompleteTable(Params['page'].toLong()))
 get('/jobs/cancelled/:page', \-> controller.TableController.getCancelledTable(Params['page'].toLong()))
@@ -22,7 +25,7 @@ get('/jobs/:id/elapsed_time', \-> {
   Layout = null
   return controller.JobController.getUUIDElapsedTime(Params['id'])
 })
-get('/jobs/:id/info', \-> jobs.Job.renderToString(Params['id']))
+get('/jobs/:id/info', \-> controller.JobController.renderJobInfo(Params['id']))
 get('/jobs/:id/status_feed', \-> {Layout = null
   return jobs.Job.getStatusFeed(Params['id'])})
 get('/jobs/table/:type/:page', \-> { Layout = null

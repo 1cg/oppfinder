@@ -1,20 +1,22 @@
-<h1><i class="fa fa-search"></i> <span>Opportunity</span><span>Finder  </span></h1>
+<div class="jumbotron">
+  <h1><i class="fa fa-search"></i> <span>Opportunity</span><span>Finder  </span></h1>
 
-<p>Welcome to OpportunityFinder, the 2014 Gosu Summer If Intern Project!</p>
+  <p>Welcome to OpportunityFinder, the 2014 Gosu Summer Intern Project!</p><br>
 
-<p>Would you like to begin a new analysis?</p>
+  <a class="btn btn-lg btn-primary" href="/companies/">
+    <strong>Upload or generate data</strong>
+  </a>
 
-<a class="btn btn-lg btn-primary" href="/companies/">
-  <strong>Upload or generate data</strong>
-</a>
+  <button ic-post-to="/jobs/action/start/test" ic-target="#feedback" class="btn btn-lg btn-primary">
+    <strong>Begin Test &rarr;</strong>
+  </button>
 
-<button ic-post-to="/jobs/action/start/test" ic-target="#feedback" class="btn btn-lg btn-primary">
-  <strong>Begin Test &rarr;</strong>
-</button>
+  <button ic-post-to="/jobs/action/start/recommend" ic-target="#feedback" class="btn btn-lg btn-primary">
+    <strong>Begin Recommendation Analysis &rarr;</strong>
+  </button>
 
-<button ic-post-to="/jobs/action/start/recommend" ic-target="#feedback" class="btn btn-lg btn-primary">
-  <strong>Begin Recommendation Analysis &rarr;</strong>
-</button>
-
-<span id="feedback"></span>
-${controller.TableController.getRunningTable(1)}
+  <span id="feedback"></span>
+</div>
+<div ic-src="/jobs/home/1" ic-poll="5s" ic-transition="none" ic-deps="/jobs/action">
+  ${controller.TableController.getRunningTable(1)}
+</div>

@@ -141,7 +141,7 @@ class RecommendJob extends Job {
   property get SubJobs() : List<jobs.Job> {
     var stringArray = search('SubJobs') as String
     var array = Arrays.asList(stringArray.substring(1, stringArray.length() - 1).split(", "))
-    return array.map(\ j -> newUp({'UUId' -> j, 'Type' -> 'jobs.RecommendSubJob'}))
+    return array.map(\ j -> newUp(j, 'jobs.RecommendSubJob'))
   }
 
 }
