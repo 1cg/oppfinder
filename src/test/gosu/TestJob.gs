@@ -25,7 +25,6 @@ class TestJob extends Job {
       this.Progress = (i * 100)/iterations
     }
     this.StatusFeed = "Done"
-    this.Progress = 100
     print("Test Job Complete")
   }
 

@@ -10,30 +10,32 @@ uses datagen.GenerateRandom
 uses datagen.GenerateTest
 uses gw.lang.reflect.ReflectUtil
 uses view.JobDrillDown
+uses view.FailedJobView
+uses view.JobStatusFeedList
 uses model.DataSetEntry
 
 class JobController implements IHasRequestContext {
 
   static var UUId : String
 
-  static function startTestJob() : String{
+  static function startTestJob() {
     var testJob = ReflectUtil.construct<Job>("TestJob", {})
     testJob.start()
-    return "Job Started!!!"
+    return
   }
 
-  static function startGenerateJob(collection : String) : String {
+  static function startGenerateJob(collection : String) {
     new GenerateRandom().generateRandom('data.json')
     var job = new GenerateJob('data.json', collection).start()
     UUId = job.UUId
-    return "Company information listed below."
+    return
   }
 
-  static function startGenerateTestJob(testVar : String, collection : String) : String {
+  static function startGenerateTestJob(testVar : String, collection : String) {
     new GenerateTest().generateTest('dataReach.json', testVar, 40000)
     var job = new GenerateJob('dataReach.json', collection).start()
     UUId = job.UUId
-    return "Company information listed below."
+    return
   }
 
   static property get LocalGenerateProgress() : String {
@@ -48,19 +50,19 @@ class JobController implements IHasRequestContext {
     }
   }
 
-  static function cancelJob(UUID : String) : String{
+  static function cancelJob(UUID : String) {
     Job.cancel(UUID)
-    return "Job Cancelled"
+    return
   }
 
-  static function resetJob(UUID : String) : String{
+  static function resetJob(UUID : String) {
     Job.reset(UUID)
-    return "Job Reset"
+    return
   }
 
-  static function deleteJob(UUID : String) : String{
+  static function deleteJob(UUID : String) {
     Job.delete(UUID)
-    return "Delete"
+    return
   }
 
   static function getUUIDProgress(UUID : String) : String {
@@ -76,16 +78,24 @@ class JobController implements IHasRequestContext {
     return view.Companies.renderToString(1)
   }
 
-  static function startRecommendJob(collection : String) : String {
+  static function startRecommendJob(collection : String) {
     new RecommendJob(collection).start()
-    return "Recommend Job Started"
+    return
   }
 
-  static function renderJobInfo(UUID: String) : String {
+  static function getStatusFeed(UUID : String) : String {
+    return JobStatusFeedList.renderToString(Job.newUp(UUID, null))
+  }
+
+  static function renderJobInfo(UUID : String) : String {
     var job = Job.newUp(UUID,null)
+    var response = ""
+    var failed = job.Failed
     if (job == null) return "Oops, this appears to be an invalid UUID"
-    var response = JobDrillDown.renderToString(job)
-    if (job.Failed) return ""
+    response += JobDrillDown.renderToString(job)
+    if (failed) response += FailedJobView.renderToString(job)
+    response += JobStatusFeedList.renderToString(job)
+    if (!failed) response += job.renderToString()
     return response
   }
 

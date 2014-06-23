@@ -17,6 +17,4 @@
 
   <span id="feedback"></span>
 </div>
-<div ic-src="/jobs/home/1" ic-poll="5s" ic-transition="none" ic-deps="/jobs/action">
-  ${controller.TableController.getRunningTable(1)}
-</div>
+${controller.TableController.getRunningTable(1)}

@@ -18,7 +18,7 @@
   </thead>
   <tbody>
     <%
-     if (pager.Current == 0) { %>
+     if (pager.Current == 1 && pager.Page.size() == 0) { %>
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>Attention: </strong> There are currently no ${type} jobs in the database

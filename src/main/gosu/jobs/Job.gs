@@ -15,9 +15,9 @@ uses java.lang.Thread
 uses util.TransformationIterator
 uses util.SkipIterator
 uses java.lang.Class
-uses view.JobStatusFeedList
 uses java.lang.Exception
 uses util.CancellationException
+uses util.NoSuchUUIDException
 
 abstract class Job implements Runnable {
 
@@ -27,7 +27,8 @@ abstract class Job implements Runnable {
   var id : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {
-    if (data == null) return
+    if (data == null) throw new NoSuchUUIDException()
+    else if (dataStore.findOne({'UUId' -> data['UUId']}) == null) throw new NoSuchUUIDException()
     id = new HashMap<Object,Object>()
     id['UUId'] = data['UUId']
   }
@@ -83,9 +84,13 @@ abstract class Job implements Runnable {
     }
   }
 
-  static function reset(UUID : String) {
-    var job = newUp(UUID, null)
-    job.Cancelled = false
+  static function reset(uuid : String) {
+    var jobInfo = dataStore.findOne({'UUId' -> uuid})
+    dataStore.remove({'UUId' -> uuid})
+    jobInfo['UUId'] = UUID.randomUUID().toString()
+    dataStore.insert(jobInfo)
+    var job = newUp(jobInfo['UUId'] as String, jobInfo['Type'] as String)
+    job.Status = 'Active'
     job.Progress = 0
     job.EndTime = null
     job.reset()
@@ -163,11 +168,6 @@ abstract class Job implements Runnable {
     dataStore.update(id, {'StatusFeed' -> this.StatusFeed+feedUpdate+"\n"})
   }
 
-  static function getStatusFeed(UUID : String) : String {
-    var job = dataStore.findOne({'UUId' -> UUID})
-    return JobStatusFeedList.renderToString(job?.get('StatusFeed') as String ?: "", job?.get('Progress') as Integer ?: 0)
-  }
-
   property set FieldName(field: String) {
     dataStore.update(id, {'Field' -> field})
   }
@@ -195,6 +195,8 @@ abstract class Job implements Runnable {
     EndTime = System.currentTimeMillis()
     if (status) {
       dataStore.update(id, {'Status' -> 'Cancelled'})
+    } else {
+      dataStore.update(id, {'Status' -> 'Reset'})
     }
   }
 
@@ -256,7 +258,10 @@ abstract class Job implements Runnable {
   */
   static function newUp(UUID : String, type : String) : jobs.Job {
     if (UUID == null) return null
-    else if (type == null) type = dataStore.findOne({'UUId' -> UUID})['Type'] as String
+    else if (type == null) {
+      type = dataStore.findOne({'UUId' -> UUID})?['Type'] as String
+      if (type == null) return null
+    }
     return Class.forName(type)
                       .getConstructor({Map.Type.IntrinsicClass})
                       .newInstance({{'Type' -> type, 'UUId' -> UUID}}) as jobs.Job

@@ -151,4 +151,12 @@ class RecommendJob extends Job {
     return array.map(\ j -> newUp(j, 'jobs.RecommendSubJob'))
   }
 
+  override property set Cancelled(status : boolean) {
+    super.Cancelled = status
+    for (job in SubJobs) {
+      job.Cancelled = status
+    }
+
+  }
+
 }
