@@ -2,7 +2,6 @@ uses junit.framework.*
 uses datagen.GenerateTest
 uses jobs.GenerateJob
 uses jobs.RecommendJob
-uses java.lang.Thread
 
 class AlgorithmTest extends TestCase {
   static final var numCompanies = 1000
