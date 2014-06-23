@@ -12,7 +12,6 @@ uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
-uses view.JobDrillDown
 uses util.TransformationIterator
 uses util.SkipIterator
 uses java.lang.Class
@@ -85,7 +84,7 @@ abstract class Job implements Runnable {
   }
 
   static function reset(UUID : String) {
-    var job = newUp(dataStore.findOne({'UUId' -> UUID}))
+    var job = newUp(UUID, null)
     job.Cancelled = false
     job.Progress = 0
     job.EndTime = null
@@ -113,6 +112,10 @@ abstract class Job implements Runnable {
 
   property set Type(type : String) {
     dataStore.update(id,{'Type' -> type})
+  }
+
+  property get Failed() : boolean {
+    return Status == "Failed"
   }
 
   property get StartTime() : Long {
@@ -185,7 +188,7 @@ abstract class Job implements Runnable {
   }
 
   static function cancel(UUID : String) {
-    newUp(dataStore.findOne({'UUId' -> UUID})).Cancelled = true
+    newUp(UUID, null).Cancelled = true
   }
 
   property set Cancelled(status : boolean) {
@@ -251,36 +254,32 @@ abstract class Job implements Runnable {
   /*
   * Instantiates an object through the provided class name
   */
-  static function newUp(job : Map<Object, Object>) : jobs.Job {
-    if (job == null) return null
-    return Class.forName(job['Type'] as String)
+  static function newUp(UUID : String, type : String) : jobs.Job {
+    if (UUID == null) return null
+    else if (type == null) type = dataStore.findOne({'UUId' -> UUID})['Type'] as String
+    return Class.forName(type)
                       .getConstructor({Map.Type.IntrinsicClass})
-                      .newInstance({job}) as jobs.Job
+                      .newInstance({{'Type' -> type, 'UUId' -> UUID}}) as jobs.Job
   }
 
   static property get ActiveJobs() : SkipIterator<jobs.Job> {
     return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Active'}), \ m -> newUp(m))
+        dataStore.find({'Status' -> 'Active'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 
   static property get CompleteJobs() : SkipIterator<jobs.Job> {
     return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Complete'}), \ m -> newUp(m))
+        dataStore.find({'Status' -> 'Complete'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 
   static property get CancelledJobs() : SkipIterator<jobs.Job> {
     return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Cancelled'}), \ m -> newUp(m))
+        dataStore.find({'Status' -> 'Cancelled'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 
   static property get FailedJobs() : SkipIterator<jobs.Job> {
     return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Failed'}), \ m -> newUp(m))
-  }
-
-
-  static function renderToString(uuid : String) : String {
-    return JobDrillDown.renderToString(newUp(dataStore.findOne({'UUId' -> uuid})))
+        dataStore.find({'Status' -> 'Failed'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 
   abstract function renderToString() : String

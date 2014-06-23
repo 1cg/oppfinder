@@ -27,7 +27,7 @@
     for(job in pager.Page)  {%>
     <tr>
       <td>
-        <a href='/jobs/${job.UUId}/info'>${job.UUId}</a>
+        <a href='/jobs/${job.UUId}/info' style="color:#476CB5">${job.UUId}</a>
       </td>
       <td>
         ${job.Type}
@@ -47,12 +47,12 @@
          </div>
       </div>
       </td>
-    <% if (job.Progress < 100 && !job.Cancelled) { %>
+    <% if (job.Progress < 100 && !(job.Cancelled || job.Failed)) { %>
       <td>
         <button ic-post-to="/jobs/action/state/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><b>Cancel</b></button>
       </td>
     <% } else {
-       if (job.Cancelled) { %>
+       if (job.Cancelled || job.Failed) { %>
         <td>
           <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-primary btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
         </td>

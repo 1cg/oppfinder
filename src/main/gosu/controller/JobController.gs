@@ -79,6 +79,12 @@ class JobController implements IHasRequestContext {
     return "Recommend Job Started"
   }
 
-
+  static function renderJobInfo(UUID: String) : String {
+    var job = Job.newUp(UUID,null)
+    if (job == null) return "Oops, this appears to be an invalid UUID"
+    var response = ""
+    if (job.Failed) return ""
+    return response
+  }
 
 }
