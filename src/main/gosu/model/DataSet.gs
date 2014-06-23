@@ -3,7 +3,6 @@ package model
 uses com.mongodb.*
 uses java.util.Map
 uses util.TransformationIterator
-uses java.lang.Thread
 
 class DataSet {
 
@@ -37,11 +36,11 @@ class DataSet {
   }
 
   function insert(o : Map<Object, Object>) : WriteResult {
-    return _collection.insert( new BasicDBObject(o), new WriteConcern(1,5000))
+    return _collection.insert( new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
   }
 
   function insert(objects : List<Map<Object, Object>>) : WriteResult {
-    return _collection.insert(objects.map(\ o -> new BasicDBObject(o)), new WriteConcern(1,5000))
+    return _collection.insert(objects.map(\ o -> new BasicDBObject(o)), WriteConcern.ACKNOWLEDGED)
   }
 
   property get Count() : long {
@@ -57,7 +56,7 @@ class DataSet {
   }
 
   function save(o : Map<Object, Object>) : WriteResult {
-    return _collection.save(new BasicDBObject(o),new WriteConcern(1,5000))
+    return _collection.save(new BasicDBObject(o),WriteConcern.ACKNOWLEDGED)
   }
 
   function update(q : Map<Object, Object>, o : Map<Object, Object>) {
@@ -67,7 +66,7 @@ class DataSet {
     } else {
       current = new BasicDBObject(o)
     }
-    _collection.update(new BasicDBObject(q), current,false,false,new WriteConcern(1,5000))
+    _collection.update(new BasicDBObject(q), current,false,false,WriteConcern.ACKNOWLEDGED)
   }
 
   function drop() {

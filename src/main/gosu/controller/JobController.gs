@@ -10,6 +10,8 @@ uses datagen.GenerateRandom
 uses datagen.GenerateTest
 uses gw.lang.reflect.ReflectUtil
 uses view.JobDrillDown
+uses view.FailedJobView
+uses view.JobStatusFeedList
 
 class JobController implements IHasRequestContext {
 
@@ -80,11 +82,19 @@ class JobController implements IHasRequestContext {
     return "Recommend Job Started"
   }
 
-  static function renderJobInfo(UUID: String) : String {
+  static function getStatusFeed(UUID : String) : String {
+    return JobStatusFeedList.renderToString(Job.newUp(UUID, null))
+  }
+
+  static function renderJobInfo(UUID : String) : String {
     var job = Job.newUp(UUID,null)
+    var response = ""
+    var failed = job.Failed
     if (job == null) return "Oops, this appears to be an invalid UUID"
-    var response = JobDrillDown.renderToString(job)
-    if (job.Failed) return ""
+    response += JobDrillDown.renderToString(job)
+    if (failed) response += FailedJobView.renderToString(job)
+    response += JobStatusFeedList.renderToString(job)
+    if (!failed) response += job.renderToString()
     return response
   }
 

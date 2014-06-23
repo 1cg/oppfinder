@@ -15,7 +15,6 @@ uses java.lang.Thread
 uses util.TransformationIterator
 uses util.SkipIterator
 uses java.lang.Class
-uses view.JobStatusFeedList
 uses java.lang.Exception
 uses util.CancellationException
 
@@ -163,11 +162,6 @@ abstract class Job implements Runnable {
     dataStore.update(id, {'StatusFeed' -> this.StatusFeed+feedUpdate+"\n"})
   }
 
-  static function getStatusFeed(UUID : String) : String {
-    var job = dataStore.findOne({'UUId' -> UUID})
-    return JobStatusFeedList.renderToString(job?.get('StatusFeed') as String ?: "", job?.get('Progress') as Integer ?: 0)
-  }
-
   property set FieldName(field: String) {
     dataStore.update(id, {'Field' -> field})
   }
@@ -256,7 +250,10 @@ abstract class Job implements Runnable {
   */
   static function newUp(UUID : String, type : String) : jobs.Job {
     if (UUID == null) return null
-    else if (type == null) type = dataStore.findOne({'UUId' -> UUID})['Type'] as String
+    else if (type == null) {
+      type = dataStore.findOne({'UUId' -> UUID})?['Type'] as String
+      if (type == null) return null
+    }
     return Class.forName(type)
                       .getConstructor({Map.Type.IntrinsicClass})
                       .newInstance({{'Type' -> type, 'UUId' -> UUID}}) as jobs.Job

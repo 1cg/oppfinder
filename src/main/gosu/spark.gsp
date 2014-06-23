@@ -27,7 +27,7 @@ get('/jobs/:id/elapsed_time', \-> {
 })
 get('/jobs/:id/info', \-> controller.JobController.renderJobInfo(Params['id']))
 get('/jobs/:id/status_feed', \-> {Layout = null
-  return jobs.Job.getStatusFeed(Params['id'])})
+  return controller.JobController.getStatusFeed(Params['id'])})
 get('/jobs/table/:type/:page', \-> { Layout = null
                     return view.JobTableBody.renderToString(Params['type'], controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
