@@ -14,8 +14,8 @@ class ReachFieldImpl implements Field {
 
   static final var reachMap = makeReachMap()
 
-  override function getModel(): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Reach",
+  override function getModel(collection : String): DataModel {
+    return MahoutUtil.toDataModel(new DataSet(collection), "Reach",
        \ o -> reachToLong(o), null)
   }
 

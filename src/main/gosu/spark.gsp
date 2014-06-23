@@ -36,19 +36,23 @@ get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong(
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong()))})
+  return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong(), Params['collection']))})
 get('/companies/*', \-> view.Companies.renderToString(1))
+get('/jobs/current_collection/', \-> {Layout = null
+  return controller.JobController.getCurrentCollection()
+})
 
 /* Start Jobs */
 post('/jobs/action/start/test', \-> controller.JobController.startTestJob())
-post('/jobs/action/start/generate', \-> controller.JobController.startGenerateJob())
-post('/jobs/action/start/generateTest/:testVar', \-> controller.JobController.startGenerateTestJob(Params['testVar']))
+post('/jobs/action/start/generate', \-> controller.JobController.startGenerateJob(Params['collection']))
+post('/jobs/action/start/generateTest/:testVar', \-> controller.JobController.startGenerateTestJob(Params['testVar'], Params['collection']))
 post('/jobs/action/start/upload', \-> controller.JobController.startUploadJob(Request.Body))
-post('/jobs/action/start/recommend', \-> controller.JobController.startRecommendJob())
+post('/jobs/action/start/recommend', \-> controller.JobController.startRecommendJob(Params['collection']))
 post('/jobs/action/delete/:id', \-> controller.JobController.deleteJob(Params['id']))
 post('/jobs/action/state/:id/cancel', \-> controller.JobController.cancelJob(Params['id']))
 post('/jobs/action/state/:id/reset', \-> controller.JobController.resetJob(Params['id']))
 post('/jobs/action/refresh', \-> {Layout = null})
 post('/jobs/table/:type/:page', \ -> {Layout = null})
+post('/jobs/action/collection_submit', \-> controller.JobController.selectCollection(Request.Body))
 
 get("*", \-> view.BadPath.renderToString())

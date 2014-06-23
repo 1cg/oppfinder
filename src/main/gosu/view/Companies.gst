@@ -23,7 +23,15 @@
     ${view.ProgressView.renderToString()}
   </div>
 </div>
+<form method="post" action="/jobs/action/collection_submit">
+<select class="selectpicker" name="collections">
+  <% for(collection in model.DataSetEntry.AllDataSets()){ %>
+    <option value=${collection}>${collection}</option>
+  <% } %>
+</select>
+<input type="submit" value="Submit">
+</form>
 <div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
-  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
+  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page, "POOP"))}
 </div>
 

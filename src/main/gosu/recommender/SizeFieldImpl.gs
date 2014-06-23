@@ -8,8 +8,8 @@ uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity
 
 class SizeFieldImpl implements Field {
-  override function getModel(): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), "Size", \ o -> o.toLong(), null)
+  override function getModel(collection : String): DataModel {
+    return MahoutUtil.toDataModel(new DataSet(collection), "Size", \ o -> o.toLong(), null)
   }
 
   override function getSimilarity(model : DataModel): ItemSimilarity {

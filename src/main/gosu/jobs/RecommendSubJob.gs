@@ -27,11 +27,12 @@ class RecommendSubJob extends Job {
   * Takes in the class name of the <<recommender.Field>> implementation that should be used
   * for analysis of the data set
   */
-  construct(field : String, start : long, number : long){
+  construct(field : String, start : long, number : long, collection : String){
     super()
     this.FieldName = field
     this.Start = start
     this.Number = number
+    this.Collection = collection
   }
 
   property get Start() : long {
@@ -50,6 +51,13 @@ class RecommendSubJob extends Job {
     update({'Number' -> start})
   }
 
+  property get Collection() : String {
+    return search('DataSetCollection') as String
+  }
+
+  property set Collection(collection : String) {
+    update({'DataSetCollection' -> collection})
+  }
 
   override function executeJob() {
     maxRecommendation = Float.MIN_VALUE
@@ -57,7 +65,7 @@ class RecommendSubJob extends Job {
     checkCancellation()
     var c = Class.forName(this.FieldName)
     var field = c.newInstance() as Field
-    var model = field.getModel()
+    var model = field.getModel(this.Collection)
     checkCancellation()
     var recommender = new SVDRecommender(model, new SVDPlusPlusFactorizer(model,10,10))
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job

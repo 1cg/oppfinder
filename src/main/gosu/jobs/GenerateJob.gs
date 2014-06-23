@@ -22,17 +22,25 @@ class GenerateJob extends Job {
     super()
   }
 
+  /*
   construct(path: String) {
     super()
+    update({'Path' -> path})
+  }
+*/
+  construct(path: String, dataSet : String) {
+    super()
+    update({'DataSetCollection' -> dataSet})
     update({'Path' -> path})
   }
 
   override function executeJob() {
     checkCancellation()
     var path = search('Path') as String
+    var collection = search('DataSetCollection') as String
     var parser = new JSONParser()
     this.StatusFeed = "Dropping previous dataset"
-    var dataSet = new DataSet(DataSetEntry.COLLECTION)
+    var dataSet = new DataSet(collection)
     dataSet.drop()
     var companies = (parser.parse(
         new FileReader(AssetLibrarian.INSTANCE.getPath(path))) as JSONArray)

@@ -20,14 +20,21 @@ class RecommendJob extends Job {
   construct(data : Map<Object, Object> ) {
     super(data)
   }
-
+/*
   construct() {
     super()
+    update({'DataSetToAnalyze' -> DataSetEntry.COLLECTION})
+  }
+*/
+  construct(dataSetName : String) {
+    super()
+    update({'DataSetToAnalyze' -> dataSetName})
   }
 
   override function executeJob() {
     checkCancellation()
-    startSubJobs()
+    var dataSet = search('DataSetToAnalyze') as String
+    startSubJobs(dataSet)
     this.StatusFeed = "Started Sub Jobs"
     poll() //Blocks until sub-tasks are complete
     this.StatusFeed = "Sub Jobs Complete"
@@ -48,7 +55,7 @@ class RecommendJob extends Job {
       ds.drop() //Get rid of the temp data
     }
     this.StatusFeed = "Recommendations Calculated"
-    storeTopRecommendations(recommendations)
+    storeTopRecommendations(recommendations, dataSet)
     this.StatusFeed = "Recommendations Stored"
     this.StatusFeed = "Done"
   }
@@ -56,11 +63,11 @@ class RecommendJob extends Job {
   /*
   * Runs each of the sub jobs that analyze the selected fields
    */
-  function startSubJobs() {
-    var size = (new DataSet(DataSetEntry.COLLECTION).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
+  function startSubJobs(dataSet : String) {
+    var size = (new DataSet(dataSet).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
     for (jobName in subJobs) {
       for (i in 0..|NUM_BUCKETS) {
-        var job = new RecommendSubJob(jobName,i * size, size)
+        var job = new RecommendSubJob(jobName,i * size, size, dataSet)
         job.start()
         subJobsID.add(job.UUId)
         if (Cancelled) return
@@ -73,11 +80,11 @@ class RecommendJob extends Job {
   * Takes a set of recommendations and sorts them by the value (in decreasing order).
   * Those recommendations that are the strongest will be stored.
    */
-  function storeTopRecommendations(recommendations : Map<String, Float>) {
+  function storeTopRecommendations(recommendations : Map<String, Float>, dataSet : String) {
     var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue().reversed())
     checkCancellation()
     var finalResults : List<Map<Object, Object>>= {}
-    var companyDB = new DataSet(DataSetEntry.COLLECTION)
+    var companyDB = new DataSet(dataSet)
     for (each in sorted.iterator() index i) {
       if (i == NUM_RECOMMENDATIONS) break
       var result : Map<Object, Object> = {}

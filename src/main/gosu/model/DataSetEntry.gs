@@ -6,18 +6,50 @@ uses util.SkipIterator
 
 class DataSetEntry {
 
-  public static var COLLECTION : String = "oppFinder"
   public static var REGIONCOORDINATES : String = "regionCoordinates"
+  public static var MASTER_DATA_SET : String = "masterDataSet" // DataSet of DataSets to refer to
+  public static var CURRENT_DATA_SET_REF : String = "currentDataSetReference" // Stored in Master. Pls don't name any datasets with this string
   var myDataSet : DataSet
   var info : Map<Object, Object>
+  var collection : String
 
   construct() {
-    myDataSet = new DataSet(COLLECTION)
+    collection = "defaultDataSet"
+    myDataSet = new DataSet(collection)
+    new DataSet(MASTER_DATA_SET).insert({"name" -> collection})
+    DataSetEntry.CurrentCollection = collection
     info = new HashMap<String, Object>()
   }
 
-  static property get All() : SkipIterator<Map> {
-    return new DataSet(COLLECTION).find()
+  construct(_collection : String) {
+    collection = _collection
+    myDataSet = new DataSet(collection)
+    new DataSet(MASTER_DATA_SET).insert({"name" -> collection})
+    DataSetEntry.CurrentCollection = collection
+    info = new HashMap<String, Object>()
+  }
+
+  static function All(_collection : String) : SkipIterator<Map> {
+    return new DataSet(_collection).find()
+  }
+
+  static function AllDataSets() : List<String> {
+    var ds = new DataSet(MASTER_DATA_SET).find()
+    var returnList = new List<String>()
+    while (ds.hasNext()) {
+      returnList.add(ds.next().get('name') as String)
+    }
+    return returnList
+  }
+
+  static property get CurrentCollection() : String {
+    return new DataSet(CURRENT_DATA_SET_REF).find().next().get('current') as String
+  }
+
+  static property set CurrentCollection(col : String) {
+    var current = new DataSet(CURRENT_DATA_SET_REF)
+    current.drop()
+    current.insert({'current' -> col})
   }
 
   // Saves this company info into the mongo dataset

@@ -10,6 +10,7 @@ uses datagen.GenerateRandom
 uses datagen.GenerateTest
 uses gw.lang.reflect.ReflectUtil
 uses view.JobDrillDown
+uses model.DataSetEntry
 
 class JobController implements IHasRequestContext {
 
@@ -21,16 +22,16 @@ class JobController implements IHasRequestContext {
     return "Job Started!!!"
   }
 
-  static function startGenerateJob() : String {
+  static function startGenerateJob(collection : String) : String {
     new GenerateRandom().generateRandom('data.json')
-    var job = new GenerateJob('data.json').start()
+    var job = new GenerateJob('data.json', collection).start()
     UUId = job.UUId
     return "Company information listed below."
   }
 
-  static function startGenerateTestJob(testVar : String) : String {
+  static function startGenerateTestJob(testVar : String, collection : String) : String {
     new GenerateTest().generateTest('dataReach.json', testVar, 40000)
-    var job = new GenerateJob('dataReach.json').start()
+    var job = new GenerateJob('dataReach.json', collection).start()
     UUId = job.UUId
     return "Company information listed below."
   }
@@ -75,8 +76,8 @@ class JobController implements IHasRequestContext {
     return view.Companies.renderToString(1)
   }
 
-  static function startRecommendJob() : String {
-    new RecommendJob().start()
+  static function startRecommendJob(collection : String) : String {
+    new RecommendJob(collection).start()
     return "Recommend Job Started"
   }
 
@@ -86,6 +87,16 @@ class JobController implements IHasRequestContext {
     var response = JobDrillDown.renderToString(job)
     if (job.Failed) return ""
     return response
+  }
+
+  static function selectCollection(requestBody : String) : String {
+    var collection = requestBody.split("=")[1]
+    DataSetEntry.CurrentCollection = collection
+    return collection
+  }
+
+  static function getCurrentCollection() : String {
+    return DataSetEntry.CurrentCollection
   }
 
 }

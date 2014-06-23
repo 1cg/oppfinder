@@ -10,13 +10,14 @@ class AlgorithmTest extends TestCase {
   for (1..80 index i) {
     print("iteration: "+i)
     new GenerateTest().generateTest('dataReach.json', "Reach", numCompanies)
-    new GenerateJob('dataReach.json').start().join()
+    new GenerateJob('dataReach.json', "AlgorithmTestCollection").start().join()
 
-      var recommendJob = new RecommendJob()
-      recommendJob.start().join()
+    print("yo")
+    var recommendJob = new RecommendJob("AlgorithmTestCollection")
+    recommendJob.start().join()
 
-      var recommendations = recommendJob.ResultsData.find().next()
-      assertEquals(recommendations.get("Company"), "RECOMMENDEE (test success)")
+    var recommendations = recommendJob.ResultsData.find().next()
+    assertEquals(recommendations.get("Company"), "RECOMMENDEE (test success)")
 
     }
   }

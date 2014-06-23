@@ -14,8 +14,8 @@ class LocationFieldImpl implements Field {
   final static var geocoder = new Geocoder()
   final static var coordinates = new DataSet(DataSetEntry.REGIONCOORDINATES).find().next()
 
-  override function getModel(): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(DataSetEntry.COLLECTION), 'Region',
+  override function getModel(collection : String): DataModel {
+    return MahoutUtil.toDataModel(new DataSet(collection), 'Region',
         \ l -> locationToLat(l),\ l -> locationToLng(l))
   }
 

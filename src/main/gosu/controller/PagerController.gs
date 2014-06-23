@@ -20,9 +20,9 @@ class PagerController {
     return pager
   }
 
-  static function getCompanyPager(page : long) : Pager<Map<Object,Object>> {
+  static function getCompanyPager(page : long, collection : String) : Pager<Map<Object,Object>> {
     var pager : Pager<Map<Object,Object>>
-    pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All, 10,page)
+    pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All(collection), 10,page)
     return pager
   }
 
