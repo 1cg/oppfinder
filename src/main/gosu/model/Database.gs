@@ -10,7 +10,7 @@ class Database {
 
   static final var _INSTANCE : Database as readonly INSTANCE = new Database()
 
-  final var CLIENT : MongoClient
+  var CLIENT : MongoClient
   final var DB_NAME : String
   final var DB : DB
 
@@ -18,9 +18,15 @@ class Database {
     var host = System.Env['MONGO_HOST']
     DB_NAME = "oppFinder"
     if (host != null) {
-      CLIENT = new MongoClient(new MongoClientURI(host))
+      var uri = new MongoClientURI(host)
+      print(uri.Credentials.UserName)
+      print(uri.Credentials.Password)
+      print(uri.Database)
+      print(uri.Collection)
+      print(uri.Hosts)
+      CLIENT = new MongoClient(uri)
     } else {
-      CLIENT = new MongoClient()
+      throw "MONGO_HOST not set"
     }
     DB = CLIENT.getDB(DB_NAME)
   }
