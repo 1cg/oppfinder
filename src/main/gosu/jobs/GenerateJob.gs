@@ -17,16 +17,6 @@ class GenerateJob extends Job {
     super(data)
   }
 
-  construct() {
-    super()
-  }
-
-  /*
-  construct(path: String) {
-    super()
-    update({'Path' -> path})
-  }
-*/
   construct(path: String, dataSet : String) {
     super()
     update({'DataSetCollection' -> dataSet})

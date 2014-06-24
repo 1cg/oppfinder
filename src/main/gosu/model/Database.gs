@@ -4,6 +4,8 @@ uses com.mongodb.DBCollection
 uses com.mongodb.DB
 uses java.lang.System
 uses com.mongodb.MongoClient
+uses com.mongodb.MongoCredential
+uses com.mongodb.ServerAddress
 
 class Database {
 
@@ -15,12 +17,15 @@ class Database {
 
   private construct() {
     var host = System.Env['MONGO_HOST']
+    var pwd = System.Env['MONGO_PWD']
+    var user = System.Env['MONGO_USER']
+    DB_NAME = "oppFinder"
+    var cred = MongoCredential.createMongoCRCredential(user,DB_NAME,pwd.toCharArray())
     if (host != null) {
-      CLIENT = new MongoClient(host)
+      CLIENT = new MongoClient(new ServerAddress(host), {cred})
     } else {
       CLIENT = new MongoClient()
     }
-    DB_NAME = "oppFinder"
     DB = CLIENT.getDB(DB_NAME)
   }
 

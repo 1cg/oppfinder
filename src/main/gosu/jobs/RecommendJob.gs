@@ -4,7 +4,6 @@ uses java.util.Map
 uses java.lang.Thread
 uses model.DataSet
 uses java.lang.Float
-uses model.DataSetEntry
 uses util.MahoutUtil
 uses java.util.Arrays
 
@@ -20,12 +19,7 @@ class RecommendJob extends Job {
   construct(data : Map<Object, Object> ) {
     super(data)
   }
-/*
-  construct() {
-    super()
-    update({'DataSetToAnalyze' -> DataSetEntry.COLLECTION})
-  }
-*/
+
   construct(dataSetName : String) {
     super()
     update({'DataSetToAnalyze' -> dataSetName})

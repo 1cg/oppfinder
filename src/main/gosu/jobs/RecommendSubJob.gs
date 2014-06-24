@@ -19,10 +19,6 @@ class RecommendSubJob extends Job {
     super(data)
   }
 
-  construct() {
-    super()
-  }
-
   /*
   * Takes in the class name of the <<recommender.Field>> implementation that should be used
   * for analysis of the data set
