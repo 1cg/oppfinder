@@ -1,7 +1,6 @@
 package jobs
 
 uses net.greghaines.jesque.client.ClientImpl
-uses net.greghaines.jesque.ConfigBuilder
 uses net.greghaines.jesque.Job
 uses model.DataSet
 uses java.util.Map
@@ -18,6 +17,7 @@ uses java.lang.Class
 uses java.lang.Exception
 uses util.CancellationException
 uses util.NoSuchUUIDException
+uses util.RedisConfigUtil
 
 abstract class Job implements Runnable {
 
@@ -65,14 +65,8 @@ abstract class Job implements Runnable {
   abstract function executeJob()
 
   final function start() : jobs.Job {
-    var builder = new ConfigBuilder()
-    var host = System.Env['REDIS_HOST']
-    if (host != null) {
-      builder.withHost(host)
-    }
-    var config = builder.build()
     var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
-    var client = new ClientImpl(config)
+    var client = new ClientImpl(RedisConfigUtil.Config)
     client.enqueue('main', testJob)
     client.end()
     return this
@@ -182,8 +176,8 @@ abstract class Job implements Runnable {
   }
 
   static function getUUIDElapsedTime(UUID : String) : String {
-    var start = dataStore.findOne({'UUId' -> UUID})['StartTime'] as Long
-    var end = dataStore.findOne({'UUId' -> UUID})['EndTime'] as Long
+    var start = dataStore.findOne({'UUId' -> UUID})?['StartTime'] as Long
+    var end = dataStore.findOne({'UUId' -> UUID})?['EndTime'] as Long
     return calculateElapsedTime(start, end)
   }
 
