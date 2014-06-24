@@ -38,19 +38,10 @@
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/companies/1">Input Data</a>
+              <a href="/jobs/all/1">Jobs</a>
             </li>
             <li>
-              <a href="/jobs/running/1">Currently Running</a>
-            </li>
-            <li>
-              <a href="/jobs/complete/1">Completed</a>
-            </li>
-            <li>
-              <a href="/jobs/cancelled/1">Cancelled</a>
-            </li>
-            <li>
-              <a href="/jobs/failed/1">Failed</a>
+              <a href="/companies/1">Data Generation</a>
             </li>
           </ul>
 
