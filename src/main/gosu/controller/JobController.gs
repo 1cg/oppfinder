@@ -79,9 +79,9 @@ class JobController implements IHasRequestContext {
     return view.Companies.renderToString(1)
   }
 
-  static function startRecommendJob(collection : String) {
+  static function startRecommendJob(collection : String) : String {
     new RecommendJob(collection).start()
-    return
+    return view.Root.renderToString()
   }
 
   static function getStatusFeed(UUID : String) : String {
