@@ -1,12 +1,15 @@
 <%@ params(page : long)%>
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
-  <button ic-post-to="/jobs/action/start/generate" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
-    Generate Random
-  </button>
-  <button ic-post-to="/jobs/action/start/generateTest/Reach" ic-target="#generateFeedback" ic-transition="none" class="btn btn-lg btn-primary">
-    Generate Test Reaches
-  </button>
+
+  <form action="/jobs/action/start/generate" method="post">
+    Data Set Name: <input type="text" name="dataSetName"><br>
+    <input type="radio" name="generateStrategy" value="random">Random<br>
+    <input type="radio" name="generateStrategy" value="reachTest">Test Reaches<br>
+    <input type="submit" value="Submit">
+  </form>
+
+  </form>
   <h3>
     OR
   </h3>

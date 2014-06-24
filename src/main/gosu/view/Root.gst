@@ -11,9 +11,7 @@
     <strong>Begin Test &rarr;</strong>
   </button>
 
-  <button ic-post-to="/jobs/action/start/recommend" ic-target="#feedback" class="btn btn-lg btn-primary">
-    <strong>Begin Recommendation Analysis &rarr;</strong>
-  </button>
+
 
   <form method="post" action="/jobs/action/start/recommend">
     <select class="selectpicker" name="collections">

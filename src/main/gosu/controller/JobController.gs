@@ -13,6 +13,8 @@ uses view.FailedJobView
 uses view.JobStatusFeedList
 uses java.util.UUID
 uses jobs.TestJob
+uses java.util.HashMap
+uses util.GenerateJobFormParser
 
 class JobController implements IHasRequestContext {
 
@@ -24,16 +26,9 @@ class JobController implements IHasRequestContext {
     return
   }
 
-  static function startGenerateJob() {
-    new GenerateRandom().generateRandom('data.json')
-    var job = new GenerateJob('data.json', UUID.randomUUID().toString()).start()
-    UUId = job.UUId
-    return
-  }
-
-  static function startGenerateTestJob(testVar : String) {
-    new GenerateTest().generateTest('dataReach.json', testVar, 40000)
-    var job = new GenerateJob('dataReach.json', UUID.randomUUID().toString()).start()
+  static function startGenerateJob(formInput : String) {
+    var form = new GenerateJobFormParser(formInput)
+    var job = form.startJob()
     UUId = job.UUId
     return
   }
