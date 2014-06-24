@@ -4,6 +4,7 @@ uses com.mongodb.DBCollection
 uses com.mongodb.DB
 uses java.lang.System
 uses com.mongodb.MongoClient
+uses com.mongodb.MongoClientURI
 
 class Database {
 
@@ -17,7 +18,7 @@ class Database {
     var host = System.Env['MONGO_HOST']
     DB_NAME = "oppFinder"
     if (host != null) {
-      CLIENT = new MongoClient(host)
+      CLIENT = new MongoClient(new MongoClientURI(host))
     } else {
       CLIENT = new MongoClient()
     }
