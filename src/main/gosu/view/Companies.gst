@@ -2,16 +2,22 @@
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
 
-  <form action="/jobs/action/start/generate" method="post">
-    Data Set Name: <input type="text" name="dataSetName"><br>
-    <input type="radio" name="generateStrategy" value="random">Random<br>
-    <input type="radio" name="generateStrategy" value="reachTest">Test Reaches<br>
-    <input type="submit" value="Submit">
+  <h3> Generate New Data Set </h3>
+  <form action="/jobs/action/start/generate" method="post" role="form">
+    <label for="dataSetName">New Data Set Name</label>
+    <input type="text" class="form-control" name="dataSetName" placeholder="Leave blank for random UUID">
+    <br>
+    <label for="generateStrategy">Generation Method</label>
+    <div class="radio" name="options">
+    <label><input type="radio" name="generateStrategy" value="random">Random<br></label>
+    <label><input type="radio" name="generateStrategy" value="Reach">Test Reaches<br></label>
+    </div>
+    <button type="submit" value="Submit" class="btn btn-lg btn-primary">Submit</button>
   </form>
 
   </form>
   <h3>
-    OR
+    Upload JSON Data Set
   </h3>
   <form method="post" enctype="multipart/form-data" action="/jobs/action/start/upload">
     <div class="fileinput fileinput-new" data-provides="fileinput">

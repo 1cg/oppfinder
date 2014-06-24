@@ -2,18 +2,13 @@ package controller
 
 uses sparkgs.util.IHasRequestContext
 
-uses jobs.GenerateJob
 uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
-uses datagen.GenerateRandom
-uses datagen.GenerateTest
 uses view.JobDrillDown
 uses view.FailedJobView
 uses view.JobStatusFeedList
-uses java.util.UUID
 uses jobs.TestJob
-uses java.util.HashMap
 uses util.GenerateJobFormParser
 
 class JobController implements IHasRequestContext {
@@ -26,11 +21,11 @@ class JobController implements IHasRequestContext {
     return
   }
 
-  static function startGenerateJob(formInput : String) {
+  static function startGenerateJob(formInput : String) : String{
     var form = new GenerateJobFormParser(formInput)
     var job = form.startJob()
     UUId = job.UUId
-    return
+    return view.Companies.renderToString(0)
   }
 
   static property get LocalGenerateProgress() : String {

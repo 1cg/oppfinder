@@ -27,7 +27,7 @@ class GenerateJobFormParser {
 
     var strategy = formMap["generateStrategy"]
 
-    if(strategy == "reachTest") {
+    if(strategy == "Reach") {
       new GenerateTest().generateTest('dataReach.json', 'Reach', 40000)
       var job = new GenerateJob('dataReach.json', name).start()
       return job
