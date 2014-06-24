@@ -1,7 +1,7 @@
+package jobs
 
-uses java.lang.Thread
 uses java.util.Map
-uses jobs.Job
+uses java.lang.Thread
 
 class TestJob extends Job {
 

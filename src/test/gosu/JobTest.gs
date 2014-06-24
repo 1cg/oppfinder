@@ -1,5 +1,6 @@
 uses junit.framework.TestCase
 uses jobs.Job
+uses jobs.TestJob
 
 class JobTest extends TestCase {
 

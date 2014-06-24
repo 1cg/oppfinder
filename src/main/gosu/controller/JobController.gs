@@ -8,19 +8,18 @@ uses jobs.UploadJob
 uses jobs.RecommendJob
 uses datagen.GenerateRandom
 uses datagen.GenerateTest
-uses gw.lang.reflect.ReflectUtil
 uses view.JobDrillDown
 uses view.FailedJobView
 uses view.JobStatusFeedList
-uses model.DataSetEntry
 uses java.util.UUID
+uses jobs.TestJob
 
 class JobController implements IHasRequestContext {
 
   static var UUId : String
 
   static function startTestJob() {
-    var testJob = ReflectUtil.construct<Job>("TestJob", {})
+    var testJob = new TestJob()
     testJob.start()
     return
   }
