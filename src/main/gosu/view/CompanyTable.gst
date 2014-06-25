@@ -1,4 +1,5 @@
 <%@ params(pager : model.Pager<java.util.Map<Object,Object>>)%>
+${pager.Page.size()}
 <table class="table">
   <thead>
     <tr>
@@ -21,5 +22,5 @@
     <% } %>
   </tbody>
 </table>
-${widgets.PagerWidget.renderWidget(pager,"/companies/", "")}
+${widgets.PagerWidget.renderWidget(pager,"/companies/", null)}
 

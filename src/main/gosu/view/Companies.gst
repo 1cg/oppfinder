@@ -1,7 +1,6 @@
 <%@ params(page : long)%>
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
-
   <h3> Generate New Data Set </h3>
   <form ic-post-to="/jobs/action/start/generate" role="form">
     <label for="dataSetName">New Data Set Name</label>
@@ -31,6 +30,6 @@
   </div>
 </div>
 <div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
-  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page, "POOP"))}
+  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
 </div>
 

@@ -1,4 +1,3 @@
-uses model.DataSetEntry
 
 extends sparkgs.SparkFile
 
@@ -48,7 +47,7 @@ get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong(
 get('/jobs/upload', \-> view.Companies.renderToString(1))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong(), DataSetEntry.mostRecentlyAdded()))})
+  return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong()))})
 get('/companies/*', \-> view.Companies.renderToString(1))
 
 
@@ -63,4 +62,4 @@ post('/jobs/action/state/:id/reset', \-> controller.JobController.resetJob(Param
 post('/jobs/action/refresh', \-> {Layout = null})
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
-get("*", \-> view.BadPath.renderToString())
+get("*", \-> view.BadPath.renderToString(Request.PathInfo))

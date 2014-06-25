@@ -5,13 +5,11 @@
     <strong>Begin Test &rarr;</strong>
   </button>
   <form class="form-group" ic-post-to="/jobs/action/start/recommend">
-    <select data-live-search="true" class="selectpicker" name="collections">
+    <select class="chosen-select" name="collections" style="width: 350px;" tabindex="-1">
       <optgroup label="Most Recent">
       <% for(collection in model.DataSetEntry.AllDataSets()){ %>
         <option value=${collection}>${collection}</option>
       <% } %>
-      </optgroup>
-      <optgroup label="Least Recent">
       </optgroup>
     </select>
     <input class="btn btn-lg btn-primary" type="submit" value="Recommend!">
