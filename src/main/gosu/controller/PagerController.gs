@@ -14,6 +14,8 @@ class PagerController {
       pager = new Pager<Job>(Job.ActiveJobs,10,page)
     } else if (type == "failed") {
       pager = new Pager<Job>(Job.FailedJobs,10,page)
+    } else if (type == "all") {
+      pager = new Pager<Job>(Job.AllJobs,10,page)
     }  else {
       pager = new Pager<Job>(Job.CancelledJobs,10,page)
     }
@@ -28,6 +30,6 @@ class PagerController {
 
   static function renderPager(type : String, page : long) : String {
     var pager = getPager(type,page)
-    return widgets.PagerWidget.renderWidget(pager, '/jobs/' + type + '/')
+    return widgets.PagerWidget.renderWidget(pager, '/jobs/' + type + '/', type)
   }
 }

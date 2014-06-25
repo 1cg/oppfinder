@@ -1,4 +1,3 @@
-uses model.DataSet
 uses model.DataSetEntry
 
 extends sparkgs.SparkFile
@@ -11,6 +10,7 @@ get('/jobs/home/:page', \-> {
   Layout = null
   controller.TableController.getRunningTable(Params['page'].toLong())})
 get('/jobs/running/:page', \-> controller.TableController.getRunningTable(Params['page'].toLong()))
+get('/jobs/all/:page', \-> controller.TableController.getAllTable(Params['page'].toLong()))
 get('/jobs/complete/:page', \-> controller.TableController.getCompleteTable(Params['page'].toLong()))
 get('/jobs/cancelled/:page', \-> controller.TableController.getCancelledTable(Params['page'].toLong()))
 get('/jobs/failed/:page', \-> controller.TableController.getFailedTable(Params['page'].toLong()))
@@ -31,8 +31,16 @@ get('/jobs/:id/elapsed_time', \-> {
 get('/jobs/:id/info', \-> controller.JobController.renderJobInfo(Params['id']))
 get('/jobs/:id/status_feed', \-> {Layout = null
   return controller.JobController.getStatusFeed(Params['id'])})
-get('/jobs/table/:type/:page', \-> { Layout = null
-                    return view.JobTableBody.renderToString(Params['type'], controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
+get('/jobs/table/all/:page', \-> { Layout = null
+                    return controller.TableController.getAllTableBody(Params['page'].toLong())})
+get('/jobs/table/running/:page', \-> { Layout = null
+                    return controller.TableController.getRunningTableBody(Params['page'].toLong())})
+get('/jobs/table/complete/:page', \-> { Layout = null
+                    return controller.TableController.getCompleteTableBody(Params['page'].toLong())})
+get('/jobs/table/failed/:page', \-> { Layout = null
+                    return controller.TableController.getFailedTableBody(Params['page'].toLong())})
+get('/jobs/table/cancelled/:page', \-> { Layout = null
+                    return controller.TableController.getCancelledTableBody(Params['page'].toLong())})
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
   return controller.PagerController.renderPager(Params['type'], Params['page'].toLong())})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))

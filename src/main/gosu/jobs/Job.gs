@@ -281,6 +281,11 @@ abstract class Job implements Runnable {
         dataStore.find({'Status' -> 'Failed'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 
+  static property get AllJobs() : SkipIterator<jobs.Job> {
+    return new TransformationIterator<jobs.Job>(
+        dataStore.find(), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  }
+
   abstract function renderToString() : String
 
 }
