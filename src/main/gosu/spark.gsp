@@ -53,8 +53,7 @@ get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Start Jobs */
 post('/jobs/action/start/test', \-> controller.JobController.startTestJob())
-post('/jobs/action/start/generate', \-> controller.JobController.startGenerateJob())
-post('/jobs/action/start/generateTest/:testVar', \-> controller.JobController.startGenerateTestJob(Params['testVar']))
+post('/jobs/action/start/generate', \-> controller.JobController.startGenerateJob(Request.Body.toString()))
 post('/jobs/action/start/upload', \-> controller.JobController.startUploadJob(Request.Body))
 post('/jobs/action/start/recommend', \-> controller.JobController.startRecommendJob(Request.Body.toString().split("=")[1]))
 post('/jobs/action/delete/:id', \-> controller.JobController.deleteJob(Params['id']))
