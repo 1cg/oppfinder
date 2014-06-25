@@ -22,18 +22,14 @@ class GenerateJobFormParser {
 
 
   function startJob() : jobs.Job {
-    var name = formMap["dataSetName"]
-    if(name == null) name = UUID.randomUUID().toString()
-
-    var strategy = formMap["generateStrategy"]
-
-    if(strategy == "Reach") {
+    var name = formMap["dataSetName"]?.replaceAll("\\+", " ") ?: UUID.randomUUID().toString()
+    if(formMap["generateStrategy"] == "Reach") {
       new GenerateTest().generateTest('dataReach.json', 'Reach', 40000)
       var job = new GenerateJob('dataReach.json', name).start()
       return job
     } else {
       new GenerateRandom().generateRandom('data.json')
-      var job = new GenerateJob('data.json', formMap["dataSetName"]).start()
+      var job = new GenerateJob('data.json', name).start()
       return job
     }
   }

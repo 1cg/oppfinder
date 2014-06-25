@@ -50,7 +50,7 @@ class Pager<T> {
   }
 
   final function lastPage() : long {
-    return Math.max(iterate.Count / pageSize,1)
+    return Math.max((iterate.Count + pageSize - 1) / pageSize,1)
   }
 
 }

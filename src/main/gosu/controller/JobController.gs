@@ -21,11 +21,11 @@ class JobController implements IHasRequestContext {
     return
   }
 
-  static function startGenerateJob(formInput : String) : String{
+  static function startGenerateJob(formInput : String) {
     var form = new GenerateJobFormParser(formInput)
     var job = form.startJob()
     UUId = job.UUId
-    return view.Companies.renderToString(0)
+    return
   }
 
   static property get LocalGenerateProgress() : String {
@@ -68,9 +68,9 @@ class JobController implements IHasRequestContext {
     return view.Companies.renderToString(1)
   }
 
-  static function startRecommendJob(collection : String) : String {
+  static function startRecommendJob(collection : String) {
     new RecommendJob(collection).start()
-    return view.Root.renderToString()
+    return
   }
 
   static function getStatusFeed(UUID : String) : String {

@@ -3,6 +3,7 @@ uses model.DataSetEntry
 extends sparkgs.SparkFile
 
 Layout = view.Layout
+StaticFiles = '/public'
 
 /* Getters for job information */
 get('/', \-> view.Root.renderToString())

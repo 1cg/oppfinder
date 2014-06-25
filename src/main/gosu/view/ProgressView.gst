@@ -4,10 +4,12 @@
       ic-transition="none"
       ic-style-src="width:/jobs/generate/percent_done"
       ic-poll="300ms"
-      style="width:0%">
+      style="width:${controller.JobController.LocalGenerateProgress}">
     </div>
   </div>
-  <div ic-src="/jobs/generate/complete" ic-poll="300ms" ic-transition="none"></div>
+  <div ic-src="/jobs/generate/complete" ic-poll="300ms" ic-transition="none">
+    ${controller.JobController.LocalGenerateComplete}
+  </div>
 </div>
 
 
