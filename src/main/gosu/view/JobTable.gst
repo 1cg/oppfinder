@@ -1,6 +1,6 @@
 <%@ params(header : String, type : String, pager : model.Pager<jobs.Job>)%>
 <div class="page-header">
-  <h1>${header}</h1>
+  <h3>${header}</h3>
 </div>
 <h3 class="navbar-left">Filter by job status: </h3>
 <div class="btn-group navbar-left" style='padding-left:10px;padding-top:15px'>
