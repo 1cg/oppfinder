@@ -1,9 +1,8 @@
 <%@ params(page : long)%>
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
-
   <h3> Generate New Data Set </h3>
-  <form action="/jobs/action/start/generate" method="post" role="form">
+  <form ic-post-to="/jobs/startgenerate" role="form">
     <label for="dataSetName">New Data Set Name</label>
     <input type="text" class="form-control" name="dataSetName" placeholder="Leave blank for random UUID">
     <br>
@@ -14,17 +13,14 @@
     </div>
     <button type="submit" value="Submit" class="btn btn-lg btn-primary">Submit</button>
   </form>
-
-  </form>
   <h3>
     Upload JSON Data Set
   </h3>
-  <form method="post" enctype="multipart/form-data" action="/jobs/action/start/upload">
+  <form method="post" enctype="multipart/form-data" action="/jobs/startupload">
     <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-lg btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
     <span class="fileinput-filename"></span>
     <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
-
     <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
     </div>
   </form>
@@ -32,8 +28,7 @@
     ${view.ProgressView.renderToString()}
   </div>
 </div>
-
 <div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
-  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page, "POOP"))}
+  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
 </div>
 

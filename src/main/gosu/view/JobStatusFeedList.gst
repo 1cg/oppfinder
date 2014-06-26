@@ -1,5 +1,5 @@
 <%@ params(job : jobs.Job) %>
-<div ic-src="/jobs/${job.UUId}/status_feed" ic-poll="1s" ic-transition="none">
+<div ic-src="/jobs/${job.UUId}/statusfeed" ic-poll="1s" ic-transition="none">
   <div class="panel panel-primary">
    <div class="panel-heading">Job Status Update (${job.Progress}% Complete)</div>
     <ul class="list-group" >

@@ -40,13 +40,12 @@ class DataSetEntry {
     return returnList
   }
 
-  static function mostRecentlyAdded() : String {
+  static property get MostRecentDataSet() : SkipIterator<Map> {
     var ds = new DataSet(MASTER_DATA_SET).find()
     if (ds.hasNext()) {
-      return ds.next().get('name') as String
-    } else {
-      return "empty"
+      return All(ds.next().get('name') as String)
     }
+    return null
   }
 
   // Saves this company info into the mongo dataset

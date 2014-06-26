@@ -3,12 +3,13 @@ package controller
 uses jobs.Job
 uses model.Pager
 uses java.util.Map
+uses model.DataSetEntry
 
 class PagerController {
 
   static function getPager(type : String, page : long) : Pager<Job> {
     var pager : Pager<Job>
-    if (type == "complete") {
+    if (type == "completed") {
       pager = new Pager<Job>(Job.CompleteJobs,10,page)
     } else if (type == "running") {
       pager = new Pager<Job>(Job.ActiveJobs,10,page)
@@ -22,10 +23,12 @@ class PagerController {
     return pager
   }
 
-  static function getCompanyPager(page : long, collection : String) : Pager<Map<Object,Object>> {
-    var pager : Pager<Map<Object,Object>>
-    pager = new model.Pager<java.util.Map<Object,Object>>(model.DataSetEntry.All(collection), 10,page)
-    return pager
+  static function getCompanyPager(page : long, collection : String = null) : Pager<Map<Object,Object>> {
+    if (collection != null) {
+      return new model.Pager<java.util.Map<Object,Object>>(DataSetEntry.All(collection), 10,page)
+    } else {
+      return new model.Pager<java.util.Map<Object,Object>>(DataSetEntry.MostRecentDataSet, 10,page)
+    }
   }
 
   static function renderPager(type : String, page : long) : String {

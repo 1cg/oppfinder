@@ -21,5 +21,5 @@
     <% } %>
   </tbody>
 </table>
-${widgets.PagerWidget.renderWidget(pager,"/companies/", "")}
+${widgets.PagerWidget.renderWidget(pager,"/companies/", null)}
 

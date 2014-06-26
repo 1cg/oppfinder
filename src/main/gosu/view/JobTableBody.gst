@@ -1,5 +1,5 @@
 <%@ params(type: String, pager: model.Pager<jobs.Job>) %>
-<div ic-src="/jobs/table/${type}/${pager.Current}" ic-poll="3s" ic-transition="none" ic-deps="/jobs/action">
+<div ic-src="/jobs/table?status=${type}&page=${pager.Current}" ic-poll="3s" ic-transition="none" ic-deps="/jobs/action">
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -18,6 +18,9 @@
         <th>
           Progress
         </th>
+        <th>
+          Actionssta
+        </t>
       </tr>
     </thead>
     <tbody>
@@ -32,7 +35,7 @@
       for(job in pager.Page)  {%>
       <tr>
         <td>
-          <a href='/jobs/${job.UUId}/info' style="color:#476CB5">${job.UUId}</a>
+          <a href='/jobs/${job.UUId}' style="color:#476CB5">${job.UUId}</a>
         </td>
         <td>
           ${job.Status}
@@ -41,30 +44,27 @@
           ${job.Type}
         </td>
         <td>
-          <div ic-src="/jobs/${job.UUId}/elapsed_time" ic-transition="none" ic-poll="1s">${job.ElapsedTime}</div>
+          <div ic-src="/jobs/${job.UUId}/getuuidelapsedtime" ic-transition="none" ic-poll="5s">${job.ElapsedTime}</div>
         </td>
         <td>
-          <% if (job.Cancelled || job.Progress == 100) { %>
-          <div class="progress">
-          <% }else{ %>
-          <div class="progress progress-striped active">
+          <% if (!job.Cancelled && job.Progress != 100) { %>
+            <div class="progress progress-striped active">
+              <div class="progress-bar" ic-style-src="width:/jobs/${job.UUId}/progress"
+                ic-poll="1s"
+                style="width:${jobs.Job.getUUIDProgress(job.UUId)}">
+              </div>
+            </div>
           <% } %>
-            <div class="progress-bar"
-              ic-style-src="width:/jobs/${job.UUId}/percent_done"
-              ic-poll="1s" style="width:${jobs.Job.getUUIDProgress(job.UUId)}">
-           </div>
-        </div>
         </td>
         <td>
           <% if (job.Progress < 100 && !(job.Cancelled || job.Failed)) { %>
-            <button ic-post-to="/jobs/action/state/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-stop"></span></button>
+            <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-stop"></span></button>
           <% }  else if (job.Cancelled || job.Failed) { %>
-            <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-primary btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
+            <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-primary btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
           <% } %>
-        </td>
-        <td>
+
           <% if (job.Progress == 100 || job.Cancelled || job.Failed)  { %>
-            <button ic-post-to="/jobs/action/delete/${job.UUId}" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
+            <button ic-post-to="/jobs/${job.UUId}/delete" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
           <% } %>
         </td>
      </tr>

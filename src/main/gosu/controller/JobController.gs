@@ -11,22 +11,30 @@ uses view.JobStatusFeedList
 uses jobs.TestJob
 uses util.GenerateJobFormParser
 uses jobs.SalesforceAuthJob
+uses sparkgs.IResourceController
+uses view.JobTable
+uses view.JobTableBody
 
-class JobController implements IHasRequestContext {
+class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
 
-  static function startTestJob() {
-    var testJob = new TestJob()
-    testJob.start()
-    return
+  function table() {
+    var status = Params['status'] ?: "all"
+    var page = Params['page'] == null ? 1 : Params['page'].toLong()
+    Writer.append(JobTableBody.renderToString(status, PagerController.getPager(status,page)))
   }
 
-  static function startGenerateJob(formInput : String) : String{
-    var form = new GenerateJobFormParser(formInput)
-    var job = form.startJob()
-    UUId = job.UUId
-    return view.Companies.renderToString(0)
+  function generateProgress(id : String) : String {
+    return Job.getUUIDProgress(UUId)
+  }
+
+  function generateComplete(id : String) {
+    if (Job.getUUIDProgress(UUId) == "100%") {
+      Writer.append('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
+    } else {
+      Writer.append('<div></div>')
+    }
   }
 
   static property get LocalGenerateProgress() : String {
@@ -47,53 +55,91 @@ class JobController implements IHasRequestContext {
     return
   }
 
-  static function cancelJob(UUID : String) {
+  function cancel(UUID : String) {
     Job.cancel(UUID)
     return
   }
 
-  static function resetJob(UUID : String) {
+  function reset(UUID : String) {
     Job.reset(UUID)
     return
   }
 
-  static function deleteJob(UUID : String) {
+  function delete(UUID : String) {
     Job.delete(UUID)
     return
   }
 
-  static function getUUIDProgress(UUID : String) : String {
+  function getUUIDProgress(UUID : String) : String {
     return Job.getUUIDProgress(UUID)
   }
 
-  static function getUUIDElapsedTime(UUID : String) : String {
+  function getUUIDElapsedTime(UUID : String) : String {
     return Job.getUUIDElapsedTime(UUID)
   }
 
-  static function startUploadJob(requestBody : String) : String {
-    new UploadJob(requestBody).start()
-    return view.Companies.renderToString(1)
-  }
-
-  static function startRecommendJob(collection : String) : String {
-    new RecommendJob(collection).start()
-    return view.Root.renderToString()
-  }
-
-  static function getStatusFeed(UUID : String) : String {
+  function statusFeed(UUID : String) : String {
     return JobStatusFeedList.renderToString(Job.newUp(UUID, null))
   }
 
-  static function renderJobInfo(UUID : String) : String {
-    var job = Job.newUp(UUID,null)
+  function startUpload() {
+    new UploadJob(Request.Body).start()
+    return
+  }
+
+  function startRecommend() {
+    new RecommendJob(Request.Body.toString().split("=")[1]).start()
+    return
+  }
+
+  function startTest() {
+    var testJob = new TestJob()
+    testJob.start()
+    return
+  }
+
+  function startGenerate() {
+    var form = new GenerateJobFormParser(Request.Body)
+    var job = form.startJob()
+    UUId = job.UUId
+    return
+  }
+
+  function progress(UUID : String) {
+    Writer.append(Job.getUUIDProgress(UUID))
+  }
+
+  override function index() {
+    var status = Params['status'] ?: "all"
+    var page = Params['page'] == null ? 1 : Params['page'].toLong()
+    Writer.append(JobTable.renderToString(status, PagerController.getPager(status, page)))
+  }
+
+  override function _new() {
+  }
+
+  override function create() {
+  }
+
+  override function show(id: String) {
+    print(id)
+    var job = Job.newUp(id, null)
     var response = ""
     var failed = job.Failed
-    if (job == null) return "Oops, this appears to be an invalid UUID"
+    if (job == null) {
+      Writer.append("Oops, this appears to be an invalid UUID")
+      return
+    }
     response += JobDrillDown.renderToString(job)
     if (failed) response += FailedJobView.renderToString(job)
     response += JobStatusFeedList.renderToString(job)
     if (!failed) response += job.renderToString()
-    return response
+    Writer.append(response)
   }
 
+  override function edit(id: String) {
+  }
+
+  override function update(id: String) {
+  }
 }
