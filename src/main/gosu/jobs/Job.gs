@@ -286,6 +286,13 @@ abstract class Job implements Runnable {
         dataStore.find(), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 
+  // This is for salesforce uploading
+  static property get CompleteRecommendJobs() : SkipIterator<jobs.Job> {
+    return new TransformationIterator<jobs.Job>(
+        dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}),
+            \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  }
+
   abstract function renderToString() : String
 
 }

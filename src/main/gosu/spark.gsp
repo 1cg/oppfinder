@@ -50,6 +50,10 @@ get('/companies/table/:page', \-> {
   return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong(), DataSetEntry.mostRecentlyAdded()))})
 get('/companies/*', \-> view.Companies.renderToString(1))
 
+/* Salesforce authenticates then goes back to this Callback URL with a ?code= param. */
+get('/_auth', \-> view.SalesforceUpload.renderToString(Params['code']))
+post('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobController.startSalesforceAuthJob(Params['uuid'],Params['code']))
+
 
 /* Start Jobs */
 post('/jobs/action/start/test', \-> controller.JobController.startTestJob())

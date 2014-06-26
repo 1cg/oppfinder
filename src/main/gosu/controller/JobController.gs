@@ -10,6 +10,7 @@ uses view.FailedJobView
 uses view.JobStatusFeedList
 uses jobs.TestJob
 uses util.GenerateJobFormParser
+uses jobs.SalesforceAuthJob
 
 class JobController implements IHasRequestContext {
 
@@ -38,6 +39,12 @@ class JobController implements IHasRequestContext {
     } else {
       return '<div></div>'
     }
+  }
+
+  static function startSalesforceAuthJob(id : String, authCode: String) {
+    var salesforceAuthJob = new SalesforceAuthJob(id, authCode)
+    salesforceAuthJob.start()
+    return
   }
 
   static function cancelJob(UUID : String) {
