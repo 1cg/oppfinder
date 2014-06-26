@@ -71,6 +71,19 @@ class SalesforceAuthJob extends Job {
 */
 
     this.StatusFeed = "Started uploading to Salesforce"
+
+    if(search('AnalysisToUpload') as String == "0000") {
+      var company = "CoolCompany"
+      var policy = "CoolPolicy"
+      var value = "4.0"
+      var nameValuePair = new NameValuePair()
+      nameValuePair.setName("data")
+      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
+      pm.addParameter(nameValuePair)
+      httpClient.executeMethod(pm)
+    } else {
+
+
     var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
     for(result in recommendations) {
       var company = result.get('Company') as String
@@ -86,7 +99,7 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "Done"
     this.Progress = 100
 
-
+    }
 
   }
 
