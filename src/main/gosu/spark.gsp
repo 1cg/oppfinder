@@ -22,7 +22,7 @@ get('/companies/table/:page', \-> {
 get('/companies/*', \-> view.Companies.renderToString(1))
 
 /* Salesforce authenticates then goes back to this Callback URL with a ?code= param. */
-get('/_auth', \-> view.SalesforceUpload.renderToString(Params['code']))
+get('/_auth/', \-> view.SalesforceUpload.renderToString(Params['code']))
 post('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobController.startSalesforceAuthJob(Params['uuid'],Params['code']))
 
 
