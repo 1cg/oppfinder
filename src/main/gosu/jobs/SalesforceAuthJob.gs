@@ -78,7 +78,7 @@ class SalesforceAuthJob extends Job {
       var value = result.get('Value') as String
       var nameValuePair = new NameValuePair()
       nameValuePair.setName("data")
-      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
+      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
       pm.addParameter(nameValuePair)
       httpClient.executeMethod(pm)
     }
