@@ -8,11 +8,11 @@
     Job Status <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a ic-get-from="/jobs/table/all/${pager.Current}" ic-target="#wrapper">All</a></li>
-    <li><a ic-get-from="/jobs/table/running/${pager.Current}" ic-target="#wrapper">Running</a></li>
-    <li><a ic-get-from="/jobs/table/complete/${pager.Current}" ic-target="#wrapper">Completed</a></li>
-    <li><a ic-get-from="/jobs/table/cancelled/${pager.Current}" ic-target="#wrapper">Cancelled</a></li>
-    <li><a ic-get-from="/jobs/table/failed/${pager.Current}" ic-target="#wrapper">Failed</a></li>
+    <li><a ic-get-from="/jobs/table?status=all&page=${pager.Current}" ic-target="#wrapper">All</a></li>
+    <li><a ic-get-from="/jobs/table?status=running&page=${pager.Current}" ic-target="#wrapper">Running</a></li>
+    <li><a ic-get-from="/jobs/table?status=completed&page=${pager.Current}" ic-target="#wrapper">Completed</a></li>
+    <li><a ic-get-from="/jobs/table?status=cancelled&page=${pager.Current}" ic-target="#wrapper">Cancelled</a></li>
+    <li><a ic-get-from="/jobs/table?status=failed&page=${pager.Current}" ic-target="#wrapper">Failed</a></li>
   </ul>
 </div>
 <br><br><hr>

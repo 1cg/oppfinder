@@ -1,5 +1,4 @@
 uses controller.JobController
-uses controller.TableController
 
 extends sparkgs.SparkFile
 
@@ -10,7 +9,6 @@ StaticFiles = '/public'
 /* Set TableController() as a resource first so that it will catch all associated
 *paths before JobController()
  */
-resource("/jobs/table", new TableController())
 resource("/jobs", new JobController())
 
 /* Getters for job information */

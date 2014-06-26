@@ -12,20 +12,27 @@ uses jobs.TestJob
 uses util.GenerateJobFormParser
 uses sparkgs.IResourceController
 uses view.JobTable
+uses view.JobTableBody
 
 class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
 
+  function table() {
+    var status = Params['status'] ?: "all"
+    var page = Params['page'] == null ? 1 : Params['page'].toLong()
+    Writer.append(JobTableBody.renderToString(status, PagerController.getPager(status,page)))
+  }
+
   function generateProgress(id : String) : String {
     return Job.getUUIDProgress(UUId)
   }
 
-  function generateComplete(id : String) : String {
+  function generateComplete(id : String) {
     if (Job.getUUIDProgress(UUId) == "100%") {
-     return '<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>'
+      Writer.append('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
     } else {
-      return '<div></div>'
+      Writer.append('<div></div>')
     }
   }
 
