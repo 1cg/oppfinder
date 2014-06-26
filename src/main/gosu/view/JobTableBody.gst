@@ -18,6 +18,9 @@
         <th>
           Progress
         </th>
+        <th>
+          Actions
+        </t>
       </tr>
     </thead>
     <tbody>
@@ -44,16 +47,12 @@
           <div ic-src="/jobs/${job.UUId}/elapsed_time" ic-transition="none" ic-poll="1s">${job.ElapsedTime}</div>
         </td>
         <td>
-          <% if (job.Cancelled || job.Progress == 100) { %>
-          <div class="progress">
-          <% }else{ %>
-          <div class="progress progress-striped active">
-          <% } %>
-            <div class="progress-bar"
-              ic-style-src="width:/jobs/${job.UUId}/progress"
-              ic-poll="1s" style="width:${jobs.Job.getUUIDProgress(job.UUId)}">
+          <% if (!job.Cancelled && job.Progress != 100) { %>
+            <div class="progress-bar" ic-style-src="width:/jobs/${job.UUId}/progress"
+              ic-poll="1s"
+              style="width:${jobs.Job.getUUIDProgress(job.UUId)}">
            </div>
-        </div>
+          <% } %>
         </td>
         <td>
           <% if (job.Progress < 100 && !(job.Cancelled || job.Failed)) { %>
@@ -61,8 +60,7 @@
           <% }  else if (job.Cancelled || job.Failed) { %>
             <button ic-post-to="/jobs/action/state/${job.UUId}/reset" class="btn btn-primary btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
           <% } %>
-        </td>
-        <td>
+
           <% if (job.Progress == 100 || job.Cancelled || job.Failed)  { %>
             <button ic-post-to="/jobs/action/delete/${job.UUId}" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
           <% } %>
