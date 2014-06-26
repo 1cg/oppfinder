@@ -13,8 +13,3 @@
 <h3>Elapsed Time: <span class="label label-default">${job.ElapsedTime}</span></h3>
 <br>
 
-
-
-<button ic-post-to="/jobs/action/start/salesforce_export/${job.UUId}" class="btn btn-lg btn-primary">
-  <strong>Export to Salesforce!</strong>
-</button>
