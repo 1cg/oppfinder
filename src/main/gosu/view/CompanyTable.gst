@@ -1,5 +1,4 @@
 <%@ params(pager : model.Pager<java.util.Map<Object,Object>>)%>
-${pager.Page.size()}
 <table class="table">
   <thead>
     <tr>

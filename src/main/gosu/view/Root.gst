@@ -25,7 +25,7 @@
       </button>
     </div>
   </form>
-  <a href="/companies">Generate Or Import DataSet</a>
+  <a href="/companies/">Generate Or Import DataSet</a>
   </div>
 </div>
-${controller.TableController.getRunningTable(1)}
+<% new controller.JobController().index() %>

@@ -1,29 +1,15 @@
+uses controller.JobController
 
 extends sparkgs.SparkFile
 
 Layout = view.Layout
 StaticFiles = '/public'
 
+resource("/jobs", new JobController())
+
 /* Getters for job information */
-get('/', \-> view.Root.renderToString())
-get('/jobs/home/:page', \-> {
-  Layout = null
-  controller.TableController.getRunningTable(Params['page'].toLong())})
-get('/jobs/running/:page', \-> controller.TableController.getRunningTable(Params['page'].toLong()))
-get('/jobs/all/:page', \-> controller.TableController.getAllTable(Params['page'].toLong()))
-get('/jobs/complete/:page', \-> controller.TableController.getCompleteTable(Params['page'].toLong()))
-get('/jobs/cancelled/:page', \-> controller.TableController.getCancelledTable(Params['page'].toLong()))
-get('/jobs/failed/:page', \-> controller.TableController.getFailedTable(Params['page'].toLong()))
-get('/jobs/generate/percent_done', \-> {
-  Layout = null
-  return controller.JobController.LocalGenerateProgress})
-get('/jobs/generate/complete', \-> {
-  Layout = null
-  return controller.JobController.LocalGenerateComplete})
-get('/jobs/:id/percent_done', \-> {
-  Layout = null
-  return controller.JobController.getUUIDProgress(Params['id'])
-})
+get('/', \-> view.Root.render(Writer))
+
 get('/jobs/:id/elapsed_time', \-> {
   Layout = null
   return controller.JobController.getUUIDElapsedTime(Params['id'])

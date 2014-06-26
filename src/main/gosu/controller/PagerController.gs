@@ -9,7 +9,7 @@ class PagerController {
 
   static function getPager(type : String, page : long) : Pager<Job> {
     var pager : Pager<Job>
-    if (type == "complete") {
+    if (type == "completed") {
       pager = new Pager<Job>(Job.CompleteJobs,10,page)
     } else if (type == "running") {
       pager = new Pager<Job>(Job.ActiveJobs,10,page)

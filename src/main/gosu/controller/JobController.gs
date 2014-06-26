@@ -10,8 +10,10 @@ uses view.FailedJobView
 uses view.JobStatusFeedList
 uses jobs.TestJob
 uses util.GenerateJobFormParser
+uses sparkgs.IResourceController
+uses view.JobTable
 
-class JobController implements IHasRequestContext {
+class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
 
@@ -77,8 +79,8 @@ class JobController implements IHasRequestContext {
     return JobStatusFeedList.renderToString(Job.newUp(UUID, null))
   }
 
-  static function renderJobInfo(UUID : String) : String {
-    var job = Job.newUp(UUID,null)
+  static function renderJobInfo(UUID: String): String {
+    var job = Job.newUp(UUID, null)
     var response = ""
     var failed = job.Failed
     if (job == null) return "Oops, this appears to be an invalid UUID"
@@ -89,4 +91,50 @@ class JobController implements IHasRequestContext {
     return response
   }
 
+  function progress(UUID : String) {
+    Writer.append(Job.getUUIDProgress(UUID))
+  }
+
+  function generateProgress() {
+    Writer.append(Job.getUUIDProgress(UUId))
+  }
+
+  function generateComplete() {
+    if (Job.getUUIDProgress(UUId) == "100%") {
+      Writer.append('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
+    } else {
+      Writer.append('<div></div>')
+    }
+  }
+
+  override function index() {
+    var status = Params['status']
+    var page = Params['page']?.toLong()
+    if (status == null) {
+      Writer.append(JobTable.renderToString("All Jobs", "all", PagerController.getPager("all",page)))
+    } else if (status == "completed") {
+      Writer.append(JobTable.renderToString("Completed Jobs", "completed", PagerController.getPager("completed",page)))
+    } else if (status == "running") {
+      Writer.append(JobTable.renderToString("Running Jobs", "running", PagerController.getPager("running",page)))
+    } else if (status == "failed") {
+      Writer.append(JobTable.renderToString("Failed Jobs", "failed", PagerController.getPager("failed",page)))
+    } else {
+      Writer.append(JobTable.renderToString("Cancelled Jobs", "cancelled", PagerController.getPager("cancelled",page)))
+    }
+  }
+
+  override function _new() {
+  }
+
+  override function create() {
+  }
+
+  override function show(id: String) {
+  }
+
+  override function edit(id: String) {
+  }
+
+  override function update(id: String) {
+  }
 }

@@ -42,7 +42,7 @@
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/jobs/all/1">Jobs</a>
+              <a href="/jobs">Jobs</a>
             </li>
             <li>
               <a href="/companies/1">Data Generation</a>

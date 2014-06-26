@@ -17,7 +17,8 @@ class Pager<T> {
     copy = i.copy()
     pageSize = size
     jobs = {}
-    page = (validPage(p)) ? p : lastPage()
+    if (page < 1) page = 1
+    else page = (validPage(p)) ? p : lastPage()
   }
 
   final property get Page() : List<T> {

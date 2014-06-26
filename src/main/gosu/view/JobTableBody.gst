@@ -50,7 +50,7 @@
           <div class="progress progress-striped active">
           <% } %>
             <div class="progress-bar"
-              ic-style-src="width:/jobs/${job.UUId}/percent_done"
+              ic-style-src="width:/jobs/${job.UUId}/progress"
               ic-poll="1s" style="width:${jobs.Job.getUUIDProgress(job.UUId)}">
            </div>
         </div>
