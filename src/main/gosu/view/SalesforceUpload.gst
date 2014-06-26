@@ -6,9 +6,7 @@
 
 <p>This page is ugly, I know. Will clean up as soon as salesforce works</p>
 
-<form action="/jobs/action/start/salesforce_export/0000/${code}">
-  <input type="submit" value="TEST">
-</form>
+<a class="btn" href="/jobs/action/start/salesforce_export/0000/${code}">Test!</a>
 
 
 <% for(recommendationUUID in jobs.Job.CompleteRecommendJobs) { %>
