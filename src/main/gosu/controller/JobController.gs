@@ -115,6 +115,7 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   override function show(id: String) {
+    print(id)
     var job = Job.newUp(id, null)
     var response = ""
     var failed = job.Failed
