@@ -1,35 +1,29 @@
 package controller
 
-uses view.JobTable
 uses view.JobTableBody
+uses sparkgs.IResourceController
+uses sparkgs.util.IHasRequestContext
 
-class TableController {
+class TableController implements IResourceController, IHasRequestContext {
 
-  static function getAllTableBody(page : long) : String {
-    var pager = controller.PagerController.getPager("all",page)
-    return JobTableBody.renderToString("all", pager)
+  override function index() {
+    var status = Params['status'] ?: "all"
+    var page = Params['page'] == null ? 1 : Params['page'].toLong()
+    Writer.append(JobTableBody.renderToString(status, PagerController.getPager(status,page)))
   }
 
-  static function getCompleteTableBody(page : long) : String {
-    var pager = controller.PagerController.getPager("complete",page)
-    return JobTableBody.renderToString("complete", pager)
+  override function _new() {
   }
 
-  static function getCancelledTableBody(page : long) : String {
-    var pager = controller.PagerController.getPager("cancelled",page)
-    return JobTableBody.renderToString("cancelled", pager)
+  override function create() {
   }
 
-  static function getRunningTableBody(page : long) : String {
-    var pager = controller.PagerController.getPager("running",page)
-    return JobTableBody.renderToString("running", pager)
+  override function show(id: String) {
   }
 
-  static function getFailedTableBody(page : long) : String {
-    var pager = controller.PagerController.getPager("failed",page)
-    return JobTableBody.renderToString("failed", pager)
+  override function edit(id: String) {
   }
 
-
-
+  override function update(id: String) {
+  }
 }

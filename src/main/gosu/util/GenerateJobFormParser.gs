@@ -6,6 +6,7 @@ uses java.util.UUID
 uses datagen.GenerateRandom
 uses jobs.GenerateJob
 uses datagen.GenerateTest
+uses java.net.URLDecoder
 
 class GenerateJobFormParser {
 
@@ -22,7 +23,8 @@ class GenerateJobFormParser {
 
 
   function startJob() : jobs.Job {
-    var name = formMap["dataSetName"]?.replaceAll("\\+", " ") ?: UUID.randomUUID().toString()
+    var name = formMap["dataSetName"] ?: UUID.randomUUID().toString()
+    name = URLDecoder.decode(name, "UTC-8")
     if(formMap["generateStrategy"] == "Reach") {
       new GenerateTest().generateTest('dataReach.json', 'Reach', 40000)
       var job = new GenerateJob('dataReach.json', name).start()
