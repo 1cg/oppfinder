@@ -2,7 +2,7 @@ uses controller.JobController
 
 extends sparkgs.SparkFile
 
-Layout = view.Layout
+//Layout = view.Layout
 StaticFiles = '/public'
 
 /* Salesforce authenticates then goes back to this Callback URL with a ?code= param. */
@@ -16,9 +16,10 @@ post('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobContr
 resource("/jobs", new JobController())
 
 /* Getters for job information */
-get('/', \-> view.Root.render(Writer))
+get('/', \-> {Layout = view.Layout
+              view.Root.render(Writer) })
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
-  return controller.PagerController.renderPager(Params['type'], Params['page'].toLong())})
+  return controller.PagerController.renderPager(Params['type'],controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/companies/table/:page', \-> {
   Layout = null
@@ -28,7 +29,6 @@ get('/companies/*', \-> view.Companies.renderToString(1))
 
 
 /* Start Jobs */
-post('/jobs/action/refresh', \-> {Layout = null})
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
 get("*", \-> view.BadPath.renderToString(Request.PathInfo))

@@ -9,21 +9,25 @@ class Pager<T> {
   var iterate : SkipIterator<T>
   var copy : SkipIterator<T>
   var jobs : List<T>
-  var page : long as Current
+  var _page : long as Current
   var processed : boolean
 
-  construct(i : SkipIterator<T>, size : long, p : long) {
+  construct(i : SkipIterator<T>, size : long, page : long) {
     iterate = i
     copy = i.copy()
     pageSize = size
     jobs = {}
-    if (page < 1) page = 1
-    else page = (validPage(p)) ? p : lastPage()
+    if (page < 1) {
+      _page = 1
+    }
+    else {
+      _page = (validPage(page)) ? page : lastPage()
+    }
   }
 
   final property get Page() : List<T> {
-    if (processed || page == 0) return jobs
-    iterate.skip((page -1) * pageSize)
+    if (processed || _page == 0) return jobs
+    iterate.skip((_page -1) * pageSize)
     for (i in 0..|pageSize) {
       if (!iterate.hasNext()) {
         break
@@ -34,17 +38,17 @@ class Pager<T> {
     return jobs
   }
 
-  final function validPage(p : long) : boolean {
-    if (p < 1) return false
+  final function validPage(page : long) : boolean {
+    if (page < 1) return false
     var tmp = copy.copy()
-    tmp.skip((p - 1) * pageSize)
+    tmp.skip((page - 1) * pageSize)
     return tmp.hasNext()
   }
 
-  final function checkStatus(p : long) : String {
-    if (p == page) {
+  final function checkStatus(page : long) : String {
+    if (_page == page) {
       return "active"
-    } else if (validPage(p)) {
+    } else if (validPage(page)) {
       return ""
     }
     return "disabled"
