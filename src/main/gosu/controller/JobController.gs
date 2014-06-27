@@ -13,6 +13,7 @@ uses util.GenerateJobFormParser
 uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
+uses view.Layout
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -24,11 +25,11 @@ class JobController implements IHasRequestContext, IResourceController {
     Writer.append(JobTableBody.renderToString(status, PagerController.getPager(status,page)))
   }
 
-  function generateProgress(id : String) : String {
+  function generateProgress() : String {
     return Job.getUUIDProgress(UUId)
   }
 
-  function generateComplete(id : String) {
+  function generateComplete() {
     if (Job.getUUIDProgress(UUId) == "100%") {
       Writer.append('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
     } else {
@@ -105,7 +106,8 @@ class JobController implements IHasRequestContext, IResourceController {
   override function index() {
     var status = Params['status'] ?: "all"
     var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    Writer.append(JobTable.renderToString(status, PagerController.getPager(status, page)))
+    var pager = PagerController.getPager(status, page)
+    Writer.append(Layout.renderToString(JobTable.renderToString(status, PagerController.getPager(status, page))))
   }
 
   override function _new() {
@@ -115,7 +117,6 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   override function show(id: String) {
-    print(id)
     var job = Job.newUp(id, null)
     var response = ""
     var failed = job.Failed
