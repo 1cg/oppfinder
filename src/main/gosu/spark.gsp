@@ -7,7 +7,7 @@ StaticFiles = '/public'
 
 /* Salesforce authenticates then goes back to this Callback URL with a ?code= param. */
 get('/_auth', \-> view.SalesforceUpload.renderToString(Params['code']))
-post('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobController.startSalesforceAuthJob(Params['uuid'],Params['code']))
+get('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobController.startSalesforceAuthJob(Params['uuid'],Params['code']))
 
 
 /* Set TableController() as a resource first so that it will catch all associated
