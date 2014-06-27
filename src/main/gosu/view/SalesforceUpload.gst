@@ -5,7 +5,7 @@
 <!-- Be able to pass a UUID (for the recommendation job) and the code parameter -->
 
 <p>This page is ugly, I know. Will clean up as soon as salesforce works</p>
-<% var code1 = code.substring(0,code.length-2)%>
+<% var code1 = code.substring(0,code.length)%>
 
 <a class="btn" href="/jobs/action/start/salesforce_export/0000/${code1}">Test!</a>
 
