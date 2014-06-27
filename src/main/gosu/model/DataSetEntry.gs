@@ -33,7 +33,7 @@ class DataSetEntry {
 
   static function AllDataSets() : List<String> {
     var ds = new DataSet(MASTER_DATA_SET).find()
-    var returnList = new List<String>()
+    var returnList : List<String> = {}
     while (ds.hasNext()) {
       returnList.add(ds.next().get('name') as String)
     }
