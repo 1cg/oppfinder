@@ -58,11 +58,11 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "Managed to execute authorization post... Starting Opportunity request!!!"
 
     /* Receive response with access token. Access token must be used for all following requests */
-    var responseBody = post.getResponseBodyAsString()
+    var authResponse = post.getResponseBodyAsString()
 
-    this.StatusFeed = "ResponseBody (provides Access Token and Refresh Token): "+responseBody
+    this.StatusFeed = "ResponseBody (provides Access Token and Refresh Token): "+authResponse
 
-    var json = JSONValue.parse(responseBody) as JSONObject
+    var json = JSONValue.parse(authResponse) as JSONObject
 
     this.StatusFeed = "ResponseBody (JSONized): "+json.toString()
     var accessToken = json.get("access_token") as String
@@ -74,12 +74,29 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "instance url = "+instanceUrl
 
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v26.0/sobjects/Opportunity")
+    var pm = new PostMethod(instanceUrl+"/services/data/v31.0/sobjects/Opportunity")
     pm.setRequestHeader("Authorization", "Bearer "+accessToken)
+    pm.setRequestHeader("X-PrettyPrint", "1")
     pm.setRequestHeader("Content-Type", "application/json")
     pm.setRequestHeader("X-HTTP-Method-Override", "PUT")
+    var company = "CoolCompany"
+    var policy = "CoolPolicy"
+    var value = "4.0"
+    var nameValuePair = new NameValuePair()
+    nameValuePair.setName("data")
+    nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Qualification", "Probability":"10.0", "CloseDate":"2014-07-07"}')
+    pm.addParameter(nameValuePair)
 
 
+    this.StatusFeed = "About to execute Post method: "+pm.toString()
+    this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
+    this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
+    this.StatusFeed = "pm data: "+pm.getParameter("data")
+
+
+
+    httpClient.executeMethod(pm)
+    this.StatusFeed = "Finished uploading to Salesforce"
 
     /* API ACCESS */
     /*
@@ -90,23 +107,6 @@ class SalesforceAuthJob extends Job {
     pool.configureOrg(orgId, host, accessToken)
     var connection = pool.getRestConnection(orgId)
 */
-    var company = "CoolCompany"
-    var policy = "CoolPolicy"
-    var value = "4.0"
-    var nameValuePair = new NameValuePair()
-    nameValuePair.setName("data")
-    nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
-    pm.addParameter(nameValuePair)
-
-    this.StatusFeed = "About to execute Post method: "+pm.toString()
-    this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
-    this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
-
-
-
-    httpClient.executeMethod(pm)
-    this.StatusFeed = "Finished uploading to Salesforce"
-
     /*if(false) {
       var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
       for(result in recommendations) {
