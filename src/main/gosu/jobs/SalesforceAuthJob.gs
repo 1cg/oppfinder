@@ -79,25 +79,23 @@ class SalesforceAuthJob extends Job {
     httpClient.executeMethod(pm)
     this.StatusFeed = "Started uploading to Salesforce"
 
-    if(true) {
-
-
-    var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
-    for(result in recommendations) {
-      var company1 = result.get('Company') as String
-      var policy1 = result.get('Policy') as String
-      var value1 = result.get('Value') as String
-      var nameValuePair1 = new NameValuePair()
-      nameValuePair.setName("data")
-      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company1+', '+policy1+'", "StageName":"Prospecting", "Probability":"'+value1+'"}')
-      pm.addParameter(nameValuePair)
-      httpClient.executeMethod(pm)
-    }
+    /*if(false) {
+      var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
+      for(result in recommendations) {
+        var company1 = result.get('Company') as String
+        var policy1 = result.get('Policy') as String
+        var value1 = result.get('Value') as String
+        var nameValuePair1 = new NameValuePair()
+        nameValuePair.setName("data")
+        nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company1+', '+policy1+'", "StageName":"Prospecting", "Probability":"'+value1+'"}')
+        pm.addParameter(nameValuePair)
+        httpClient.executeMethod(pm)
+      }
+      }
+*/
 
     this.StatusFeed = "Done"
     this.Progress = 100
-
-    }
 
   }
 
