@@ -74,7 +74,7 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "instance url = "+instanceUrl
 
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v31.0/sobjects/Opportunity")
+    var pm = new PostMethod(instanceUrl+"/services/data/v31.0/sobjects/Opportunity/")
     pm.setRequestHeader("Authorization", "Bearer "+accessToken)
     pm.setRequestHeader("X-PrettyPrint", "1")
     pm.setRequestHeader("Content-Type", "application/json")
@@ -98,6 +98,9 @@ class SalesforceAuthJob extends Job {
     print("yo")
 
     httpClient.executeMethod(pm)
+
+    this.StatusFeed = "RESPONSE: " + pm.getResponseBodyAsString()
+
     this.StatusFeed = "Finished uploading to Salesforce"
 
     /* API ACCESS */
