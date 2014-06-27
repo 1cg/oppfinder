@@ -51,4 +51,4 @@
   <a href="/companies/">Generate Or Import DataSet</a>
   </div>
 </div>
-<% new controller.JobController().index() %>
+${view.JobTable.renderToString("all", controller.PagerController.getPager("all", 1))}

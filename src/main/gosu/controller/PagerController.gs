@@ -8,19 +8,17 @@ uses model.DataSetEntry
 class PagerController {
 
   static function getPager(type : String, page : long) : Pager<Job> {
-    var pager : Pager<Job>
     if (type == "completed") {
-      pager = new Pager<Job>(Job.CompleteJobs,10,page)
+      return new Pager<Job>(Job.CompleteJobs,10,page)
     } else if (type == "running") {
-      pager = new Pager<Job>(Job.ActiveJobs,10,page)
+      return new Pager<Job>(Job.ActiveJobs,10,page)
     } else if (type == "failed") {
-      pager = new Pager<Job>(Job.FailedJobs,10,page)
+      return new Pager<Job>(Job.FailedJobs,10,page)
     } else if (type == "all") {
-      pager = new Pager<Job>(Job.AllJobs,10,page)
+      return new Pager<Job>(Job.AllJobs,10,page)
     }  else {
-      pager = new Pager<Job>(Job.CancelledJobs,10,page)
+      return new Pager<Job>(Job.CancelledJobs,10,page)
     }
-    return pager
   }
 
   static function getCompanyPager(page : long, collection : String = null) : Pager<Map<Object,Object>> {
@@ -31,8 +29,7 @@ class PagerController {
     }
   }
 
-  static function renderPager(type : String, page : long) : String {
-    var pager = getPager(type,page)
-    return widgets.PagerWidget.renderWidget(pager, '/jobs/' + type + '/', type)
+  static function renderPager(type : String, pager : Pager) : String {
+    return widgets.PagerWidget.renderWidget(pager, '/jobs?status=' + type + '&page=', type)
   }
 }

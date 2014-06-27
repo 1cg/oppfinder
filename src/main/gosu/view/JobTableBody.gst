@@ -1,5 +1,5 @@
 <%@ params(type: String, pager: model.Pager<jobs.Job>) %>
-<div ic-src="/jobs/table?status=${type}&page=${pager.Current}" ic-poll="3s" ic-transition="none" ic-deps="/jobs/action">
+<div ic-src="/jobs/table?status=${type}&page=${pager.Current}" ic-poll="10s" ic-transition="none" ic-deps="/jobs/action">
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -72,6 +72,5 @@
     } %>
     </tbody>
   </table>
-  <button ic-post-to="/jobs/table/${type}/${pager.Current}" class="btn btn-primary btn-md" role="button"><b>Refresh</b></button>
-  ${controller.PagerController.renderPager(type,pager.Current)}
+  ${controller.PagerController.renderPager(type,pager)}
 </div>

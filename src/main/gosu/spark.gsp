@@ -2,19 +2,16 @@ uses controller.JobController
 
 extends sparkgs.SparkFile
 
-Layout = view.Layout
+//Layout = view.Layout
 StaticFiles = '/public'
 
-
-/* Set TableController() as a resource first so that it will catch all associated
-*paths before JobController()
- */
 resource("/jobs", new JobController())
 
 /* Getters for job information */
-get('/', \-> view.Root.render(Writer))
+get('/', \-> {Layout = view.Layout
+              view.Root.render(Writer) })
 get('/jobs/table/pager/:type/:page', \-> { Layout = null
-  return controller.PagerController.renderPager(Params['type'], Params['page'].toLong())})
+  return controller.PagerController.renderPager(Params['type'],controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/companies/table/:page', \-> {
   Layout = null
@@ -27,7 +24,6 @@ post('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobContr
 
 
 /* Start Jobs */
-post('/jobs/action/refresh', \-> {Layout = null})
 post('/jobs/table/:type/:page', \ -> {Layout = null})
 
 get("*", \-> view.BadPath.renderToString(Request.PathInfo))
