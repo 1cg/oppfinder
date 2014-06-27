@@ -69,29 +69,27 @@ class SalesforceAuthJob extends Job {
     pool.configureOrg(orgId, host, accessToken)
     var connection = pool.getRestConnection(orgId)
 */
-
+    var company = "CoolCompany"
+    var policy = "CoolPolicy"
+    var value = "4.0"
+    var nameValuePair = new NameValuePair()
+    nameValuePair.setName("data")
+    nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
+    pm.addParameter(nameValuePair)
+    httpClient.executeMethod(pm)
     this.StatusFeed = "Started uploading to Salesforce"
 
-    if(search('AnalysisToUpload') as String == "0000") {
-      var company = "CoolCompany"
-      var policy = "CoolPolicy"
-      var value = "4.0"
-      var nameValuePair = new NameValuePair()
-      nameValuePair.setName("data")
-      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
-      pm.addParameter(nameValuePair)
-      httpClient.executeMethod(pm)
-    } else {
+    if(true) {
 
 
     var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
     for(result in recommendations) {
-      var company = result.get('Company') as String
-      var policy = result.get('Policy') as String
-      var value = result.get('Value') as String
-      var nameValuePair = new NameValuePair()
+      var company1 = result.get('Company') as String
+      var policy1 = result.get('Policy') as String
+      var value1 = result.get('Value') as String
+      var nameValuePair1 = new NameValuePair()
       nameValuePair.setName("data")
-      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
+      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company1+', '+policy1+'", "StageName":"Prospecting", "Probability":"'+value1+'"}')
       pm.addParameter(nameValuePair)
       httpClient.executeMethod(pm)
     }
