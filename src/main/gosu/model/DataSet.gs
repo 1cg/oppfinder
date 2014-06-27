@@ -28,7 +28,7 @@ class DataSet {
   /* Automatically sorts from oldest to newest */
   function find() : TransformationIterator<Map<Object,Object>> {
     return new TransformationIterator<Map<Object,Object>>(
-        _collection.find().sort(new BasicDBObject({'_id' -> -1})).sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
+        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
   }
 
   function findOne(ref : Map<Object, Object>) : Map<Object, Object> {

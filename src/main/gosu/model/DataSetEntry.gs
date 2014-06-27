@@ -8,7 +8,6 @@ class DataSetEntry {
 
   public static var REGIONCOORDINATES : String = "regionCoordinates"
   public static var MASTER_DATA_SET : String = "masterDataSet" // DataSet of DataSets to refer to
-  public static var CURRENT_DATA_SET_REF : String = "currentDataSetReference" // Stored in Master. Pls don't name any datasets with this string
   var myDataSet : DataSet
   var info : Map<Object, Object>
   var collection : String
@@ -33,29 +32,18 @@ class DataSetEntry {
 
   static function AllDataSets() : List<String> {
     var ds = new DataSet(MASTER_DATA_SET).find()
-    var returnList : List<String> = {}
-    while (ds.hasNext()) {
-      returnList.add(ds.next().get('name') as String)
-    }
-    return returnList
+    return ds.toList().map(\ o -> o['name'] as String)
   }
 
   static property get MostRecentDataSet() : SkipIterator<Map> {
     var ds = new DataSet(MASTER_DATA_SET).find()
-    if (ds.hasNext()) {
-      return All(ds.next().get('name') as String)
-    }
-    return null
+    return ds.hasNext() ? All(ds.next().get('name') as String) : null
   }
 
   // Saves this company info into the mongo dataset
   function save() {
     myDataSet.insert(info)
     return
-  }
-
-  static function deleteAllEntries(dataSet : DataSet) {
-    dataSet.drop()
   }
 
   // put and get are for the child classes to update info

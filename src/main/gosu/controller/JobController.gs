@@ -89,7 +89,7 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function startRecommend() {
-    new RecommendJob(Request.Body.toString().split("=")[1]).start()
+    new RecommendJob(Params['collections']).start()
     return
   }
 

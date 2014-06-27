@@ -28,7 +28,7 @@
     ${view.ProgressView.renderToString()}
   </div>
 </div>
-<div ic-src="/companies/table/${page}" ic-deps="/jobs/action">
+<div ic-src="/companies/table/${page}" ic-deps="/jobs">
   ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
 </div>
 

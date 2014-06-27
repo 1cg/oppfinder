@@ -19,7 +19,7 @@
           Progress
         </th>
         <th>
-          Actionssta
+          Actions
         </t>
       </tr>
     </thead>

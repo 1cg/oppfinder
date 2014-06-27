@@ -14,16 +14,16 @@
     </tr>
   </thead>
   <tbody>
-  <% for (result in job.ResultsData.find()) {%>
+  <% for (result in model.Results.getResults(job.UUId)) {%>
     <tr>
       <td>
-        ${result.get('Company')}
+        ${result['Company']}
       </td>
       <td>
-        ${result.get('Policy')}
+        ${result['Policy']}
       </td>
       <td>
-        ${result.get('Value')}
+        ${result['Value']}
       </td>
     </tr>
   <% } %>
