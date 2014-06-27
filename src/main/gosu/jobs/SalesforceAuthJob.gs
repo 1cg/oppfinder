@@ -104,10 +104,9 @@ class SalesforceAuthJob extends Job {
 
     pm.setRequestBody(nvpairList)
 */
-    this.StatusFeed = "About to execute Post method: "+pm.toString()
-    this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
-    this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
-    this.StatusFeed = "pm data: "+pm.getParameter("data").Value
+  //  this.StatusFeed = "About to execute Post method: "+pm.toString()
+  //  this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
+  //  this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
 
     print("yo")
 
