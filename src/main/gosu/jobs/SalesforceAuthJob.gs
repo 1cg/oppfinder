@@ -8,6 +8,7 @@ uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
 
 uses org.apache.commons.httpclient.NameValuePair
+uses org.apache.commons.httpclient.methods.StringRequestEntity
 
 class SalesforceAuthJob extends Job {
 
@@ -73,10 +74,23 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "issued at = "+issuedAt
     this.StatusFeed = "instance url = "+instanceUrl
 
+///////// WHAT THE FUUUUUUUUUUUU HOW ABOUT WE MAKE AN OPPORTUNITY PLZZZ
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v31.0/sobjects/Opportunity/")
-    pm.setRequestHeader("Authorization", "Bearer "+accessToken)
-    pm.setRequestHeader("X-PrettyPrint", "1")
+    var opp = new JSONObject()
+    opp.put("AccountId", "001o0000003Jdkf")
+    opp.put("Name","Cool Company Bro")
+    opp.put("StageName","Qualification")
+    opp.put("Probability", "10.0")
+    opp.put("CloseDate","2014-07-07")
+
+    var pm = new PostMethod(instanceUrl+"/services/data/v31.0/sobjects/Opportunity")
+
+    pm.setRequestHeader("Authorization", "OAuth "+accessToken)
+    pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
+
+    httpClient.executeMethod(pm)
+/*
+    pm.setRequestHeader("Authorization", "OAuth "+accessToken)
     pm.setRequestHeader("Content-Type", "application/json")
     pm.setRequestHeader("X-HTTP-Method-Override", "PUT")
     var company = "CoolCompany"
@@ -89,7 +103,7 @@ class SalesforceAuthJob extends Job {
     nvpairList[0] = nameValuePair
 
     pm.setRequestBody(nvpairList)
-
+*/
     this.StatusFeed = "About to execute Post method: "+pm.toString()
     this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
     this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
@@ -97,7 +111,7 @@ class SalesforceAuthJob extends Job {
 
     print("yo")
 
-    httpClient.executeMethod(pm)
+   // httpClient.executeMethod(pm)
 
     this.StatusFeed = "RESPONSE: " + pm.getResponseBodyAsString()
 
