@@ -36,6 +36,8 @@ class SalesforceAuthJob extends Job {
     var environment = "https://login.salesforce.com/services/oauth2/token"
     var code = search('AuthCode') as String
 
+    this.StatusFeed = "Auth Code: "+code
+
     var httpClient = new HttpClient();
     var post = new PostMethod(environment);
     post.addParameter("grant_type","authorization_code");
@@ -46,8 +48,12 @@ class SalesforceAuthJob extends Job {
     post.addParameter("code",code);
     httpClient.executeMethod(post)
 
+    this.StatusFeed = "Authorization HTTP Post: "+post.toString()
+    this.StatusFeed = "Managed to execute authorization post... Starting Opportunity request!!!"
+
     /* Receive response with access token. Access token must be used for all following requests */
     var responseBody = post.getResponseBodyAsString()
+    this.StatusFeed = "ResponseBody: "+responseBody
     var json = JSONValue.parse(responseBody) as JSONObject
     var accessToken = json.get("access_token") as String
     var issuedAt = json.get("issued_at") as String
@@ -76,8 +82,10 @@ class SalesforceAuthJob extends Job {
     nameValuePair.setName("data")
     nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
     pm.addParameter(nameValuePair)
+    this.StatusFeed = "About to execute Post method: "+pm.toString()
+
     httpClient.executeMethod(pm)
-    this.StatusFeed = "Started uploading to Salesforce"
+    this.StatusFeed = "Finished uploading to Salesforce"
 
     /*if(false) {
       var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
