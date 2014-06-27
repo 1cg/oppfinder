@@ -29,27 +29,37 @@ class SalesforceAuthJob extends Job {
     /* This code receives the the authorization code from the authorization endpoint, then requests for the access
      * token with which to access protected salesforce resources. */
 
-    // OAUTH - Receiving the access token
+    /*
+     * You need to use the correct Salesforce OAuth endpoint when issuing authentication requests in your application.
+     * The primary OAuth endpoints are:
+     * For authorization: https://login.salesforce.com/services/oauth2/authorize
+     * For token requests: https://login.salesforce.com/services/oauth2/token
+     * For revoking OAuth tokens: https://login.salesforce.com/services/oauth2/revoke
+     */
+
+
+    // OAUTH - Receiving the access token (STEP 4)
     var clientId = "3MVG9xOCXq4ID1uHgL9H.cY5bCyugh.IQXPoeCKgVGLWwC3NvV3Zqj08_KIEEViJmJ.i7hDLkO89Q20ykTyu_"
     var clientSecret = "2369090302549152630"
-    var redirectUri = "https://gosuroku.herokuapp.com/_auth_access_token" //may have to change this for token as opposed to code
-    var environment = "https://login.salesforce.com/services/oauth2/token"
     var code = search('AuthCode') as String
 
     this.StatusFeed = "Auth Code: "+code
 
     var httpClient = new HttpClient();
-    var post = new PostMethod(environment);
+    var post = new PostMethod("https://login.salesforce.com/services/oauth2/token");
     post.addParameter("grant_type","authorization_code");
     /** For session ID instead of OAuth 2.0, use "grant_type", "password" **/
     post.addParameter("client_id",clientId);
     post.addParameter("client_secret",clientSecret);
-    post.addParameter("redirect_uri",redirectUri);
+    post.addParameter("redirect_uri", "https://gosuroku.herokuapp.com/_auth");
     post.addParameter("code",code);
     httpClient.executeMethod(post)
 
-    this.StatusFeed = "Authorization HTTP Post: "+post.toString()
     this.StatusFeed = "Managed to execute authorization post... Starting Opportunity request!!!"
+
+
+    ////// 10:25 AM, Debug is saying that ResponseBody responded with error description
+
 
     /* Receive response with access token. Access token must be used for all following requests */
     var responseBody = post.getResponseBodyAsString()
