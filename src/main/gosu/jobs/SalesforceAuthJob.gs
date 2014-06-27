@@ -57,17 +57,22 @@ class SalesforceAuthJob extends Job {
 
     this.StatusFeed = "Managed to execute authorization post... Starting Opportunity request!!!"
 
-
-    ////// 10:25 AM, Debug is saying that ResponseBody responded with error description
-
-
     /* Receive response with access token. Access token must be used for all following requests */
     var responseBody = post.getResponseBodyAsString()
-    this.StatusFeed = "ResponseBody: "+responseBody
+
+    this.StatusFeed = "ResponseBody (provides Access Token and Refresh Token): "+responseBody
+
     var json = JSONValue.parse(responseBody) as JSONObject
+
+    this.StatusFeed = "ResponseBody (JSONized): "+json.toString()
     var accessToken = json.get("access_token") as String
     var issuedAt = json.get("issued_at") as String
     var instanceUrl = json.get("instance_url") as String
+
+    this.StatusFeed = "access token = "+accessToken
+    this.StatusFeed = "issued at = "+issuedAt
+    this.StatusFeed = "instance url = "+instanceUrl
+
 
     var pm = new PostMethod(instanceUrl+"/services/data/v26.0/sobjects/Opportunity")
     pm.setRequestHeader("Authorization", "Bearer "+accessToken)
@@ -92,7 +97,12 @@ class SalesforceAuthJob extends Job {
     nameValuePair.setName("data")
     nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Prospecting", "Probability":"'+value+'"}')
     pm.addParameter(nameValuePair)
+
     this.StatusFeed = "About to execute Post method: "+pm.toString()
+    this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
+    this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
+
+
 
     httpClient.executeMethod(pm)
     this.StatusFeed = "Finished uploading to Salesforce"
