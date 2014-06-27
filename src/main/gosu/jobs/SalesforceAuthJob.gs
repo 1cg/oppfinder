@@ -83,7 +83,7 @@ class SalesforceAuthJob extends Job {
   //  opp.put("Probability", "10.0")
   //  opp.put("CloseDate","2014-07-07")
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v31.0/sobjects/Account/")
+    var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Account/")
 
     pm.setRequestHeader("Authorization", "OAuth "+accessToken)
     pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
