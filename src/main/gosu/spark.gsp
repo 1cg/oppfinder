@@ -4,6 +4,11 @@ extends sparkgs.SparkFile
 
 StaticFiles = '/public'
 
+//TODO Matt - yank this out, just here as an example
+Layout = view.Layout
+get("/foo", \-> "foo")
+get("/bar", \-> raw("bar"))
+
 /* Salesforce authenticates then goes back to this Callback URL with a ?code= param. */
 get('/_auth', \-> view.SalesforceUpload.renderToString(Params['code']))
 get('/jobs/action/start/salesforce_export/:uuid/:code', \-> controller.JobController.startSalesforceAuthJob(Params['uuid'],Params['code']))
