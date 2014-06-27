@@ -85,15 +85,17 @@ class SalesforceAuthJob extends Job {
     var nameValuePair = new NameValuePair()
     nameValuePair.setName("data")
     nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Qualification", "Probability":"10.0", "CloseDate":"2014-07-07"}')
-    pm.addParameter(nameValuePair)
+    var nvpairList = new NameValuePair[1]
+    nvpairList[0] = nameValuePair
 
+    pm.setRequestBody(nvpairList)
 
     this.StatusFeed = "About to execute Post method: "+pm.toString()
     this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
     this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
-    this.StatusFeed = "pm data: "+pm.getParameter("data")
+    this.StatusFeed = "pm data: "+pm.getParameter("data").Value
 
-
+    print("yo")
 
     httpClient.executeMethod(pm)
     this.StatusFeed = "Finished uploading to Salesforce"
