@@ -6,6 +6,7 @@ uses model.DataSet
 uses java.lang.Float
 uses util.MahoutUtil
 uses java.util.Arrays
+uses model.Results
 
 class RecommendJob extends Job {
 
@@ -22,6 +23,7 @@ class RecommendJob extends Job {
 
   construct(dataSetName : String) {
     super()
+    print(dataSetName)
     update({'DataSetToAnalyze' -> dataSetName})
   }
 
@@ -89,17 +91,8 @@ class RecommendJob extends Job {
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    if (finalResults.size() > 0) {
-      var ds = new DataSet('Results:'+UUId)
-      for (result in finalResults.reverse()) {
-       ds.insert(result)
-      } // We unbatched this guy to prevent a race condition.
-    }
-  }
-
-  property get ResultsData() : DataSet {
-    var ds = new DataSet('Results:'+UUId)
-    return ds
+    print(finalResults.size())
+    Results.addResults(UUId, finalResults.reverse())
   }
 
   /*
