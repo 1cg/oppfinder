@@ -8,9 +8,9 @@
 
 <a class="btn" href="/jobs/action/start/salesforce_export/0000/${code}">Test!</a>
 
-
+<% var code1 = code.substring(0,code.length-2)%>
 <% for(recommendationUUID in jobs.Job.CompleteRecommendJobs) { %>
-  <form action="/jobs/action/start/salesforce_export/${recommendationUUID}/${code}" >
+  <form action="/jobs/action/start/salesforce_export/${recommendationUUID}/${code1}" >
     <input type="submit" value="${recommendationUUID}">
   </form>
 <% } %>
