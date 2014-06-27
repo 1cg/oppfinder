@@ -128,14 +128,14 @@ class JobController implements IHasRequestContext, IResourceController {
     var response = ""
     var failed = job.Failed
     if (job == null) {
-      Writer.append("Oops, this appears to be an invalid UUID")
+      Writer.append(Layout.renderToString("Oops, this appears to be an invalid UUID"))
       return
     }
     response += JobDrillDown.renderToString(job)
     if (failed) response += FailedJobView.renderToString(job)
     response += JobStatusFeedList.renderToString(job)
     if (!failed) response += job.renderToString()
-    Writer.append(response)
+    Writer.append(Layout.renderToString(response))
   }
 
   override function edit(id: String) {
