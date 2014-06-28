@@ -1,5 +1,5 @@
 <%@ params(type: String, pager: model.Pager<jobs.Job>) %>
-<div ic-src="/jobs/table?status=${type}&page=${pager.Current}" ic-poll="10s" ic-transition="none" ic-deps="/jobs/action">
+<div ic-src="/jobs/table?status=${type}&page=${pager.Current}" ic-poll="3s" ic-transition="none" ic-deps="/jobs/action">
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -44,7 +44,7 @@
           ${job.Type}
         </td>
         <td>
-          <div ic-src="/jobs/${job.UUId}/getuuidelapsedtime" ic-transition="none" ic-poll="5s">${job.ElapsedTime}</div>
+          <div ic-src="/jobs/${job.UUId}/elapsed" ic-transition="none" ic-poll="5s">${job.ElapsedTime}</div>
         </td>
         <td>
           <% if (!job.Cancelled && job.Progress != 100) { %>

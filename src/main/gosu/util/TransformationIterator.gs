@@ -4,7 +4,7 @@ uses java.util.Iterator
 uses com.mongodb.DBCursor
 uses java.util.Map
 
-class TransformationIterator<T> implements Iterator<T>, SkipIterator<T> {
+class TransformationIterator<T> implements Iterator<T>, SkipIterable<T> {
 
   var cursor : DBCursor
   var transformation(elt: Map) : T
@@ -35,7 +35,7 @@ class TransformationIterator<T> implements Iterator<T>, SkipIterator<T> {
     cursor.skip(n as int)
   }
 
-  override function copy(): SkipIterator<T> {
+  override function copy(): SkipIterable<T> {
     return new TransformationIterator<T>(cursor.copy(), transformation)
   }
 
@@ -43,4 +43,8 @@ class TransformationIterator<T> implements Iterator<T>, SkipIterator<T> {
     return cursor.count()
   }
 
+  /*override function page(page: int): PagedData<T> {
+    return new PagedData<T>(page, cursor.skip(page < 1 ? 0 : (page -1) * PagedData.PAGE_SIZE).iterator())
+  }
+*/
 }

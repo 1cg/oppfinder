@@ -91,8 +91,7 @@ class RecommendJob extends Job {
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    print(finalResults.size())
-    Results.addResults(UUId, finalResults.reverse())
+    Results.addResults(UUId, finalResults)
   }
 
   /*
