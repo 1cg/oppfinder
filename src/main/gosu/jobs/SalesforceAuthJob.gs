@@ -9,6 +9,7 @@ uses org.json.simple.JSONValue
 
 uses org.apache.commons.httpclient.NameValuePair
 uses org.apache.commons.httpclient.methods.StringRequestEntity
+uses org.apache.commons.httpclient.methods.GetMethod
 
 class SalesforceAuthJob extends Job {
 
@@ -83,10 +84,15 @@ class SalesforceAuthJob extends Job {
   //  opp.put("Probability", "10.0")
   //  opp.put("CloseDate","2014-07-07")
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Account/")
-
+   // var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Account/")
+    var pm = new GetMethod(instanceUrl+"/services/data/v20.0/query")
     pm.setRequestHeader("Authorization", "OAuth "+accessToken)
-    pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
+   // pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
+
+    /** TESTING THINGS OUT WITH JUST GETTING QUERY TO WORK **/
+    var params = new NameValuePair[1]
+    params[0] = new NameValuePair("q","SELECT Name, Id from Account LIMIT 100")
+    pm.setQueryString(params)
 
     httpClient.executeMethod(pm)
 /*
