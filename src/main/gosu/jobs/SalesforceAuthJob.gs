@@ -6,11 +6,9 @@ uses org.apache.commons.httpclient.HttpClient
 uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
 uses org.apache.commons.httpclient.methods.StringRequestEntity
+uses java.lang.System
 
 class SalesforceAuthJob extends Job {
-  static final var ACCOUNT_ID = "001o0000003d6P4"
-  static final var CLIENT_ID = "3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg"
-  static final var CLIENT_SECRET = "5207032927813523155"
   static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/_auth"
 
   construct(data : Map<Object, Object>) {
@@ -28,15 +26,22 @@ class SalesforceAuthJob extends Job {
 
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
+
+    /* Not sure what's best practice for these variables; left it as environment variable for now. */
+    var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
+    var clientID = System.Env["SF_CLIENT_ID"]?.toString()
+    var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
+    var redirectURI = REDIRECT_URI
+
     /* This code receives the the authorization code from the authorization endpoint, then requests for the access
      * token to access protected salesforce resources. */
     var code = search('AuthCode') as String
     var httpClient = new HttpClient();
     var postAuth = new PostMethod("https://login.salesforce.com/services/oauth2/token");
     postAuth.addParameter("grant_type","authorization_code");
-    postAuth.addParameter("client_id",CLIENT_ID);
-    postAuth.addParameter("client_secret",CLIENT_SECRET);
-    postAuth.addParameter("redirect_uri", REDIRECT_URI);
+    postAuth.addParameter("client_id",clientID);
+    postAuth.addParameter("client_secret",clientSecret);
+    postAuth.addParameter("redirect_uri", redirectURI);
     postAuth.addParameter("code",code);
     httpClient.executeMethod(postAuth)
     this.StatusFeed = "Sent authorization request"
@@ -49,9 +54,11 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "Received response."
 
     // Create Opportunity from Company Information and send to Salesforce via POST method
+    /* This oppportunity is a proof of concept. When doing the real thing, needs to iterate over the
+     * 'Results:'+search('AnalysisToUpload') recommendation dataset. */
     var opp = new JSONObject()
     opp.put("Name","Testing Corp - ")
-    opp.put("AccountId", ACCOUNT_ID)
+    opp.put("AccountId", accountID)
     opp.put("StageName","Qualification")
     opp.put("Probability", "99.8")
     opp.put("CloseDate","2014-07-07")
@@ -64,7 +71,7 @@ class SalesforceAuthJob extends Job {
     json = JSONValue.parse(postOpp.getResponseBodyAsString()) as JSONObject
     var success = json.get("success") as Boolean
     if (success) {
-      this.StatusFeed = "Successful upload! Opportunities available at "+instanceUrl+ACCOUNT_ID
+      this.StatusFeed = "Successful upload! Opportunities available at "+instanceUrl+"/"+accountID
     } else {
       this.StatusFeed = "Failed upload. Response from Salesforce: "+json
     }

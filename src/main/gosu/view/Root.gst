@@ -25,6 +25,7 @@
       </button>
     </div>
   </form>
+  <!-- This login link with the client_id needs to get abstracted. -->
   <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2F%5Fauth&state=mystate">Authorize Salesforce</a> | |
   <a href="/companies/">Generate Or Import DataSet</a>
   </div>
