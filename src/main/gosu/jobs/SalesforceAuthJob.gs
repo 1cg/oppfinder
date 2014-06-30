@@ -10,6 +10,7 @@ uses org.json.simple.JSONValue
 uses org.apache.commons.httpclient.NameValuePair
 uses org.apache.commons.httpclient.methods.StringRequestEntity
 uses org.apache.commons.httpclient.methods.GetMethod
+uses javax.servlet.http.HttpServletResponse
 
 class SalesforceAuthJob extends Job {
 
@@ -61,16 +62,12 @@ class SalesforceAuthJob extends Job {
 
     /* Receive response with access token. Access token must be used for all following requests */
     var authResponse = post.getResponseBodyAsString()
-
     this.StatusFeed = "ResponseBody (provides Access Token and Refresh Token): "+authResponse
-
     var json = JSONValue.parse(authResponse) as JSONObject
-
     this.StatusFeed = "ResponseBody (JSONized): "+json.toString()
     var accessToken = json.get("access_token") as String
     var issuedAt = json.get("issued_at") as String
     var instanceUrl = json.get("instance_url") as String
-
     this.StatusFeed = "access token = "+accessToken
     this.StatusFeed = "issued at = "+issuedAt
     this.StatusFeed = "instance url = "+instanceUrl
@@ -86,7 +83,7 @@ class SalesforceAuthJob extends Job {
 
    // var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Account/")
     var pm = new GetMethod(instanceUrl+"/services/data/v20.0/query")
-    pm.setRequestHeader("Authorization", "OAuth "+accessToken)
+    pm.setRequestHeader("Authorization", "Bearer "+accessToken)
    // pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
 
     /** TESTING THINGS OUT WITH JUST GETTING QUERY TO WORK **/
