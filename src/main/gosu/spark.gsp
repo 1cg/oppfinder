@@ -27,5 +27,5 @@ get('/companies/table/:page', \-> {
   Layout = null
   return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong()))})
 
-
-get("*", \-> view.BadPath.renderToString(Request.PathInfo))
+// TODO cgross - upgrade sparkgs to latest sparkjava and implement exception handling
+//get("*", \-> view.BadPath.renderToString(Request.PathInfo))
