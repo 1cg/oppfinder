@@ -72,17 +72,15 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed = "issued at = "+issuedAt
     this.StatusFeed = "instance url = "+instanceUrl
 
-///////// WHAT THE FUUUUUUUUUUUU HOW ABOUT WE MAKE AN OPPORTUNITY PLZZZ
-
+    // Create Opportunity
     var opp = new JSONObject()
-  //  opp.put("AccountId", "001o0000003Jdkf")
+    opp.put("AccountId", "001o0000003d6P4")
     opp.put("Name","Cool Company Bro")
-  //  opp.put("StageName","Qualification")
-  //  opp.put("Probability", "10.0")
-  //  opp.put("CloseDate","2014-07-07")
+    opp.put("StageName","Qualification")
+    opp.put("Probability", "10.0")
+    opp.put("CloseDate","2014-07-07")
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Account/")
-   // var pm = new GetMethod(instanceUrl+"/services/data/v20.0/query")
+    var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Opportunity/")
     pm.setRequestHeader("Authorization", "Bearer "+accessToken)
     pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
 
