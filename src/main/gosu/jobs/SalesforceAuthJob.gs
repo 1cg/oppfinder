@@ -84,49 +84,19 @@ class SalesforceAuthJob extends Job {
     pm.setRequestHeader("Authorization", "Bearer "+accessToken)
     pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
 
-    /** TESTING THINGS OUT WITH JUST GETTING QUERY TO WORK **/
-    //var params = new NameValuePair[1]
-  //  params[0] = new NameValuePair("q","SELECT Name, Id from Account LIMIT 100")
-//    pm.setQueryString(params)
 
     httpClient.executeMethod(pm)
-/*
-    pm.setRequestHeader("Authorization", "OAuth "+accessToken)
-    pm.setRequestHeader("Content-Type", "application/json")
-    pm.setRequestHeader("X-HTTP-Method-Override", "PUT")
-    var company = "CoolCompany"
-    var policy = "CoolPolicy"
-    var value = "4.0"
-    var nameValuePair = new NameValuePair()
-    nameValuePair.setName("data")
-    nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company+', '+policy+'", "StageName":"Qualification", "Probability":"10.0", "CloseDate":"2014-07-07"}')
-    var nvpairList = new NameValuePair[1]
-    nvpairList[0] = nameValuePair
-
-    pm.setRequestBody(nvpairList)
-*/
-  //  this.StatusFeed = "About to execute Post method: "+pm.toString()
-  //  this.StatusFeed = "pm headers"+(pm.RequestHeaders.toList().toString())
-  //  this.StatusFeed = "pm parameters: "+(pm.Parameters.toList().toString())
 
     print("yo")
 
-   // httpClient.executeMethod(pm)
 
     this.StatusFeed = "RESPONSE: " + pm.getResponseBodyAsString()
 
     this.StatusFeed = "Finished uploading to Salesforce"
 
     /* API ACCESS */
+
     /*
-    var metrics = new MetricRegistry()
-    var pool = new RestConnectionPoolImpl<String>(metrics) // from the 3rd party api
-    var orgId = "00Do0000000J6TA"
-    var host = "https://gosuroku.herokuapp.com/_auth"
-    pool.configureOrg(orgId, host, accessToken)
-    var connection = pool.getRestConnection(orgId)
-*/
-    /*if(false) {
       var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
       for(result in recommendations) {
         var company1 = result.get('Company') as String
@@ -137,7 +107,6 @@ class SalesforceAuthJob extends Job {
         nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company1+', '+policy1+'", "StageName":"Prospecting", "Probability":"'+value1+'"}')
         pm.addParameter(nameValuePair)
         httpClient.executeMethod(pm)
-      }
       }
 */
 
