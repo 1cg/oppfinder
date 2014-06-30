@@ -1,18 +1,17 @@
 package jobs
 
 uses java.util.Map
-uses model.DataSet
 uses org.apache.commons.httpclient.methods.PostMethod
 uses org.apache.commons.httpclient.HttpClient
 uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
-
-uses org.apache.commons.httpclient.NameValuePair
 uses org.apache.commons.httpclient.methods.StringRequestEntity
-uses org.apache.commons.httpclient.methods.GetMethod
-uses javax.servlet.http.HttpServletResponse
 
 class SalesforceAuthJob extends Job {
+  static final var ACCOUNT_ID = "001o0000003d6P4"
+  static final var CLIENT_ID = "3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg"
+  static final var CLIENT_SECRET = "5207032927813523155"
+  static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/_auth"
 
   construct(data : Map<Object, Object>) {
     super(data)
@@ -28,91 +27,63 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
 
     this.StatusFeed= "Connecting to Salesforce..."
-
+    this.Progress = 5
     /* This code receives the the authorization code from the authorization endpoint, then requests for the access
-     * token with which to access protected salesforce resources. */
-
-    /*
-     * You need to use the correct Salesforce OAuth endpoint when issuing authentication requests in your application.
-     * The primary OAuth endpoints are:
-     * For authorization: https://login.salesforce.com/services/oauth2/authorize
-     * For token requests: https://login.salesforce.com/services/oauth2/token
-     * For revoking OAuth tokens: https://login.salesforce.com/services/oauth2/revoke
-     */
-
-
-    // OAUTH - Receiving the access token (STEP 4)
-    var clientId = "3MVG9xOCXq4ID1uHgL9H.cY5bCyugh.IQXPoeCKgVGLWwC3NvV3Zqj08_KIEEViJmJ.i7hDLkO89Q20ykTyu_"
-    var clientSecret = "2369090302549152630"
+     * token to access protected salesforce resources. */
     var code = search('AuthCode') as String
-
-    this.StatusFeed = "Auth Code: "+code
-
     var httpClient = new HttpClient();
-    var post = new PostMethod("https://login.salesforce.com/services/oauth2/token");
-    post.addParameter("grant_type","authorization_code");
-    /** For session ID instead of OAuth 2.0, use "grant_type", "password" **/
-    post.addParameter("client_id",clientId);
-    post.addParameter("client_secret",clientSecret);
-    post.addParameter("redirect_uri", "https://gosuroku.herokuapp.com/_auth");
-    post.addParameter("code",code);
-    httpClient.executeMethod(post)
-
-    this.StatusFeed = "Managed to execute authorization post... Starting Opportunity request!!!"
-
+    var postAuth = new PostMethod("https://login.salesforce.com/services/oauth2/token");
+    postAuth.addParameter("grant_type","authorization_code");
+    postAuth.addParameter("client_id",CLIENT_ID);
+    postAuth.addParameter("client_secret",CLIENT_SECRET);
+    postAuth.addParameter("redirect_uri", REDIRECT_URI);
+    postAuth.addParameter("code",code);
+    httpClient.executeMethod(postAuth)
+    this.StatusFeed = "Sent authorization request"
+    this.Progress = 10
+    
     /* Receive response with access token. Access token must be used for all following requests */
-    var authResponse = post.getResponseBodyAsString()
-    this.StatusFeed = "ResponseBody (provides Access Token and Refresh Token): "+authResponse
-    var json = JSONValue.parse(authResponse) as JSONObject
-    this.StatusFeed = "ResponseBody (JSONized): "+json.toString()
+    var json = JSONValue.parse(postAuth.getResponseBodyAsString()) as JSONObject
     var accessToken = json.get("access_token") as String
-    var issuedAt = json.get("issued_at") as String
     var instanceUrl = json.get("instance_url") as String
-    this.StatusFeed = "access token = "+accessToken
-    this.StatusFeed = "issued at = "+issuedAt
-    this.StatusFeed = "instance url = "+instanceUrl
+    this.StatusFeed = "Received response."
 
-    // Create Opportunity
+    // Create Opportunity from Company Information and send to Salesforce via POST method
     var opp = new JSONObject()
-    opp.put("AccountId", "001o0000003d6P4")
-    opp.put("Name","Cool Company Bro")
+    opp.put("Name","Testing Corp - ")
+    opp.put("AccountId", ACCOUNT_ID)
     opp.put("StageName","Qualification")
-    opp.put("Probability", "10.0")
+    opp.put("Probability", "99.8")
     opp.put("CloseDate","2014-07-07")
+    var postOpp = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Opportunity/")
+    postOpp.setRequestHeader("Authorization", "Bearer "+accessToken)
+    postOpp.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
+    httpClient.executeMethod(postOpp)
 
-    var pm = new PostMethod(instanceUrl+"/services/data/v20.0/sobjects/Opportunity/")
-    pm.setRequestHeader("Authorization", "Bearer "+accessToken)
-    pm.setRequestEntity(new StringRequestEntity(opp.toString(), "application/json", null))
-
-
-    httpClient.executeMethod(pm)
-
-    print("yo")
-
-
-    this.StatusFeed = "RESPONSE: " + pm.getResponseBodyAsString()
-
-    this.StatusFeed = "Finished uploading to Salesforce"
-
-    /* API ACCESS */
-
-    /*
-      var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
-      for(result in recommendations) {
-        var company1 = result.get('Company') as String
-        var policy1 = result.get('Policy') as String
-        var value1 = result.get('Value') as String
-        var nameValuePair1 = new NameValuePair()
-        nameValuePair.setName("data")
-        nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company1+', '+policy1+'", "StageName":"Prospecting", "Probability":"'+value1+'"}')
-        pm.addParameter(nameValuePair)
-        httpClient.executeMethod(pm)
-      }
-*/
-
+    // Receive POST message response
+    json = JSONValue.parse(postOpp.getResponseBodyAsString()) as JSONObject
+    var success = json.get("success") as Boolean
+    if (success) {
+      this.StatusFeed = "Successful upload! Opportunities available at "+instanceUrl+ACCOUNT_ID
+    } else {
+      this.StatusFeed = "Failed upload. Response from Salesforce: "+json
+    }
     this.StatusFeed = "Done"
     this.Progress = 100
 
+/*********** Iterate through recommendations and convert them into opportunities to post. *******************
+    var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find()
+    for(result in recommendations) {
+      var company1 = result.get('Company') as String
+      var policy1 = result.get('Policy') as String
+      var value1 = result.get('Value') as String
+      var nameValuePair1 = new NameValuePair()
+      nameValuePair.setName("data")
+      nameValuePair.setValue('{"AccountId":"001o0000003Jdkf","Name":"'+company1+', '+policy1+'", "StageName":"Prospecting", "Probability":"'+value1+'"}')
+      pm.addParameter(nameValuePair)
+      httpClient.executeMethod(pm)
+    }
+*/
   }
 
   override function reset() {
