@@ -3,7 +3,6 @@
   <p>Find new business opportunities in your existing Policy clientbase!</p>
   <hr/>
   <div>
-<button ic-post-to="/jobs/action/start/generate" class="btn btn-danger btn-sm" role="button">TEMPORARY GENERATE DATA BUTTON</button>
   <form class="form-inline" role="form" ic-post-to="/jobs/startrecommend">
     <div class="form-group">
     <label>

@@ -15,18 +15,10 @@ uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
 uses view.Layout
-uses datagen.GenerateRandom
-uses jobs.GenerateJob
 
 class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
-
-  static function startGenerateJob() {
-    new GenerateRandom().generateRandom('src/main/resources/data.json')
-    new GenerateJob('src/main/resources/data.json', 'SalesforceTestInput').start()
-    return
-  }
 
   function table() {
     var status = Params['status'] ?: "all"
