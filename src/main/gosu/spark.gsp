@@ -4,9 +4,8 @@ extends sparkgs.SparkFile
 
 StaticFiles = '/public'
 
-//TODO Matt - yank this out, just here as an example
 Layout = view.Layout
-get("/foo", \-> "foo")
+//get("/foo", \-> "foo")
 //get("/bar", \-> raw("bar"))
 
 /* Salesforce authenticates then goes back to this Callback URL with a ?code= param. */
