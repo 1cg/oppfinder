@@ -1,4 +1,4 @@
-<%@ params(pager : model.Pager<java.util.Map<Object,Object>>)%>
+<%@ params(pager : util.PagerIterable<java.util.Map<Object,Object>>)%>
 <table class="table">
   <thead>
     <tr>
@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <% for (entry in pager.getPage()) { %>
+    <% for (entry in pager) { %>
       <tr>
         <% for (type in model.Company.CompanyDataTypes) { %>
           <td> <% if (type == 'Policies') {
@@ -21,5 +21,5 @@
     <% } %>
   </tbody>
 </table>
-${widgets.PagerWidget.renderWidget(pager,"/companies/", null)}
+${new widgets.PagerWidget().renderWidget(pager)}
 

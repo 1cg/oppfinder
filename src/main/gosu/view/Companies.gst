@@ -2,7 +2,7 @@
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
   <h3> Generate New Data Set </h3>
-  <form ic-post-to="/jobs/startgenerate" role="form">
+  <form ic-post-to="/jobs?type=generate" role="form">
     <label for="dataSetName">New Data Set Name</label>
     <input type="text" class="form-control" name="dataSetName" placeholder="Leave blank for random UUID">
     <br>
@@ -16,7 +16,7 @@
   <h3>
     Upload JSON Data Set
   </h3>
-  <form method="post" enctype="multipart/form-data" action="/jobs/startupload">
+  <form method="post" enctype="multipart/form-data" action="/jobs?type=upload">
     <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-lg btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
     <span class="fileinput-filename"></span>
@@ -29,6 +29,6 @@
   </div>
 </div>
 <div ic-src="/companies/table/${page}" ic-deps="/jobs">
-  ${CompanyTable.renderToString(controller.PagerController.getCompanyPager(page))}
+  ${CompanyTable.renderToString(new util.PagerIterable<java.util.Map<Object,Object>>(model.DataSetEntry.MostRecentDataSet,page))}
 </div>
 

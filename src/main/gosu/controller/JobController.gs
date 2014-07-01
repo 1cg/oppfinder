@@ -15,6 +15,7 @@ uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
 uses view.Layout
+uses util.PagerIterable
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -23,7 +24,7 @@ class JobController implements IHasRequestContext, IResourceController {
   function table() {
     var status = Params['status'] ?: "all"
     var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    Writer.append(JobTableBody.renderToString(status, PagerController.getPager(status,page)))
+    Writer.append(JobTableBody.renderToString(status, new util.PagerIterable<jobs.Job>(RequestedData,page)))
   }
 
   function generateProgress() : String {
@@ -71,11 +72,11 @@ class JobController implements IHasRequestContext, IResourceController {
     return
   }
 
-  function getUUIDProgress(UUID : String) : String {
+  function progress(UUID : String) : String {
     return Job.getUUIDProgress(UUID)
   }
 
-  function getUUIDElapsedTime(UUID : String) : String {
+  function elapsed(UUID : String) : String {
     return Job.getUUIDElapsedTime(UUID)
   }
 
@@ -83,44 +84,41 @@ class JobController implements IHasRequestContext, IResourceController {
     return JobStatusFeedList.renderToString(Job.newUp(UUID, null))
   }
 
-  function startUpload() {
-    new UploadJob(Request.Body).start()
-    return
-  }
-
-  function startRecommend() {
-    new RecommendJob(Params['collections']).start()
-    return
-  }
-
-  function startTest() {
-    var testJob = new TestJob()
-    testJob.start()
-    return
-  }
-
-  function startGenerate() {
-    var form = new GenerateJobFormParser(Request.Body)
-    var job = form.startJob()
-    UUId = job.UUId
-    return
-  }
-
-  function progress(UUID : String) {
-    Writer.append(Job.getUUIDProgress(UUID))
+  override function create() {
+    if (Params['type'] == "test") {
+      new TestJob().start()
+    } else if (Params['type'] == 'recommend') {
+      new RecommendJob(Params['collections']).start()
+    } else if (Params['type'] == 'upload') {
+      new UploadJob(Request.Body).start()
+    } else if (Params['type'] == 'generate') {
+      var form = new GenerateJobFormParser(Request.Body).startJob()
+    }
   }
 
   override function index() {
-    var status = Params['status'] ?: "all"
     var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    var pager = PagerController.getPager(status, page)
-    Writer.append(Layout.renderToString(JobTable.renderToString(status, PagerController.getPager(status, page))))
+    var status = Params['status'] ?: 'all'
+    Writer.append(Layout.renderToString(JobTable.renderToString(status, new PagerIterable<jobs.Job>(RequestedData, page))))
+  }
+
+  private property get RequestedData() : util.SkipIterable<jobs.Job> {
+    var status = Params['status'] ?: 'all'
+    if (status == 'all') {
+      return Job.AllJobs
+    } else if (status == 'failed') {
+      return Job.FailedJobs
+    } else if (status == 'cancelled') {
+      return Job.CancelledJobs
+    } else if (status == 'running') {
+      return Job.ActiveJobs
+    } else if (status == 'completed') {
+      return Job.CompleteJobs
+    }
+    throw "Unsupported state for requested data"
   }
 
   override function _new() {
-  }
-
-  override function create() {
   }
 
   override function show(id: String) {

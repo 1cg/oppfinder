@@ -2,7 +2,7 @@ package model
 
 uses java.util.HashMap
 uses java.util.Map
-uses util.SkipIterator
+uses util.SkipIterable
 
 class DataSetEntry {
 
@@ -26,7 +26,7 @@ class DataSetEntry {
     info = new HashMap<String, Object>()
   }
 
-  static function All(_collection : String = "defaultDataSet") : SkipIterator<Map> {
+  static function All(_collection : String = "defaultDataSet") : SkipIterable<Map> {
     return new DataSet(_collection).find()
   }
 
@@ -35,9 +35,9 @@ class DataSetEntry {
     return ds.toList().map(\ o -> o['name'] as String)
   }
 
-  static property get MostRecentDataSet() : SkipIterator<Map> {
+  static property get MostRecentDataSet() : SkipIterable<Map> {
     var ds = new DataSet(MASTER_DATA_SET).find()
-    return ds.hasNext() ? All(ds.next().get('name') as String) : null
+    return ds.iterator().hasNext() ? All(ds.iterator().next().get('name') as String) : null
   }
 
   // Saves this company info into the mongo dataset
