@@ -183,6 +183,21 @@ abstract class Job implements Runnable {
     newUp(UUID, null).Cancelled = true
   }
 
+  static function findByStatus(status : String) : SkipIterable<jobs.Job> {
+    if (status == 'all') {
+      return AllJobs
+    } else if (status == 'failed') {
+      return FailedJobs
+    } else if (status == 'cancelled') {
+      return CancelledJobs
+    } else if (status == 'running') {
+      return ActiveJobs
+    } else if (status == 'completed') {
+      return CompleteJobs
+    }
+    throw "Unsupported state for jobs: ${status}"
+  }
+
   property set Cancelled(status : boolean) {
     EndTime = System.currentTimeMillis()
     if (status) {

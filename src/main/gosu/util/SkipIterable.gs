@@ -8,8 +8,8 @@ interface SkipIterable <E> extends Iterable<E> {
 
   function copy() : SkipIterable<E>
 
-  //function page(page : int) : PagedData<E>
-
   property get Count() : long
+
+  function paginate(page : String) : PagerIterable<E>
 
 }

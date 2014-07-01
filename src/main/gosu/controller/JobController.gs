@@ -21,10 +21,15 @@ class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
 
-  function table() {
-    var status = Params['status'] ?: "all"
+  // TODO cgross - update sparkgs to allow return values for this
+  override function index() {
     var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    Writer.append(JobTableBody.renderToString(status, new util.PagerIterable<jobs.Job>(RequestedData,page)))
+    var status = Params['status'] ?: 'all'
+    Writer.append(Layout.renderToString(JobTable.renderToString(status, new PagerIterable<jobs.Job>(RequestedData, page))))
+  }
+
+  function table() : Object {
+    return raw(JobTableBody.renderToString(Params['status'], Job.findByStatus(Params['status']).paginate(Params['page'])));
   }
 
   function generateProgress() : String {
@@ -94,12 +99,6 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'generate') {
       var form = new GenerateJobFormParser(Request.Body).startJob()
     }
-  }
-
-  override function index() {
-    var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    var status = Params['status'] ?: 'all'
-    Writer.append(Layout.renderToString(JobTable.renderToString(status, new PagerIterable<jobs.Job>(RequestedData, page))))
   }
 
   private property get RequestedData() : util.SkipIterable<jobs.Job> {
