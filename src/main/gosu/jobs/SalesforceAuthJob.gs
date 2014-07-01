@@ -4,6 +4,7 @@ uses java.util.Map
 uses java.lang.System
 uses util.SalesforceRESTClient
 uses util.Opportunity
+uses util.SObject
 
 class SalesforceAuthJob extends Job {
   static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/_auth"
@@ -29,11 +30,22 @@ class SalesforceAuthJob extends Job {
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var sClient = new SalesforceRESTClient(search('AuthCode') as String,clientID, clientSecret,REDIRECT_URI, accountID)
+
     this.StatusFeed = "Salesforce Authorized"
+    this.Progress = 15
 
     /*** Eventually, the creation and posting of opportunities will go in a loop over the recommendations at
      *   var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find() ***/
-    var opp = new Opportunity("Test Company", accountID, "2014-07-07", "Qualification")
+
+    var opp1 = new SObject("Opportunity", {
+        "Name" -> "Test Company",
+        "AccountId" -> accountID
+    //ETC.; SWITCH IT FROM SalesforceObject Interface + implementing to just a flat SalesforcE Object.
+    })
+
+
+
+       var opp = new Opportunity("Test Company", accountID, "2014-07-07", "Qualification")
     opp.Probability = "99"
     opp.Description = "These are optional fields for opportunity!"
     var result = sClient.post(opp)
@@ -43,7 +55,7 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "Failed upload. Response from Salesforce: "+result
     }
 
-    this.StatusFeed = "Done"
+    this.StatusFeed = "Job Terminated"
     this.Progress = 100
 
   }
