@@ -3,11 +3,8 @@ package jobs
 uses java.util.Map
 uses java.lang.System
 uses util.SalesforceRESTClient
-uses util.Opportunity
-uses util.SObject
 
 class SalesforceAuthJob extends Job {
-  static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/_auth"
 
   construct(data : Map<Object, Object>) {
     super(data)
@@ -25,30 +22,21 @@ class SalesforceAuthJob extends Job {
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
 
-    /* Not sure what's best practice for these kinds of variables; left it as environment variable for now. */
-    var clientID = System.Env["SF_CLIENT_ID"]?.toString()
-    var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
-    var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
-    var sClient = new SalesforceRESTClient(search('AuthCode') as String,clientID, clientSecret,REDIRECT_URI, accountID)
-
+    var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
     this.Progress = 15
 
     /*** Eventually, the creation and posting of opportunities will go in a loop over the recommendations at
      *   var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find() ***/
-
-    var opp1 = new SObject("Opportunity", {
-        "Name" -> "Test Company",
-        "AccountId" -> accountID
-    //ETC.; SWITCH IT FROM SalesforceObject Interface + implementing to just a flat SalesforcE Object.
-    })
-
-
-
-       var opp = new Opportunity("Test Company", accountID, "2014-07-07", "Qualification")
-    opp.Probability = "99"
-    opp.Description = "These are optional fields for opportunity!"
-    var result = sClient.post(opp)
+    var opportunity = {
+        "Name" -> "Test Company 1",
+        "AccountId" -> System.Env["SF_ACCOUNT_ID"]?.toString(),
+        "CloseDate" -> "2014-07-07",
+        "Probability" -> "98",
+        "StageName" -> "Qualification",
+        "Description" -> "Maps are cool"
+    }
+    var result = sClient.post("Opportunity", opportunity)
     if (result.get("success") as Boolean) {
       this.StatusFeed = "Successful opportunity upload!"
     } else {
@@ -57,7 +45,6 @@ class SalesforceAuthJob extends Job {
 
     this.StatusFeed = "Job Terminated"
     this.Progress = 100
-
   }
 
   override function reset() {
