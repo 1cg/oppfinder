@@ -18,7 +18,6 @@ class SalesforceAuthJob extends Job {
 
   override function executeJob() {
     checkCancellation()
-
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
 
@@ -28,6 +27,7 @@ class SalesforceAuthJob extends Job {
 
     /*** Eventually, the creation and posting of opportunities will go in a loop over the recommendations at
      *   var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find() ***/
+    // For a list of Opportunity fields, please visit: https://www.salesforce.com/us/developer/docs/api/Content/sforce_api_objects_opportunity.htm
     var opportunity = {
         "Name" -> "Test Company 1",
         "AccountId" -> System.Env["SF_ACCOUNT_ID"]?.toString(),
@@ -38,7 +38,7 @@ class SalesforceAuthJob extends Job {
     }
     var result = sClient.post("Opportunity", opportunity)
     if (result.get("success") as Boolean) {
-      this.StatusFeed = "Successful opportunity upload!"
+      this.StatusFeed = "Successful opportunity upload! Available at: "+sClient.InstanceURL+"/"+opportunity["AccountId"]
     } else {
       this.StatusFeed = "Failed upload. Response from Salesforce: "+result
     }
