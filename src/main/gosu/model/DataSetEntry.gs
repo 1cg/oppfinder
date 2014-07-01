@@ -37,7 +37,7 @@ class DataSetEntry {
 
   static property get MostRecentDataSet() : SkipIterable<Map> {
     var ds = new DataSet(MASTER_DATA_SET).find()
-    return ds.iterator().hasNext() ? All(ds.iterator().next().get('name') as String) : null
+    return ds?.iterator()?.hasNext() ? All(ds.iterator().next().get('name') as String) : null
   }
 
   // Saves this company info into the mongo dataset
