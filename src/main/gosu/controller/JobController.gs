@@ -15,7 +15,6 @@ uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
 uses view.Layout
-uses util.PagerIterable
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -23,23 +22,19 @@ class JobController implements IHasRequestContext, IResourceController {
 
   // TODO cgross - update sparkgs to allow return values for this
   override function index() {
-    Writer.append(Layout.renderToString(JobTable.renderToString(Params['status'],Job.findByStatus(Params['status']).paginate(Params['page']))))
+    Writer.append(JobTable.renderToString(Params['status'],Job.findByStatus(Params['status']).paginate(Params['page'])))
   }
 
   function table() : Object {
-    return raw(JobTableBody.renderToString(Params['status'], Job.findByStatus(Params['status']).paginate(Params['page'])));
+    return raw(JobTableBody.renderToString(Params['status'], Job.findByStatus(Params['status']).paginate(Params['page'])))
   }
 
   function generateProgress() : Object {
-    return raw(Job.find(UUId).Progress)
+    return raw(Job.find(UUId)?.Progress)
   }
 
   function generateComplete() : Object {
-    if (Job.find(UUId).Progress == 100) {
-      return raw('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
-    } else {
-      return raw('<div></div>')
-    }
+    return (Job.find(UUId)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
   }
 
   function cancel(UUID : String) {
@@ -66,7 +61,7 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function statusFeed(UUID : String) : Object {
-    return raw(JobStatusFeedList.renderToString(Job.newUp(UUID, null)))
+    return raw(JobStatusFeedList.renderToString(Job.find(UUID).StatusFeed, UUID))
   }
 
   override function create() {
@@ -86,19 +81,9 @@ class JobController implements IHasRequestContext, IResourceController {
   override function _new() {
   }
 
+  // TODO cgross - update sparkgs to allow return values for this
   override function show(id: String) {
-    var job = Job.newUp(id, null)
-    var response = ""
-    var failed = job.Failed
-    if (job == null) {
-      Writer.append(Layout.renderToString("Oops, this appears to be an invalid UUID"))
-      return
-    }
-    response += JobDrillDown.renderToString(job)
-    if (failed) response += FailedJobView.renderToString(job)
-    response += JobStatusFeedList.renderToString(job)
-    if (!failed) response += job.renderToString()
-    Writer.append(Layout.renderToString(response))
+    Writer.append(JobDrillDown.renderToString(Job.find(id)))
   }
 
   override function edit(id: String) {

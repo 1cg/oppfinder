@@ -58,7 +58,7 @@ class UploadJob extends Job {
     this.Progress = 100
   }
 
-  override function reset() {}
+  override function doReset() {}
 
   override function renderToString() : String {
     return view.Companies.renderToString(1)

@@ -28,7 +28,7 @@ class TestJob extends Job {
     print("Test Job Complete")
   }
 
-  override function reset() {}
+  override function doReset() {}
 
   override function renderToString() : String {
     return view.TestJob.renderToString()

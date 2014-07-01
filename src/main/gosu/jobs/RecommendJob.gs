@@ -97,7 +97,7 @@ class RecommendJob extends Job {
   /*
   * Cleans up the database by removing the temp data from the sub jobs
    */
-  override function reset() {
+  override function doReset() {
     for (jobID in subJobsID) {
       new DataSet(jobID).drop()
     }
