@@ -21,12 +21,10 @@ resource("/jobs", new JobController())
 /* Getters for job information */
 get('/', \-> {Layout = view.Layout
               view.Root.render(Writer) })
-get('/jobs/table/pager/:type/:page', \-> { Layout = null
-  return controller.PagerController.renderPager(Params['type'],controller.PagerController.getPager(Params['type'], Params['page'].toLong()))})
 get('/companies/:page', \-> view.Layout.renderToString(view.Companies.renderToString(Params['page'].toLong())))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(controller.PagerController.getCompanyPager(Params['page'].toLong()))})
+  return view.CompanyTable.renderToString(new util.PagerIterable<java.util.Map<Object,Object>>(model.DataSetEntry.MostRecentDataSet,Params['page'].toLong()))})
 
 // TODO cgross - upgrade sparkgs to latest sparkjava and implement exception handling
 //get("*", \-> view.BadPath.renderToString(Request.PathInfo))

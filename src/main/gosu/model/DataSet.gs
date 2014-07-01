@@ -2,7 +2,7 @@ package model
 
 uses com.mongodb.*
 uses java.util.Map
-uses util.TransformationIterator
+uses util.TransformIterable
 
 class DataSet {
 
@@ -13,22 +13,27 @@ class DataSet {
   }
 
  /* Automatically sorts from oldest to newest */
-  function find(ref : Map<Object, Object>) : TransformationIterator<Map<Object,Object>> {
-     return new TransformationIterator<Map<Object,Object>>(
-         _collection.find(new BasicDBObject(ref)).sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
+  function find(ref : Map<Object, Object>) : TransformIterable<Map<Object,Object>> {
+     return new TransformIterable<Map<Object,Object>>(
+         _collection.find(new BasicDBObject(ref))
+                            .sort(new BasicDBObject({'_id' -> -1})),
+                             \ o  -> (o as BasicDBObject))
   }
 
   /* Automatically sorts from oldest to newest */
-  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : TransformationIterator<Map<Object,Object>> {
-    return new TransformationIterator<Map<Object,Object>>(
-        _collection.find(new BasicDBObject(ref),new BasicDBObject(keys)).sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
+  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : TransformIterable<Map<Object,Object>> {
+    return new TransformIterable<Map<Object,Object>>(
+        _collection.find(new BasicDBObject(ref),
+                          new BasicDBObject(keys))
+                          .sort(new BasicDBObject({'_id' -> -1})),
+                          \ o -> (o as BasicDBObject))
 
   }
 
   /* Automatically sorts from oldest to newest */
-  function find() : TransformationIterator<Map<Object,Object>> {
-    return new TransformationIterator<Map<Object,Object>>(
-        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o)
+  function find() : TransformIterable<Map<Object,Object>> {
+    return new TransformIterable<Map<Object,Object>>(
+        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
   }
 
   function findOne(ref : Map<Object, Object>) : Map<Object, Object> {

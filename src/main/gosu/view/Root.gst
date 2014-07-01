@@ -3,7 +3,7 @@
   <p>Find new business opportunities in your existing Policy clientbase!</p>
   <hr/>
   <div>
-  <form class="form-inline" role="form" ic-post-to="/jobs/startrecommend">
+  <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
     <div class="form-group">
     <label>
       <strong>Select DataSet: </strong>
@@ -20,7 +20,7 @@
       <input class="btn btn-primary" type="submit" value="Start Opportunity Analysis">
     </div>
     <div class="form-group pull-right">
-      <button ic-post-to="/jobs/starttest" class="btn btn-default">
+      <button ic-post-to="/jobs?type=test" class="btn btn-default">
         Run Test Job
       </button>
     </div>
@@ -30,4 +30,4 @@
   <a href="/companies/1">Generate Or Import DataSet</a>
   </div>
 </div>
-${view.JobTable.renderToString("all", controller.PagerController.getPager("all", 1))}
+${view.JobTable.renderToString("all", new util.PagerIterable<jobs.Job>(jobs.Job.AllJobs, 1))}

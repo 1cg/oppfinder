@@ -1,4 +1,4 @@
-<%@ params(type : String, pager : model.Pager<jobs.Job>)%>
+<%@ params(type : String, pager : util.PagerIterable<jobs.Job>)%>
 <div class="page-header">
   <h3>${type.capitalize() + " Jobs"}</h3>
 </div>

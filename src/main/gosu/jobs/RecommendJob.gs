@@ -85,14 +85,13 @@ class RecommendJob extends Job {
       if (i == NUM_RECOMMENDATIONS) break
       var result : Map<Object, Object> = {}
       var info = each.Key.split(DELIMITER)
-      var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1}).next()
+      var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1}).iterator().next()
       result.put('Company', company['Company'])
       result.put('Policy',MahoutUtil.longToPolicy(info[1].toLong()))
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    print(finalResults.size())
-    Results.addResults(UUId, finalResults.reverse())
+    Results.addResults(UUId, finalResults)
   }
 
   /*
