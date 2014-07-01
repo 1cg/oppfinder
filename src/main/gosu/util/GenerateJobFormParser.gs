@@ -10,29 +10,15 @@ uses java.net.URLDecoder
 
 class GenerateJobFormParser {
 
-  var formMap : Map<String, String>
-
-  construct(form : String) {
-    formMap = new HashMap<String, String>()
-
-    for(kv in form.split(" *& *")) {
-      var pairs = kv.split(" *= *", 2)
-      formMap.put(pairs[0], pairs.length == 1 ? "" : pairs[1])
-    }
-  }
-
-
-  function startJob() : jobs.Job {
-    var name = formMap["dataSetName"] ?: UUID.randomUUID().toString()
-    name = URLDecoder.decode(name, "UTC-8")
-    if(formMap["generateStrategy"] == "Reach") {
+  static function startJob(ds : String, type : String) : jobs.Job {
+    ds = ds ?: UUID.randomUUID().toString()
+    ds = URLDecoder.decode(ds, "UTC-8")
+    if(type == "Reach") {
       new GenerateTest().generateTest('dataReach.json', 'Reach', 40000)
-      var job = new GenerateJob('dataReach.json', name).start()
-      return job
+      return new GenerateJob('dataReach.json', ds).start()
     } else {
       new GenerateRandom().generateRandom('data.json')
-      var job = new GenerateJob('data.json', name).start()
-      return job
+      return new GenerateJob('data.json', ds).start()
     }
   }
 }

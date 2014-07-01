@@ -74,7 +74,7 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'upload') {
       new UploadJob(Request.Body).start()
     } else if (Params['type'] == 'generate') {
-      new GenerateJobFormParser(Request.Body).startJob()
+      GenerateJobFormParser.startJob(Params['dataSetName'] as String, Params['generateStrategy'] as String)
     } else if (Params['type'] == 'auth') {
       new SalesforceAuthJob(Params['id'], Params['code']).start()
     }
