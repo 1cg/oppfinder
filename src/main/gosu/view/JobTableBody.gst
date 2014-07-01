@@ -57,15 +57,15 @@
           <% } %>
         </td>
         <td>
+          <% if (job.Progress == 100 || job.Cancelled || job.Failed)  { %>
+            <button ic-post-to="/jobs/${job.UUId}/delete" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
+          <% } %>
           <% if (job.Progress < 100 && !(job.Cancelled || job.Failed)) { %>
             <button ic-post-to="/jobs/${job.UUId}/cancel" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-stop"></span></button>
           <% }  else if (job.Cancelled || job.Failed) { %>
             <button ic-post-to="/jobs/${job.UUId}/reset" class="btn btn-primary btn-sm" role="button"><span class="glyphicon glyphicon-repeat"></span></button>
           <% } %>
 
-          <% if (job.Progress == 100 || job.Cancelled || job.Failed)  { %>
-            <button ic-post-to="/jobs/${job.UUId}/delete" class="btn btn-danger btn-sm" role="button"><span class="glyphicon glyphicon-trash"></span></button>
-          <% } %>
         </td>
      </tr>
      <% }

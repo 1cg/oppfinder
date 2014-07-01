@@ -1,12 +1,9 @@
 package jobs
 
 uses java.util.Map
-uses org.apache.commons.httpclient.methods.PostMethod
-uses org.apache.commons.httpclient.HttpClient
-uses org.json.simple.JSONObject
-uses org.json.simple.JSONValue
-uses org.apache.commons.httpclient.methods.StringRequestEntity
 uses java.lang.System
+uses util.SalesforceRESTClient
+uses util.Opportunity
 
 class SalesforceAuthJob extends Job {
   static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/_auth"
@@ -28,14 +25,27 @@ class SalesforceAuthJob extends Job {
     this.Progress = 5
 
     /* Not sure what's best practice for these variables; left it as environment variable for now. */
-    var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var clientID = System.Env["SF_CLIENT_ID"]?.toString()
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
+    var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var redirectURI = REDIRECT_URI
 
     /* This code receives the the authorization code from the authorization endpoint, then requests for the access
      * token to access protected salesforce resources. */
     var code = search('AuthCode') as String
+    var sClient = new SalesforceRESTClient(code,clientID, clientSecret,redirectURI, accountID)
+
+    var opp = new Opportunity("Test Company", accountID, "2014-07-07", "Qualification")
+    opp.Probability = "99.8"
+    opp.Description = "These are optional fields for opportunity!"
+
+    var result = sClient.post(opp)
+    if (result.get("success") as Boolean) {
+      this.StatusFeed = "Successful opportunity upload!"
+    } else {
+      this.StatusFeed = "Failed upload. Response from Salesforce: "+result
+    }
+/*
     var httpClient = new HttpClient();
     var postAuth = new PostMethod("https://login.salesforce.com/services/oauth2/token");
     postAuth.addParameter("grant_type","authorization_code");
@@ -75,6 +85,7 @@ class SalesforceAuthJob extends Job {
     } else {
       this.StatusFeed = "Failed upload. Response from Salesforce: "+json
     }
+    */
     this.StatusFeed = "Done"
     this.Progress = 100
 
