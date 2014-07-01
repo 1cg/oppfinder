@@ -18,7 +18,7 @@ resource("/jobs", new JobController())
 // DataSets
 resource("/dataset", new DataSetController())
 
-get('/companies/:page', \-> view.Layout.renderToString(view.Companies.renderToString(Params['page'].toLong())))
+get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(new util.PagerIterable<java.util.Map<Object,Object>>(model.DataSetEntry.MostRecentDataSet,Params['page'].toLong()))})
+  return view.CompanyTable.renderToString(model.DataSetEntry.MostRecentDataSet?.paginate(Params['page'] as String))})

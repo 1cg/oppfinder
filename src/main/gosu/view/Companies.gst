@@ -29,6 +29,6 @@
   </div>
 </div>
 <div ic-src="/companies/table/${page}" ic-deps="/jobs">
-  ${CompanyTable.renderToString(new util.PagerIterable<java.util.Map<Object,Object>>(model.DataSetEntry.MostRecentDataSet,page))}
+  ${CompanyTable.renderToString(model.DataSetEntry.MostRecentDataSet.paginate(page as String))}
 </div>
 
