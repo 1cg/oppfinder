@@ -23,70 +23,50 @@ class JobController implements IHasRequestContext, IResourceController {
 
   // TODO cgross - update sparkgs to allow return values for this
   override function index() {
-    var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    var status = Params['status'] ?: 'all'
-    Writer.append(Layout.renderToString(JobTable.renderToString(status, new PagerIterable<jobs.Job>(RequestedData, page))))
+    Writer.append(Layout.renderToString(JobTable.renderToString(Params['status'],Job.findByStatus(Params['status']).paginate(Params['page']))))
   }
 
   function table() : Object {
     return raw(JobTableBody.renderToString(Params['status'], Job.findByStatus(Params['status']).paginate(Params['page'])));
   }
 
-  function generateProgress() : String {
-    return Job.getUUIDProgress(UUId)
+  function generateProgress() : Object {
+    return raw(Job.find(UUId).Progress)
   }
 
-  function generateComplete() {
-    if (Job.getUUIDProgress(UUId) == "100%") {
-      Writer.append('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
+  function generateComplete() : Object {
+    if (Job.find(UUId).Progress == 100) {
+      return raw('<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>')
     } else {
-      Writer.append('<div></div>')
+      return raw('<div></div>')
     }
-  }
-
-  static property get LocalGenerateProgress() : String {
-    return Job.getUUIDProgress(UUId)
-  }
-
-  static property get LocalGenerateComplete() : String {
-    if (Job.getUUIDProgress(UUId) == "100%") {
-      return '<div class="fa fa-check green navbar-left" style="padding-left:10px;padding-top:4px;"</div>'
-    } else {
-      return '<div></div>'
-    }
-  }
-
-  static function startSalesforceAuthJob(id : String, authCode: String) {
-    var salesforceAuthJob = new SalesforceAuthJob(id, authCode)
-    salesforceAuthJob.start()
-    return
   }
 
   function cancel(UUID : String) {
-    Job.cancel(UUID)
+    Job.find(UUID).cancel()
     return
   }
 
   function reset(UUID : String) {
-    Job.reset(UUID)
+    Job.find(UUID).reset()
     return
   }
 
   function delete(UUID : String) {
-    Job.delete(UUID)
+    Job.find(UUID).delete()
     return
   }
 
-  function progress(UUID : String) : String {
-    return Job.getUUIDProgress(UUID)
+  function progress(UUID : String) : Object {
+    return raw(Job.find(UUID).Progress+"%")
   }
 
-  function elapsed(UUID : String) : String {
-    return Job.getUUIDElapsedTime(UUID)
+  function elapsed(UUID : String) : Object {
+    return raw(Job.find(UUID).ElapsedTime)
   }
 
-  function statusFeed(UUID : String) : String {
-    return JobStatusFeedList.renderToString(Job.newUp(UUID, null))
+  function statusFeed(UUID : String) : Object {
+    return raw(JobStatusFeedList.renderToString(Job.newUp(UUID, null)))
   }
 
   override function create() {
@@ -97,24 +77,10 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'upload') {
       new UploadJob(Request.Body).start()
     } else if (Params['type'] == 'generate') {
-      var form = new GenerateJobFormParser(Request.Body).startJob()
+      new GenerateJobFormParser(Request.Body).startJob()
+    } else if (Params['type'] == 'auth') {
+      new SalesforceAuthJob(Params['id'], Params['code']).start()
     }
-  }
-
-  private property get RequestedData() : util.SkipIterable<jobs.Job> {
-    var status = Params['status'] ?: 'all'
-    if (status == 'all') {
-      return Job.AllJobs
-    } else if (status == 'failed') {
-      return Job.FailedJobs
-    } else if (status == 'cancelled') {
-      return Job.CancelledJobs
-    } else if (status == 'running') {
-      return Job.ActiveJobs
-    } else if (status == 'completed') {
-      return Job.CompleteJobs
-    }
-    throw "Unsupported state for requested data"
   }
 
   override function _new() {

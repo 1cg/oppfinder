@@ -117,7 +117,7 @@ class RecommendJob extends Job {
       checkCancellation()
       finished = true
       for (jobID in subJobsID) {
-        var progress = Job.getUUIDProgress(jobID).remove("%").toInt()
+        var progress = Job.find(jobID).Progress
         sum += progress
         if (progress < Job.MAX_PROGRESS_VALUE) {
           finished = false

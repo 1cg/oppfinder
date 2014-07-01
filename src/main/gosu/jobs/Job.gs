@@ -78,22 +78,19 @@ abstract class Job implements Runnable {
     }
   }
 
-  static function reset(uuid : String) {
+  function reset() {
     var newUUID = UUID.randomUUID().toString()
-    dataStore.update({'UUId' -> uuid}, {'UUId' -> newUUID})
+    dataStore.update({'UUId' -> UUId}, {'UUId' -> newUUID})
     var job = newUp(newUUID, dataStore.findOne({'UUId' -> newUUID})['Type'] as String)
     job.Status = 'Active'
     job.Progress = 0
     job.EndTime = null
-    job.reset()
     job.start()
   }
 
-  static function delete(UUId : String) {
+  function delete() {
     dataStore.remove(dataStore.findOne({'UUId' -> UUId}))
   }
-
-  abstract function reset()
 
   final function update(update : Map<Object,Object>) {
     dataStore.update(id, update)
@@ -168,19 +165,18 @@ abstract class Job implements Runnable {
     return dataStore.findOne(id)?.get('Field') as String
   }
 
-  static function getUUIDProgress(UUID : String) : String {
-    var job = dataStore.findOne({'UUId' -> UUID})
-    return job == null ? null : (job['Progress'] as String) + "%"
-  }
-
   static function getUUIDElapsedTime(UUID : String) : String {
     var start = dataStore.findOne({'UUId' -> UUID})?['StartTime'] as Long
     var end = dataStore.findOne({'UUId' -> UUID})?['EndTime'] as Long
     return calculateElapsedTime(start, end)
   }
 
-  static function cancel(UUID : String) {
-    newUp(UUID, null).Cancelled = true
+  function cancel() {
+    Cancelled = true
+  }
+
+  static function find(UUID : String) : jobs.Job {
+    return newUp(UUID, null)
   }
 
   static function findByStatus(status : String) : SkipIterable<jobs.Job> {
