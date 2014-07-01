@@ -31,6 +31,11 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
     return _wrapped.count()
   }
 
+  override function paginate(page: String): PagerIterable<T> {
+    var l = page == null ? 1 : page.toLong()
+    return new util.PagerIterable<T>(this,l)
+  }
+
   static class TransformIterator<TT> implements Iterator<TT> {
 
     var _iter : Iterator
