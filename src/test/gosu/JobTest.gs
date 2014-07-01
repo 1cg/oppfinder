@@ -75,13 +75,13 @@ class JobTest extends TestCase {
     assertNull(job.EndTime)
   }
 
-  public function testGetUUIdProgress() {
+  public function testProgress() {
     var job = new TestJob()
-    assertEquals("0%", Job.getUUIDProgress(job.UUId))
+    assertEquals("0%", Job.find(job.UUId).Progress + "%")
   }
 
-  public function testGetUUIdProgressInvalid() {
-    assertNull(Job.getUUIDProgress("Not a value"))
+  public function testFindInvalid() {
+    assertNull(Job.find("Not a value"))
   }
 
   public function testActiveJobs() {
