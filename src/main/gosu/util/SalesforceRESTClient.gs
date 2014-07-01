@@ -44,7 +44,9 @@ class SalesforceRESTClient {
     return JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
   }
 
-
+  property get InstanceURL() : String {
+    return _instanceUrl
+  }
 
   //constructor should simply initialize,
 
