@@ -12,4 +12,10 @@
 <h3>Job Type: <span class="label label-default">${job.Type}</span></h3>
 <h3>Elapsed Time: <span class="label label-default">${job.ElapsedTime}</span></h3>
 <br>
-
+<% if (job.Failed) { %>
+  ${FailedJobView.renderToString(job)}
+<%} %>
+${JobStatusFeedList.renderToString(job.StatusFeed, job.UUId)}
+<% if (!job.Failed) { %>
+  ${job.renderToString()}
+<%} %>

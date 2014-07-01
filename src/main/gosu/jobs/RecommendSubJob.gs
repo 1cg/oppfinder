@@ -93,7 +93,7 @@ class RecommendSubJob extends Job {
     return (value - minRecommendation) / (maxRecommendation - minRecommendation)
   }
 
-  override function reset() {}
+  override function doReset() {}
 
   override property set Status(status : String) {
     update({'Status' -> 'Subjob'})

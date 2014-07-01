@@ -78,12 +78,15 @@ abstract class Job implements Runnable {
     }
   }
 
-  function reset() {
+  abstract function doReset()
+
+  final function reset() {
     var newUUID = UUID.randomUUID().toString()
     dataStore.update({'UUId' -> UUId}, {'UUId' -> newUUID})
     var job = newUp(newUUID, dataStore.findOne({'UUId' -> newUUID})['Type'] as String)
     job.Status = 'Active'
     job.Progress = 0
+    job.doReset()
     job.EndTime = null
     job.start()
   }
@@ -165,12 +168,6 @@ abstract class Job implements Runnable {
     return dataStore.findOne(id)?.get('Field') as String
   }
 
-  static function getUUIDElapsedTime(UUID : String) : String {
-    var start = dataStore.findOne({'UUId' -> UUID})?['StartTime'] as Long
-    var end = dataStore.findOne({'UUId' -> UUID})?['EndTime'] as Long
-    return calculateElapsedTime(start, end)
-  }
-
   function cancel() {
     Cancelled = true
   }
@@ -223,7 +220,7 @@ abstract class Job implements Runnable {
     return calculateElapsedTime(this.StartTime, this.EndTime)
   }
 
-  private static function calculateElapsedTime(start : Long, end : Long) : String {
+  private function calculateElapsedTime(start : Long, end : Long) : String {
     if (start == null) return "0 Seconds"
     var totalSeconds = (((end ?: System.currentTimeMillis()) - start) / 1000)
     var returnString = ""

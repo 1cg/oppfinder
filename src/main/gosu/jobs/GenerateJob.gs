@@ -51,7 +51,7 @@ class GenerateJob extends Job {
     this.StatusFeed = "Done"
   }
 
-  override function reset() {}
+  override function doReset() {}
 
   override function renderToString() : String {
     return ""
