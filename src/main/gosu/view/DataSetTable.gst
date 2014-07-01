@@ -1,3 +1,4 @@
+<%@ params(dataSetNames : java.util.List<String>) %>
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
   <h3> Generate New Data Set </h3>
@@ -28,6 +29,6 @@
   </div>
 </div>
 <div id='wrapper'>
-  ${view.DataSetTableBody.renderToString()}
+  ${view.DataSetTableBody.renderToString(dataSetNames)}
 </div>
 

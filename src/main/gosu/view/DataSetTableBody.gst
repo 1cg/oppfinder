@@ -1,3 +1,4 @@
+<%@ params(dataSetNames : java.util.List<String>) %>
 <table class="table">
   <thead>
     <tr>
@@ -7,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-  <% for (result in model.DataSetEntry.AllDataSets()) {%>
+  <% for (result in dataSetNames) {%>
     <tr>
       <td>
         <a href='/datasets/${result}' style="color:#476CB5">${result}</a>

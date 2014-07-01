@@ -15,6 +15,7 @@ uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
 uses view.Layout
+uses view.SalesforceUpload
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -29,6 +30,10 @@ class JobController implements IHasRequestContext, IResourceController {
   function table() : Object {
     var status = Params['status'] ?: "all"
     return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page'])));
+  }
+
+  function _auth() {
+    Writer.append(Layout.renderToString(SalesforceUpload.renderToString(Params['code'])))
   }
 
   function generateProgress() : Object {
