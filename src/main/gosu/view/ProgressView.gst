@@ -4,11 +4,11 @@
       ic-transition="none"
       ic-style-src="width:/jobs/generateprogress"
       ic-poll="300ms"
-      style="width:${controller.JobController.LocalGenerateProgress}">
+      style="width:${new controller.JobController().generateProgress()}">
     </div>
   </div>
   <div ic-src="/jobs/generatecomplete" ic-poll="300ms" ic-transition="none">
-    ${controller.JobController.LocalGenerateComplete}
+    ${new controller.JobController().generateComplete()}
   </div>
 </div>
 
