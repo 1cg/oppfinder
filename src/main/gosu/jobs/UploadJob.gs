@@ -25,7 +25,7 @@ class UploadJob extends Job {
 
   override function executeJob() {
     checkCancellation()
-    var body = (new DataSet("uploadToParse").find().next()["file"]).toString()
+    var body = (new DataSet("uploadToParse").find().iterator().next()["file"]).toString()
     var i = 0
     for (0..3) {
       i = body.indexOf("\n", i+1)

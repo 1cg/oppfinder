@@ -6,7 +6,7 @@ uses com.mongodb.DBCursor
 
 class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
 
-  var _wrapped : DBCursor
+  var _wrapped : DBCursor as Cursor
   var _transform : block(o:Object):T
 
   construct(wrapped: DBCursor, transform : block(o:Object):T) {
@@ -19,6 +19,7 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
   }
 
   override function skip(n: long) {
+    if (n <= 0) return
     _wrapped = _wrapped.skip(n as int)
   }
 
@@ -27,7 +28,7 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
   }
 
   override property get Count(): long {
-    return _wrapped.Count
+    return _wrapped.count()
   }
 
   static class TransformIterator<TT> implements Iterator<TT> {
@@ -37,6 +38,7 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
 
     construct(i : Iterator, transform : block(o:Object):TT ) {
       _iter = i
+      _tr = transform
     }
 
     override function hasNext(): boolean {
@@ -44,8 +46,8 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
     }
 
     override function next(): TT {
-    return _tr(_iter.next())
-  }
+      return _tr(_iter.next())
+    }
 
     override function remove() {
       _iter.remove();

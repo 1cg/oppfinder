@@ -15,7 +15,7 @@ uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
 uses view.Layout
-uses util.SkipIterator
+uses util.PagerIterable
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -24,7 +24,7 @@ class JobController implements IHasRequestContext, IResourceController {
   function table() {
     var status = Params['status'] ?: "all"
     var page = Params['page'] == null ? 1 : Params['page'].toLong()
-    Writer.append(JobTableBody.renderToString(status, PagerController.getPager(status,page)))
+    Writer.append(JobTableBody.renderToString(status, new util.PagerIterable<jobs.Job>(RequestedData,page)))
   }
 
   function generateProgress() : String {
@@ -99,11 +99,10 @@ class JobController implements IHasRequestContext, IResourceController {
   override function index() {
     var page = Params['page'] == null ? 1 : Params['page'].toLong()
     var status = Params['status'] ?: 'all'
-    var pager = PagerController.getPager(status, page)
-    Writer.append(Layout.renderToString(JobTable.renderToString(status, PagerController.getPager(status, page))))
+    Writer.append(Layout.renderToString(JobTable.renderToString(status, new PagerIterable<jobs.Job>(RequestedData, page))))
   }
 
-  private property get RequestedData() : SkipIterator<jobs.Job> {
+  private property get RequestedData() : util.SkipIterable<jobs.Job> {
     var status = Params['status'] ?: 'all'
     if (status == 'all') {
       return Job.AllJobs

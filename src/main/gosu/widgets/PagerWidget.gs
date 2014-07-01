@@ -1,12 +1,15 @@
 package widgets
 
-uses model.Pager
 uses sparkgs.util.IHasRequestContext
 
 class PagerWidget implements IHasRequestContext {
 
-  static function renderWidget(pager : Pager, path : String, type : String) : String {
-    return PagerView.renderToString(pager, path, type)
+  function renderWidget(pager : util.PagerIterable) : String {
+    return PagerView.renderToString(pager, Request.URL.replace("/table",""), (Params['page'] as String)?.toLong())
+  }
+
+  static function replacePage(URL : String, value : String) : String {
+    return URL + "?page=" + value
   }
 
 }

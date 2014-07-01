@@ -11,8 +11,8 @@ uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
-uses util.TransformationIterator
-uses util.SkipIterator
+uses util.TransformIterable
+uses util.SkipIterable
 uses java.lang.Class
 uses java.lang.Exception
 uses util.CancellationException
@@ -260,35 +260,35 @@ abstract class Job implements Runnable {
                       .newInstance({{'Type' -> type, 'UUId' -> UUID}}) as jobs.Job
   }
 
-  static property get ActiveJobs() : SkipIterator<jobs.Job> {
-    return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Active'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  static property get ActiveJobs() : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.find({'Status' -> 'Active'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get CompleteJobs() : SkipIterator<jobs.Job> {
-    return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Complete'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  static property get CompleteJobs() : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.find({'Status' -> 'Complete'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get CancelledJobs() : SkipIterator<jobs.Job> {
-    return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Cancelled'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  static property get CancelledJobs() : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.find({'Status' -> 'Cancelled'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get FailedJobs() : SkipIterator<jobs.Job> {
-    return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Failed'}), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  static property get FailedJobs() : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.find({'Status' -> 'Failed'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get AllJobs() : SkipIterator<jobs.Job> {
-    return new TransformationIterator<jobs.Job>(
-        dataStore.find(), \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+  static property get AllJobs() : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.find().Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
   // This is for salesforce uploading
-  static property get CompleteRecommendJobs() : SkipIterator<jobs.Job> {
-    return new TransformationIterator<jobs.Job>(
-        dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}),
+  static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}).Cursor,
             \ m -> newUp(m['UUId'] as String, m['Type'] as String))
   }
 

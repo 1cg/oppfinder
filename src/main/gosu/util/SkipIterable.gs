@@ -1,6 +1,8 @@
 package util
 
-interface SkipIterable <E> {
+uses java.lang.Iterable
+
+interface SkipIterable <E> extends Iterable<E> {
 
   function skip(n : long)
 
