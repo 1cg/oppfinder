@@ -61,7 +61,7 @@ class UploadJob extends Job {
   override function doReset() {}
 
   override function renderToString() : String {
-    return view.Companies.renderToString(1)
+    return view.DataSetTable.renderToString()
   }
 
 }

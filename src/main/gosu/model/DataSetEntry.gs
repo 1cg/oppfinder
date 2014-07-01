@@ -35,6 +35,18 @@ class DataSetEntry {
     return ds.toList().map(\ o -> o['name'] as String)
   }
 
+  static function FindDataSet(id : String) : SkipIterable<Map> {
+    var ds = new DataSet(MASTER_DATA_SET).find()
+    var iter = ds?.iterator()
+    while (iter?.hasNext()) {
+      var n = iter?.next()
+      if (n.get('name') as String == id) {
+        return All(n.get('name') as String)
+      }
+    }
+    return null
+  }
+
   static property get MostRecentDataSet() : SkipIterable<Map> {
     var ds = new DataSet(MASTER_DATA_SET).find()
     return ds?.iterator()?.hasNext() ? All(ds.iterator().next().get('name') as String) : null
