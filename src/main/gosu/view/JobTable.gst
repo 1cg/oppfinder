@@ -1,6 +1,6 @@
 <%@ params(type : String, pager : util.PagerIterable<jobs.Job>)%>
 <div class="page-header">
-  <h3>${type.capitalize() + " Jobs"}</h3>
+  <h3>${type?.capitalize() + " Jobs"}</h3>
 </div>
 <h3 class="navbar-left">Filter by job status: </h3>
 <div class="btn-group navbar-left" style='padding-left:10px;padding-top:15px'>
