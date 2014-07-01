@@ -22,11 +22,13 @@ class JobController implements IHasRequestContext, IResourceController {
 
   // TODO cgross - update sparkgs to allow return values for this
   override function index() {
-    Writer.append(JobTable.renderToString(Params['status'],Job.findByStatus(Params['status']).paginate(Params['page'])))
+    var status = Params['status'] ?: "all"
+    Writer.append(Layout.renderToString(JobTable.renderToString(status, Job.findByStatus(status).paginate(Params['page']))))
   }
 
   function table() : Object {
-    return raw(JobTableBody.renderToString(Params['status'], Job.findByStatus(Params['status']).paginate(Params['page'])))
+    var status = Params['status'] ?: "all"
+    return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page'])));
   }
 
   function generateProgress() : Object {
