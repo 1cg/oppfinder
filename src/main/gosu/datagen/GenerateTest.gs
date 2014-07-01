@@ -5,6 +5,7 @@ uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses java.io.FileWriter
 uses java.io.File
+uses util.AssetLibrarian
 
 class GenerateTest {
 
@@ -60,7 +61,9 @@ class GenerateTest {
       company.put("Policies", coPolicies)
       bigArray.add(company)
     }
-    var outputFile = new FileWriter(new File(output))
+    var path = AssetLibrarian.INSTANCE.getPath("Cities.txt")
+    path = path.substring(0,path.lastIndexOf("/")+1)
+    var outputFile = new FileWriter(new File(path + output))
     outputFile.write(bigArray.toJSONString())
     outputFile.flush()
     outputFile.close()

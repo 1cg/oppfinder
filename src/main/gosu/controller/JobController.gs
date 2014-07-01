@@ -32,7 +32,7 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function generateProgress() : Object {
-    return raw(Job.find(UUId)?.Progress)
+    return raw(Job.find(UUId)?.Progress+"%")
   }
 
   function generateComplete() : Object {
@@ -72,9 +72,9 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'recommend') {
       new RecommendJob(Params['collections']).start()
     } else if (Params['type'] == 'upload') {
-      new UploadJob(Request.Body).start()
+      UUId = new UploadJob(Request.Body).start().UUId
     } else if (Params['type'] == 'generate') {
-      new GenerateJobFormParser(Request.Body).startJob()
+      UUId = GenerateJobFormParser.startJob(Params['dataSetName'] as String, Params['generateStrategy'] as String).UUId
     } else if (Params['type'] == 'auth') {
       new SalesforceAuthJob(Params['id'], Params['code']).start()
     }
