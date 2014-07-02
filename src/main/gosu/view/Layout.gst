@@ -40,7 +40,7 @@
               <a href="/jobs">Jobs</a>
             </li>
             <li>
-              <a href="/companies/1">Data Generation</a>
+              <a href="/datasets">Data Generation</a>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">

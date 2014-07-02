@@ -14,6 +14,7 @@ uses sparkgs.IResourceController
 uses view.JobTable
 uses view.JobTableBody
 uses view.Layout
+uses view.SalesforceUpload
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -33,6 +34,10 @@ class JobController implements IHasRequestContext, IResourceController {
   function subJobTable(UUID : String) : Object {
     var jobs = (Job.find(UUID) as RecommendJob).SubJobs
     return raw(JobTableBody.renderToString("Sub Jobs",Job.findByIDs(jobs.map(\ j -> j.UUId)).paginate(Params['page'])))
+  }
+
+  function _auth() {
+    Writer.append(Layout.renderToString(SalesforceUpload.renderToString(Params['code'])))
   }
 
   function generateProgress() : Object {

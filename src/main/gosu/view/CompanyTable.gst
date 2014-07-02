@@ -1,4 +1,4 @@
-<%@ params(pager : util.PagerIterable<java.util.Map<Object,Object>>)%>
+<%@ params(pager : util.PagerIterable<java.util.Map>)%>
 <table class="table">
   <thead>
     <tr>

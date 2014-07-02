@@ -16,9 +16,4 @@ get('/_auth', \-> view.SalesforceUpload.renderToString(Params['code']))
 resource("/jobs", new JobController())
 
 // DataSets
-resource("/dataset", new DataSetController())
-
-get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
-get('/companies/table/:page', \-> {
-  Layout = null
-  return view.CompanyTable.renderToString(model.DataSetEntry.MostRecentDataSet?.paginate(Params['page']))})
+resource("/datasets", new DataSetController())
