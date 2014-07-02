@@ -4,6 +4,7 @@ uses java.util.Map
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONValue
 uses org.json.simple.JSONObject
+uses util.SkipIterable
 
 class Results {
 
@@ -20,8 +21,8 @@ class Results {
     return jArray?.map(\ o -> o as JSONObject)
   }
 
-  static property get AllResults() : List<String> {
-    return DS.find()?.toList()?.map(\ o -> o['UUId'] as String)
+  static property get AllResults() : SkipIterable<Map<Object,Object>> {
+    return DS.find()
   }
 
 }

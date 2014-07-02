@@ -19,7 +19,7 @@ class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
 
-  override function index() : String {
+  override function index() : Object {
     var status = Params['status'] ?: "all"
     return JobTable.renderToString(status, Job.findByStatus(status).paginate(Params['page']))
   }
@@ -46,19 +46,19 @@ class JobController implements IHasRequestContext, IResourceController {
     return (Job.find(UUId)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
   }
 
-  function cancel(UUID : String) {
+  function cancel(UUID : String) : String {
     Job.find(UUID)?.cancel()
-    return
+    return ""
   }
 
-  function reset(UUID : String) {
+  function reset(UUID : String) : String {
     Job.find(UUID)?.reset()
-    return
+    return ""
   }
 
-  function delete(UUID : String) {
+  function delete(UUID : String) : String {
     Job.find(UUID)?.delete()
-    return
+    return ""
   }
 
   function progress(UUID : String) : Object {
@@ -73,7 +73,7 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(JobStatusFeedList.renderToString(Job.find(UUID)?.StatusFeed, UUID))
   }
 
-  override function create() {
+  override function create() : Object {
     if (Params['type'] == "test") {
       new TestJob().start()
     } else if (Params['type'] == 'recommend') {
@@ -85,18 +85,22 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'auth') {
       new SalesforceAuthJob(Params['id'], Params['code']).start()
     }
+    return ""
   }
 
-  override function _new() {
+  override function _new() : Object{
+    return ""
   }
 
-  override function show(id: String) : String {
-   return JobDrillDown.renderToString(Job.find(id))
+  override function show(id: String) : Object {
+     return JobDrillDown.renderToString(Job.find(id))
   }
 
-  override function edit(id: String) {
+  override function edit(id: String) : Object {
+    return ""
   }
 
-  override function update(id: String) {
+  override function update(id: String) : Object {
+    return ""
   }
 }
