@@ -1,5 +1,6 @@
 uses controller.JobController
 uses controller.DataSetController
+uses controller.ResultsController
 
 extends sparkgs.SparkFile
 
@@ -17,3 +18,6 @@ resource("/jobs", new JobController())
 
 // DataSets
 resource("/datasets", new DataSetController())
+
+// Results
+resource("/results", new ResultsController())

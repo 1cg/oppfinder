@@ -10,7 +10,7 @@ uses java.lang.System
 
 class SalesforceRESTClient {
   static final var SF_TOKEN_SITE = "https://login.salesforce.com/services/oauth2/token"
-  static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/jobs/_auth"
+  static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results/_auth"
 
   var _httpClient : HttpClient
   var _accessToken : String
