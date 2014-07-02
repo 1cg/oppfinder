@@ -29,7 +29,8 @@ class GenerateJob extends Job {
     this.StatusFeed = "Dropping previous dataset"
     var dataSet = new MongoCollection (collection)
     dataSet.drop()
-    var companies = new MongoCollection(inputCollection).find()
+    var companiesDS = new MongoCollection(inputCollection)
+    var companies = companiesDS.find()
     checkCancellation()
     this.StatusFeed = "Parsed company information"
     for (company in companies index i) {
@@ -41,6 +42,7 @@ class GenerateJob extends Job {
     }
     checkCancellation()
     dataSet.insert(companies.toList())
+    companiesDS.drop()
     this.StatusFeed = "Company information inserted"
     writeLatLng()
     new DataSet (collection)
