@@ -1,6 +1,4 @@
-package view.jobs
-
-    <%@ params(type : String, pager : util.PagerIterable<jobs.Job>)%>
+<%@ params(type : String, pager : util.PagerIterable<jobs.Job>)%>
 <div class="page-header">
   <h3>${type?.capitalize() + " Jobs"}</h3>
 </div>
