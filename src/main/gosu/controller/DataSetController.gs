@@ -5,6 +5,7 @@ uses sparkgs.IResourceController
 uses view.companies.Companies
 uses view.datasets.DataSetTable
 uses model.DataSet
+uses view.datasets.GenerateUploadPage
 
 class DataSetController implements IHasRequestContext, IResourceController {
 
@@ -17,7 +18,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
   override function create() {
   }
   override function _new() {
-
+    Writer.append(GenerateUploadPage.renderToString())
   }
   override function edit(id: String) {
   }

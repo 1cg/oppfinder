@@ -1,4 +1,5 @@
 <h2>Either randomly generate or upload your own data.</h2><br>
+<a href='/datasets' style="color:#476CB5"><strong>Back to DataSets</strong></a>
 <div class="jumbotron">
   <h3> Generate New Data Set </h3>
   <form ic-post-to="/jobs?type=generate" role="form">
