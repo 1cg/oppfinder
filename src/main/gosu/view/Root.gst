@@ -11,7 +11,7 @@
       <select class="form-control" name="collections">
         <optgroup label="Most Recent">
         <% for(collection in model.DataSet.allDataSets){ %>
-          <option value=${collection}>${collection}</option>
+          <option value=${collection['name']}>${collection['name']}</option>
         <% } %>
         </optgroup>
       </select>
