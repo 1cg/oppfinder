@@ -5,12 +5,11 @@
 <!-- Be able to pass a UUID (for the recommendation job) and the code parameter -->
 
 <p>This page is ugly, I know. Will clean up as soon as salesforce works</p>
-<% var code1 = code.substring(0,code.length)%>
 
-<a class="btn" href="/jobs/action/start/salesforce_export/0000/${code1}">Test!</a>
+<a class="btn" ic-post-to="/jobs?type=auth&id=0000&code=${code}">Test!</a>
 
 <% for(recommendationUUID in jobs.Job.CompleteRecommendJobs) { %>
-  <form action="/jobs?type=auth&id=${recommendationUUID}&code=${code1}" >
+  <form action="/jobs?type=auth&id=${recommendationUUID}&code=${code}" >
     <input type="submit" value="${recommendationUUID}">
   </form>
 <% } %>
