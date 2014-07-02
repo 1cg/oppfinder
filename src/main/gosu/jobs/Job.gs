@@ -290,14 +290,20 @@ abstract class Job implements Runnable {
 
   static property get AllJobs() : SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
-        dataStore.find().Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+        dataStore.queryNot('Status', 'Subjob').Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
   // This is for salesforce uploading
   static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}).Cursor,
-            \ m -> newUp(m['UUId'] as String, m['Type'] as String))
+            \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+  }
+
+  static function findByIDs(IDs : List<String>) : SkipIterable<jobs.Job> {
+    return new TransformIterable<jobs.Job>(
+        dataStore.queryOr(IDs, 'UUId').Cursor, \
+            m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
   abstract function renderToString() : String

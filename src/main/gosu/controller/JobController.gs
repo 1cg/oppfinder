@@ -6,7 +6,6 @@ uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
 uses view.JobDrillDown
-uses view.FailedJobView
 uses view.JobStatusFeedList
 uses jobs.TestJob
 uses util.GenerateJobFormParser
@@ -28,7 +27,12 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function table() : Object {
     var status = Params['status'] ?: "all"
-    return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page'])));
+    return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page'])))
+  }
+
+  function subJobTable(UUID : String) : Object {
+    var jobs = (Job.find(UUID) as RecommendJob).SubJobs
+    return raw(JobTableBody.renderToString("Sub Jobs",Job.findByIDs(jobs.map(\ j -> j.UUId)).paginate(Params['page'])))
   }
 
   function generateProgress() : Object {
@@ -74,7 +78,7 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'upload') {
       UUId = new UploadJob(Request.Body).start().UUId
     } else if (Params['type'] == 'generate') {
-      UUId = GenerateJobFormParser.startJob(Params['dataSetName'] as String, Params['generateStrategy'] as String).UUId
+      UUId = GenerateJobFormParser.startJob(Params['dataSetName'], Params['generateStrategy']).UUId
     } else if (Params['type'] == 'auth') {
       new SalesforceAuthJob(Params['id'], Params['code']).start()
     }

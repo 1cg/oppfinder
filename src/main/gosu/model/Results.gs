@@ -15,12 +15,13 @@ class Results {
   }
 
   static function getResults(UUID : String) : List<Map<Object,Object>> {
-    var jArray = JSONValue.parse(DS.findOne({'UUId' -> UUID})['Results'] as String) as JSONArray
-    return jArray.map(\ o -> o as JSONObject)
+    var results = DS.findOne({'UUId' -> UUID})?['Results'] as String
+    var jArray = results == null ? null : JSONValue.parse(results) as JSONArray
+    return jArray?.map(\ o -> o as JSONObject)
   }
 
   static property get AllResults() : List<String> {
-    return DS.find().toList().map(\ o -> o['UUId'] as String)
+    return DS.find()?.toList()?.map(\ o -> o['UUId'] as String)
   }
 
 }

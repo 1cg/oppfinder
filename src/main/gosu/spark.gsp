@@ -21,4 +21,4 @@ resource("/dataset", new DataSetController())
 get('/companies/:page', \-> view.Companies.renderToString(Params['page'].toLong()))
 get('/companies/table/:page', \-> {
   Layout = null
-  return view.CompanyTable.renderToString(model.DataSetEntry.MostRecentDataSet?.paginate(Params['page'] as String))})
+  return view.CompanyTable.renderToString(model.DataSetEntry.MostRecentDataSet?.paginate(Params['page']))})
