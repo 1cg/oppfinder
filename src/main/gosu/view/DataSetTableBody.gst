@@ -1,4 +1,4 @@
-<%@ params(dataSetNames : java.util.List<String>) %>
+<%@ params(dataSetNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
 <table class="table">
   <thead>
     <tr>
@@ -11,9 +11,10 @@
   <% for (result in dataSetNames) {%>
     <tr>
       <td>
-        <a href='/datasets/${result}' style="color:#476CB5">${result}</a>
+        <a href='/datasets/${result}' style="color:#476CB5">${result['name']}</a>
       </td>
     </tr>
   <% } %>
   </tbody>
 </table>
+${new widgets.PagerWidget().renderWidget(dataSetNames)}

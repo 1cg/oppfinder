@@ -3,6 +3,7 @@ package model
 uses java.util.HashMap
 uses java.util.Map
 uses util.SkipIterable
+uses util.TransformIterable
 
 class DataSetEntry {
 
@@ -30,9 +31,8 @@ class DataSetEntry {
     return new DataSet(_collection).find()
   }
 
-  static function AllDataSets() : List<String> {
-    var ds = new DataSet(MASTER_DATA_SET).find()
-    return ds.toList().map(\ o -> o['name'] as String)
+  static property get AllDataSets() : SkipIterable<Map<Object,Object>> {
+    return new DataSet(MASTER_DATA_SET).find()
   }
 
   static function FindDataSet(id : String) : SkipIterable<Map> {

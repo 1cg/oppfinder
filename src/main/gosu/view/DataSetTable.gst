@@ -1,4 +1,4 @@
-<%@ params(dataSetNames : java.util.List<String>) %>
+<%@ params(dataSetNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
 <h2>Either randomly generate or upload your own data.</h2><br>
 <div class="jumbotron">
   <h3> Generate New Data Set </h3>

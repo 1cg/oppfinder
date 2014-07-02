@@ -1,5 +1,5 @@
 <%@ params(job : jobs.RecommendJob) %>
-<% if (model.Results.getResults(job.UUId).size() > 0) { %>
+<% if (model.Results.getResults(job?.UUId)?.size() > 0) { %>
   <hr>
   <h2> Results!</h2>
   <table class="table">
@@ -36,5 +36,5 @@
 <hr>
 <h2>Sub Jobs</h2>
 <div ic-src="/jobs/${job.UUId}/subjobtable" ic-poll="3s" ic-transition="none" ic-deps="/jobs">
-  ${new controller.JobController().subJobTable(job.UUId)}
+  ${new controller.JobController().subJobTable(job?.UUId)}
 </div>
