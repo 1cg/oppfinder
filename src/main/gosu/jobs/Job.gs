@@ -81,14 +81,13 @@ abstract class Job implements Runnable {
   abstract function doReset()
 
   final function reset() {
-    var newUUID = UUID.randomUUID().toString()
-    dataStore.update({'UUId' -> UUId}, {'UUId' -> newUUID})
-    var job = newUp(newUUID, dataStore.findOne({'UUId' -> newUUID})['Type'] as String)
-    job.Status = 'Active'
-    job.Progress = 0
-    job.doReset()
-    job.EndTime = null
-    job.start()
+    UUId = UUID.randomUUID().toString()
+    update({'StatusFeed' -> null})
+    Status = 'Active'
+    Progress = 0
+    doReset()
+    EndTime = null
+    start()
   }
 
   function delete() {

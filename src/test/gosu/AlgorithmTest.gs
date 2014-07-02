@@ -12,8 +12,6 @@ class AlgorithmTest extends TestCase {
     print("iteration: "+i)
     new GenerateTest().generateTest('dataReach.json', "Reach", numCompanies)
     new GenerateJob('dataReach.json', UUID.randomUUID().toString()).start().join()
-
-    print("yo")
     var recommendJob = new RecommendJob("AlgorithmTestCollection")
     recommendJob.start().join()
 

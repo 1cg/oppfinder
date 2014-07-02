@@ -23,7 +23,6 @@ class RecommendJob extends Job {
 
   construct(dataSetName : String) {
     super()
-    print(dataSetName)
     update({'DataSetToAnalyze' -> dataSetName})
   }
 
@@ -100,6 +99,13 @@ class RecommendJob extends Job {
   override function doReset() {
     for (jobID in subJobsID) {
       new MongoCollection (jobID).drop()
+    }
+  }
+
+  override function delete() {
+    super.delete()
+    for (job in SubJobs) {
+      job.delete()
     }
   }
 
