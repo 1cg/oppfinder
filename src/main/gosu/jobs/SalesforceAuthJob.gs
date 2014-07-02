@@ -38,7 +38,7 @@ class SalesforceAuthJob extends Job {
     }
     var result = sClient.post("Opportunity", opportunity)
     if (result.get("success") as Boolean) {
-      this.StatusFeed = "Successful opportunity upload! Available at: "+sClient.InstanceURL+"/"+opportunity["AccountId"]
+      this.StatusFeed = "Confirmed upload! Available at: "+sClient.InstanceURL+"/"+opportunity["AccountId"]
     } else {
       this.StatusFeed = "Failed upload. Response from Salesforce: "+result
     }
