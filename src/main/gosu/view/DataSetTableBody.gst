@@ -11,7 +11,7 @@
   <% for (result in dataSetNames) {%>
     <tr>
       <td>
-        <a href='/datasets/${result}' style="color:#476CB5">${result['name']}</a>
+        <a href='/datasets/${result['name']}' style="color:#476CB5">${result['name']}</a>
       </td>
     </tr>
   <% } %>
