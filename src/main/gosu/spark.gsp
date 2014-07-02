@@ -1,7 +1,8 @@
 uses controller.JobController
 uses controller.DataSetController
+uses java.lang.Exception
 
-extends sparkgs.SparkFile
+extends sparkgs.SparkGSFile
 
 StaticFiles = '/public'
 Layout = view.Layout
@@ -17,3 +18,7 @@ resource("/jobs", new JobController())
 
 // DataSets
 resource("/datasets", new DataSetController())
+
+onException(Exception, \ ex, req, resp -> {
+  resp.Body = view.ExceptionPage.renderToString(ex)
+})
