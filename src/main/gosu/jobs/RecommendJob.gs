@@ -10,7 +10,7 @@ uses model.Results
 
 class RecommendJob extends Job {
 
-  static final var NUM_RECOMMENDATIONS = 20
+  static final var NUM_RECOMMENDATIONS = 10
   static final var NUM_BUCKETS = 4
   public static final var DELIMITER : String = ","
   var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}

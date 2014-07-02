@@ -24,7 +24,7 @@ class PagerIterable<T> implements Iterable<T> {
     return Math.max((_wrapped?.Count + PAGE_SIZE - 1) / PAGE_SIZE,1)
   }
 
-  function validPage(page : long) : boolean {
+  final function validPage(page : long) : boolean {
     if (page < 1) return false
     return _wrapped?.Count > (page -1) * PAGE_SIZE
   }

@@ -36,6 +36,31 @@ class DataSet {
         _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
   }
 
+  function queryOr(values : List<String>, key : String) : TransformIterable<Map<Object,Object>> {
+    var document = new BasicDBObject()
+    var qb = new QueryBuilder()
+    var list : List<DBObject> = {}
+    for (item in values) {
+      var o = new BasicDBObject()
+      o[key] = item
+      list.add(o)
+    }
+    qb.or(list.toTypedArray())
+    document.putAll(qb.get())
+    return new TransformIterable<Map<Object,Object>>(
+        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+  }
+
+  function queryNot(key : String, value : String) : TransformIterable<Map<Object,Object>> {
+    var document = new BasicDBObject()
+    var qb = new QueryBuilder()
+    qb.put(key).notEquals(value)
+    document.putAll(qb.get())
+    return new TransformIterable<Map<Object,Object>>(
+        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+  }
+
+
   function findOne(ref : Map<Object, Object>) : Map<Object, Object> {
     return _collection.findOne(new BasicDBObject(ref))?.toMap()
   }

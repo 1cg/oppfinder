@@ -16,6 +16,6 @@
   </ul>
 </div>
 <br><br><hr>
-<div id='wrapper'>
+<div id='wrapper' ic-src='jobs/table?status=${type}&page=${pager.Current}' ic-poll="3s" ic-transition="none" ic-deps="/jobs">
   ${view.JobTableBody.renderToString(type, pager)}
 </div>
