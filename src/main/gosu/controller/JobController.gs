@@ -48,17 +48,17 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function cancel(UUID : String) : String {
     Job.find(UUID)?.cancel()
-    return ""
+    return null
   }
 
   function reset(UUID : String) : String {
     Job.find(UUID)?.reset()
-    return ""
+    return null
   }
 
   function delete(UUID : String) : String {
     Job.find(UUID)?.delete()
-    return ""
+    return null
   }
 
   function progress(UUID : String) : Object {
@@ -85,11 +85,11 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'auth') {
       new SalesforceAuthJob(Params['id'], Params['code']).start()
     }
-    return ""
+    return null
   }
 
   override function _new() : Object{
-    return ""
+    return null
   }
 
   override function show(id: String) : Object {
@@ -97,10 +97,10 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   override function edit(id: String) : Object {
-    return ""
+    return null
   }
 
   override function update(id: String) : Object {
-    return ""
+    return null
   }
 }
