@@ -100,7 +100,7 @@ class RecommendSubJob extends Job {
   }
 
   override function renderToString() : String {
-    return view.TestJob.renderToString()
+    return view.jobs.drilldowns.TestJob.renderToString()
   }
 
 }
