@@ -20,9 +20,9 @@ resource("/jobs", new JobController())
 // DataSets
 resource("/datasets", new DataSetController())
 
+// Results
+resource("/results", new ResultsController())
+
 onException(Exception, \ ex, req, resp -> {
   resp.Body = view.ExceptionPage.renderToString(ex)
 })
-
-// Results
-resource("/results", new ResultsController())
