@@ -5,16 +5,16 @@ uses sparkgs.util.IHasRequestContext
 uses jobs.Job
 uses jobs.UploadJob
 uses jobs.RecommendJob
-uses view.JobDrillDown
-uses view.JobStatusFeedList
+uses view.jobs.JobDrillDown
+uses view.jobs.JobStatusFeedList
 uses jobs.TestJob
 uses util.GenerateJobFormParser
 uses jobs.SalesforceAuthJob
 uses sparkgs.IResourceController
-uses view.JobTable
-uses view.JobTableBody
+uses view.jobs.JobTable
+uses view.jobs.JobTableBody
 uses view.Layout
-uses view.SalesforceUpload
+uses view.jobs.drilldowns.SalesforceUpload
 
 class JobController implements IHasRequestContext, IResourceController {
 

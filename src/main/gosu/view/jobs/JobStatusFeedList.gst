@@ -1,4 +1,6 @@
-<%@ params(feed : String, UUID : String) %>
+package view.jobs
+
+    <%@ params(feed : String, UUID : String) %>
 <div ic-src="/jobs/${UUID}/statusfeed" ic-poll="1s" ic-transition="none">
   <div class="panel panel-primary">
    <div class="panel-heading">Job Status Update (${jobs.Job.find(UUID).Progress}% Complete)</div>

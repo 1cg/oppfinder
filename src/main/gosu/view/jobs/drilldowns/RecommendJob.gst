@@ -1,4 +1,6 @@
-<%@ params(job : jobs.RecommendJob) %>
+package view.jobs.drilldowns
+
+    <%@ params(job : jobs.RecommendJob) %>
 <% if (model.Results.getResults(job?.UUId)?.size() > 0) { %>
   <hr>
   <h2> Results!</h2>

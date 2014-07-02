@@ -1,4 +1,6 @@
-<%@ params(code : String ) %>
+package view.jobs.drilldowns
+
+    <%@ params(code : String ) %>
 
 <h1>Select a recommendation result to upload</h1>
 

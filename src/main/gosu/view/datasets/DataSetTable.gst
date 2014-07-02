@@ -29,6 +29,6 @@
   </div>
 </div>
 <div id='wrapper'>
-  ${view.DataSetTableBody.renderToString(dataSetNames)}
+  ${view.datasets.DataSetTableBody.renderToString(dataSetNames)}
 </div>
 

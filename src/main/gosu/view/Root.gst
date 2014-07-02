@@ -1,16 +1,20 @@
-<div>
-  <h1><i class="fa fa-search myColor"></i> <span>Opportunity</span> <span>Finder</span></h1>
-  <p>Find new business opportunities in your existing Policy clientbase!</p>
-  <hr/>
-  <div>
-  <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
-    <div class="form-group">
-    <label>
-      <strong>Select DataSet: </strong>
-    </label>
-    <select class="form-control" name="collections">
-      <optgroup label="Most Recent">
-      <% for(collection in model.DataSetEntry.AllDataSets){ %>
+package view
+
+    package view.jobs.drilldowns
+
+        <div>
+          <h1><i class="fa fa-search myColor"></i> <span>Opportunity</span> <span>Finder</span></h1>
+          <p>Find new business opportunities in your existing Policy clientbase!</p>
+          <hr/>
+          <div>
+          <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
+            <div class="form-group">
+            <label>
+              <strong>Select DataSet: </strong>
+            </label>
+            <select class="form-control" name="collections">
+              <optgroup label="Most Recent">
+              <% for(collection in model.DataSetEntry.AllDataSets){ %>
         <option value=${collection}>${collection}</option>
       <% } %>
       </optgroup>
@@ -30,4 +34,4 @@
   <a href="/companies/1">Generate Or Import DataSet</a>
   </div>
 </div>
-${view.JobTable.renderToString("all", new util.PagerIterable<jobs.Job>(jobs.Job.AllJobs, 1))}
+${view.jobs.JobTable.renderToString("all", new util.PagerIterable<jobs.Job>(jobs.Job.AllJobs, 1))}

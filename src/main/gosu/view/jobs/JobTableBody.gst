@@ -1,4 +1,6 @@
-<%@ params(type: String, pager: util.PagerIterable<jobs.Job>) %>
+package view.jobs
+
+    <%@ params(type: String, pager: util.PagerIterable<jobs.Job>) %>
 <table class="table table-striped table-hover">
   <thead>
     <tr>
