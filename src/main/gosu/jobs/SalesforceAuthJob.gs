@@ -94,6 +94,7 @@ class SalesforceAuthJob extends Job {
     var accessToken = json.get("access_token") as String
     var instanceUrl = json.get("instance_url") as String
     this.StatusFeed = "Received response."
+    this.StatusFeed = json.toString()
 
     // Create Opportunity from Company Information and send to Salesforce via POST method
     var opp = new JSONObject()
