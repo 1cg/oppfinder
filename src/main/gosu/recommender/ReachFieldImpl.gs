@@ -3,8 +3,7 @@ package recommender
 uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses util.MahoutUtil
-uses model.DataSet
-uses model.DataSetEntry
+uses model.MongoCollection
 uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 uses java.util.Map
 uses java.lang.Integer
@@ -15,7 +14,7 @@ class ReachFieldImpl implements Field {
   static final var reachMap = makeReachMap()
 
   override function getModel(collection : String): DataModel {
-    return MahoutUtil.toDataModel(new DataSet(collection), "Reach",
+    return MahoutUtil.toDataModel(new MongoCollection (collection), "Reach",
        \ o -> reachToLong(o), null)
   }
 

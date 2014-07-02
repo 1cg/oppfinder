@@ -3,7 +3,7 @@ package model
 uses org.json.simple.JSONValue
 uses org.json.simple.JSONArray
 
-class Company extends DataSetEntry {
+class Company extends DataSet {
 
   property set CompanyName(companyName : String) {
     put("Company", companyName)

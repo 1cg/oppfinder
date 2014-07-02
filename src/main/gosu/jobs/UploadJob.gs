@@ -1,7 +1,7 @@
 package jobs
 
 uses java.util.Map
-uses model.DataSet
+uses model.MongoCollection
 uses org.json.simple.JSONArray
 uses org.json.simple.parser.JSONParser
 uses model.Company
@@ -18,14 +18,14 @@ class UploadJob extends Job {
   }
 
   construct(body : String) {
-    var dataSet = new DataSet("uploadToParse")
+    var dataSet = new MongoCollection ("uploadToParse")
     dataSet.drop()
     dataSet.insert({"file" -> body})
   }
 
   override function executeJob() {
     checkCancellation()
-    var body = (new DataSet("uploadToParse").find().iterator().next()["file"]).toString()
+    var body = (new MongoCollection ("uploadToParse").find().iterator().next()["file"]).toString()
     var i = 0
     for (0..3) {
       i = body.indexOf("\n", i+1)
@@ -39,7 +39,7 @@ class UploadJob extends Job {
     var parser = new JSONParser()
     var array = parser.parse(body) as JSONArray
     checkCancellation()
-    var dataSet = new DataSet("oppFinder")
+    var dataSet = new MongoCollection ("oppFinder")
     dataSet.drop()
     var iterations = array.size()
     for (var j in 0..iterations-1) {
@@ -61,7 +61,7 @@ class UploadJob extends Job {
   override function doReset() {}
 
   override function renderToString() : String {
-    return view.datasets.DataSetTable.renderToString(model.DataSetEntry.AllDataSets.paginate("1"))
+    return view.datasets.DataSetTable.renderToString(model.DataSet.allDataSets.paginate("1"))
   }
 
 }

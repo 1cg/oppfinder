@@ -2,7 +2,7 @@ package jobs
 
 uses java.util.Map
 uses java.lang.Thread
-uses model.DataSet
+uses model.MongoCollection
 uses java.lang.Float
 uses util.MahoutUtil
 uses java.util.Arrays
@@ -36,7 +36,7 @@ class RecommendJob extends Job {
     this.StatusFeed = "Sub Jobs Complete"
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
-      var ds = new DataSet(jobID)
+      var ds = new MongoCollection (jobID)
       for (companyRecommendations in ds.find() index i) {
         if (i % 200 == 0) checkCancellation()
         companyRecommendations.remove('_id')
@@ -60,7 +60,7 @@ class RecommendJob extends Job {
   * Runs each of the sub jobs that analyze the selected fields
    */
   function startSubJobs(dataSet : String) {
-    var size = (new DataSet(dataSet).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
+    var size = (new MongoCollection (dataSet).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
     for (jobName in subJobs) {
       for (i in 0..|NUM_BUCKETS) {
         var job = new RecommendSubJob(jobName,i * size, size, dataSet)
@@ -80,7 +80,7 @@ class RecommendJob extends Job {
     var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue().reversed())
     checkCancellation()
     var finalResults : List<Map<Object, Object>>= {}
-    var companyDB = new DataSet(dataSet)
+    var companyDB = new MongoCollection (dataSet)
     for (each in sorted.iterator() index i) {
       if (i == NUM_RECOMMENDATIONS) break
       var result : Map<Object, Object> = {}
@@ -99,7 +99,7 @@ class RecommendJob extends Job {
    */
   override function doReset() {
     for (jobID in subJobsID) {
-      new DataSet(jobID).drop()
+      new MongoCollection (jobID).drop()
     }
   }
 

@@ -3,8 +3,8 @@ package jobs
 uses java.util.Map
 uses java.io.FileReader
 uses java.io.BufferedReader
+uses model.MongoCollection
 uses model.DataSet
-uses model.DataSetEntry
 uses org.json.simple.parser.JSONParser
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
@@ -29,7 +29,7 @@ class GenerateJob extends Job {
     var collection = search('DataSetCollection') as String
     var parser = new JSONParser()
     this.StatusFeed = "Dropping previous dataset"
-    var dataSet = new DataSet(collection)
+    var dataSet = new MongoCollection (collection)
     dataSet.drop()
     var companies = (parser.parse(
         new FileReader(AssetLibrarian.INSTANCE.getPath(path))) as JSONArray)
@@ -47,7 +47,7 @@ class GenerateJob extends Job {
     dataSet.insert(companies)
     this.StatusFeed = "Company information inserted"
     writeLatLng()
-    new DataSetEntry(collection)
+    new DataSet (collection)
     this.StatusFeed = "Done"
   }
 
@@ -62,7 +62,7 @@ class GenerateJob extends Job {
     var coordInput = new FileReader(AssetLibrarian.INSTANCE.LATLNG)
     var bufRead = new BufferedReader(coordInput)
     var myLine = bufRead.readLine()
-    var dataStore = new DataSet(DataSetEntry.REGIONCOORDINATES)
+    var dataStore = new MongoCollection (DataSet.REGIONCOORDINATES)
     dataStore.drop()
     var locationMap : Map<String, String> = {}
     while (myLine != null) {

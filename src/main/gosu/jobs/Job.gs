@@ -2,7 +2,7 @@ package jobs
 
 uses net.greghaines.jesque.client.ClientImpl
 uses net.greghaines.jesque.Job
-uses model.DataSet
+uses model.MongoCollection
 uses java.util.Map
 uses java.lang.Runnable
 uses java.util.HashMap
@@ -23,7 +23,7 @@ abstract class Job implements Runnable {
 
   static final var COLLECTION = 'jobs'
   protected static final var MAX_PROGRESS_VALUE : int = 100
-  static var dataStore = new DataSet(COLLECTION)
+  static var dataStore = new MongoCollection (COLLECTION)
   var id : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {

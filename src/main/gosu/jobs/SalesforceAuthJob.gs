@@ -26,7 +26,7 @@ class SalesforceAuthJob extends Job {
     this.Progress = 15
 
     /*** Eventually, the creation and posting of opportunities will go in a loop over the recommendations at
-     *   var recommendations = new DataSet('Results:'+search('AnalysisToUpload') as String).find() ***/
+     *   var recommendations = new MongoCollection('Results:'+search('AnalysisToUpload') as String).find() ***/
     // For a list of Opportunity fields, please visit: https://www.salesforce.com/us/developer/docs/api/Content/sforce_api_objects_opportunity.htm
     var opportunity = {
         "Name" -> "Test Company 1",

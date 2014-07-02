@@ -1,6 +1,6 @@
 package util
 
-uses model.DataSet
+uses model.MongoCollection
 uses org.apache.mahout.cf.taste.impl.common.FastByIDMap
 uses org.apache.mahout.cf.taste.model.PreferenceArray
 uses org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray
@@ -16,7 +16,7 @@ uses org.json.simple.JSONValue
 class MahoutUtil {
   static final var policies = makePolicyMap()
 
-  static function toDataModel(ds : DataSet, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
+  static function toDataModel(ds : MongoCollection, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
     var companies = ds.find({}, {field -> 1, 'Policies' -> 1, 'longID' -> 1}) //Find the field and policies for each company
     var idMap = new FastByIDMap<PreferenceArray>()
     for (companyData in companies) {
