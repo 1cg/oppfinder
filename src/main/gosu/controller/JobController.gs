@@ -49,30 +49,30 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function cancel(UUID : String) {
-    Job.find(UUID).cancel()
+    Job.find(UUID)?.cancel()
     return
   }
 
   function reset(UUID : String) {
-    Job.find(UUID).reset()
+    Job.find(UUID)?.reset()
     return
   }
 
   function delete(UUID : String) {
-    Job.find(UUID).delete()
+    Job.find(UUID)?.delete()
     return
   }
 
   function progress(UUID : String) : Object {
-    return raw(Job.find(UUID).Progress+"%")
+    return raw(Job.find(UUID)?.Progress+"%")
   }
 
   function elapsed(UUID : String) : Object {
-    return raw(Job.find(UUID).ElapsedTime)
+    return raw(Job.find(UUID)?.ElapsedTime)
   }
 
   function statusFeed(UUID : String) : Object {
-    return raw(JobStatusFeedList.renderToString(Job.find(UUID).StatusFeed, UUID))
+    return raw(JobStatusFeedList.renderToString(Job.find(UUID)?.StatusFeed, UUID))
   }
 
   override function create() {
