@@ -58,7 +58,7 @@ class SalesforceAuthJob extends Job {
   static final var ACCOUNT_ID = "001o0000003d6P4"
   static final var CLIENT_ID = "3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg"
   static final var CLIENT_SECRET = "5207032927813523155"
-  static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/_auth"
+  static final var REDIRECT_URI = "https://gosuroku.herokuapp.com/jobs/_auth"
 
   construct(data : Map<Object, Object>) {
     super(data)
