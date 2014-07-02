@@ -2,9 +2,8 @@ package controller
 
 uses sparkgs.util.IHasRequestContext
 uses sparkgs.IResourceController
-uses view.Layout
-uses view.Companies
-uses view.DataSetTable
+uses view.companies.Companies
+uses view.datasets.DataSetTable
 uses model.DataSetEntry
 
 class DataSetController implements IHasRequestContext, IResourceController {
