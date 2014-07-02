@@ -9,22 +9,29 @@ class ResultsController implements  IHasRequestContext, IResourceController {
     // This writes out the INDEX with the code argument
 //    Writer.append(Layout.renderToString(SalesforceUpload.renderToString(Params['code'])))
   }
-  override function index() {
     // This writes out the index without the code argument
+
+  override function index(): Object {
+    return ""
   }
 
-  override function _new() {
+  override function _new(): Object {
+    return ""
   }
 
-  override function create() {
+  override function create(): Object {
+    return ""
   }
 
-  override function show(id: String) {
+  override function show(id: String): Object {
+    return ""
   }
 
-  override function edit(id: String) {
+  override function edit(id: String): Object {
+    return ""
   }
 
-  override function update(id: String) {
+  override function update(id: String): Object {
+    return ""
   }
 }
