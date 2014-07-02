@@ -3,7 +3,7 @@ package datagen
 
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses model.DataSet
+uses model.MongoCollection
 
 class GenerateTest {
 
@@ -59,7 +59,7 @@ class GenerateTest {
       company.put("Policies", coPolicies)
       bigArray.add(company)
     }
-    var ds = new DataSet(output)
+    var ds = new MongoCollection(output)
     for (o in bigArray) {
       ds.insert(o as JSONObject)
     }

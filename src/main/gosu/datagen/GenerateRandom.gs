@@ -9,7 +9,7 @@ uses org.json.simple.JSONObject
 uses java.math.BigDecimal
 uses org.json.simple.JSONArray
 uses util.AssetLibrarian
-uses model.DataSet
+uses model.MongoCollection
 
 class GenerateRandom {
   /*
@@ -61,7 +61,7 @@ class GenerateRandom {
 
       bigArray.add(company)
     }
-    var ds = new DataSet(output)
+    var ds = new MongoCollection(output)
     for (o in bigArray) {
       ds.insert(o as JSONObject)
     }

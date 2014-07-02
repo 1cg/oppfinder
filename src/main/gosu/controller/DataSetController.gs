@@ -17,6 +17,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
   override function create() {
   }
   override function _new() {
+
   }
   override function edit(id: String) {
   }
