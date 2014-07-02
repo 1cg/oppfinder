@@ -1,106 +1,69 @@
 package model
 
-uses com.mongodb.*
+uses java.util.HashMap
 uses java.util.Map
-uses util.TransformIterable
+uses util.SkipIterable
 
 class DataSet {
 
-  var _collection : DBCollection
+  public static var REGIONCOORDINATES : String = "regionCoordinates"
+  public static var MASTER_DATA_SET : String = "masterDataSet" // MongoCollection of DataSets to refer to
+  var myDataSet : MongoCollection
+  var info : Map<Object, Object>
+  var collection : String
 
-  construct(collectionName : String) {
-    _collection = Database.INSTANCE.getCollection(collectionName)
+  construct() {
+    collection = "defaultDataSet"
+    myDataSet = new MongoCollection (collection)
+    new MongoCollection (MASTER_DATA_SET).insert({"name" -> collection})
+    info = new HashMap<String, Object>()
   }
 
- /* Automatically sorts from oldest to newest */
-  function find(ref : Map<Object, Object>) : TransformIterable<Map<Object,Object>> {
-     return new TransformIterable<Map<Object,Object>>(
-         _collection.find(new BasicDBObject(ref))
-                            .sort(new BasicDBObject({'_id' -> -1})),
-                             \ o  -> (o as BasicDBObject))
+  construct(_collection : String) {
+    collection = _collection
+    myDataSet = new MongoCollection (collection)
+    new MongoCollection (MASTER_DATA_SET).insert({"name" -> collection})
+    info = new HashMap<String, Object>()
   }
 
-  /* Automatically sorts from oldest to newest */
-  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : TransformIterable<Map<Object,Object>> {
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find(new BasicDBObject(ref),
-                          new BasicDBObject(keys))
-                          .sort(new BasicDBObject({'_id' -> -1})),
-                          \ o -> (o as BasicDBObject))
-
+  static function all(_collection : String = "defaultDataSet") : SkipIterable<Map> {
+    return new MongoCollection (_collection).find()
   }
 
-  /* Automatically sorts from oldest to newest */
-  function find() : TransformIterable<Map<Object,Object>> {
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+  static property get allDataSets() : SkipIterable<Map<Object,Object>> {
+    return new MongoCollection (MASTER_DATA_SET).find()
   }
 
-  function queryOr(values : List<String>, key : String) : TransformIterable<Map<Object,Object>> {
-    var document = new BasicDBObject()
-    var qb = new QueryBuilder()
-    var list : List<DBObject> = {}
-    for (item in values) {
-      var o = new BasicDBObject()
-      o[key] = item
-      list.add(o)
+  static function find(id : String) : SkipIterable<Map> {
+    var ds = new MongoCollection (MASTER_DATA_SET).find()
+    var iter = ds?.iterator()
+    while (iter?.hasNext()) {
+      var n = iter?.next()
+      if (n.get('name') as String == id) {
+        return all(n.get('name') as String)
+      }
     }
-    qb.or(list.toTypedArray())
-    document.putAll(qb.get())
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+    return null
   }
 
-  function queryNot(key : String, value : String) : TransformIterable<Map<Object,Object>> {
-    var document = new BasicDBObject()
-    var qb = new QueryBuilder()
-    qb.put(key).notEquals(value)
-    document.putAll(qb.get())
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+  static property get mostRecentDataSet() : SkipIterable<Map> {
+    var ds = new MongoCollection (MASTER_DATA_SET).find()
+    return ds?.iterator()?.hasNext() ? all(ds.iterator().next().get('name') as String) : null
   }
 
-
-  function findOne(ref : Map<Object, Object>) : Map<Object, Object> {
-    return _collection.findOne(new BasicDBObject(ref))?.toMap()
+  // Saves this company info into the mongo dataset
+  function save() {
+    myDataSet.insert(info)
+    return
   }
 
-  function insert(o : Map<Object, Object>) : WriteResult {
-    return _collection.insert( new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
+  // put and get are for the child classes to update info
+  protected function put (s : Object, o : Object) {
+    info.put(s, o)
   }
 
-  function insert(objects : List<Map<Object, Object>>) : WriteResult {
-    return _collection.insert(objects.map(\ o -> new BasicDBObject(o)), WriteConcern.ACKNOWLEDGED)
-  }
-
-  property get Count() : long {
-    return _collection.getCount()
-  }
-
-  function getCount(o : Map<Object, Object>) : long {
-    return _collection.getCount(new BasicDBObject(o))
-  }
-
-  function remove(o : Map<Object, Object>) : WriteResult {
-    return _collection.remove(new BasicDBObject(o))
-  }
-
-  function save(o : Map<Object, Object>) : WriteResult {
-    return _collection.save(new BasicDBObject(o),WriteConcern.ACKNOWLEDGED)
-  }
-
-  function update(q : Map<Object, Object>, o : Map<Object, Object>) {
-    var current = _collection.findOne(new BasicDBObject(q))
-    if (current != null) {
-      current.putAll(new BasicDBObject(o))
-    } else {
-      current = new BasicDBObject(o)
-    }
-    _collection.update(new BasicDBObject(q), current,false,false,WriteConcern.ACKNOWLEDGED)
-  }
-
-  function drop() {
-    _collection.drop()
+  protected function get (s : Object) : Object {
+    return info.get(s)
   }
 
 }

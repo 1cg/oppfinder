@@ -1,7 +1,7 @@
 package jobs
 
 uses java.util.Map
-uses model.DataSet
+uses model.MongoCollection
 uses java.lang.Class
 uses recommender.Field
 uses java.lang.Float
@@ -85,7 +85,7 @@ class RecommendSubJob extends Job {
     }
     myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
     if (myRecommendations.size() > 0) {
-      new DataSet(this.UUId).insert(myRecommendations)
+      new MongoCollection (this.UUId).insert(myRecommendations)
     }
   }
 
