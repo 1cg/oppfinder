@@ -13,17 +13,15 @@ uses jobs.SalesforceAuthJob
 uses sparkgs.IResourceController
 uses view.jobs.JobTable
 uses view.jobs.JobTableBody
-uses view.Layout
 uses view.jobs.drilldowns.SalesforceUpload
 
 class JobController implements IHasRequestContext, IResourceController {
 
   static var UUId : String
 
-  // TODO cgross - update sparkgs to allow return values for this
-  override function index() {
+  override function index() : String {
     var status = Params['status'] ?: "all"
-    Writer.append(Layout.renderToString(JobTable.renderToString(status, Job.findByStatus(status).paginate(Params['page']))))
+    return JobTable.renderToString(status, Job.findByStatus(status).paginate(Params['page']))
   }
 
   function table() : Object {
@@ -36,8 +34,8 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(JobTableBody.renderToString("Sub Jobs",Job.findByIDs(jobs.map(\ j -> j.UUId)).paginate(Params['page'])))
   }
 
-  function _auth() {
-    Writer.append(Layout.renderToString(SalesforceUpload.renderToString(Params['code'])))
+  function _auth() : String {
+    return SalesforceUpload.renderToString(Params['code'])
   }
 
   function generateProgress() : Object {
@@ -92,9 +90,8 @@ class JobController implements IHasRequestContext, IResourceController {
   override function _new() {
   }
 
-  // TODO cgross - update sparkgs to allow return values for this
-  override function show(id: String) {
-    Writer.append(JobDrillDown.renderToString(Job.find(id)))
+  override function show(id: String) : String {
+   return JobDrillDown.renderToString(Job.find(id))
   }
 
   override function edit(id: String) {

@@ -27,7 +27,6 @@ class AssetLibrarian {
       "Policy" -> "PolicyTypes.txt",
       "Reach" -> "Reaches.txt"
     }
-
   }
 
   final function getPath(fileName : String) : String {

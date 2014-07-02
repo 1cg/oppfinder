@@ -9,16 +9,16 @@ uses view.datasets.GenerateUploadPage
 
 class DataSetController implements IHasRequestContext, IResourceController {
 
-  override function index() {
-    Writer.append(DataSetTable.renderToString(model.DataSet.allDataSets.paginate(Params['page'] ?: 1))) // LATER come back to this and paginate it
+  override function index() : String {
+    return DataSetTable.renderToString(model.DataSet.allDataSets.paginate(Params['page'] ?: 1))
   }
-  override function show(id: String) {
-    Writer.append(Companies.renderToString(1, id, DataSet.find(id).paginate(Params['page'])))
+  override function show(id: String) : String {
+    return Companies.renderToString(1, id, DataSet.find(id).paginate(Params['page']))
   }
   override function create() {
   }
-  override function _new() {
-    Writer.append(GenerateUploadPage.renderToString())
+  override function _new() : String {
+    return GenerateUploadPage.renderToString()
   }
   override function edit(id: String) {
   }

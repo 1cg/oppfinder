@@ -23,29 +23,30 @@ class GenerateJob extends Job {
 
   override function executeJob() {
     checkCancellation()
-    var inputCollection = search('Input') as String
-    var collection = search('DataSetCollection') as String
     var parser = new JSONParser()
     this.StatusFeed = "Dropping previous dataset"
-    var dataSet = new MongoCollection (collection)
+    var dataSet = new MongoCollection(search('DataSetCollection') as String)
     dataSet.drop()
-    var companiesDS = new MongoCollection(inputCollection)
-    var companies = companiesDS.find()
+    var companiesDS = new MongoCollection(search('Input') as String)
     checkCancellation()
+    var companies : List<Map<Object,Object>> = {}
     this.StatusFeed = "Parsed company information"
-    for (company in companies index i) {
+    for (company in companiesDS.find() index i) {
       //Thread.sleep(10)
-      if (i % 20 == 0) this.Progress = (i * 100) / (companies.Count as int)
+      if (i % 20 == 0) {
+        this.Progress = (i * 100) / (companiesDS.Count as int)
+        checkCancellation()
+      }
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
+      companies.add(company)
     }
     checkCancellation()
-    dataSet.insert(companies.toList())
+    dataSet.insert(companies)
     companiesDS.drop()
     this.StatusFeed = "Company information inserted"
     writeLatLng()
-    new DataSet (collection)
     this.StatusFeed = "Done"
   }
 
