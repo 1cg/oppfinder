@@ -53,6 +53,7 @@ class GenerateRandom {
           continue
         }
       }
+
       company.put("Policies", coPolicies)
       company.put("Revenue", (new BigDecimal(10 + rand.nextInt(162000))).toString())
       company.put("Size", (50 + rand.nextInt(40000)) as String)
