@@ -6,8 +6,6 @@ uses java.io.BufferedReader
 uses model.DataSet
 uses model.DataSetEntry
 uses org.json.simple.parser.JSONParser
-uses org.json.simple.JSONArray
-uses org.json.simple.JSONObject
 uses util.AssetLibrarian
 uses java.util.UUID
 
@@ -17,34 +15,32 @@ class GenerateJob extends Job {
     super(data)
   }
 
-  construct(path: String, dataSet : String) {
+  construct(inputCollection: String, dataSet : String) {
     super()
-    update({'Path' -> path})
+    update({'Input' -> inputCollection})
     update({'DataSetCollection' -> dataSet})
   }
 
   override function executeJob() {
     checkCancellation()
-    var path = search('Path') as String
+    var inputCollection = search('Input') as String
     var collection = search('DataSetCollection') as String
     var parser = new JSONParser()
     this.StatusFeed = "Dropping previous dataset"
     var dataSet = new DataSet(collection)
     dataSet.drop()
-    var companies = (parser.parse(
-        new FileReader(AssetLibrarian.INSTANCE.getPath(path))) as JSONArray)
-        .map(\ o -> o as JSONObject)
+    var companies = new DataSet(inputCollection).find()
     checkCancellation()
     this.StatusFeed = "Parsed company information"
     for (company in companies index i) {
       //Thread.sleep(10)
-      if (i % 20 == 0) this.Progress = (i * 100) / companies.size()
+      if (i % 20 == 0) this.Progress = (i * 100) / (companies.Count as int)
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
     }
     checkCancellation()
-    dataSet.insert(companies)
+    dataSet.insert(companies.toList())
     this.StatusFeed = "Company information inserted"
     writeLatLng()
     new DataSetEntry(collection)

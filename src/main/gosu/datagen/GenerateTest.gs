@@ -3,9 +3,7 @@ package datagen
 
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses java.io.FileWriter
-uses java.io.File
-uses util.AssetLibrarian
+uses model.DataSet
 
 class GenerateTest {
 
@@ -61,11 +59,9 @@ class GenerateTest {
       company.put("Policies", coPolicies)
       bigArray.add(company)
     }
-    var path = AssetLibrarian.INSTANCE.getPath("Cities.txt")
-    path = path.substring(0,path.lastIndexOf("/")+1)
-    var outputFile = new FileWriter(new File(path + output))
-    outputFile.write(bigArray.toJSONString())
-    outputFile.flush()
-    outputFile.close()
+    var ds = new DataSet(output)
+    for (o in bigArray) {
+      ds.insert(o as JSONObject)
+    }
   }
 }

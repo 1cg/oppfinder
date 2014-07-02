@@ -1,7 +1,5 @@
 package util
 
-uses java.util.HashMap
-uses java.util.Map
 uses java.util.UUID
 uses datagen.GenerateRandom
 uses jobs.GenerateJob
@@ -14,11 +12,11 @@ class GenerateJobFormParser {
     ds = ds ?: UUID.randomUUID().toString()
     ds = URLDecoder.decode(ds, "UTC-8")
     if(type == "Reach") {
-      new GenerateTest().generateTest('dataReach.json', 'Reach', 40000)
-      return new GenerateJob('dataReach.json', ds).start()
+      new GenerateTest().generateTest('generateDataReach', 'Reach', 40000)
+      return new GenerateJob('generateDataReach', ds).start()
     } else {
-      new GenerateRandom().generateRandom('data.json')
-      return new GenerateJob('data.json', ds).start()
+      new GenerateRandom().generateRandom('generateJobData')
+      return new GenerateJob('generateJobData', ds).start()
     }
   }
 }

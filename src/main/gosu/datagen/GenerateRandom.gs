@@ -8,9 +8,8 @@ uses java.io.BufferedReader
 uses org.json.simple.JSONObject
 uses java.math.BigDecimal
 uses org.json.simple.JSONArray
-uses java.io.File
-uses java.io.FileWriter
 uses util.AssetLibrarian
+uses model.DataSet
 
 class GenerateRandom {
   /*
@@ -62,11 +61,9 @@ class GenerateRandom {
 
       bigArray.add(company)
     }
-    var path = AssetLibrarian.INSTANCE.getPath("Cities.txt")
-    path = path.substring(0,path.lastIndexOf("/")+1)
-    var outputFile = new FileWriter(new File(path + output))
-    outputFile.write(bigArray.toJSONString())
-    outputFile.flush()
-    outputFile.close()
+    var ds = new DataSet(output)
+    for (o in bigArray) {
+      ds.insert(o as JSONObject)
+    }
   }
 }
