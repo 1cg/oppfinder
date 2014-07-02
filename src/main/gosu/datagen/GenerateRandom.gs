@@ -34,7 +34,6 @@ class GenerateRandom {
       dataMap.put(column, data)
     }
 
-
     var bigArray = new JSONArray()
     for (name in dataMap.get("Company") index i) {
       var company = new JSONObject()
@@ -55,10 +54,8 @@ class GenerateRandom {
         }
       }
       company.put("Policies", coPolicies)
-
       company.put("Revenue", (new BigDecimal(10 + rand.nextInt(162000))).toString())
       company.put("Size", (50 + rand.nextInt(40000)) as String)
-
       bigArray.add(company)
     }
     var ds = new MongoCollection(output)

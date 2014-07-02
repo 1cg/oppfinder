@@ -2,17 +2,19 @@ package controller
 
 uses sparkgs.util.IHasRequestContext
 uses sparkgs.IResourceController
-uses view.Layout
+uses view.results.ResultTable
+uses model.Results
 
 class ResultsController implements  IHasRequestContext, IResourceController {
-  function _auth() {
+
+  function _auth() : Object {
     // This writes out the INDEX with the code argument
-//    Writer.append(Layout.renderToString(SalesforceUpload.renderToString(Params['code'])))
+    return ResultTable.renderToString(Params['code'], Results.AllResults.paginate(Params['page']))
   }
     // This writes out the index without the code argument
 
   override function index(): Object {
-    return null
+    return ResultTable.renderToString(Params['code'], Results.AllResults.paginate(Params['page']))
   }
 
   override function _new(): Object {

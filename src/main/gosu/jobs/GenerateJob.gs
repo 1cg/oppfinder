@@ -24,8 +24,9 @@ class GenerateJob extends Job {
   override function executeJob() {
     checkCancellation()
     var parser = new JSONParser()
+    var collection = search('DataSetCollection') as String
     this.StatusFeed = "Dropping previous dataset"
-    var dataSet = new MongoCollection(search('DataSetCollection') as String)
+    var dataSet = new MongoCollection(collection)
     dataSet.drop()
     var companiesDS = new MongoCollection(search('Input') as String)
     checkCancellation()
@@ -47,6 +48,7 @@ class GenerateJob extends Job {
     companiesDS.drop()
     this.StatusFeed = "Company information inserted"
     writeLatLng()
+    new DataSet(collection)
     this.StatusFeed = "Done"
   }
 

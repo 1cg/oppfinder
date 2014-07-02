@@ -31,7 +31,7 @@ class DataSet {
   }
 
   static property get allDataSets() : SkipIterable<Map<Object,Object>> {
-    return new MongoCollection (MASTER_DATA_SET).find()
+    return new MongoCollection(MASTER_DATA_SET).find()
   }
 
   static function find(id : String) : SkipIterable<Map> {

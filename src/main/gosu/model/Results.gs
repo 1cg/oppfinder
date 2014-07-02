@@ -8,7 +8,7 @@ uses util.SkipIterable
 
 class Results {
 
-  static var DS = new MongoCollection ('RECOMMENDATION_RESULTS_COLLECTION')
+  static var DS = new MongoCollection('RECOMMENDATION_RESULTS_COLLECTION')
 
   static function addResults(UUID : String, results : List<Map<Object,Object>>) {
     DS.insert({'UUId' -> UUID,
