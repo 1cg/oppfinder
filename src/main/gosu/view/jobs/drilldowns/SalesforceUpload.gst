@@ -1,6 +1,6 @@
 <%@ params(code : String ) %>
 
-<h2 class="page-title">Select a recommendation result to upload</h2>
+<h1>Select a recommendation result to upload</h1>
 
 <!-- Be able to pass a UUID (for the recommendation job) and the code parameter -->
 
