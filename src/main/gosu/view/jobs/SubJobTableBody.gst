@@ -1,5 +1,5 @@
-<%@ params(type: String, pager: util.PagerIterable<jobs.Job>) %>
-<div ic-src='jobs/table?status=${type}&page=${pager.Current}' ic-poll="3s" ic-transition="none" ic-deps="/jobs">
+<%@ params(UUID : String, pager: util.PagerIterable<jobs.Job>) %>
+<div ic-src=${'jobs/'+UUID+'/subjobtable?page='+(pager == null ? 1 : pager.Current)} ic-poll="3s" ic-transition="none" ic-deps="/jobs">
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -25,11 +25,11 @@
     </thead>
     <tbody>
       <%
-       if ((pager == null) || (pager.Current == 1 && pager.Count == 0)) { %>
+       if (pager == null || pager.Count == 0) { %>
         <br>
         <div class="alert alert-info alert-dismissable">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <strong>Attention: </strong> There are currently no ${type} jobs in the database
+          <strong>Attention: </strong> There are currently no sub jobs spawned. Please wait a moment.
         </div>
       <% return } else {
       for(job in pager)  {%>
