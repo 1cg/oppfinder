@@ -21,3 +21,14 @@ body {
 .blue {
   color:#476CB5;
 }
+
+.relative {
+  position:relative;
+}
+
+.row-action-btns {
+  display:none;
+  position:absolute;
+  top:-3;
+  left:-3;
+}
