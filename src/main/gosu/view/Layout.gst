@@ -47,7 +47,9 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://github.com/carsongross/oppfinder"><i class="fa fa-github"></i></a></li>
+            <li><a href='https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate'>
+                Connect to Salesforce <font color="blue"><i class="fa fa-cloud"></i></font></a></li>
+            <li><a href="https://github.com/carsongross/oppfinder">GitHub <i class="fa fa-github"></i></a></li>
           </ul>
         </div>
       </div>
