@@ -5,19 +5,17 @@ uses sparkgs.IResourceController
 uses view.results.ResultTable
 uses model.Results
 uses view.results.Result
-uses view.results.ResultTableBody
 uses view.results.ResultUpload
 
 class ResultsController implements  IHasRequestContext, IResourceController {
 
-  function table() : Object {
-    return raw(ResultTableBody.renderToString(Request.Session.attribute("code"), Results.AllResults.paginate(Params['page'])))
-  }
-
   override function index(): Object {
     var code = Params['code']
-    if (code != null && code != "") Request.Session.attribute("code", code)
-    return ResultTable.renderToString(code, Results.AllResults.paginate(Params['page']))
+    var loggedIn = (code != null && code != "")
+    if (loggedIn) {
+      Request.Session.attribute("code", code)
+    }
+    return ResultTable.renderToString(loggedIn, Results.AllResults.paginate(Params['page']))
   }
 
   override function _new(): Object {

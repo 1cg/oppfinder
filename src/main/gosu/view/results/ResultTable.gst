@@ -1,12 +1,11 @@
-<%@ params(code : String, resultNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
-
+<%@ params(loggedIn : boolean, resultNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
 <div>
   <h2 class="page-title">Results</h2>
 </div>
 
 <div id='wrapper'>
-  <% if (code == null || code == "") { %>
-    <h2><i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
+  <% if (!loggedIn) { %>
+    <h2><i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
         log in to Salesforce</a> to upload results
     </h2>
   <% } %>
@@ -16,7 +15,7 @@
         <th>
           Result Id
         </th>
-      <% if (code != null && code != "") { %>
+      <% if (loggedIn) { %>
         <th>
           Upload to Salesforce
         </t>
@@ -37,7 +36,7 @@
         <td>
           <a href='/results/${result['UUId']}' style="color:#476CB5">${result['UUId']}</a>
         </td>
-      <% if (code != null && code != "") { %>
+      <% if (loggedIn) { %>
         <td>
           <a class="btn" ic-post-to="/jobs?type=%auth&id=${result['UUId']}">Upload!</a>
         </td>
