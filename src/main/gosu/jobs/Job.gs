@@ -65,9 +65,7 @@ abstract class Job implements Runnable {
   abstract function executeJob()
 
   final function start() : jobs.Job {
-    var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
-    var client = RedisConfigUtil.INSTANCE.CLIENT
-    client.enqueue('main', testJob)
+    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,{dataStore.findOne(id)}))
     return this
   }
 
