@@ -4,10 +4,21 @@ uses net.greghaines.jesque.ConfigBuilder
 uses java.lang.System
 uses java.net.URI
 uses net.greghaines.jesque.Config
+uses net.greghaines.jesque.client.Client
+uses net.greghaines.jesque.client.ClientImpl
 
 class RedisConfigUtil {
 
-  static property get Config() : Config {
+  static final var _INSTANCE : RedisConfigUtil as readonly INSTANCE = new RedisConfigUtil()
+  var _CONFIG : Config as readonly CONFIG
+  var _CLIENT : Client as readonly CLIENT
+
+  private construct() {
+    _CONFIG = config()
+    _CLIENT = new ClientImpl(_CONFIG)
+  }
+
+  private function config() : Config {
     var builder = new ConfigBuilder()
     var host = System.Env['REDIS_HOST']
     var uri = new URI(host)
