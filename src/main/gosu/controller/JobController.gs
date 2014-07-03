@@ -34,10 +34,11 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(JobTableBody.renderToString("Sub Jobs",Job.findByIDs(jobs.map(\ j -> j.UUId)).paginate(Params['page'])))
   }
 
+ /*
   function _auth() : String {
     return SalesforceUpload.renderToString(Params['code'])
   }
-
+*/
   function generateProgress() : Object {
     return raw(Job.find(UUId)?.Progress+"%")
   }
@@ -83,7 +84,7 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'generate') {
       UUId = GenerateJobFormParser.startJob(Params['dataSetName'], Params['generateStrategy']).UUId
     } else if (Params['type'] == 'auth') {
-      new SalesforceAuthJob(Params['id'], Params['code']).start()
+      new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start()
     }
     return null
   }
