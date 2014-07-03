@@ -6,10 +6,13 @@ uses java.net.URI
 uses net.greghaines.jesque.Config
 uses net.greghaines.jesque.client.Client
 uses net.greghaines.jesque.client.ClientImpl
+uses java.util.concurrent.locks.ReentrantLock
+uses net.greghaines.jesque.Job
 
 class RedisConfigUtil {
 
   static final var _INSTANCE : RedisConfigUtil as readonly INSTANCE = new RedisConfigUtil()
+  static final var _LOCK = new ReentrantLock()
   var _CONFIG : Config as readonly CONFIG
   var _CLIENT : Client as readonly CLIENT
 
@@ -26,6 +29,17 @@ class RedisConfigUtil {
     builder.withPort(uri.Port)
     builder.withPassword(uri.UserInfo.split(":",2)[1])
     return builder.build()
+  }
+
+  function enqueue(queue : String, job : Job) {
+    using(_LOCK) {
+      try {
+        _CLIENT.enqueue(queue, job)
+      } catch(e) {
+        _CLIENT = new ClientImpl(_CONFIG)
+        _CLIENT.enqueue(queue, job)
+      }
+    }
   }
 
 }

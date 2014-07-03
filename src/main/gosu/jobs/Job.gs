@@ -65,9 +65,7 @@ abstract class Job implements Runnable {
   abstract function executeJob()
 
   final function start() : jobs.Job {
-    var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
-    var client = RedisConfigUtil.INSTANCE.CLIENT
-    client.enqueue('main', testJob)
+    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,{dataStore.findOne(id)}))
     return this
   }
 
@@ -291,7 +289,7 @@ abstract class Job implements Runnable {
         dataStore.queryNot('Status', 'Subjob').Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  // This is for salesforce uploading
+  // This is for Salesforce uploading
   static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}).Cursor,
