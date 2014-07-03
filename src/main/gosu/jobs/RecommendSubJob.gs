@@ -69,8 +69,8 @@ class RecommendSubJob extends Job {
     userIDs.skip(this.Start as int)
     var number = this.Number
     for (i in 0..|number) {
-      if (i % 50 == 0) {
-        Progress = ((i* 100)/number) as int //Reduce write load
+      if (i > 0 && i % 50 == 0) {
+        Progress = Math.max(((i* 100)/number) as int, 1) //Reduce write load
         checkCancellation()
       }
       if (!userIDs.hasNext()) break

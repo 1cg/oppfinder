@@ -14,6 +14,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
     // This writes out the index without the code argument
 
   override function index(): Object {
+    if (Params['code'] == null || Params['code'] == "") { redirect('https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate',307) }
     return ResultTable.renderToString(Params['code'], Results.AllResults.paginate(Params['page']))
   }
 
