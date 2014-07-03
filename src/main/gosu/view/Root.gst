@@ -3,7 +3,7 @@
   <p>Find new business opportunities in your existing Policy clientbase!</p>
   <hr/>
   <div>
-    <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend" ic-target="#wrapper">
+    <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
       <div class="form-group">
       <label>
         <strong>Select DataSet: </strong>
@@ -20,7 +20,7 @@
         <input class="btn btn-primary" type="submit" value="Start Opportunity Analysis">
       </div>
       <div class="form-group pull-right">
-        <button ic-post-to="/jobs?type=test" class="btn btn-default" ic-target="#wrapper">
+        <button ic-post-to="/jobs?type=test" class="btn btn-default">
           Run Test Job
         </button>
       </div>

@@ -13,7 +13,6 @@ uses jobs.SalesforceAuthJob
 uses sparkgs.IResourceController
 uses view.jobs.JobTable
 uses view.jobs.JobTableBody
-uses view.jobs.drilldowns.SalesforceUpload
 uses view.jobs.SubJobTableBody
 
 class JobController implements IHasRequestContext, IResourceController {
@@ -90,6 +89,7 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'auth') {
       UUID = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId
     }
+    Headers['X-IC-Redirect'] = "/jobs/${UUID}"
     return show(UUID)
   }
 

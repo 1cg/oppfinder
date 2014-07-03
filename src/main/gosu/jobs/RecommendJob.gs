@@ -51,7 +51,7 @@ class RecommendJob extends Job {
     }
     this.StatusFeed = "Recommendations Calculated"
     storeTopRecommendations(recommendations, dataSet)
-    this.StatusFeed = "Recommendations Stored"
+    this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
     this.StatusFeed = "Done"
   }
 
