@@ -13,7 +13,6 @@ uses jobs.SalesforceAuthJob
 uses sparkgs.IResourceController
 uses view.jobs.JobTable
 uses view.jobs.JobTableBody
-uses view.jobs.drilldowns.SalesforceUpload
 
 class JobController implements IHasRequestContext, IResourceController {
 

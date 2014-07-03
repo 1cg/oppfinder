@@ -38,7 +38,7 @@
         </td>
       <% if (loggedIn) { %>
         <td>
-          <a class="btn" ic-post-to="/jobs?type=%auth&id=${result['UUId']}">Upload!</a>
+          <a ic-post-to="/jobs?type=%auth&id=${result['UUId']}">Upload</a>
         </td>
       <% } %>
      </tr>

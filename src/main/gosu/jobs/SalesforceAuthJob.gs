@@ -3,6 +3,10 @@ package jobs
 uses java.util.Map
 uses java.lang.System
 uses util.SalesforceRESTClient
+uses model.MongoCollection
+uses java.util.Calendar
+uses java.lang.Double
+uses java.lang.Thread
 
 class SalesforceAuthJob extends Job {
 
@@ -23,28 +27,38 @@ class SalesforceAuthJob extends Job {
 
     var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
-    this.Progress = 15
 
-    /*** Eventually, the creation and posting of opportunities will go in a loop over the recommendations at
-     *   var recommendations = new MongoCollection('Results:'+search('AnalysisToUpload') as String).find() ***/
-    // For a list of Opportunity fields, please visit: https://www.salesforce.com/us/developer/docs/api/Content/sforce_api_objects_opportunity.htm
+    var cal = Calendar.getInstance()
+    var year = cal.get(Calendar.YEAR)
+    var month = cal.get(Calendar.MONTH) + 1
+    var date = cal.get(Calendar.DATE)
+    var closeDate = ""+year+"-"+month+"-"+date
+    var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
+    var recommendations = new MongoCollection('Results:'+search('AnalysisToUpload') as String).find()
+
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
-    var opportunity = {
-        "Name" -> "Test Company 1",
-        "AccountId" -> System.Env["SF_ACCOUNT_ID"]?.toString(),
-        "CloseDate" -> "2014-07-07",
-        "Probability" -> "98",
+    for (recommendation in recommendations index i) {
+      Thread.sleep(4500) //Don't go over the API limit!
+      if (i % 20 == 0) {
+        this.Progress = (i * 100) / (recommendations.Count as int)
+        checkCancellation()
+      }
+      var opportunity = {
+        "Name" -> recommendation['Company'] as String,
+        "AccountId" -> accountID,
+        "CloseDate" -> closeDate,
+        "Probability" -> String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100),
         "StageName" -> "Qualification",
-        "Description" -> "Maps are cool"
-    }
-    var result = sClient.post("Opportunity", opportunity)
-    if (result.get("success") as Boolean) {
-      this.StatusFeed = "Confirmed upload! Available at: "+sClient.InstanceURL+"/"+opportunity["AccountId"]
-    } else {
-      this.StatusFeed = "Failed upload. Response from Salesforce: "+result
+        "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
+      }
+      var result = sClient.post("Opportunity", opportunity)
+      if (!(result.get("success") as Boolean)) {
+        this.StatusFeed = "Failed upload. Response from Salesforce: "+result
+      }
     }
 
-    this.StatusFeed = "Job Terminated"
+    this.StatusFeed = "Uploads available at: "+sClient.InstanceURL+"/"+accountID
+    this.StatusFeed = "Done"
     this.Progress = 100
   }
 
