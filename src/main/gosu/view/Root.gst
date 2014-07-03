@@ -25,7 +25,6 @@
         </button>
       </div>
     </form>
-    <a href="/companies/1">Generate Or Import DataSet</a>
   </div>
   ${view.jobs.JobTable.renderToString("all", new util.PagerIterable<jobs.Job>(jobs.Job.AllJobs, 1))}
 </div>

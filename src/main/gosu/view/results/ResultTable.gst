@@ -6,10 +6,46 @@
 
 <div id='wrapper'>
   <% if (code == null || code == "") { %>
-    <h2>Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
-        log in to Salesforce</a>
+    <h2><i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
+        log in to Salesforce</a> to upload results
     </h2>
-  <% } else { %>
-    ${view.results.ResultTableBody.renderToString(code, resultNames)}
   <% } %>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>
+          Result Id
+        </th>
+      <% if (code != null && code != "") { %>
+        <th>
+          Upload to Salesforce
+        </t>
+      <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <%
+       if (resultNames.Current == 1 && resultNames.Count == 0) { %>
+        <br>
+        <div class="alert alert-info alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <strong>Attention: </strong> There are currently no recommendation results in the database
+        </div>
+      <% } else {
+    for(result in resultNames)  {%>
+      <tr>
+        <td>
+          <a href='/results/${result['UUId']}' style="color:#476CB5">${result['UUId']}</a>
+        </td>
+      <% if (code != null && code != "") { %>
+        <td>
+          <a class="btn" ic-post-to="/jobs?type=%auth&id=${result['UUId']}">Upload!</a>
+        </td>
+      <% } %>
+     </tr>
+     <% }
+  } %>
+    </tbody>
+  </table>
+  ${new widgets.PagerWidget().renderWidget(resultNames)}
 </div>

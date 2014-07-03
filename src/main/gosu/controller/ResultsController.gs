@@ -11,18 +11,17 @@ uses view.results.ResultUpload
 class ResultsController implements  IHasRequestContext, IResourceController {
 
   function table() : Object {
-    return raw(ResultTableBody.renderToString(Params['code'], Results.AllResults.paginate(Params['page'])))
+    return raw(ResultTableBody.renderToString(Request.Session.attribute("code"), Results.AllResults.paginate(Params['page'])))
   }
 
   override function index(): Object {
-//    if (Params['code'] == null || Params['code'] == "") {
-//      redirect('https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate',307)
-//    }
-    return ResultTable.renderToString(Params['code'], Results.AllResults.paginate(Params['page']))
+    var code = Params['code']
+    if (code != null && code != "") Request.Session.attribute("code", code)
+    return ResultTable.renderToString(code, Results.AllResults.paginate(Params['page']))
   }
 
   override function _new(): Object {
-    return ResultUpload.renderToString(Results.AllResults, Params['code'])
+    return ResultUpload.renderToString(Results.AllResults, Request.Session.attribute("code"))
   }
 
   override function create(): Object {
@@ -30,7 +29,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function show(id: String): Object {
-    return Result.renderToString(Params['code'], Results.getResults(id))
+    return Result.renderToString(Request.Session.attribute("code"), Results.getResults(id))
   }
 
   override function edit(id: String): Object {
