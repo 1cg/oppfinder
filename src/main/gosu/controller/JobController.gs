@@ -26,12 +26,12 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function table() : Object {
     var status = Params['status'] ?: "all"
-    return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page'])))
+    return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page']), true))
   }
 
   function subJobTable(UUID : String) : Object {
     var jobs = (Job.find(UUID) as RecommendJob).SubJobs
-    return raw(JobTableBody.renderToString("Sub Jobs",Job.findByIDs(jobs.map(\ j -> j.UUId)).paginate(Params['page'])))
+    return raw(JobTableBody.renderToString("Sub Jobs",Job.findByIDs(jobs?.map(\ j -> j.UUId)).paginate(Params['page']),false))
   }
 
   function _auth() : String {
@@ -74,18 +74,21 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   override function create() : Object {
+    var UUID : String
     if (Params['type'] == "test") {
-      new TestJob().start()
+      UUID = new TestJob().start().UUId
     } else if (Params['type'] == 'recommend') {
-      new RecommendJob(Params['collections']).start()
+      UUID = new RecommendJob(Params['collections']).start().UUId
     } else if (Params['type'] == 'upload') {
       UUId = new UploadJob(Request.Body).start().UUId
+      UUID = UUId
     } else if (Params['type'] == 'generate') {
       UUId = GenerateJobFormParser.startJob(Params['dataSetName'], Params['generateStrategy']).UUId
+      UUID = UUId
     } else if (Params['type'] == 'auth') {
-      new SalesforceAuthJob(Params['id'], Params['code']).start()
+      UUID = new SalesforceAuthJob(Params['id'], Params['code']).start().UUId
     }
-    return null
+    return show(UUID)
   }
 
   override function _new() : Object{

@@ -35,6 +35,6 @@
 <%}%>
 <hr>
 <h2>Sub Jobs</h2>
-<div ic-src="/jobs/${job.UUId}/subjobtable" ic-poll="3s" ic-transition="none" ic-deps="/jobs">
+<div>
   ${new controller.JobController().subJobTable(job?.UUId)}
 </div>
