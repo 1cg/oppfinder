@@ -13,7 +13,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
     return DataSetTable.renderToString(model.DataSet.allDataSets.paginate(Params['page'] ?: 1))
   }
   override function show(id: String)  : Object {
-    return Companies.renderToString(1, id, DataSet.find(id).paginate(Params['page']))
+    return Companies.renderToString(id, DataSet.find(id).paginate(Params['page']))
   }
 
   override function create()  : Object {

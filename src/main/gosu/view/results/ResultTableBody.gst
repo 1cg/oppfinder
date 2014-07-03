@@ -22,7 +22,7 @@
     for(result in resultNames)  {%>
     <tr>
       <td>
-        <a href='/results/${result['name']}&code=${code}' style="color:#476CB5">${result['name']}</a>
+        <a href='/results/${result['UUId']}&code=${code}' style="color:#476CB5">${result['UUId']}</a>
       </td>
       <td>
         <a class="btn" ic-post-to="/results?type=auth&id=0000&code=${code}">Test!</a>

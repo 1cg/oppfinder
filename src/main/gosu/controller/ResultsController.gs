@@ -5,14 +5,14 @@ uses sparkgs.IResourceController
 uses view.results.ResultTable
 uses model.Results
 uses view.results.Result
+uses view.results.ResultTableBody
+uses view.results.ResultUpload
 
 class ResultsController implements  IHasRequestContext, IResourceController {
 
-  function _auth() : Object {
-    // This writes out the INDEX with the code argument
-    return ResultTable.renderToString(Params['code'], Results.AllResults.paginate(Params['page']))
+  function table() : Object {
+    return raw(ResultTableBody.renderToString(Params['code'], Results.AllResults.paginate(Params['page'])))
   }
-    // This writes out the index without the code argument
 
   override function index(): Object {
     if (Params['code'] == null || Params['code'] == "") { redirect('https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=3MVG9xOCXq4ID1uFvTCKN7SyVYdNd2wGzeDj0D.bK751bqhCLLzaTqEfj8GVVPI1c3AY83tn8fRdVl09T7Wqg&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate',307) }
@@ -20,7 +20,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function _new(): Object {
-    return null
+    return ResultUpload.renderToString(Results.AllResults, Params['code'])
   }
 
   override function create(): Object {
