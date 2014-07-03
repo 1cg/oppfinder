@@ -12,3 +12,12 @@ body {
     padding-left:10px;
     padding-top:4px;"
 }
+
+.status-select {
+  margin-left: 8px;
+  margin-top:-8px;
+}
+
+.blue {
+  color:#476CB5;
+}

@@ -1,6 +1,6 @@
-    <div>
-      <h2 class="page-title">New DataSet</h2>
-    </div>
+<div>
+  <h2 class="page-title">New Data Set</h2>
+</div>
 
 <div class="row">
   <div class="col-md-6">

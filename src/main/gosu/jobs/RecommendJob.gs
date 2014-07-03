@@ -35,8 +35,8 @@ class RecommendJob extends Job {
     this.StatusFeed = "Sub Jobs Complete"
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
-      var ds = new MongoCollection (jobID)
-      for (companyRecommendations in ds.find() index i) {
+      var ds = new MongoCollection(jobID)
+      for (companyRecommendations in ds?.find() index i) {
         if (i % 200 == 0) checkCancellation()
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
@@ -98,14 +98,14 @@ class RecommendJob extends Job {
    */
   override function doReset() {
     for (jobID in subJobsID) {
-      new MongoCollection (jobID).drop()
+      new MongoCollection(jobID)?.drop()
     }
   }
 
   override function delete() {
     super.delete()
     for (job in SubJobs) {
-      job.delete()
+      job?.delete()
     }
   }
 
@@ -123,7 +123,7 @@ class RecommendJob extends Job {
       checkCancellation()
       finished = true
       for (jobID in subJobsID) {
-        var progress = Job.find(jobID).Progress
+        var progress = Job.find(jobID)?.Progress
         sum += progress
         if (progress < Job.MAX_PROGRESS_VALUE) {
           finished = false
@@ -139,8 +139,11 @@ class RecommendJob extends Job {
 
   property get SubJobs() : List<jobs.Job> {
     var stringArray = search('SubJobs') as String
-    var array = Arrays.asList(stringArray.substring(1, stringArray.length() - 1).split(", "))
-    return array.map(\ j -> newUp(j, 'jobs.RecommendSubJob'))
+    if (stringArray != null) {
+      var array = Arrays.asList(stringArray?.substring(1, stringArray.length() - 1)?.split(", "))
+      return array.map(\ j -> newUp(j, 'jobs.RecommendSubJob'))
+    }
+    return null
   }
 
   override property set Cancelled(status : boolean) {
