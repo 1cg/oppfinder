@@ -33,7 +33,12 @@ class RedisConfigUtil {
 
   function enqueue(queue : String, job : Job) {
     using(_LOCK) {
-      _CLIENT.enqueue('main', job)
+      try {
+        _CLIENT.enqueue(queue, job)
+      } catch(e) {
+        _CLIENT = new ClientImpl(_CONFIG)
+        _CLIENT.enqueue(queue, job)
+      }
     }
   }
 
