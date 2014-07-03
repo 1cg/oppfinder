@@ -1,5 +1,10 @@
 body {
-  margin-top:50px;
+  margin-top:80px;
+}
+
+.page-title {
+  display:inline-block;
+  margin-top: 0px;
 }
 
 .chk {
