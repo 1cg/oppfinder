@@ -4,6 +4,7 @@ uses sparkgs.util.IHasRequestContext
 uses sparkgs.IResourceController
 uses view.results.ResultTable
 uses model.Results
+uses view.results.Result
 
 class ResultsController implements  IHasRequestContext, IResourceController {
 
@@ -27,7 +28,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function show(id: String): Object {
-    return null
+    return Result.renderToString(Params['code'], Results.getResults(id))
   }
 
   override function edit(id: String): Object {
