@@ -68,7 +68,6 @@ abstract class Job implements Runnable {
     var testJob = new Job(this.IntrinsicType.Name,{dataStore.findOne(id)})
     var client = RedisConfigUtil.INSTANCE.CLIENT
     client.enqueue('main', testJob)
-    client.end()
     return this
   }
 
