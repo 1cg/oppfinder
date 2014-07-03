@@ -289,7 +289,7 @@ abstract class Job implements Runnable {
         dataStore.queryNot('Status', 'Subjob').Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  // This is for salesforce uploading
+  // This is for Salesforce uploading
   static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}).Cursor,
