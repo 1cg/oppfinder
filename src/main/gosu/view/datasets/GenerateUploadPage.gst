@@ -1,30 +1,38 @@
-<h2>Either randomly generate or upload your own data.</h2><br>
-<a href='/datasets' style="color:#476CB5"><strong>Back to DataSets</strong></a>
-<div class="jumbotron">
-  <h3> Generate New Data Set </h3>
-  <form ic-post-to="/jobs?type=generate" role="form">
-    <label for="dataSetName">New Data Set Name</label>
-    <input type="text" class="form-control" name="dataSetName" placeholder="Leave blank for random UUID">
-    <br>
-    <label for="generateStrategy">Generation Method</label>
-    <div class="radio" name="options">
-    <label><input type="radio" name="generateStrategy" value="random">Random<br></label>
-    <label><input type="radio" name="generateStrategy" value="Reach">Test Reaches<br></label>
+    <div>
+      <h2 class="page-title">New DataSet</h2>
     </div>
-    <button type="submit" value="Submit" class="btn btn-lg btn-primary">Submit</button>
-  </form>
-  <h3>
-    Upload JSON Data Set
-  </h3>
-  <form method="post" enctype="multipart/form-data" action="/jobs?type=upload">
-    <div class="fileinput fileinput-new" data-provides="fileinput">
-    <span class="btn btn-lg btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
-    <span class="fileinput-filename"></span>
-    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
-    <input type="submit" value="Submit" class="btn btn-lg btn-primary"/>
+
+<div class="row">
+  <div class="col-md-6">
+      <h4>Generate Data Set</h4>
+      <div class="well well-sm">
+      <form ic-post-to="/jobs?type=generate" role="form">
+        <label for="dataSetName">New Data Set Name</label>
+        <input type="text" class="form-control" name="dataSetName" placeholder="Leave blank for random name">
+        <br>
+        <label for="generateStrategy">Generation Method</label>
+        <div class="radio" name="options">
+        <label><input type="radio" name="generateStrategy" value="random">Random<br></label>
+        <label><input type="radio" name="generateStrategy" value="Reach">Test Reaches<br></label>
+        </div>
+        <button type="submit" value="Submit" class="btn btn-primary">Generate DataSet</button>
+      </form>
+      </div>
+  </div>
+
+  <div class="col-md-6">
+    <h4>
+      Or Upload JSON Data Set
+    </h4>
+    <div class="well well-sm">
+      <form method="post" enctype="multipart/form-data" action="/jobs?type=upload">
+        <div class="fileinput fileinput-new" data-provides="fileinput">
+        <span class="btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
+        <span class="fileinput-filename"></span>
+        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+        <input type="submit" value="Upload DataSet" class="btn btn-primary"/>
+        </div>
+      </form>
     </div>
-  </form>
-  <div>
-    ${view.ProgressView.renderToString()}
   </div>
 </div>

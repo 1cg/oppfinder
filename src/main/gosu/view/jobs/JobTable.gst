@@ -1,7 +1,10 @@
 <%@ params(type : String, pager : util.PagerIterable<jobs.Job>)%>
-<div class="page-header">
-  <h3>${type?.capitalize() + " Jobs"}</h3>
+
+<div>
+  <h2 class="page-title">Jobs</h2>
+  <a href="/datasets/new" class="btn btn-primary pull-right">Start Job</a>
 </div>
+
 <h3 class="navbar-left">Filter by job status: </h3>
 <div class="btn-group navbar-left" style='padding-left:10px;padding-top:15px'>
   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -15,7 +18,6 @@
     <li><a ic-get-from="/jobs/table?status=failed&page=${pager.Current}" ic-target="#wrapper">Failed</a></li>
   </ul>
 </div>
-<br><br><hr>
 <div id='wrapper' ic-src='jobs/table?status=${type}&page=${pager.Current}' ic-poll="3s" ic-transition="none" ic-deps="/jobs">
   ${view.jobs.JobTableBody.renderToString(type, pager)}
 </div>
