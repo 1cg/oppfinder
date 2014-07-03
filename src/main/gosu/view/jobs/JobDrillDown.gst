@@ -6,15 +6,16 @@
     <strong>Oops! </strong> This doesn't appear to be a valid job id
   </div>
 <% return } %>
-<h1>Specific job details: (${job.UUId})</h1>
+<h2 class="page-title">Job Detail</h2>
 <br>
-<h3>Job Id: <span class="label label-default">${job.UUId}</span></h3>
-<h3>Job Type: <span class="label label-default">${job.Type}</span></h3>
-<h3>Elapsed Time: <span class="label label-default">${job.ElapsedTime}</span></h3>
+<div class="detail-row"><span class="detail-label">Job Id: </span><span class="detail-value">${job.UUId}</span></div>
+<div class="detail-row"><span class="detail-label">Job Type: </span><span class="detail-value">${job.Type}</span></div>
+<div class="detail-row"><span class="detail-label">Elapsed Time: </span><span class="detail-value">${job.ElapsedTime}</span></div>
 <br>
 <% if (job.Failed) { %>
   ${FailedJobView.renderToString(job)}
 <%} %>
+<h3 class="sub-section-header">Job Feed: </h3>
 ${JobStatusFeedList.renderToString(job.StatusFeed, job.UUId)}
 <% if (!job.Failed) { %>
   ${job.renderToString()}

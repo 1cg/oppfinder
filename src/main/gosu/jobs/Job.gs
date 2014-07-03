@@ -1,6 +1,5 @@
 package jobs
 
-uses net.greghaines.jesque.client.ClientImpl
 uses net.greghaines.jesque.Job
 uses model.MongoCollection
 uses java.util.Map
@@ -297,6 +296,7 @@ abstract class Job implements Runnable {
   }
 
   static function findByIDs(IDs : List<String>) : SkipIterable<jobs.Job> {
+    if (IDs == null) return null
     return new TransformIterable<jobs.Job>(
         dataStore.queryOr(IDs, 'UUId').Cursor, \
             m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))

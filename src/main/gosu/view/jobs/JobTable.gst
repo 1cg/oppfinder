@@ -18,5 +18,5 @@
 </div>
 
 <div id='wrapper'>
-  ${view.jobs.JobTableBody.renderToString(type, pager, true)}
+  ${view.jobs.JobTableBody.renderToString(type, pager)}
 </div>
