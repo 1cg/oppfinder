@@ -32,3 +32,24 @@ body {
   top:-3;
   left:-3;
 }
+
+.sp {
+  color:#EB7200;
+}
+
+.op {
+  color:#0066B0;
+}
+
+.fi {
+  color:#3E9032;
+}
+
+.inset-8 {
+  padding:8px;
+}
+
+.root-overview {
+  font-size:16px;
+  line-height:24px;
+}
