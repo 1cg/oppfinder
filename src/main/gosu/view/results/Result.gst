@@ -1,6 +1,5 @@
 <%@ params(code : String, results : java.util.List<java.util.Map<Object,Object>>) %>
 <% if (results.size() > 0) { %>
-  <hr>
   <h2> Results!</h2>
   <table class="table">
     <thead>

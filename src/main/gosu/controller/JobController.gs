@@ -93,7 +93,7 @@ class JobController implements IHasRequestContext, IResourceController {
     return show(UUID)
   }
 
-  override function _new() : Object{
+  override function _new() : Object {
     return null
   }
 
@@ -108,4 +108,5 @@ class JobController implements IHasRequestContext, IResourceController {
   override function update(id: String) : Object {
     return null
   }
+
 }

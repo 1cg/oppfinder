@@ -1,6 +1,7 @@
 <%@ params(loggedIn : boolean, resultNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
 <div>
   <h2 class="page-title">Results</h2>
+  <a href="/results/new" class="btn btn-primary pull-right">New Analysis</a>
 </div>
 
 <div id='wrapper'>
@@ -34,7 +35,7 @@
     for(result in resultNames)  {%>
       <tr>
         <td>
-          <a href='/results/${result['UUId']}' style="color:#476CB5">${result['UUId']}</a>
+          <a href='/results/${result['UUId']}'>${result['UUId']}</a>
         </td>
       <% if (loggedIn) { %>
         <td>
