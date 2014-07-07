@@ -3,7 +3,6 @@ package jobs
 uses java.util.Map
 uses java.lang.System
 uses util.SalesforceRESTClient
-uses model.MongoCollection
 uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
@@ -68,6 +67,6 @@ class SalesforceAuthJob extends Job {
   }
 
   override function renderToString(): String {
-    return "Salesforce Job"
+    return view.jobs.drilldowns.SalesforceUpload.renderToString(this)
   }
 }

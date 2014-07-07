@@ -16,7 +16,6 @@ class SalesforceRESTClient {
   var _accessToken : String
   var _instanceUrl : String
 
-  // Should construct take responsibility of OAuth? Or should uses always require a client.init() call?
   /* This code receives the the authorization code from the authorization endpoint, then requests for the access
    * token to access protected salesforce resources. */
   construct(authorizationCode : String) {
