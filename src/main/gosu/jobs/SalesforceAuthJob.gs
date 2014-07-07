@@ -7,6 +7,7 @@ uses model.MongoCollection
 uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
+uses model.Results
 
 class SalesforceAuthJob extends Job {
 
@@ -16,7 +17,7 @@ class SalesforceAuthJob extends Job {
 
   construct(recommendUUID : String, authCode : String) {
     super()
-    update({'AnalysisToUpload' -> recommendUUID})
+    update({'RecommendUUID' -> recommendUUID})
     update({'AuthCode' -> authCode})
   }
 
@@ -34,10 +35,11 @@ class SalesforceAuthJob extends Job {
     var date = cal.get(Calendar.DATE)
     var closeDate = ""+year+"-"+month+"-"+date
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
-    var recommendations = new MongoCollection('Results:'+search('AnalysisToUpload') as String).find()
+    var recommendations = Results.getResults(search('RecommendUUID') as String)
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
+      this.StatusFeed = "Uploading recommendation "+(i+1)
       Thread.sleep(4500) //Don't go over the API limit!
       if (i % 20 == 0) {
         this.Progress = (i * 100) / (recommendations.Count as int)
