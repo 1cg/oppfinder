@@ -9,12 +9,17 @@ uses java.util.Map
 uses java.lang.Integer
 uses util.AssetLibrarian
 
-class ReachFieldImpl implements Field {
+class ReachFieldImpl extends AbstractField {
 
   static final var reachMap = makeReachMap()
 
+  construct() {
+    _field = 'Reach'
+  }
+
   override function getModel(collection : String): DataModel {
-    return MahoutUtil.toDataModel(new MongoCollection (collection), "Reach",
+    _collection = collection
+    return MahoutUtil.toDataModel(new MongoCollection (collection), _field,
        \ o -> reachToLong(o), null)
   }
 

@@ -6,9 +6,15 @@ uses model.MongoCollection
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity
 
-class SizeFieldImpl implements Field {
+class SizeFieldImpl extends AbstractField {
+
+  construct() {
+    _field = 'Size'
+  }
+
   override function getModel(collection : String): DataModel {
-    return MahoutUtil.toDataModel(new MongoCollection (collection), "Size", \ o -> o.toLong(), null)
+    _collection = collection
+    return MahoutUtil.toDataModel(new MongoCollection (collection), _field, \ o -> o.toLong(), null)
   }
 
   override function getSimilarity(model : DataModel): ItemSimilarity {

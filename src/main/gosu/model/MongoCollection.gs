@@ -36,6 +36,10 @@ class MongoCollection {
         _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
   }
 
+  property get Name() : String {
+    return _collection.Name
+  }
+
   function queryOr(values : List<String>, key : String) : TransformIterable<Map<Object,Object>> {
     var document = new BasicDBObject()
     var qb = new QueryBuilder()

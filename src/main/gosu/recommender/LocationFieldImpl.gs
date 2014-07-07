@@ -9,13 +9,18 @@ uses model.DataSet
 uses com.google.code.geocoder.Geocoder
 uses java.lang.Long
 
-class LocationFieldImpl implements Field {
+class LocationFieldImpl extends AbstractField {
 
   final static var geocoder = new Geocoder()
   final static var coordinates = new MongoCollection (DataSet.REGIONCOORDINATES).find().iterator().next()
 
+  construct() {
+    _field = 'Region'
+  }
+
   override function getModel(collection : String): DataModel {
-    return MahoutUtil.toDataModel(new MongoCollection (collection), 'Region',
+    _collection = collection
+    return MahoutUtil.toDataModel(new MongoCollection (collection), _field,
         \ l -> locationToLat(l),\ l -> locationToLng(l))
   }
 
