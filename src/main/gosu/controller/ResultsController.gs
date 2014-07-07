@@ -13,8 +13,9 @@ class ResultsController implements  IHasRequestContext, IResourceController {
 
   override function index(): Object {
     var code = Params['code']
-    var loggedIn = ((code != null && code != "") || Request.Session.attribute("code") != null)
-    if (loggedIn) {
+    var hasAttribute = Request.Session.attribute("code") != null
+    var loggedIn = ((code != null && code != "") || hasAttribute)
+    if (loggedIn && !hasAttribute) {
       Request.Session.attribute("code", code)
     }
     return ResultTable.renderToString(loggedIn, Results.AllResults.paginate(Params['page']))
