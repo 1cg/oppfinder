@@ -25,14 +25,10 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
-    this.StatusFeed = "Auth Code: " + search('AuthCode') as String
     var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
-    this.StatusFeed = "Response Body: " + sClient.response
-    this.StatusFeed = "Host: " + sClient._httpClient.Host
-    this.StatusFeed = "Instance URL: " + sClient._instanceUrl
-    this.StatusFeed = "Access Token: " + sClient._accessToken
 
+    this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
     var cal = Calendar.getInstance()
     var year = cal.get(Calendar.YEAR)
     var month = cal.get(Calendar.MONTH) + 1
@@ -46,7 +42,7 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "Uploading recommendation "+(i+1)
       Thread.sleep(4500) //Don't go over the API limit!
       if (i % 20 == 0) {
-        this.Progress = (i * 100) / (recommendations.Count as int)
+        this.Progress = (i * 100) / recommendations.size()
         checkCancellation()
       }
       var opportunity = {
