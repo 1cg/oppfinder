@@ -77,8 +77,12 @@ abstract class Job implements Runnable {
   abstract function doReset()
 
   final function reset() {
-    delete()
-    (Class.forName(id['Type'] as String).getConstructor({}).newInstance({}) as jobs.Job).start()
+    update({'StatusFeed' -> null})
+    Status = 'Active'
+    Progress = 0
+    doReset()
+    EndTime = null
+    start()
   }
 
   function delete() {
