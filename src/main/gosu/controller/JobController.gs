@@ -77,6 +77,12 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(job?.Progress+"%")
   }
 
+  function status(UUID : String) : Object {
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.Status)
+  }
+
   function elapsed(UUID : String) : Object {
     var job = Job.find(UUID)
     if (job?.Progress == 100) cancelPolling()
