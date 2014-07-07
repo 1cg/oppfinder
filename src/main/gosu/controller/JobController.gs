@@ -34,21 +34,26 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(SubJobTableBody.renderToString(UUID,Job.findByIDs(jobs?.map(\ j -> j.UUId))?.paginate(Params['page'])))
   }
 
- /*
-  function _auth() : String {
-    return SalesforceUpload.renderToString(Params['code'])
-  }
-*/
   function generateProgress() : Object {
-    return raw(Job.find(UUId)?.Progress+"%")
+    var progress = Job.find(UUId)?.Progress+"%"
+    if (progress == "100%") cancelPolling()
+    return raw(progress)
   }
 
   function generateComplete() : Object {
-    return (Job.find(UUId)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
+    if (Job.find(UUId)?.Progress == 100) {
+      cancelPolling()
+      return raw('<div class="fa fa-check chk navbar-left"</div>')
+    }
+    return  raw('<div></div>')
   }
 
   function complete(UUID : String) : Object {
-    return (Job.find(UUID)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
+    if (Job.find(UUID)?.Progress == 100) {
+      cancelPolling()
+      return raw('<div class="fa fa-check chk navbar-left"</div>')
+    }
+    return  raw('<div></div>')
   }
 
   function cancel(UUID : String) : String {
@@ -67,15 +72,27 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function progress(UUID : String) : Object {
-    return raw(Job.find(UUID)?.Progress+"%")
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.Progress+"%")
+  }
+
+  function status(UUID : String) : Object {
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.Status)
   }
 
   function elapsed(UUID : String) : Object {
-    return raw(Job.find(UUID)?.ElapsedTime)
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.ElapsedTime)
   }
 
   function statusFeed(UUID : String) : Object {
-    return raw(JobStatusFeedList.renderToString(Job.find(UUID)?.StatusFeed, UUID))
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(JobStatusFeedList.renderToString(job?.StatusFeed, UUID))
   }
 
   override function create() : Object {
@@ -113,5 +130,10 @@ class JobController implements IHasRequestContext, IResourceController {
   override function update(id: String) : Object {
     return null
   }
+
+  function cancelPolling() {
+    Headers['X-IC-CancelPolling'] = true as String
+  }
+
 
 }
