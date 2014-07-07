@@ -6,7 +6,7 @@
     <strong>Oops! </strong> This doesn't appear to be a valid job id
   </div>
 <% return } %>
-<h2 class="page-title">Job Detail</h2>
+<h2 class="page-title">Job Details</h2>
 <div class="detail-row"><span class="detail-label">Job Id: </span><span class="detail-value">${job.UUId}</span></div>
 <div class="detail-row"><span class="detail-label">Job Type: </span><span class="detail-value">${job.Type}</span></div>
 <div class="detail-row"><span class="detail-label">Elapsed Time: </span><span class="detail-value">${job.ElapsedTime}</span></div>
