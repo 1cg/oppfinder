@@ -65,7 +65,7 @@
             </div>
           <% } %>
         </td>
-        <td>
+        <td class="no-wrap">
           <div class="relative">
             <div class="row-action-btns">
               <% if (job.Progress == 100 || job.Cancelled || job.Failed)  { %>

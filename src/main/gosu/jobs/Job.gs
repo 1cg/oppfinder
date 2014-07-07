@@ -218,15 +218,15 @@ abstract class Job implements Runnable {
     var returnString = ""
     if (totalSeconds > 3600) {
       var hours = totalSeconds / 3600
-      returnString += hours + " Hrs "
+      returnString += hours + " Hours "
       totalSeconds -= hours*3600
     }
     if (totalSeconds > 60) {
       var minutes = totalSeconds / 60
-      returnString += minutes + " Mins "
+      returnString += minutes + " Minutes "
       totalSeconds -= minutes*60
     }
-    return returnString + totalSeconds + " Secs"
+    return returnString + totalSeconds + " Seconds"
   }
 
   /*
