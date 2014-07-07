@@ -1,5 +1,15 @@
 <%@ params(type: String, pager: util.PagerIterable<jobs.Job>) %>
 <div ic-src='jobs/table?status=${type}&page=${pager.Current}' ic-poll="3s" ic-transition="none" ic-deps="/jobs">
+
+<% if ((pager == null) || (pager.Current == 1 && pager.Count == 0)) { %>
+  <div class="inset-8">
+    <div class="alert alert-info alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>Attention: </strong> There are currently no ${type} jobs in the database
+    </div>
+  </div>
+<% } %>
+
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -24,15 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      <%
-       if ((pager == null) || (pager.Current == 1 && pager.Count == 0)) { %>
-        <br>
-        <div class="alert alert-info alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <strong>Attention: </strong> There are currently no ${type} jobs in the database
-        </div>
-      <% return } else {
-      for(job in pager)  {%>
+     <% for(job in pager)  {%>
       <tr>
         <td>
           <a href='/jobs/${job.UUId}'>${job.UUId}</a>
@@ -71,8 +73,7 @@
           </div>
         </td>
      </tr>
-     <% }
-    } %>
+     <% } %>
     </tbody>
   </table>
   ${new widgets.PagerWidget().renderWidget(pager)}

@@ -49,9 +49,10 @@ class RecommendJob extends Job {
       }
       ds.drop() //Get rid of the temp data
     }
+    print(MahoutUtil.MODEL_MAP.Count)
     this.StatusFeed = "Recommendations Calculated"
     storeTopRecommendations(recommendations, dataSet)
-    this.StatusFeed = "Recommendations Stored"
+    this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
     this.StatusFeed = "Done"
   }
 

@@ -89,10 +89,11 @@ class JobController implements IHasRequestContext, IResourceController {
     } else if (Params['type'] == 'auth') {
       UUID = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId
     }
+    Headers['X-IC-Redirect'] = "/jobs/${UUID}"
     return show(UUID)
   }
 
-  override function _new() : Object{
+  override function _new() : Object {
     return null
   }
 
@@ -107,4 +108,5 @@ class JobController implements IHasRequestContext, IResourceController {
   override function update(id: String) : Object {
     return null
   }
+
 }

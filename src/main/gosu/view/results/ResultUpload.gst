@@ -1,7 +1,7 @@
 <%@ params(results : util.SkipIterable<java.util.Map<Object,Object>>, code : String) %>
 <div class='jumbotron'>
   <h2>Select a dataset to upload to Salesforce</h2>
-  <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
+  <form class="form-inline" role="form" ic-post-to="/jobs?type=auth">
     <div class="form-group">
     <label>
       <strong>Select DataSet: </strong>

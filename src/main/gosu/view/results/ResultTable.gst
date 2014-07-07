@@ -1,14 +1,21 @@
 <%@ params(loggedIn : boolean, resultNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
 <div>
   <h2 class="page-title">Results</h2>
+  <a href="/results/new" class="btn btn-primary pull-right">New Analysis</a>
 </div>
 
 <div id='wrapper'>
+
   <% if (!loggedIn) { %>
-    <h4><i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
+    <div class="inset-8">
+      <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
         log in to Salesforce</a> to upload results
-    </h4>
+      </div>
+    </div>
   <% } %>
+
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -34,7 +41,7 @@
     for(result in resultNames)  {%>
       <tr>
         <td>
-          <a href='/results/${result['UUId']}' style="color:#476CB5">${result['UUId']}</a>
+          <a href='/results/${result['UUId']}'>${result['UUId']}</a>
         </td>
       <% if (loggedIn) { %>
         <td>

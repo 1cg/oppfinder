@@ -6,6 +6,8 @@ uses view.results.ResultTable
 uses model.Results
 uses view.results.Result
 uses view.results.ResultUpload
+uses view.results.NewAnalysis
+uses model.DataSet
 
 class ResultsController implements  IHasRequestContext, IResourceController {
 
@@ -18,8 +20,12 @@ class ResultsController implements  IHasRequestContext, IResourceController {
     return ResultTable.renderToString(loggedIn, Results.AllResults.paginate(Params['page']))
   }
 
-  override function _new(): Object {
+  function push() : Object {
     return ResultUpload.renderToString(Results.AllResults, Request.Session.attribute("code"))
+  }
+
+  override function _new(): Object {
+    return NewAnalysis.renderToString(DataSet.allDataSets)
   }
 
   override function create(): Object {

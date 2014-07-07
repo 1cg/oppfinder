@@ -1,40 +1,42 @@
-<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean) %>
-  <hr>
-  <% if (loggedIn) { %>
-  <a ic-post-to="/jobs?type=%auth&id=${id}" class="btn btn-primary pull-right">Upload</a>
+<%@ params(code : String, results : java.util.List<java.util.Map<Object,Object>>) %>
+<%@ extends sparkgs.SparkGSTemplate %>
+<div>
+  <h2 class="page-title">Results</h2>
+</div>
+
+<div class="detail-row">
+  <span class="detail-label">Job Id: </span>
+  <!-- TODO cgross  this should be a results object -->
+  <span class="detail-value"><a href="/jobs/${Request.Params['id']}">${Request.Params['id']}</a></span>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        Company
+      </th>
+      <th>
+        Recommended Policy
+      </th>
+      <th>
+        Value
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+  <% for (result in results) {%>
+    <tr>
+      <td>
+        ${result['Company']}
+      </td>
+      <td>
+        ${result['Policy']}
+      </td>
+      <td>
+        ${result['Value']}
+      </td>
+    </tr>
   <% } %>
-  <h2>Results for ${id}</h2>
-<% if (results.size() > 0) { %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>
-          Company
-        </th>
-        <th>
-          Recommended Policy
-        </th>
-        <th>
-          Value
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-    <% for (result in results) {%>
-      <tr>
-        <td>
-          ${result['Company']}
-        </td>
-        <td>
-          ${result['Policy']}
-        </td>
-        <td>
-          ${result['Value']}
-        </td>
-      </tr>
-    <% } %>
-    </tbody>
-  </table>
-<%} else { %>
-  No recommendations available.
-<% } %>
+  </tbody>
+</table>
