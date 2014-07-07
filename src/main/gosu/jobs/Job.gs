@@ -77,13 +77,8 @@ abstract class Job implements Runnable {
   abstract function doReset()
 
   final function reset() {
-    UUId = UUID.randomUUID().toString()
-    update({'StatusFeed' -> null})
-    Status = 'Active'
-    Progress = 0
-    doReset()
-    EndTime = null
-    start()
+    delete()
+    (Class.forName(id['Type'] as String).getConstructor({}).newInstance({}) as jobs.Job).start()
   }
 
   function delete() {
@@ -256,7 +251,7 @@ abstract class Job implements Runnable {
     if (UUID == null) return null
     else if (type == null) {
       type = dataStore.findOne({'UUId' -> UUID})?['Type'] as String
-      if (type == null) return null
+      if (type == null || type == "") return null
     }
     return Class.forName(type)
                       .getConstructor({Map.Type.IntrinsicClass})

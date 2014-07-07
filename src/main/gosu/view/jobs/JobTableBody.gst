@@ -34,7 +34,8 @@
       </tr>
     </thead>
     <tbody>
-     <% for(job in pager)  {%>
+     <% for(job in pager)  {
+       if (job != null) { %>
       <tr>
         <td>
           <a href='/jobs/${job.UUId}'>${job.UUId}</a>
@@ -73,7 +74,7 @@
           </div>
         </td>
      </tr>
-     <% } %>
+     <% }} %>
     </tbody>
   </table>
   ${new widgets.PagerWidget().renderWidget(pager)}

@@ -47,6 +47,10 @@ class JobController implements IHasRequestContext, IResourceController {
     return (Job.find(UUId)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
   }
 
+  function complete(UUID : String) : Object {
+    return (Job.find(UUID)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
+  }
+
   function cancel(UUID : String) : String {
     Job.find(UUID)?.cancel()
     return null
