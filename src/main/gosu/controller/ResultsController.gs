@@ -27,7 +27,9 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function show(id: String): Object {
-    return Result.renderToString(Request.Session.attribute("code"), Results.getResults(id))
+    var code = Request.Session.attribute("code") // UGH
+    var loggedIn = (code != null && code != "")
+    return Result.renderToString(id, Results.getResults(id), loggedIn)
   }
 
   override function edit(id: String): Object {

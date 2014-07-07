@@ -1,7 +1,10 @@
-<%@ params(code : String, results : java.util.List<java.util.Map<Object,Object>>) %>
-<% if (results.size() > 0) { %>
+<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean) %>
   <hr>
-  <h2> Results!</h2>
+  <% if (loggedIn) { %>
+  <a ic-post-to="/jobs?type=%auth&id=${id}" class="btn btn-primary pull-right">Upload</a>
+  <% } %>
+  <h2>Results for ${id}</h2>
+<% if (results.size() > 0) { %>
   <table class="table">
     <thead>
       <tr>
@@ -32,4 +35,6 @@
     <% } %>
     </tbody>
   </table>
-<%}%>
+<%} else { %>
+  No recommendations available.
+<% } %>

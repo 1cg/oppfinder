@@ -5,9 +5,9 @@
 
 <div id='wrapper'>
   <% if (!loggedIn) { %>
-    <h2><i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
+    <h4><i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate">
         log in to Salesforce</a> to upload results
-    </h2>
+    </h4>
   <% } %>
   <table class="table table-striped table-hover">
     <thead>
