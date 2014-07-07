@@ -5,6 +5,10 @@ uses org.json.simple.JSONArray
 
 class Company extends DataSet {
 
+  construct(collection : String) {
+    super(collection)
+  }
+
   property set CompanyName(companyName : String) {
     put("Company", companyName)
   }

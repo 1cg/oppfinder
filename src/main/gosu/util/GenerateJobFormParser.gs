@@ -10,7 +10,7 @@ class GenerateJobFormParser {
 
   static function startJob(ds : String, type : String) : jobs.Job {
     ds = ds == null || ds == "" ? UUID.randomUUID().toString() : ds
-    ds = URLDecoder.decode(ds, "UTC-8")
+    ds = URLDecoder.decode(ds, "UTF-8")
     if(type == "Reach") {
       new GenerateTest().generateTest('generateDataReach', 'Reach', 40000)
       return new GenerateJob('generateDataReach', ds).start()

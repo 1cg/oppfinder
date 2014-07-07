@@ -1,4 +1,4 @@
-package util
+package util.iterable
 
 uses java.lang.Iterable
 

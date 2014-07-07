@@ -1,4 +1,4 @@
-<%@ params(collections : util.SkipIterable<java.util.Map<Object,Object>>) %>
+<%@ params(collections : util.iterable.SkipIterable<java.util.Map<Object,Object>>) %>
 <div class='jumbotron'>
   <h2>Select a dataset to analyze</h2>
   <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
@@ -6,10 +6,10 @@
     <label>
       <strong>Select DataSet: </strong>
     </label>
-    <select class="form-control" name="id">
+    <select class="form-control" name="collections">
       <optgroup label="Most Recent">
         <% for(collection in collections){ %>
-          <option value=${collection['name']}>${collection['name']}</option>
+          <option value=${java.net.URLEncoder.encode(collection['name'] as String,'UTF-8')}>${collection['name']} (${collection['size']})</option>
         <% } %>
       </optgroup>
     </select>

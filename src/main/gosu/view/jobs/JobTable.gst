@@ -1,4 +1,4 @@
-<%@ params(type : String, pager : util.PagerIterable<jobs.Job>)%>
+<%@ params(type : String, pager : util.iterable.PagerIterable<jobs.Job>)%>
 
 <div>
   <div class="btn-group status-select pull-right">

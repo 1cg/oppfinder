@@ -14,6 +14,8 @@ uses sparkgs.IResourceController
 uses view.jobs.JobTable
 uses view.jobs.JobTableBody
 uses view.jobs.SubJobTableBody
+uses java.text.SimpleDateFormat
+uses java.net.URLDecoder
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -54,6 +56,11 @@ class JobController implements IHasRequestContext, IResourceController {
       return raw('<div class="fa fa-check chk navbar-left"</div>')
     }
     return  raw('<div></div>')
+  }
+
+  function created(UUID : String) : Object {
+    var sdf = new SimpleDateFormat("MMM d, 'at' h:mm a")
+    return sdf.format(Job.find(UUID)?.StartTime)
   }
 
   function cancel(UUID : String) : String {
@@ -100,12 +107,12 @@ class JobController implements IHasRequestContext, IResourceController {
     if (Params['type'] == "test") {
       UUID = new TestJob().start().UUId
     } else if (Params['type'] == 'recommend') {
-      UUID = new RecommendJob(Params['collections']).start().UUId
+      UUID = new RecommendJob(URLDecoder.decode(Params['collections'], 'UTF-8')).start().UUId
     } else if (Params['type'] == 'upload') {
       UUId = new UploadJob(Request.Body).start().UUId
       UUID = UUId
     } else if (Params['type'] == 'generate') {
-      UUId = GenerateJobFormParser.startJob(Params['dataSetName'], Params['generateStrategy']).UUId
+      UUId = GenerateJobFormParser.startJob(URLDecoder.decode(Params['dataSetName'], "UTF-8"), Params['generateStrategy']).UUId
       UUID = UUId
     } else if (Params['type'] == 'auth') {
       UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId

@@ -1,7 +1,7 @@
-package util
+package util.iterable
 
-uses java.util.Iterator
 uses java.lang.Iterable
+uses java.util.Iterator
 uses java.lang.Math
 
 class PagerIterable<T> implements Iterable<T> {

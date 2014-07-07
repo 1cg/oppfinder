@@ -32,7 +32,7 @@
     <select class="form-control" name="collections">
       <optgroup label="Most Recent">
       <% for(collection in model.DataSet.allDataSets){ %>
-        <option value=${collection['name']}>${collection['name']}</option>
+        <option value=${java.net.URLEncoder.encode(collection['name'] as String, 'UTF-8')}>${collection['name']} (${collection['size']})</option>
       <% } %>
       </optgroup>
     </select>

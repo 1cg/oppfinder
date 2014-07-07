@@ -1,4 +1,4 @@
-<%@ params(pager : util.PagerIterable, URL : String, page : long) %>
+<%@ params(pager : util.iterable.PagerIterable, URL : String, page : long) %>
 <ul class="pagination navbar-right">
   <% if (pager.validPage(2)) { %>
     <li class=${pager.Current == 1 ? "disabled" : ""}>

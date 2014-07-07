@@ -129,7 +129,8 @@ class RecommendJob extends Job {
           finished = false
         }
       }
-      Progress = sum / subJobsID.size()
+      var progress = sum / subJobsID.size()
+      if (progress > 0) Progress = progress
       if (finished) {
         return
       }

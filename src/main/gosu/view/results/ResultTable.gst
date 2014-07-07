@@ -1,4 +1,4 @@
-<%@ params(loggedIn : boolean, resultNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
+<%@ params(loggedIn : boolean, resultNames : util.iterable.PagerIterable<java.util.Map<Object,Object>>) %>
 <div>
   <h2 class="page-title">Results</h2>
   <a href="/results/new" class="btn btn-primary pull-right">New Analysis</a>
@@ -22,6 +22,9 @@
         <th>
           Result Id
         </th>
+        <th>
+          Created
+        </th>
       <% if (loggedIn) { %>
         <th>
           Upload to Salesforce
@@ -42,6 +45,9 @@
       <tr>
         <td>
           <a href='/results/${result['UUId']}'>${result['UUId']}</a>
+        </td>
+        <td>
+          ${result['created'] ?: ''}
         </td>
       <% if (loggedIn) { %>
         <td>

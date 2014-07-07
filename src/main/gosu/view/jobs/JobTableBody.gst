@@ -1,4 +1,4 @@
-<%@ params(type: String, pager: util.PagerIterable<jobs.Job>) %>
+<%@ params(type: String, pager: util.iterable.PagerIterable<jobs.Job>) %>
 <div ic-src='jobs/table?status=${type}&page=${pager.Current}' ic-poll="3s" ic-transition="none" ic-deps="/jobs">
 
 <% if ((pager == null) || (pager.Current == 1 && pager.Count == 0)) { %>
@@ -21,6 +21,9 @@
         </th>
         <th>
           Job Type
+        </th>
+         <th>
+          Created
         </th>
         <th>
           Total Time
@@ -45,6 +48,9 @@
         </td>
         <td>
           ${job.Type}
+        </td>
+        <td>
+          ${new controller.JobController().created(job.UUId)}
         </td>
         <td>
           <div ic-src="/jobs/${job.UUId}/elapsed" ic-transition="none" ic-poll="5s">${job.ElapsedTime}</div>

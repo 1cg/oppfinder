@@ -6,6 +6,7 @@ uses view.companies.Companies
 uses view.datasets.DataSetTable
 uses model.DataSet
 uses view.datasets.GenerateUploadPage
+uses java.net.URLDecoder
 
 class DataSetController implements IHasRequestContext, IResourceController {
 
@@ -13,7 +14,8 @@ class DataSetController implements IHasRequestContext, IResourceController {
     return DataSetTable.renderToString(model.DataSet.allDataSets.paginate(Params['page'] ?: 1))
   }
   override function show(id: String)  : Object {
-    return Companies.renderToString(id, DataSet.find(id).paginate(Params['page']))
+    var did = URLDecoder.decode(id, "UTF-8")
+    return Companies.renderToString(did, DataSet.find(did).paginate(Params['page']))
   }
 
   override function create()  : Object {
