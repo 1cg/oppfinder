@@ -34,11 +34,6 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(SubJobTableBody.renderToString(UUID,Job.findByIDs(jobs?.map(\ j -> j.UUId))?.paginate(Params['page'])))
   }
 
- /*
-  function _auth() : String {
-    return SalesforceUpload.renderToString(Params['code'])
-  }
-*/
   function generateProgress() : Object {
     var progress = Job.find(UUId)?.Progress+"%"
     if (progress == "100%") cancelPolling()

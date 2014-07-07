@@ -28,7 +28,9 @@
 <%} %>
 <br>
 <h3 class="sub-section-header">Job Feed: </h3>
-${JobStatusFeedList.renderToString(job.StatusFeed, job.UUId)}
+<div ic-src="/jobs/${job.UUId}/statusfeed" ic-poll="1s" ic-transition="none">
+  ${JobStatusFeedList.renderToString(job.StatusFeed, job.UUId)}
+</div>
 <% if (!job.Failed) { %>
   ${job.renderToString()}
 <%} %>
