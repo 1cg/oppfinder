@@ -12,9 +12,9 @@ class SalesforceRESTClient {
   static final var SF_TOKEN_SITE = "https://login.salesforce.com/services/oauth2/token"
   static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results/_auth"
 
-  var _httpClient : HttpClient
-  var _accessToken : String
-  var _instanceUrl : String
+  public var _httpClient : HttpClient
+  public var _accessToken : String
+  public var _instanceUrl : String
 
   // Should construct take responsibility of OAuth? Or should uses always require a client.init() call?
   /* This code receives the the authorization code from the authorization endpoint, then requests for the access
