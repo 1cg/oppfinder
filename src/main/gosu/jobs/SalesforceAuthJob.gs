@@ -25,7 +25,7 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
-
+    this.StatusFeed = "Auth Code: " + search('AuthCode') as String
     var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
     this.StatusFeed = "Response Body: " + sClient.response
