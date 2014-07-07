@@ -28,7 +28,7 @@ class SalesforceAuthJob extends Job {
 
     var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
-
+    this.StatusFeed = "Response Body: " + sClient.response
     this.StatusFeed = "Host: " + sClient._httpClient.Host
     this.StatusFeed = "Instance URL: " + sClient._instanceUrl
     this.StatusFeed = "Access Token: " + sClient._accessToken
