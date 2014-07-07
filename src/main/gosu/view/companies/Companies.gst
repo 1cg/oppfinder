@@ -1,6 +1,6 @@
 <%@ params(id : String, pager: util.PagerIterable<java.util.Map>)%>
 <h2>DataSet: ${id}</h2><br>
-<a href='/datasets' style="color:#476CB5"><strong>Back to DataSets</strong></a>
+<a href='/datasets'><strong>Back to DataSets</strong></a>
 <div id='wrapper'>
   <table class="table">
     <thead>
