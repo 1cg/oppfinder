@@ -1,9 +1,11 @@
-<%@ params(code : String, results : java.util.List<java.util.Map<Object,Object>>) %>
+<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean) %>
 <%@ extends sparkgs.SparkGSTemplate %>
 <div>
   <h2 class="page-title">Results</h2>
 </div>
-
+ <% if (loggedIn) { %>
+  <a ic-post-to="/jobs?type=%auth&id=${id}" class="btn btn-primary pull-right">Upload</a>
+  <% } %>
 <div class="detail-row">
   <span class="detail-label">Job Id: </span>
   <!-- TODO cgross  this should be a results object -->
