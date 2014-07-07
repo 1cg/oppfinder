@@ -1,14 +1,15 @@
 <h1 class="page-title">
-  <span class="op">Opportunity</span><span class="fi">Finder</span>
-  <small><em>Find new business opportunities within PolicyCenter</em></small>
+  <div><span class="op">Opportunity</span><span class="fi">Finder</span></div>
+  <small><em>Find new business opportunities hidden in PolicyCenter</em></small>
 </h1>
-
-<hr/>
 
 <div class="inset-8 root-overview">
 
+<h3>Introduction</h3>
+<hr/>
+
   <p>
-  Guidewire PolicyCenter® is a flexible underwriting and policy administration system designed to empower personal and commercial lines carriers to deliver insurance the way they've always wanted to. Designed solely for P/C insurers, PolicyCenter is a complete system-of-record and supports the core functions of the policy lifecycle—product definitions, underwriting, quoting, binding, endorsements, and renewals.
+  Guidewire PolicyCenter<sup>®</sup> is a flexible underwriting and policy administration system designed to empower personal and commercial lines carriers to deliver insurance the way they've always wanted to. Designed solely for P/C insurers, PolicyCenter is a complete system-of-record and supports the core functions of the policy lifecycle—product definitions, underwriting, quoting, binding, endorsements, and renewals.
   </p>
 
   <p>
@@ -20,7 +21,6 @@
 </div>
 
 <h3>Begin A New Analysis</h3>
-
 <hr/>
 
 <div class="inset-8">
