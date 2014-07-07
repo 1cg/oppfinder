@@ -66,7 +66,7 @@ class RecommendJob extends Job {
         var job = new RecommendSubJob(jobName,i * size, size, dataSet)
         job.start()
         subJobsID.add(job.UUId)
-        if (Cancelled) return
+        checkCancellation()
       }
     }
     update({'SubJobs' -> subJobsID.toString()})
@@ -150,9 +150,9 @@ class RecommendJob extends Job {
   override property set Cancelled(status : boolean) {
     super.Cancelled = status
     for (job in SubJobs) {
-      job.Cancelled = status
+      job?.delete()
     }
-
+    update({'SubJobs' -> null})
   }
 
 }
