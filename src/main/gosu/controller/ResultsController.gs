@@ -13,7 +13,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
 
   override function index(): Object {
     var code = Params['code']
-    var loggedIn = (code != null && code != "")
+    var loggedIn = ((code != null && code != "") || Request.Session.attribute("code") != null)
     if (loggedIn) {
       Request.Session.attribute("code", code)
     }
