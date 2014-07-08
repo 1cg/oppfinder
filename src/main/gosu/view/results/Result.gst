@@ -4,7 +4,7 @@
   <h2 class="page-title">Results</h2>
 </div>
  <% if (loggedIn) { %>
-  <a ic-post-to="/jobs?type=%auth&id=${id}" class="btn btn-primary pull-right">Upload</a>
+  <a ic-post-to="/jobs?type=auth&id=${id}" class="btn btn-primary pull-right">Upload</a>
   <% } %>
 <div class="detail-row">
   <span class="detail-label">Job Id: </span>
