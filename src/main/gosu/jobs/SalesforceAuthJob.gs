@@ -40,10 +40,8 @@ class SalesforceAuthJob extends Job {
     for (recommendation in recommendations index i) {
       this.StatusFeed = "Uploading recommendation "+(i+1)
       Thread.sleep(4500) //Don't go over the API limit!
-      if (i % 20 == 0) {
-        this.Progress = (i * 100) / recommendations.size()
-        checkCancellation()
-      }
+      this.Progress = (i * 100) / recommendations.size()
+      checkCancellation()
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
         "AccountId" -> accountID,
@@ -58,7 +56,7 @@ class SalesforceAuthJob extends Job {
       }
     }
 
-    this.StatusFeed = "Uploads available at: "+sClient.InstanceURL+"/"+accountID
+    this.StatusFeed = "Uploads available <a href=${sClient.InstanceURL}/${accountID}>here</a>"
     this.StatusFeed = "Done"
     this.Progress = 100
   }
