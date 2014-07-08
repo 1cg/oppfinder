@@ -11,10 +11,10 @@ class Results {
 
   static var DS = new MongoCollection('RECOMMENDATION_RESULTS_COLLECTION')
 
-  static function addResults(UUID : String, results : List<Map<Object,Object>>) {
+  static function addResults(UUID : String, results : List<Map<Object,Object>>, source : String) {
     DS.insert({'UUId' -> UUID,
                'Results' -> results,
-               'Results' -> results,
+               'Source'  -> source,
                'created' -> TimeUtil.now()})
   }
 
@@ -22,6 +22,10 @@ class Results {
     var results = DS.findOne({'UUId' -> UUID})?['Results'] as String
     var jArray = results == null ? null : JSONValue.parse(results) as JSONArray
     return jArray?.map(\ o -> o as JSONObject)
+  }
+
+  static function getSource(UUID : String) : String {
+    return DS.findOne({'UUId' -> UUID})?['Source'] as String
   }
 
   static property get AllResults() : SkipIterable<Map<Object,Object>> {

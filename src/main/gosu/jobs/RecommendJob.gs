@@ -90,7 +90,7 @@ class RecommendJob extends Job {
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    Results.addResults(UUId, finalResults)
+    Results.addResults(UUId, finalResults, dataSet)
   }
 
   /*
