@@ -7,6 +7,7 @@ uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
 uses model.Results
+uses java.lang.Math
 
 class SalesforceAuthJob extends Job {
 
@@ -40,7 +41,7 @@ class SalesforceAuthJob extends Job {
     for (recommendation in recommendations index i) {
       this.StatusFeed = "Uploading recommendation "+(i+1)
       Thread.sleep(4500) //Don't go over the API limit!
-      this.Progress = (i * 100) / recommendations.size()
+      this.Progress = Math.max(10, (i * 100) / recommendations.size())
       checkCancellation()
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
