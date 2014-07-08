@@ -1,4 +1,4 @@
-<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean) %>
+<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean, source : String) %>
 <%@ extends sparkgs.SparkGSTemplate %>
 <div>
   <h2 class="page-title">Results</h2>
@@ -11,7 +11,12 @@
   <!-- TODO cgross  this should be a results object -->
   <span class="detail-value"><a href="/jobs/${Request.Params['id']}">${Request.Params['id']}</a></span>
 </div>
-
+<% if (source != "" && source != null) { %>
+<div class="detail-row">
+  <span class="detail-label">Source Data Set: </span>
+  <span class="detail-value"><a href="/datasets/${java.net.URLEncoder.encode(source, 'UTF-8')}">${source}</a></span>
+</div>
+<%}%>
 <table class="table">
   <thead>
     <tr>
