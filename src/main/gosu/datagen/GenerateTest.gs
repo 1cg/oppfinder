@@ -3,7 +3,7 @@ package datagen
 
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
-uses model.MongoCollection
+uses java.util.Map
 
 class GenerateTest {
 
@@ -27,10 +27,10 @@ class GenerateTest {
    * Generates JSON of companies with arbitrary details except for two companies with clear similarities in
    * reach. The Recommendation Job should recommend company RECOMMENDEE to GODZILLA
    */
-  function generateTest(output : String, testVar : String, numCompanies : int = 20000) {
-    var bigArray = new JSONArray()
+  function generateTest(testVar : String, numCompanies : int = 20000) : List<Map<Object,Object>> {
+    var bigArray : List<Map<Object,Object>> = {}
     for (1..numCompanies index j) {
-      var company = new JSONObject()
+      var company : Map<Object,Object> = {}
 
       if (j == numCompanies-1) {
         company.put("Company", "RECOMMENDEE (test success)")
@@ -59,9 +59,6 @@ class GenerateTest {
       company.put("Policies", coPolicies)
       bigArray.add(company)
     }
-    var ds = new MongoCollection(output)
-    for (o in bigArray) {
-      ds.insert(o as JSONObject)
-    }
+    return bigArray
   }
 }

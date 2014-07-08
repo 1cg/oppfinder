@@ -9,7 +9,7 @@ uses org.json.simple.JSONObject
 uses java.math.BigDecimal
 uses org.json.simple.JSONArray
 uses util.AssetLibrarian
-uses model.MongoCollection
+uses java.util.Map
 
 class GenerateRandom {
   /*
@@ -17,7 +17,7 @@ class GenerateRandom {
    * Number of companies is dependent on the length of Companies.txt
    * output : The file path to write and place the JSON file.
    */
-  function generateRandom(output : String) {
+  function generateRandom() : List<Map<Object,Object>>{
     var columnMap = AssetLibrarian.INSTANCE.COLUMNMAP
     var rand = new Random()
     var dataMap = new HashMap<String, List>()
@@ -34,9 +34,9 @@ class GenerateRandom {
       dataMap.put(column, data)
     }
 
-    var bigArray = new JSONArray()
+    var bigArray : List<Map<Object,Object>> = {}
     for (name in dataMap.get("Company") index i) {
-      var company = new JSONObject()
+      var company : Map<Object,Object> = {}
       company.put("Company", dataMap.get("Company").get(i % dataMap.get("Company").size()) as String)
       company.put("Contact Name", dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String)
       company.put("Email", dataMap.get("Email").get(i % dataMap.get("Email").size()) as String)
@@ -53,15 +53,11 @@ class GenerateRandom {
           continue
         }
       }
-
       company.put("Policies", coPolicies)
       company.put("Revenue", (new BigDecimal(10 + rand.nextInt(162000))).toString())
       company.put("Size", (50 + rand.nextInt(40000)) as String)
       bigArray.add(company)
     }
-    var ds = new MongoCollection(output)
-    for (o in bigArray) {
-      ds.insert(o as JSONObject)
-    }
+    return bigArray
   }
 }

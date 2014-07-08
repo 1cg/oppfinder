@@ -5,9 +5,10 @@ uses java.io.FileReader
 uses java.io.BufferedReader
 uses model.MongoCollection
 uses model.DataSet
-uses org.json.simple.parser.JSONParser
 uses util.AssetLibrarian
 uses java.util.UUID
+uses datagen.GenerateTest
+uses datagen.GenerateRandom
 
 class GenerateJob extends Job {
 
@@ -17,25 +18,25 @@ class GenerateJob extends Job {
 
   construct(inputCollection: String, dataSet : String) {
     super()
-    update({'Input' -> inputCollection})
+    update({'JobType' -> inputCollection})
     update({'DataSetCollection' -> dataSet})
   }
 
   override function executeJob() {
+    var data : List<Map<Object,Object>> = {}
+    if(search('JobType') as String == 'Reach') {
+      data = new GenerateTest().generateTest('Reach', 40000)
+    } else {
+      data = new GenerateRandom().generateRandom()
+    }
     checkCancellation()
-    var parser = new JSONParser()
-    var collection = search('DataSetCollection') as String
     this.StatusFeed = "Dropping previous dataset"
-    var dataSet = new MongoCollection(collection)
-    dataSet.drop()
-    var companiesDS = new MongoCollection(search('Input') as String)
     checkCancellation()
     var companies : List<Map<Object,Object>> = {}
     this.StatusFeed = "Parsed company information"
-    for (company in companiesDS.find() index i) {
-      //Thread.sleep(10)
+    for (company in data index i) {
       if (i % 20 == 0) {
-        this.Progress = (i * 100) / (companiesDS.Count as int)
+        this.Progress = (i * 100) / (data.Count)
         checkCancellation()
       }
       var uuid = UUID.randomUUID()
@@ -44,11 +45,13 @@ class GenerateJob extends Job {
       companies.add(company)
     }
     checkCancellation()
+    var collection = search('DataSetCollection') as String
+    var dataSet = new MongoCollection(collection)
+    dataSet.drop()
     dataSet.insert(companies)
-    companiesDS.drop()
-    this.StatusFeed = "Company information inserted"
-    writeLatLng()
     new DataSet(collection)
+    this.StatusFeed = "Company information inserted"
+    //writeLatLng()
     this.StatusFeed = "Done"
   }
 
