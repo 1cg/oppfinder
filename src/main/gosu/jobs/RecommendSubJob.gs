@@ -63,7 +63,6 @@ class RecommendSubJob extends Job {
     var c = Class.forName(this.FieldName)
     var field = c.newInstance() as Field
     var model = field.getModel(this.Collection)
-    print(MahoutUtil.MODEL_MAP.Count)
     checkCancellation()
     var recommender = new SVDRecommender(model, new SVDPlusPlusFactorizer(model,10,10))
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
