@@ -10,12 +10,10 @@ uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
-uses util.TransformIterable
-uses util.SkipIterable
+uses util.iterable.TransformIterable
 uses java.lang.Class
 uses java.lang.Exception
 uses util.CancellationException
-uses util.NoSuchUUIDException
 uses util.RedisConfigUtil
 
 abstract class Job implements Runnable {
@@ -26,8 +24,8 @@ abstract class Job implements Runnable {
   var id : Map<Object, Object>
 
   construct(data : Map<Object, Object>) {
-    if (data == null) throw new NoSuchUUIDException()
-    else if (dataStore.findOne({'UUId' -> data['UUId']}) == null) throw new NoSuchUUIDException()
+    if (data == null) throw "No such UUID"
+    else if (dataStore.findOne({'UUId' -> data['UUId']}) == null) throw "No such UUID"
     id = new HashMap<Object,Object>()
     id['UUId'] = data['UUId']
   }
@@ -77,7 +75,6 @@ abstract class Job implements Runnable {
   abstract function doReset()
 
   final function reset() {
-    UUId = UUID.randomUUID().toString()
     update({'StatusFeed' -> null})
     Status = 'Active'
     Progress = 0
@@ -171,7 +168,7 @@ abstract class Job implements Runnable {
     return newUp(UUID, null)
   }
 
-  static function findByStatus(status : String) : SkipIterable<jobs.Job> {
+  static function findByStatus(status : String) : util.iterable.SkipIterable<jobs.Job> {
     if (status == 'all') {
       return AllJobs
     } else if (status == 'failed') {
@@ -256,46 +253,46 @@ abstract class Job implements Runnable {
     if (UUID == null) return null
     else if (type == null) {
       type = dataStore.findOne({'UUId' -> UUID})?['Type'] as String
-      if (type == null) return null
+      if (type == null || type == "") return null
     }
     return Class.forName(type)
                       .getConstructor({Map.Type.IntrinsicClass})
                       .newInstance({{'Type' -> type, 'UUId' -> UUID}}) as jobs.Job
   }
 
-  static property get ActiveJobs() : SkipIterable<jobs.Job> {
+  static property get ActiveJobs() : util.iterable.SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Active'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get CompleteJobs() : SkipIterable<jobs.Job> {
+  static property get CompleteJobs() : util.iterable.SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Complete'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get CancelledJobs() : SkipIterable<jobs.Job> {
+  static property get CancelledJobs() : util.iterable.SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Cancelled'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get FailedJobs() : SkipIterable<jobs.Job> {
+  static property get FailedJobs() : util.iterable.SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Failed'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static property get AllJobs() : SkipIterable<jobs.Job> {
+  static property get AllJobs() : util.iterable.SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.queryNot('Status', 'Subjob').Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
   // This is for Salesforce uploading
-  static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
+  static property get CompleteRecommendJobs() : util.iterable.SkipIterable<jobs.Job> {
     return new TransformIterable<jobs.Job>(
         dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}).Cursor,
             \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
   }
 
-  static function findByIDs(IDs : List<String>) : SkipIterable<jobs.Job> {
+  static function findByIDs(IDs : List<String>) : util.iterable.SkipIterable<jobs.Job> {
     if (IDs == null) return null
     return new TransformIterable<jobs.Job>(
         dataStore.queryOr(IDs, 'UUId').Cursor, \

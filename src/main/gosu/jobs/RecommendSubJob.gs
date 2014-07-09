@@ -9,7 +9,6 @@ uses java.lang.Math
 uses java.lang.Long
 uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer
 uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender
-uses util.MahoutUtil
 
 class RecommendSubJob extends Job {
 

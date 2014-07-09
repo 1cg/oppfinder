@@ -49,7 +49,6 @@ class RecommendJob extends Job {
       }
       ds.drop() //Get rid of the temp data
     }
-    print(MahoutUtil.MODEL_MAP.Count)
     this.StatusFeed = "Recommendations Calculated"
     storeTopRecommendations(recommendations, dataSet)
     this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
@@ -66,7 +65,7 @@ class RecommendJob extends Job {
         var job = new RecommendSubJob(jobName,i * size, size, dataSet)
         job.start()
         subJobsID.add(job.UUId)
-        if (Cancelled) return
+        checkCancellation()
       }
     }
     update({'SubJobs' -> subJobsID.toString()})
@@ -91,7 +90,7 @@ class RecommendJob extends Job {
       result.put('Value', each.Value)
       finalResults.add(result)
     }
-    Results.addResults(UUId, finalResults)
+    Results.addResults(UUId, finalResults, dataSet)
   }
 
   /*
@@ -130,7 +129,8 @@ class RecommendJob extends Job {
           finished = false
         }
       }
-      Progress = sum / subJobsID.size()
+      var progress = sum / subJobsID.size()
+      if (progress > 0) Progress = progress
       if (finished) {
         return
       }
@@ -150,9 +150,9 @@ class RecommendJob extends Job {
   override property set Cancelled(status : boolean) {
     super.Cancelled = status
     for (job in SubJobs) {
-      job.Cancelled = status
+      job?.delete()
     }
-
+    update({'SubJobs' -> null})
   }
 
 }

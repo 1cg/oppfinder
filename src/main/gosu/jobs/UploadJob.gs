@@ -6,6 +6,7 @@ uses org.json.simple.JSONArray
 uses org.json.simple.parser.JSONParser
 uses model.Company
 uses org.json.simple.JSONObject
+uses java.util.UUID
 
 class UploadJob extends Job {
 
@@ -21,11 +22,13 @@ class UploadJob extends Job {
     var dataSet = new MongoCollection ("uploadToParse")
     dataSet.drop()
     dataSet.insert({"file" -> body})
+    dataSet.insert({'collection' -> UUID.randomUUID().toString()})
   }
 
   override function executeJob() {
     checkCancellation()
-    var body = (new MongoCollection ("uploadToParse").find().iterator().next()["file"]).toString()
+    var c = new MongoCollection ("uploadToParse").find().iterator().next()
+    var body = (c["file"]).toString()
     var i = 0
     for (0..3) {
       i = body.indexOf("\n", i+1)
@@ -39,11 +42,9 @@ class UploadJob extends Job {
     var parser = new JSONParser()
     var array = parser.parse(body) as JSONArray
     checkCancellation()
-    var dataSet = new MongoCollection ("oppFinder")
-    dataSet.drop()
     var iterations = array.size()
     for (var j in 0..iterations-1) {
-      var company = new Company()
+      var company = new Company(c['collection'] as String)
       var obj = array[j] as JSONObject
       company.CompanyName = obj.get("Company") as String
       company.ContactName = obj.get("Contact Name") as String

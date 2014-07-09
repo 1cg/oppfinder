@@ -1,9 +1,15 @@
-<%@ params(dataSetNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
+<%@ params(dataSetNames : util.iterable.PagerIterable<java.util.Map<Object,Object>>) %>
 <table class="table">
   <thead>
     <tr>
       <th>
-        DataSets
+        DataSet
+      </th>
+      <th>
+        Size
+      </th>
+      <th>
+        Created
       </th>
     </tr>
   </thead>
@@ -11,7 +17,13 @@
   <% for (result in dataSetNames) {%>
     <tr>
       <td>
-        <a href='/datasets/${result['name']}' style="color:#476CB5">${result['name']}</a>
+        <a href='/datasets/${java.net.URLEncoder.encode(result['name'] as String,"UTF-8")}'>${result['name']}</a>
+      </td>
+      <td>
+        ${result['size'] ?: ""}
+      </td>
+      <td>
+        ${result['created'] ?: ""}
       </td>
     </tr>
   <% } %>

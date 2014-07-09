@@ -2,7 +2,9 @@ package model
 
 uses java.util.HashMap
 uses java.util.Map
-uses util.SkipIterable
+uses util.iterable.SkipIterable
+uses java.text.SimpleDateFormat
+uses util.TimeUtil
 
 class DataSet {
 
@@ -12,17 +14,13 @@ class DataSet {
   var info : Map<Object, Object>
   var collection : String
 
-  construct() {
-    collection = "defaultDataSet"
-    myDataSet = new MongoCollection (collection)
-    new MongoCollection (MASTER_DATA_SET).insert({"name" -> collection})
-    info = new HashMap<String, Object>()
-  }
-
   construct(_collection : String) {
     collection = _collection
     myDataSet = new MongoCollection (collection)
-    new MongoCollection (MASTER_DATA_SET).insert({"name" -> collection})
+    var sdf = new SimpleDateFormat("MMM d, 'at' h:mm a")
+    new MongoCollection (MASTER_DATA_SET).insert({"name" -> collection,
+                                                  "size" -> myDataSet.Count,
+                                                  "created" -> TimeUtil.now()})
     info = new HashMap<String, Object>()
   }
 

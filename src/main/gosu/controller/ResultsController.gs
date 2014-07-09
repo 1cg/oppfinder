@@ -13,8 +13,9 @@ class ResultsController implements  IHasRequestContext, IResourceController {
 
   override function index(): Object {
     var code = Params['code']
-    var loggedIn = (code != null && code != "")
-    if (loggedIn) {
+    var hasAttribute = Request.Session.attribute("code") != null
+    var loggedIn = ((code != null && code != "") || hasAttribute)
+    if (loggedIn && !hasAttribute) {
       Request.Session.attribute("code", code)
     }
     return ResultTable.renderToString(loggedIn, Results.AllResults.paginate(Params['page']))
@@ -33,7 +34,9 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function show(id: String): Object {
-    return Result.renderToString(Request.Session.attribute("code"), Results.getResults(id))
+    var code = Request.Session.attribute("code")
+    var loggedIn = (code != null && code != "")
+    return Result.renderToString(id, Results.getResults(id), loggedIn, Results.getSource(id))
   }
 
   override function edit(id: String): Object {

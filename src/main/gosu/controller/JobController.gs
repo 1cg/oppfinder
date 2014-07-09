@@ -14,6 +14,8 @@ uses sparkgs.IResourceController
 uses view.jobs.JobTable
 uses view.jobs.JobTableBody
 uses view.jobs.SubJobTableBody
+uses java.text.SimpleDateFormat
+uses java.net.URLDecoder
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -34,17 +36,31 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(SubJobTableBody.renderToString(UUID,Job.findByIDs(jobs?.map(\ j -> j.UUId))?.paginate(Params['page'])))
   }
 
- /*
-  function _auth() : String {
-    return SalesforceUpload.renderToString(Params['code'])
-  }
-*/
   function generateProgress() : Object {
-    return raw(Job.find(UUId)?.Progress+"%")
+    var progress = Job.find(UUId)?.Progress+"%"
+    if (progress == "100%") cancelPolling()
+    return raw(progress)
   }
 
   function generateComplete() : Object {
-    return (Job.find(UUId)?.Progress == 100) ? raw('<div class="fa fa-check chk navbar-left"</div>') : raw('<div></div>')
+    if (Job.find(UUId)?.Progress == 100) {
+      cancelPolling()
+      return raw('<div class="fa fa-check chk navbar-left"</div>')
+    }
+    return  raw('<div></div>')
+  }
+
+  function complete(UUID : String) : Object {
+    if (Job.find(UUID)?.Progress == 100) {
+      cancelPolling()
+      return raw('<div class="fa fa-check chk navbar-left"</div>')
+    }
+    return  raw('<div></div>')
+  }
+
+  function created(UUID : String) : Object {
+    var sdf = new SimpleDateFormat("MMM d, 'at' h:mm a")
+    return sdf.format(Job.find(UUID)?.StartTime)
   }
 
   function cancel(UUID : String) : String {
@@ -63,15 +79,27 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function progress(UUID : String) : Object {
-    return raw(Job.find(UUID)?.Progress+"%")
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.Progress+"%")
+  }
+
+  function status(UUID : String) : Object {
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.Status)
   }
 
   function elapsed(UUID : String) : Object {
-    return raw(Job.find(UUID)?.ElapsedTime)
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(job?.ElapsedTime)
   }
 
   function statusFeed(UUID : String) : Object {
-    return raw(JobStatusFeedList.renderToString(Job.find(UUID)?.StatusFeed, UUID))
+    var job = Job.find(UUID)
+    if (job?.Progress == 100) cancelPolling()
+    return raw(JobStatusFeedList.renderToString(job?.StatusFeed, UUID))
   }
 
   override function create() : Object {
@@ -79,15 +107,16 @@ class JobController implements IHasRequestContext, IResourceController {
     if (Params['type'] == "test") {
       UUID = new TestJob().start().UUId
     } else if (Params['type'] == 'recommend') {
-      UUID = new RecommendJob(Params['collections']).start().UUId
+      UUID = new RecommendJob(URLDecoder.decode(Params['collections'], 'UTF-8')).start().UUId
     } else if (Params['type'] == 'upload') {
       UUId = new UploadJob(Request.Body).start().UUId
       UUID = UUId
     } else if (Params['type'] == 'generate') {
-      UUId = GenerateJobFormParser.startJob(Params['dataSetName'], Params['generateStrategy']).UUId
+      UUId = GenerateJobFormParser.startJob(URLDecoder.decode(Params['dataSetName'], "UTF-8"), Params['generateStrategy']).UUId
       UUID = UUId
     } else if (Params['type'] == 'auth') {
-      UUID = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId
+      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId
+      UUID = UUId
     }
     Headers['X-IC-Redirect'] = "/jobs/${UUID}"
     return show(UUID)
@@ -108,5 +137,10 @@ class JobController implements IHasRequestContext, IResourceController {
   override function update(id: String) : Object {
     return null
   }
+
+  function cancelPolling() {
+    Headers['X-IC-CancelPolling'] = true as String
+  }
+
 
 }

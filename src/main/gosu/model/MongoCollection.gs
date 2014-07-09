@@ -2,7 +2,7 @@ package model
 
 uses com.mongodb.*
 uses java.util.Map
-uses util.TransformIterable
+uses util.iterable.TransformIterable
 
 class MongoCollection {
 

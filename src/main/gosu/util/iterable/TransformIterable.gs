@@ -1,4 +1,4 @@
-package util
+package util.iterable
 
 uses java.lang.Iterable
 uses java.util.Iterator
@@ -33,7 +33,7 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
 
   override function paginate(page: String): PagerIterable<T> {
     var l = page == null ? 1 : page.toLong()
-    return new util.PagerIterable<T>(this,l)
+    return new PagerIterable<T>(this,l)
   }
 
   static class TransformIterator<TT> implements Iterator<TT> {

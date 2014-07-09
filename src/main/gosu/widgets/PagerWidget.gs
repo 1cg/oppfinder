@@ -4,7 +4,7 @@ uses sparkgs.util.IHasRequestContext
 
 class PagerWidget implements IHasRequestContext {
 
-  function renderWidget(pager : util.PagerIterable) : String {
+  function renderWidget(pager : util.iterable.PagerIterable) : String {
     return PagerView.renderToString(pager, Request.URL.replace("/table","").replace("/subjobtable",""), (Params['page'])?.toLong())
   }
 

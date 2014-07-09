@@ -1,4 +1,4 @@
-<%@ params(dataSetNames : util.PagerIterable<java.util.Map<Object,Object>>) %>
+<%@ params(dataSetNames : util.iterable.PagerIterable<java.util.Map<Object,Object>>) %>
 
 <div>
   <h2 class="page-title">Data Sets</h2>

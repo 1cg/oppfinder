@@ -1,5 +1,5 @@
-<%@ params(UUID : String, pager: util.PagerIterable<jobs.Job>) %>
-<div ic-src=${'jobs/'+UUID+'/subjobtable?page='+(pager == null ? 1 : pager.Current)} ic-poll="3s" ic-transition="none" ic-deps="/jobs">
+<%@ params(UUID : String, pager: util.iterable.PagerIterable<jobs.Job>) %>
+<div ic-src=${'/jobs/'+UUID+'/subjobtable?page='+(pager == null ? 1 : pager.Current)} ic-poll="3s" ic-transition="none" ic-deps="/jobs">
   <table class="table table-striped table-hover">
     <thead>
       <tr>
@@ -50,7 +50,7 @@
           <% if (!job.Cancelled && job.Progress != 100 && !job.Failed) { %>
             <div class="progress progress-striped active">
               <div class="progress-bar" ic-style-src="width:/jobs/${job.UUId}/progress"
-                ic-poll="1s"
+                ic-poll="3s"
                 style="width:${job.Progress}%">
               </div>
             </div>

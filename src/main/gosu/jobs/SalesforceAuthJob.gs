@@ -3,10 +3,11 @@ package jobs
 uses java.util.Map
 uses java.lang.System
 uses util.SalesforceRESTClient
-uses model.MongoCollection
 uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
+uses model.Results
+uses java.lang.Math
 
 class SalesforceAuthJob extends Job {
 
@@ -16,7 +17,7 @@ class SalesforceAuthJob extends Job {
 
   construct(recommendUUID : String, authCode : String) {
     super()
-    update({'AnalysisToUpload' -> recommendUUID})
+    update({'RecommendUUID' -> recommendUUID})
     update({'AuthCode' -> authCode})
   }
 
@@ -24,25 +25,24 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
-
     var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
 
+    this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
     var cal = Calendar.getInstance()
     var year = cal.get(Calendar.YEAR)
     var month = cal.get(Calendar.MONTH) + 1
     var date = cal.get(Calendar.DATE)
     var closeDate = ""+year+"-"+month+"-"+date
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
-    var recommendations = new MongoCollection('Results:'+search('AnalysisToUpload') as String).find()
+    var recommendations = Results.getResults(search('RecommendUUID') as String)
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
+      this.StatusFeed = "Uploading recommendation "+(i+1)
       Thread.sleep(4500) //Don't go over the API limit!
-      if (i % 20 == 0) {
-        this.Progress = (i * 100) / (recommendations.Count as int)
-        checkCancellation()
-      }
+      this.Progress = Math.max(10, (i * 100) / recommendations.size())
+      checkCancellation()
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
         "AccountId" -> accountID,
@@ -57,7 +57,7 @@ class SalesforceAuthJob extends Job {
       }
     }
 
-    this.StatusFeed = "Uploads available at: "+sClient.InstanceURL+"/"+accountID
+    this.StatusFeed = "Uploads available <a href=${sClient.InstanceURL}/${accountID}>here</a>"
     this.StatusFeed = "Done"
     this.Progress = 100
   }
@@ -66,6 +66,6 @@ class SalesforceAuthJob extends Job {
   }
 
   override function renderToString(): String {
-    return "Salesforce Job"
+    return view.jobs.drilldowns.SalesforceUpload.renderToString(this)
   }
 }
