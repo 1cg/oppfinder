@@ -78,6 +78,15 @@ class JobController implements IHasRequestContext, IResourceController {
     return null
   }
 
+  function deletebulk() : String {
+    var UUIDs = Request.SparkJavaRequest.raw().getParameterValues('jobcheckbox[]')
+    UUIDs = Params.all('jobcheckbox[]')
+    for (UUID in UUIDs) {
+      delete(UUID)
+    }
+    return null
+  }
+
   function progress(UUID : String) : Object {
     var job = Job.find(UUID)
     if (job?.Progress == 100) cancelPolling()

@@ -79,11 +79,6 @@
         <version>31.0.0</version>
     </dependency>
     <dependency>
-        <groupId>com.palominolabs.salesforce</groupId>
-        <artifactId>rest-api-connector</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
-    </dependency>
-    <dependency>
         <groupId>com.codahale.metrics</groupId>
         <artifactId>metrics-core</artifactId>
         <version>3.0.1</version>

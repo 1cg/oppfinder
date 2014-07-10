@@ -10,7 +10,7 @@ class AlgorithmTest extends TestCase {
   public function testReaches() {
   for (1..80 index i) {
     print("iteration: "+i)
-    new GenerateTest().generateTest('dataReach.json', "Reach", numCompanies)
+    //new GenerateTest().generateTest('dataReach.json', "Reach", numCompanies)
     new GenerateJob('dataReach.json', UUID.randomUUID().toString()).start().join()
     var recommendJob = new RecommendJob("AlgorithmTestCollection")
     recommendJob.start().join()

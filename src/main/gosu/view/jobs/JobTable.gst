@@ -2,6 +2,9 @@
 
 <div>
   <div class="btn-group status-select pull-right">
+  <a href="/jobs" class="btn btn-primary pull-right"><font size="4"><span class="fa fa-refresh"></span></font></a>
+  </div>
+  <div class="btn-group status-select pull-right">
     <button type="button" class="btn btn-primary pull-right dropdown-toggle" data-toggle="dropdown">
       Start Job <span class="caret"></span>
     </button>
@@ -25,8 +28,19 @@
       <li><a href="/jobs?status=failed&page=${pager.Current}">Failed</a></li>
     </ul>
   </div>
+  <div class="btn-group status-select pull-right">
+  <form>
+    <button type="button" class="btn btn-primary pull-right dropdown-toggle" data-toggle="dropdown">
+      Bulk Action <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a ic-post-to="/jobs/deletebulk" ic-include="#jobcheckbox">Delete</a></li>
+    </ul>
+  </div>
+
 </div>
 
 <div id='wrapper'>
   ${view.jobs.JobTableBody.renderToString(type, pager)}
+  </form>
 </div>

@@ -1,6 +1,6 @@
 <%@ params(body:String) %>
 <%@ extends sparkgs.SparkGSTemplate %>
-<% var code = Request.Session.attribute("code") %>
+<% var code = Request.Session.attribute("code") as String %>
 <html>
   <head>
     <title>OppFinder: Summer 2014 intern project</title>
