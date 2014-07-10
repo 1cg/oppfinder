@@ -18,7 +18,7 @@ class MahoutUtil {
 
   static final var policies = makePolicyMap()
   static final var _LOCK = new ReentrantLock()
-  public static var MODEL_MAP : Map<String, DataModel> = {}
+  static var MODEL_MAP : Map<String, DataModel> = {}
   static var MODEL_COUNT : Map<String, Integer> = {}
 
   static function toDataModel(ds : MongoCollection, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
