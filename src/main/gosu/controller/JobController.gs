@@ -145,8 +145,10 @@ class JobController implements IHasRequestContext, IResourceController {
       UUId = GenerateJobFormParser.startJob(URLDecoder.decode(Params['dataSetName'], "UTF-8"), Params['generateStrategy']).UUId
       UUID = UUId
     } else if (Params['type'] == 'auth') {
-      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId
+      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), null).start().UUId
       UUID = UUId
+    } else if (Params['type'] == 'authselective') {
+      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), Params.all('resultcheckbox[]')).start().UUId
     }
     Headers['X-IC-Redirect'] = "/jobs/${UUID}"
     return show(UUID)

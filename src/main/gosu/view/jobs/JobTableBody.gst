@@ -1,15 +1,6 @@
 <%@ params(type: String, pager: util.iterable.PagerIterable<jobs.Job>) %>
 <div ic-src='jobs/table?status=${type}&page=${pager.Current}' ic-deps="/jobs">
 
-<script language="JavaScript">
-function toggle(source) {
-  checkboxes = document.getElementsByName('jobcheckbox[]');
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = source.checked;
-  }
-}
-</script>
-
 <% if ((pager == null) || (pager.Current == 1 && pager.Count == 0)) { %>
   <div class="inset-8">
     <div class="alert alert-info alert-dismissable">
@@ -44,7 +35,7 @@ function toggle(source) {
           Actions
         </th>
         <th>
-          <input type="checkbox" onClick="toggle(this)">
+          <input type="checkbox" onClick="toggle(this, 'jobcheckbox[]')">
         </th>
       </tr>
     </thead>
