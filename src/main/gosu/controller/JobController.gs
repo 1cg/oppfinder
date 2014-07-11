@@ -149,6 +149,7 @@ class JobController implements IHasRequestContext, IResourceController {
       UUID = UUId
     } else if (Params['type'] == 'authselective') {
       UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), Params.all('resultcheckbox[]')).start().UUId
+      UUID = UUId
     }
     Headers['X-IC-Redirect'] = "/jobs/${UUID}"
     return show(UUID)

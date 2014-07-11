@@ -4,8 +4,8 @@
   <h2 class="page-title">Results</h2>
 </div>
 <form>
- <% if (loggedIn) { %>
-  <a ic-post-to="/jobs?type=authselective&id=${id}" ic-include="#resultcheckbox" class="btn btn-primary pull-right">Upload</a>
+  <% if (loggedIn) { %>
+  <a ic-post-to="/jobs?type=authselective&id=${id}" class="btn btn-primary pull-right">Upload</a>
   <% } %>
 <div class="detail-row">
   <span class="detail-label">Job Id: </span>
