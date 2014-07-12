@@ -78,6 +78,36 @@ class JobController implements IHasRequestContext, IResourceController {
     return null
   }
 
+  function deleteBulk() : String {
+    for (UUID in Params.all('jobcheckbox[]')) {
+      var job = Job.find(UUID)
+      if(job.Progress == 100 || job.Cancelled || job.Failed) {
+        job.delete()
+      }
+    }
+    return null
+  }
+
+  function cancelBulk() : String {
+    for (UUID in Params.all('jobcheckbox[]')) {
+      var job = Job.find(UUID)
+      if(job.Progress < 100 && !(job.Cancelled || job.Failed)) {
+        job.cancel()
+      }
+    }
+    return null
+  }
+
+  function resetBulk() : String {
+    for (UUID in Params.all('jobcheckbox[]')) {
+      var job = Job.find(UUID)
+      if(job.Cancelled || job.Failed) {
+        job.reset()
+      }
+    }
+    return null
+  }
+
   function progress(UUID : String) : Object {
     var job = Job.find(UUID)
     if (job?.Progress == 100) cancelPolling()
@@ -115,7 +145,10 @@ class JobController implements IHasRequestContext, IResourceController {
       UUId = GenerateJobFormParser.startJob(URLDecoder.decode(Params['dataSetName'], "UTF-8"), Params['generateStrategy']).UUId
       UUID = UUId
     } else if (Params['type'] == 'auth') {
-      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code")).start().UUId
+      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), null).start().UUId
+      UUID = UUId
+    } else if (Params['type'] == 'authselective') {
+      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), Params.all('resultcheckbox[]')).start().UUId
       UUID = UUId
     }
     Headers['X-IC-Redirect'] = "/jobs/${UUID}"

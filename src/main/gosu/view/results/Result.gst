@@ -3,8 +3,9 @@
 <div>
   <h2 class="page-title">Results</h2>
 </div>
- <% if (loggedIn) { %>
-  <a ic-post-to="/jobs?type=auth&id=${id}" class="btn btn-primary pull-right">Upload</a>
+<form>
+  <% if (loggedIn) { %>
+  <a ic-post-to="/jobs?type=authselective&id=${id}" class="btn btn-primary pull-right">Upload</a>
   <% } %>
 <div class="detail-row">
   <span class="detail-label">Job Id: </span>
@@ -29,10 +30,15 @@
       <th>
         Value
       </th>
+      <% if (loggedIn) { %>
+      <th>
+        <input type="checkbox" onClick="toggle(this, 'resultcheckbox[]')">
+      </th>
+      <% } %>
     </tr>
   </thead>
   <tbody>
-  <% for (result in results) {%>
+  <% for (result in results index i) {%>
     <tr>
       <td>
         ${result['Company']}
@@ -43,7 +49,13 @@
       <td>
         ${result['Value']}
       </td>
+      <% if (loggedIn) { %>
+      <td>
+        <input type="checkbox" name="resultcheckbox[]" value=${i}>
+      </td>
+      <% } %>
     </tr>
   <% } %>
   </tbody>
 </table>
+</form>

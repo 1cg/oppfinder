@@ -8,6 +8,7 @@ uses java.lang.Double
 uses java.lang.Thread
 uses model.Results
 uses java.lang.Math
+uses java.util.Arrays
 
 class SalesforceAuthJob extends Job {
 
@@ -15,10 +16,11 @@ class SalesforceAuthJob extends Job {
     super(data)
   }
 
-  construct(recommendUUID : String, authCode : String) {
+  construct(recommendUUID : String, authCode : String, selectCompanies : String[]) {
     super()
     update({'RecommendUUID' -> recommendUUID})
     update({'AuthCode' -> authCode})
+    update({'SelectCompanies' -> selectCompanies})
   }
 
   override function executeJob() {
@@ -27,7 +29,6 @@ class SalesforceAuthJob extends Job {
     this.Progress = 5
     var sClient = new SalesforceRESTClient(search('AuthCode') as String)
     this.StatusFeed = "Salesforce Authorized"
-
     this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
     var cal = Calendar.getInstance()
     var year = cal.get(Calendar.YEAR)
@@ -36,9 +37,15 @@ class SalesforceAuthJob extends Job {
     var closeDate = ""+year+"-"+month+"-"+date
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var recommendations = Results.getResults(search('RecommendUUID') as String)
+    var s = (search('SelectCompanies') as String).replace("\"", "").replace(" ","")
+    var selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
+      if (!selectCompanies.contains(i as String)) {
+        print("skipped: " + recommendation['Company'])
+        continue
+      }
       this.StatusFeed = "Uploading recommendation "+(i+1)
       Thread.sleep(4500) //Don't go over the API limit!
       this.Progress = Math.max(10, (i * 100) / recommendations.size())
