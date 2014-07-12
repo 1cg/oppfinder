@@ -25,6 +25,9 @@
         <th>
           Created
         </th>
+        <th>
+          Source
+        </th>
       <% if (loggedIn) { %>
         <th>
           Upload to Salesforce
@@ -48,6 +51,9 @@
         </td>
         <td>
           ${result['created'] ?: ''}
+        </td>
+        <td>
+          ${result['Source'] ?: ''}
         </td>
       <% if (loggedIn) { %>
         <td>

@@ -29,6 +29,7 @@
     <label>
       <strong>Select DataSet: </strong>
     </label>
+    ${input_helper.InputGenerator.select(model.DataSet#AllDataSets, "collections", {'class' -> 'form-control'})}
     <select class="form-control" name="collections">
       <optgroup label="Most Recent">
       <% for(collection in model.DataSet.allDataSets){ %>
