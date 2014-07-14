@@ -2,7 +2,7 @@ package jobs
 
 uses java.util.Map
 uses java.lang.System
-uses util.SalesforceRESTClient
+uses salesforce.SalesforceRESTClient
 uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
@@ -11,6 +11,8 @@ uses java.lang.Math
 uses java.util.Arrays
 
 class SalesforceAuthJob extends Job {
+  static final var SF_TOKEN_SITE = "https://login.salesforce.com/services/oauth2/token"
+  static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results"
 
   construct(data : Map<Object, Object>) {
     super(data)
@@ -27,14 +29,15 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
-    var sClient = new SalesforceRESTClient(search('AuthCode') as String)
+
+    var authCode = search('AuthCode') as String
+    var clientID = System.Env["SF_CLIENT_ID"]?.toString()
+    var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
+    var sClient = new SalesforceRESTClient(authCode, SF_TOKEN_SITE, SF_REDIRECT_URI, clientID, clientSecret)
+
     this.StatusFeed = "Salesforce Authorized"
     this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
     var cal = Calendar.getInstance()
-    var year = cal.get(Calendar.YEAR)
-    var month = cal.get(Calendar.MONTH) + 1
-    var date = cal.get(Calendar.DATE)
-    var closeDate = ""+year+"-"+month+"-"+date
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var recommendations = Results.getResults(search('RecommendUUID') as String)
     var s = (search('SelectCompanies') as String).replace("\"", "").replace(" ","")
@@ -53,12 +56,12 @@ class SalesforceAuthJob extends Job {
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
         "AccountId" -> accountID,
-        "CloseDate" -> closeDate,
+        "CloseDate" -> cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE) as String,
         "Probability" -> String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100),
         "StageName" -> "Qualification",
         "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
       }
-      var result = sClient.post("Opportunity", opportunity)
+      var result = sClient.httpPost("Opportunity", opportunity)
       if (!(result.get("success") as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }
