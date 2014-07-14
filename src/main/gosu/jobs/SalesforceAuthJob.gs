@@ -34,7 +34,7 @@ class SalesforceAuthJob extends Job {
     var clientID = System.Env["SF_CLIENT_ID"]?.toString()
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
     var sClient = new SalesforceRESTClient(authCode, SF_TOKEN_SITE, SF_REDIRECT_URI, clientID, clientSecret)
-
+    this.StatusFeed = "response: "+sClient.Response
     this.StatusFeed = "Salesforce Authorized"
     this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
     var cal = Calendar.getInstance()
@@ -70,7 +70,7 @@ class SalesforceAuthJob extends Job {
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
         "AccountId" -> accountID,
-        "CloseDate" -> cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE) as String,
+        "CloseDate" -> ""+cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE) as String,
         "Probability" -> String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100),
         "StageName" -> "Qualification",
         "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."

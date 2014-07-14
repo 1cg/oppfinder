@@ -13,6 +13,7 @@ class SalesforceRESTClient {
   var _httpClient : HttpClient
   var _accessToken : String
   var _instanceUrl : String
+  var _response : String
 
   /* This code receives authorization code from authorization endpoint, then requests for access
    * token to access protected salesforce resources. */
@@ -27,12 +28,18 @@ class SalesforceRESTClient {
     _httpClient = new HttpClient()
     _httpClient.executeMethod(postAuth)
     var response = JSONValue.parse(postAuth.getResponseBodyAsString()) as JSONObject
+    _response = response.toJSONString()
     _accessToken = response.get("access_token") as String
     _instanceUrl = response.get("instance_url") as String
   }
 
   property get InstanceURL() : String {
     return _instanceUrl
+  }
+
+  property get Response() : String {
+    return _response
+
   }
 
   function insert(sObject : SObject) : JSONObject {
