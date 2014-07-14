@@ -84,7 +84,11 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "yo"
       post.setRequestEntity(new StringRequestEntity(JSONValue.toJSONString(opportunity), "application/json", null))
       this.StatusFeed = "yo2"
-      sClient.Client.executeMethod(post)
+      try {
+        sClient.Client.executeMethod(post)
+      } catch(ee) {
+        this.StatusFeed = ee.toString()
+      }
       this.StatusFeed = post.getResponseBodyAsString()
       ///////
       var result = sClient.httpPost("Opportunity", opportunity)
