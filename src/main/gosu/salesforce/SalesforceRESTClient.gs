@@ -111,6 +111,12 @@ class SalesforceRESTClient {
     return JSONValue.parse(httpGet.getResponseBodyAsString()) as JSONObject
   }
 
+  function httpGet(requestURI : String) : String {
+    var httpGet = new GetMethod(requestURI)
+    httpGet.setRequestHeader("Authorization", "Bearer "+_accessToken)
+    _httpClient.executeMethod(httpGet)
+    return httpGet.getResponseBodyAsString()
+  }
 
 
 }

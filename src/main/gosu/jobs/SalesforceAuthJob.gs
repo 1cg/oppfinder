@@ -70,7 +70,6 @@ class SalesforceAuthJob extends Job {
 
     for (recommendation in recommendations index i) {
       if (s != null && !selectCompanies.contains(i as String)) {
-        this.StatusFeed = "skipped: " + recommendation['Company']
         continue
       }
       this.StatusFeed = "Uploading recommendation "+(i+1)+": "+recommendation['Company']
