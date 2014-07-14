@@ -9,6 +9,9 @@ uses java.lang.Thread
 uses model.Results
 uses java.lang.Math
 uses java.util.Arrays
+uses org.apache.commons.httpclient.methods.PostMethod
+uses org.apache.commons.httpclient.methods.StringRequestEntity
+uses org.json.simple.JSONValue
 
 class SalesforceAuthJob extends Job {
   static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results"
@@ -75,7 +78,15 @@ class SalesforceAuthJob extends Job {
         "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
       }
       this.StatusFeed = "what 2"
-
+      ///////
+      var post = new PostMethod(sClient.InstanceURL+"/services/data/v20.0/sobjects/"+"Opportunity")
+      post.setRequestHeader("Authorization", "Bearer "+sClient.AccessTok)
+      this.StatusFeed = "yo"
+      post.setRequestEntity(new StringRequestEntity(JSONValue.toJSONString(opportunity), "application/json", null))
+      this.StatusFeed = "yo2"
+      sClient.Client.executeMethod(post)
+      this.StatusFeed = post.getResponseBodyAsString()
+      ///////
       var result = sClient.httpPost("Opportunity", opportunity)
       this.StatusFeed = "what 3"
 

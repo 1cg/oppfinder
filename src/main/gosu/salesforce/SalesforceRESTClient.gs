@@ -56,10 +56,17 @@ class SalesforceRESTClient {
     return _instanceUrl
   }
 
+  /// TEMPORARY
   property get Response() : String {
     return _response
-
   }
+  property get AccessTok() : String {
+    return _accessToken
+  }
+  property get Client() : HttpClient {
+    return _httpClient
+  }
+
 
   function insert(sObject : SObject) : JSONObject {
     var post = new PostMethod(_instanceUrl+"/services/data/v20.0/sobjects/"+sObject.ObjectType)
@@ -113,6 +120,7 @@ class SalesforceRESTClient {
     _httpClient.executeMethod(post)
     var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
     if (response.get("error_description") != null) {
+
       refresh()
       return httpPost(sObjectType, data)
     }
