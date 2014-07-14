@@ -82,7 +82,7 @@ class SalesforceAuthJob extends Job {
       opp["StageName"] = "Qualification"
       opp["Description"] = "It is recommended that this company take on the "+recommendation['Policy']+" policy."
 
-      var result = salesforce.insert(opp)
+      var result = salesforce.httpPost("Opportunity", opp.ObjectData)
       if (!(result.get("success") as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }
