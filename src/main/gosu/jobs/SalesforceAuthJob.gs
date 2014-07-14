@@ -11,7 +11,6 @@ uses java.lang.Math
 uses java.util.Arrays
 
 class SalesforceAuthJob extends Job {
-  static final var SF_TOKEN_SITE = "https://login.salesforce.com/services/oauth2/token"
   static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results"
 
   construct(data : Map<Object, Object>) {
@@ -33,7 +32,7 @@ class SalesforceAuthJob extends Job {
     var authCode = search('AuthCode') as String
     var clientID = System.Env["SF_CLIENT_ID"]?.toString()
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
-    var sClient = new SalesforceRESTClient(authCode, SF_TOKEN_SITE, SF_REDIRECT_URI, clientID, clientSecret)
+    var sClient = new SalesforceRESTClient(authCode, SF_REDIRECT_URI, clientID, clientSecret)
     this.StatusFeed = "response: "+sClient.Response
     this.StatusFeed = "Salesforce Authorized"
     this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
