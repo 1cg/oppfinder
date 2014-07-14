@@ -47,23 +47,21 @@ class SalesforceRESTClient {
     return response
   }
 
-  function refresh(refreshToken : String) : boolean {
+  function refresh(refreshToken : String) : JSONObject {
     var post = new PostMethod(SF_TOKEN_SITE)
     post.addParameter("grant_type", "refresh_token")
     post.addParameter("client_id", _clientID)
     post.addParameter("client_secret", _clientSecret)
     post.addParameter("refresh_token", refreshToken)
     try {
-    _httpClient.executeMethod(post)
+      _httpClient.executeMethod(post)
+      var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
+      _accessToken = response.get("access_token") as String
     } catch (e) {
       throw e
     }
-    var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
-    var success = response.get("error") as String == null
-    if (success) {
-      _accessToken = response.get("access_token") as String
-    }
-    return success
+    return JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
+
   }
 
 

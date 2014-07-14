@@ -60,8 +60,11 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "refresh token???"
       var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
       try {
-        this.StatusFeed = "it wasn't the mongo thing"
-        salesforce.refresh(refreshToken)
+        this.StatusFeed = "it wasn't the mongo thing. refresh token: "+refreshToken
+        this.StatusFeed = "Old access token: "+salesforce.AccessTok
+        var refreshResponse = salesforce.refresh(refreshToken)
+        this.StatusFeed = "New access token: "+salesforce.AccessTok
+        this.StatusFeed = "Refresh Response: "+refreshResponse
       } catch (e) {
         this.StatusFeed = "error omg "+e
       }
