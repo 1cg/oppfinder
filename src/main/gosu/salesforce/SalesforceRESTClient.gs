@@ -36,6 +36,7 @@ class SalesforceRESTClient {
     post.addParameter("client_secret", _clientSecret)
     post.addParameter("redirect_uri", redirectURI)
     post.addParameter("code", authorizationCode)
+    post.addParameter("scope","full%20refresh_token")
     _httpClient.executeMethod(post)
     var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
     var error = response.get("error") as String ?: null
