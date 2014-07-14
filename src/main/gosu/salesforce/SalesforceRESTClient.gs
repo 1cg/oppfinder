@@ -57,6 +57,7 @@ class SalesforceRESTClient {
       _httpClient.executeMethod(post)
       var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
       _accessToken = response.get("access_token") as String
+      _instanceUrl = response.get("instance_url") as String
     } catch (e) {
       throw e
     }
