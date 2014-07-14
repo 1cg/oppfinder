@@ -42,9 +42,9 @@ class SalesforceAuthJob extends Job {
     var clientID = System.Env["SF_CLIENT_ID"]?.toString()
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
     var salesforce = new SalesforceRESTClient(clientID, clientSecret)
-    var authResponse = "" as JSONObject
+    var authResponse = new JSONObject()
     try {
-      var authResponse = salesforce.authenticate(authCode, SF_REDIRECT_URI)
+      authResponse = salesforce.authenticate(authCode, SF_REDIRECT_URI)
     } catch (e) {
       this.StatusFeed = "error: "+e
     }
