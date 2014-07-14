@@ -56,8 +56,8 @@ class SalesforceAuthJob extends Job {
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
-      if (!selectCompanies.contains(i as String) && s != null) {
-        print("skipped: " + recommendation['Company'])
+      if (s != null && !selectCompanies.contains(i as String)) {
+        this.StatusFeed = "skipped: " + recommendation['Company']
         continue
       }
       this.StatusFeed = "Uploading recommendation "+(i+1)
