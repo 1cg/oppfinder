@@ -11,7 +11,6 @@ uses java.lang.Math
 uses java.util.Arrays
 uses model.MongoCollection
 uses java.lang.Exception
-uses salesforce.SObject
 
 class SalesforceAuthJob extends Job {
   static final var SF_REDIRECT_URI  = "https://gosuroku.herokuapp.com/results"
@@ -34,35 +33,33 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
-
     /*
      * ---- Access Salesforce Resources ----
      */
     var salesforce = new SalesforceRESTClient(SF_CLIENT_ID, SF_CLIENT_SECRET)
     var authResponse = salesforce.authenticate(search('AuthCode') as String, SF_REDIRECT_URI)
-    var err = authResponse.get("error") as String
 
-    if (err == null) { // Authorized without error
+    if (authResponse.get("error") as String == null) { // Authorized without error
       var tokenStore = new MongoCollection("SalesforceRefreshToken")
       tokenStore.drop()
       tokenStore.insert({"RefreshToken" -> authResponse.get("refresh_token") as String})
       this.StatusFeed = "Connected!"
-    } else if (err == "invalid_grant") { // need to use refresh token
+    } else if (authResponse.get("error") as String == "invalid_grant") { // need to use refresh token
       var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
       salesforce.refresh(refreshToken)
       this.StatusFeed = "Token Refreshed!"
     } else {
-      this.StatusFeed = "Error! "+err
-      handleErrorState(new Exception("Error: "+err))
+      this.StatusFeed = "Error! "+authResponse.get("error") as String
+      handleErrorState(new Exception("Error: "+(authResponse.get("error") as String)))
     }
 
     /*
      * ---- Upload to Salesforce ----
      */
-    var recUUID = search('RecommendUUID') as String
-    this.StatusFeed = "Uploading results from <a href=https://gosuroku.herokuapp.com/results/"+recUUID+">"+recUUID+"</a>"
+    this.StatusFeed = "Uploading results from <a href=https://gosuroku.herokuapp.com/results/"+(search('RecommendUUID') as String)+">"+(search('RecommendUUID') as String)+"</a>"
 
-    var recommendations = Results.getResults(recUUID)
+    var recommendations = Results.getResults(search('RecommendUUID') as String)
+    var date = getDate()
     var s = search('SelectCompanies') as String
     var selectCompanies = null as List
     if (s != null) {
@@ -76,18 +73,19 @@ class SalesforceAuthJob extends Job {
         continue
       }
       this.StatusFeed = "Uploading recommendation "+(i+1)+": "+recommendation['Company']
+      Thread.sleep(4500) //Don't go over the API limit (5 requests per 20 seconds)!
       this.Progress = Math.max(10, (i * 100) / recommendations.size())
-      Thread.sleep(4400) //Don't go over the API limit (5 requests per 20 seconds)!
-      checkCancellation()
 
-      var opp = new SObject("Opportunity")
-      opp["Name"] = recommendation['Company'] as String
-      opp["AccountId"] = SF_ACCOUNT_ID
-      opp["CloseDate"] = getDate()
-      opp["Probability"] = String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100)
-      opp["StageName"] = "Qualification"
-      opp["Description"] = "It is recommended that this company take on the "+recommendation['Policy']+" policy."
-      var result = salesforce.insert(opp)
+      checkCancellation()
+      var opportunity = {
+          "Name" -> recommendation['Company'] as String,
+          "AccountId" -> SF_ACCOUNT_ID,
+          "CloseDate" -> date,
+          "Probability" -> String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100),
+          "StageName" -> "Qualification",
+          "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
+      }
+      var result = salesforce.httpPost("Opportunity", opportunity)
 
       if (!(result.get("success") as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
