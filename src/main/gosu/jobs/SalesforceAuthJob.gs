@@ -50,7 +50,7 @@ class SalesforceAuthJob extends Job {
     }
     this.StatusFeed = "dafq"
     if (authResponse.get("error") as String == null) { // Authorized without error
-      this.StatusFeed = "token store??"
+      this.StatusFeed = "token store??" + authResponse.get("refresh_token")
       var tokenStore = new MongoCollection("SalesforceRefreshToken")
       tokenStore.drop()
       tokenStore.insert({"RefreshToken" -> authResponse.get("refresh_token") as String})
@@ -58,7 +58,12 @@ class SalesforceAuthJob extends Job {
     } else if (authResponse.get("error") as String == "invalid_grant") { // need to use refresh token
       this.StatusFeed = "refresh token???"
       var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
-      salesforce.refresh(refreshToken)
+      try {
+        this.StatusFeed = "it wasn't the mongo thing"
+        salesforce.refresh(refreshToken)
+      } catch (e) {
+        this.StatusFeed = "error omg "+e
+      }
       this.StatusFeed = "Token Refreshed!"
     } else { // ERROR
       this.StatusFeed = "Error! "+authResponse.get("error") as String

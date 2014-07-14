@@ -53,7 +53,11 @@ class SalesforceRESTClient {
     post.addParameter("client_id", _clientID)
     post.addParameter("client_secret", _clientSecret)
     post.addParameter("refresh_token", refreshToken)
+    try {
     _httpClient.executeMethod(post)
+    } catch (e) {
+      throw e
+    }
     var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
     var success = response.get("error") as String == null
     if (success) {
