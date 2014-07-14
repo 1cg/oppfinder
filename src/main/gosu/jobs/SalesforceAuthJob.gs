@@ -48,13 +48,15 @@ class SalesforceAuthJob extends Job {
     } catch (e) {
       this.StatusFeed = "error: "+e
     }
-
+    this.StatusFeed = "dafq"
     if (authResponse.get("error") as String == null) { // Authorized without error
+      this.StatusFeed = "token store??"
       var tokenStore = new MongoCollection("SalesforceRefreshToken")
       tokenStore.drop()
       tokenStore.insert({"RefreshToken" -> authResponse.get("refresh_token") as String})
       this.StatusFeed = "Connected!"
     } else if (authResponse.get("error") as String == "invalid_grant") { // need to use refresh token
+      this.StatusFeed = "refresh token???"
       var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
       salesforce.refresh(refreshToken)
       this.StatusFeed = "Token Refreshed!"
