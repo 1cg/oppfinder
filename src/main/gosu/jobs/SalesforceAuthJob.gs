@@ -50,6 +50,7 @@ class SalesforceAuthJob extends Job {
     }
     this.StatusFeed = "dafq"
     if (authResponse.get("error") as String == null) { // Authorized without error
+      this.StatusFeed = "auth response: "+authResponse
       this.StatusFeed = "token store??" + authResponse.get("refresh_token")
       var tokenStore = new MongoCollection("SalesforceRefreshToken")
       tokenStore.drop()
