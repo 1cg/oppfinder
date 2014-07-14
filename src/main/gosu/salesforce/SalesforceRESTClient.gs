@@ -18,37 +18,48 @@ class SalesforceRESTClient {
   var _accessToken : String
   var _refreshToken : String
   var _instanceUrl : String
-  var _response : String
+  var _response : JSONObject
 
-  /* This code receives authorization code from authorization endpoint, then requests for access
-   * token to access protected salesforce resources. */
-  construct(authorizationCode : String, redirectURI : String,
-            clientID : String, clientSecret : String) {
-    var postAuth = new PostMethod(SF_TOKEN_SITE)
+  construct(clientID : String, clientSecret : String) {
     _clientID = clientID
     _clientSecret = clientSecret
-    postAuth.addParameter("grant_type", "authorization_code")
-    postAuth.addParameter("client_id", clientID)
-    postAuth.addParameter("client_secret", clientSecret)
-    postAuth.addParameter("redirect_uri", redirectURI)
-    postAuth.addParameter("code", authorizationCode)
     _httpClient = new HttpClient()
-    _httpClient.executeMethod(postAuth)
-    var response = JSONValue.parse(postAuth.getResponseBodyAsString()) as JSONObject
-    _response = response.toJSONString()
-    _accessToken = response.get("access_token") as String
-    _refreshToken = response.get("refresh_token") as String
-    _instanceUrl = response.get("instance_url") as String
   }
 
-  private function refresh() {
+  // Decided to return the JSONObject to the caller since the refresh token may need to persist
+  // beyond the life of a SalesforceRESTClient object instance. Needed to expose it so it can be
+  // used.
+  function authenticate(redirectURI : String, authorizationCode : String) : JSONObject{
+    var post = new PostMethod(SF_TOKEN_SITE)
+    post.addParameter("grant_type", "authorization_code")
+    post.addParameter("client_id", _clientID)
+    post.addParameter("client_secret", _clientSecret)
+    post.addParameter("redirect_uri", redirectURI)
+    post.addParameter("code", authorizationCode)
+    _httpClient.executeMethod(post)
+    var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
+    var error = response.get("error") as String ?: null
+    if (error == null) {
+      _accessToken = response.get("access_token") as String
+      _refreshToken = response.get("refresh_token") as String
+      _instanceUrl = response.get("instance_url") as String
+    }
+    return response
+  }
+
+  function refresh(token : String) : boolean {
     var post = new PostMethod(SF_TOKEN_SITE)
     post.addParameter("grant_type", "refresh_token")
     post.addParameter("client_id", _clientID)
     post.addParameter("client_secret", _clientSecret)
-    post.addParameter("refresh_token", _refreshToken)
+    post.addParameter("refresh_token", token)
     _httpClient.executeMethod(post)
-    _accessToken = (JSONValue.parse(post.getResponseBodyAsString()) as JSONObject).get("access_token") as String
+    var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
+    var success = response.get("error") as String == null
+    if (success) {
+      _accessToken = response.get("access_token") as String
+    }
+    return success
   }
 
 
@@ -56,8 +67,13 @@ class SalesforceRESTClient {
     return _instanceUrl
   }
 
+  property get RefreshToken() : String{
+    return _refreshToken
+
+  }
+
   /// TEMPORARY
-  property get Response() : String {
+  property get Response() : JSONObject {
     return _response
   }
   property get AccessTok() : String {
@@ -119,11 +135,6 @@ class SalesforceRESTClient {
     post.setRequestEntity(new StringRequestEntity(JSONValue.toJSONString(data), "application/json", null))
     _httpClient.executeMethod(post)
     var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
-    if (response.get("error_description") != null) {
-
-      refresh()
-      return httpPost(sObjectType, data)
-    }
     return response
   }
 

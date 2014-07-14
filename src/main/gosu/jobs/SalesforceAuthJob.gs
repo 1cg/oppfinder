@@ -12,6 +12,9 @@ uses java.util.Arrays
 uses org.apache.commons.httpclient.methods.PostMethod
 uses org.apache.commons.httpclient.methods.StringRequestEntity
 uses org.json.simple.JSONValue
+uses model.MongoCollection
+uses model.DataSet
+uses java.lang.Exception
 
 class SalesforceAuthJob extends Job {
   static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results"
@@ -31,15 +34,35 @@ class SalesforceAuthJob extends Job {
     checkCancellation()
     this.StatusFeed= "Connecting to Salesforce..."
     this.Progress = 5
-
+    /*
+     * ---- Access Salesforce Resources ----
+     */
     var authCode = search('AuthCode') as String
     var clientID = System.Env["SF_CLIENT_ID"]?.toString()
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
-    var sClient = new SalesforceRESTClient(authCode, SF_REDIRECT_URI, clientID, clientSecret)
-    this.StatusFeed = "response: "+sClient.Response
-    this.StatusFeed = "Salesforce Authorized"
+    var salesforce = new SalesforceRESTClient(clientID, clientSecret)
+
+    var authResponse = salesforce.authenticate(authCode, SF_REDIRECT_URI)
+    if (authResponse.get("error") as String == null) { // Authorized without error
+      var tokenStore = new MongoCollection("SalesforceRefreshToken")
+      tokenStore.drop()
+      tokenStore.insert({"RefreshToken" -> authResponse.get("refresh_token") as String})
+      this.StatusFeed = "Connected!"
+    } else if (authResponse.get("error") as String == "invalid_grant") { // need to use refresh token
+      var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
+      salesforce.refresh(refreshToken)
+      this.StatusFeed = "Token Refreshed!"
+    } else {
+      this.StatusFeed = "Error! "+authResponse.get("error") as String
+      handleErrorState(new Exception("Error: "+(authResponse.get("error") as String)))
+    }
+
+    /*
+     * ---- Upload to Salesforce ----
+     */
     this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
     var cal = Calendar.getInstance()
+    var date =  ""+cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE) as String
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var recommendations = Results.getResults(search('RecommendUUID') as String)
 
@@ -50,11 +73,6 @@ class SalesforceAuthJob extends Job {
       s = s.replace("\"", "").replace(" ","")
       selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
     }
-
-    this.StatusFeed = "selected companies"
-
-
-    this.StatusFeed = "Companies selected..."
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
@@ -72,26 +90,26 @@ class SalesforceAuthJob extends Job {
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
         "AccountId" -> accountID,
-        "CloseDate" -> ""+cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE) as String,
+        "CloseDate" -> date,
         "Probability" -> String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100),
         "StageName" -> "Qualification",
         "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
       }
       this.StatusFeed = "what 2"
       ///////
-      var post = new PostMethod(sClient.InstanceURL+"/services/data/v20.0/sobjects/"+"Opportunity")
-      post.setRequestHeader("Authorization", "Bearer "+sClient.AccessTok)
+      var post = new PostMethod(salesforce.InstanceURL+"/services/data/v20.0/sobjects/"+"Opportunity")
+      post.setRequestHeader("Authorization", "Bearer "+salesforce.AccessTok)
       this.StatusFeed = "yo"
       post.setRequestEntity(new StringRequestEntity(JSONValue.toJSONString(opportunity), "application/json", null))
       this.StatusFeed = "yo2"
       try {
-        sClient.Client.executeMethod(post)
+        salesforce.Client.executeMethod(post)
       } catch(ee) {
         this.StatusFeed = ee.toString()
       }
       this.StatusFeed = post.getResponseBodyAsString()
       ///////
-      var result = sClient.httpPost("Opportunity", opportunity)
+      var result = salesforce.httpPost("Opportunity", opportunity)
       this.StatusFeed = "what 3"
 
       if (!(result.get("success") as Boolean)) {
@@ -99,7 +117,7 @@ class SalesforceAuthJob extends Job {
       }
     }
 
-    this.StatusFeed = "Uploads available as opportunities <a href=${sClient.InstanceURL}/${accountID}>on Salesforce</a>"
+    this.StatusFeed = "Uploads available as opportunities <a href=${salesforce.InstanceURL}/${accountID}>on Salesforce</a>"
     this.StatusFeed = "Done"
     this.Progress = 100
   }
