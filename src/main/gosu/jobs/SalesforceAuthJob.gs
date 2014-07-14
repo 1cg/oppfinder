@@ -40,8 +40,16 @@ class SalesforceAuthJob extends Job {
     var cal = Calendar.getInstance()
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var recommendations = Results.getResults(search('RecommendUUID') as String)
+
+    this.StatusFeed = "recommendations: "+recommendations.toString()
+
     var s = (search('SelectCompanies') as String).replace("\"", "").replace(" ","")
+
+    this.StatusFeed = "selected companies"
+
     var selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
+
+    this.StatusFeed = "Companies selected..."
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
