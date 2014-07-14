@@ -60,10 +60,13 @@ class SalesforceAuthJob extends Job {
         this.StatusFeed = "skipped: " + recommendation['Company']
         continue
       }
-      this.StatusFeed = "Uploading recommendation "+(i+1)
+      this.StatusFeed = "Uploading recommendation "+(i+1)+": "+recommendation['Company']
       Thread.sleep(4500) //Don't go over the API limit!
       this.Progress = Math.max(10, (i * 100) / recommendations.size())
+      this.StatusFeed = "what 0"
+
       checkCancellation()
+      this.StatusFeed = "what 1"
       var opportunity = {
         "Name" -> recommendation['Company'] as String,
         "AccountId" -> accountID,
@@ -72,13 +75,17 @@ class SalesforceAuthJob extends Job {
         "StageName" -> "Qualification",
         "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
       }
+      this.StatusFeed = "what 2"
+
       var result = sClient.httpPost("Opportunity", opportunity)
+      this.StatusFeed = "what 3"
+
       if (!(result.get("success") as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }
     }
 
-    this.StatusFeed = "Uploads available <a href=${sClient.InstanceURL}/${accountID}>here</a>"
+    this.StatusFeed = "Uploads available as opportunities <a href=${sClient.InstanceURL}/${accountID}>on Salesforce</a>"
     this.StatusFeed = "Done"
     this.Progress = 100
   }
