@@ -11,6 +11,7 @@ uses java.lang.Math
 uses java.util.Arrays
 uses model.MongoCollection
 uses java.lang.Exception
+uses salesforce.SObject
 
 class SalesforceAuthJob extends Job {
   static final var SF_REDIRECT_URI  = "https://gosuroku.herokuapp.com/results"
@@ -77,15 +78,15 @@ class SalesforceAuthJob extends Job {
       this.Progress = Math.max(10, (i * 100) / recommendations.size())
 
       checkCancellation()
-      var opportunity = {
-          "Name" -> recommendation['Company'] as String,
-          "AccountId" -> SF_ACCOUNT_ID,
-          "CloseDate" -> date,
-          "Probability" -> String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100),
-          "StageName" -> "Qualification",
-          "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
-      }
-      var result = salesforce.httpPost("Opportunity", opportunity)
+      var opp = new SObject("Opportunity")
+      opp["Name"] = recommendation['Company'] as String
+      opp["AccountId"] = SF_ACCOUNT_ID
+      opp["CloseDate"] = date
+      opp["Probability"] = String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100)
+      opp["StageName"] = "Qualification"
+      opp["Description"] = "It is recommended that this company take on the "+recommendation['Policy']+" policy."
+
+      var result = salesforce.insert(opp)
 
       if (!(result.get("success") as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
