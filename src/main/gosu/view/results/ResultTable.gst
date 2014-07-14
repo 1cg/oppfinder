@@ -10,7 +10,7 @@
     <div class="inset-8">
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate&scope=api%20id%20full%20refresh_token">
+        <i class="fa fa-warning"></i> Please <a href="https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=${java.lang.System.Env['SF_CLIENT_ID']}&redirect_uri=https%3A%2F%2Fgosuroku.herokuapp.com%2Fresults&state=mystate&scope=api%20id%20refresh_token">
         log in to Salesforce</a> to upload results
       </div>
     </div>
