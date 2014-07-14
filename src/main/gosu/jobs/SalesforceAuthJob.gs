@@ -42,18 +42,21 @@ class SalesforceAuthJob extends Job {
     var recommendations = Results.getResults(search('RecommendUUID') as String)
 
     this.StatusFeed = "recommendations: "+recommendations.toString()
-
-    var s = (search('SelectCompanies') as String).replace("\"", "").replace(" ","")
+    var s = search('SelectCompanies') as String
+    var selectCompanies = null as List
+    if (s != null) {
+      s = s.replace("\"", "").replace(" ","")
+      selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
+    }
 
     this.StatusFeed = "selected companies"
 
-    var selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
 
     this.StatusFeed = "Companies selected..."
 
     // NOTE: API Request limit for Developer Edition is 5 requests per 20 seconds
     for (recommendation in recommendations index i) {
-      if (!selectCompanies.contains(i as String)) {
+      if (!selectCompanies.contains(i as String) && s != null) {
         print("skipped: " + recommendation['Company'])
         continue
       }
