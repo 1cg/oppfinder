@@ -29,7 +29,7 @@ class SalesforceRESTClient {
   // Decided to return the JSONObject to the caller since the refresh token may need to persist
   // beyond the life of a SalesforceRESTClient object instance. Needed to expose it so it can be
   // used.
-  function authenticate(redirectURI : String, authorizationCode : String) : JSONObject{
+  function authenticate(authorizationCode : String, redirectURI : String) : JSONObject{
     var post = new PostMethod(SF_TOKEN_SITE)
     post.addParameter("grant_type", "authorization_code")
     post.addParameter("client_id", _clientID)
@@ -47,12 +47,12 @@ class SalesforceRESTClient {
     return response
   }
 
-  function refresh(token : String) : boolean {
+  function refresh(refreshToken : String) : boolean {
     var post = new PostMethod(SF_TOKEN_SITE)
     post.addParameter("grant_type", "refresh_token")
     post.addParameter("client_id", _clientID)
     post.addParameter("client_secret", _clientSecret)
-    post.addParameter("refresh_token", token)
+    post.addParameter("refresh_token", refreshToken)
     _httpClient.executeMethod(post)
     var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
     var success = response.get("error") as String == null

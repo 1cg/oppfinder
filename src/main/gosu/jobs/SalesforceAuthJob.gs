@@ -52,7 +52,7 @@ class SalesforceAuthJob extends Job {
       var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
       salesforce.refresh(refreshToken)
       this.StatusFeed = "Token Refreshed!"
-    } else {
+    } else { // ERROR
       this.StatusFeed = "Error! "+authResponse.get("error") as String
       handleErrorState(new Exception("Error: "+(authResponse.get("error") as String)))
     }
@@ -61,11 +61,9 @@ class SalesforceAuthJob extends Job {
      * ---- Upload to Salesforce ----
      */
     this.StatusFeed = "Recommending results from "+search('RecommendUUID') as String
-    var cal = Calendar.getInstance()
-    var date =  ""+cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE) as String
     var accountID = System.Env["SF_ACCOUNT_ID"]?.toString()
     var recommendations = Results.getResults(search('RecommendUUID') as String)
-
+    var date = getDate()
     this.StatusFeed = "recommendations: "+recommendations.toString()
     var s = search('SelectCompanies') as String
     var selectCompanies = null as List
@@ -127,5 +125,11 @@ class SalesforceAuthJob extends Job {
 
   override function renderToString(): String {
     return view.jobs.drilldowns.SalesforceUpload.renderToString(this)
+  }
+
+  /* Returns current date in Salesforce Object Date field format */
+  private function getDate() : String {
+    var cal = Calendar.getInstance()
+    return cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE)
   }
 }
