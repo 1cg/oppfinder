@@ -51,6 +51,7 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "Connected!"
     } else if (authResponse.get("error") as String == "invalid_grant") { // need to use refresh token
       var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
+      salesforce.refresh(refreshToken)
       this.StatusFeed = "Token Refreshed!"
     } else {
       this.StatusFeed = "Error! "+authResponse.get("error") as String
