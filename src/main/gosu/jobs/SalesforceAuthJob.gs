@@ -15,6 +15,7 @@ uses org.json.simple.JSONValue
 uses model.MongoCollection
 uses model.DataSet
 uses java.lang.Exception
+uses org.json.simple.JSONObject
 
 class SalesforceAuthJob extends Job {
   static final var SF_REDIRECT_URI = "https://gosuroku.herokuapp.com/results"
@@ -41,8 +42,13 @@ class SalesforceAuthJob extends Job {
     var clientID = System.Env["SF_CLIENT_ID"]?.toString()
     var clientSecret = System.Env["SF_CLIENT_SECRET"]?.toString()
     var salesforce = new SalesforceRESTClient(clientID, clientSecret)
+    var authResponse = "" as JSONObject
+    try {
+      var authResponse = salesforce.authenticate(authCode, SF_REDIRECT_URI)
+    } catch (e) {
+      this.StatusFeed = "error: "+e
+    }
 
-    var authResponse = salesforce.authenticate(authCode, SF_REDIRECT_URI)
     if (authResponse.get("error") as String == null) { // Authorized without error
       var tokenStore = new MongoCollection("SalesforceRefreshToken")
       tokenStore.drop()
@@ -94,19 +100,6 @@ class SalesforceAuthJob extends Job {
         "Description" -> "It is recommended that this company take on the "+recommendation['Policy']+" policy."
       }
       this.StatusFeed = "what 2"
-      ///////
-      var post = new PostMethod(salesforce.InstanceURL+"/services/data/v20.0/sobjects/"+"Opportunity")
-      post.setRequestHeader("Authorization", "Bearer "+salesforce.AccessTok)
-      this.StatusFeed = "yo"
-      post.setRequestEntity(new StringRequestEntity(JSONValue.toJSONString(opportunity), "application/json", null))
-      this.StatusFeed = "yo2"
-      try {
-        salesforce.Client.executeMethod(post)
-      } catch(ee) {
-        this.StatusFeed = ee.toString()
-      }
-      this.StatusFeed = post.getResponseBodyAsString()
-      ///////
       var result = salesforce.httpPost("Opportunity", opportunity)
       this.StatusFeed = "what 3"
 
