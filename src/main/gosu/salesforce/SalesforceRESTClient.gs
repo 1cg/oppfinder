@@ -16,7 +16,6 @@ class SalesforceRESTClient {
   var _clientID : String
   var _clientSecret : String
   var _accessToken : String
-  var _refreshToken : String
   var _instanceUrl : String
   var _response : JSONObject
 
@@ -41,7 +40,6 @@ class SalesforceRESTClient {
     var error = response.get("error") as String ?: null
     if (error == null) {
       _accessToken = response.get("access_token") as String
-      _refreshToken = response.get("refresh_token") as String
       _instanceUrl = response.get("instance_url") as String
     }
     return response
@@ -65,27 +63,9 @@ class SalesforceRESTClient {
 
   }
 
-
   property get InstanceURL() : String {
     return _instanceUrl
   }
-
-  property get RefreshToken() : String{
-    return _refreshToken
-
-  }
-
-  /// TEMPORARY
-  property get Response() : JSONObject {
-    return _response
-  }
-  property get AccessTok() : String {
-    return _accessToken
-  }
-  property get Client() : HttpClient {
-    return _httpClient
-  }
-
 
   function insert(sObject : SObject) : JSONObject {
     var post = new PostMethod(_instanceUrl+"/services/data/v20.0/sobjects/"+sObject.ObjectType)
@@ -131,22 +111,6 @@ class SalesforceRESTClient {
     return JSONValue.parse(httpGet.getResponseBodyAsString()) as JSONObject
   }
 
-///////// TRASH
-  function httpPost(sObjectType : String, data : Map<String, String>) : JSONObject {
-    var post = new PostMethod(_instanceUrl+"/services/data/v20.0/sobjects/"+sObjectType)
-    post.setRequestHeader("Authorization", "Bearer "+_accessToken)
-    post.setRequestEntity(new StringRequestEntity(JSONValue.toJSONString(data), "application/json", null))
-    _httpClient.executeMethod(post)
-    var response = JSONValue.parse(post.getResponseBodyAsString()) as JSONObject
-    return response
-  }
-
-  function httpGet(requestURI : String) : String {
-    var httpGet = new GetMethod(requestURI)
-    httpGet.setRequestHeader("Authorization", "Bearer "+_accessToken)
-    _httpClient.executeMethod(httpGet)
-    return httpGet.getResponseBodyAsString()
-  }
 
 
 }

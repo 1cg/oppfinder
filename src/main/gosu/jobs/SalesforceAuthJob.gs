@@ -79,12 +79,12 @@ class SalesforceAuthJob extends Job {
 
       checkCancellation()
       var opp = new SObject("Opportunity")
-      opp["Name"] = recommendation['Company'] as String
-      opp["AccountId"] = SF_ACCOUNT_ID
-      opp["CloseDate"] = date
-      opp["Probability"] = String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100)
-      opp["StageName"] = "Qualification"
-      opp["Description"] = "It is recommended that this company take on the "+recommendation['Policy']+" policy."
+      opp.set("Name", recommendation['Company'] as String)
+      opp.set("AccountId", SF_ACCOUNT_ID)
+      opp.set("CloseDate", date)
+      opp.set("Probability", String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100))
+      opp.set("StageName", "Qualification")
+      opp.set("Description", "It is recommended that this company take on the "+recommendation['Policy']+" policy.")
 
       var result = salesforce.insert(opp)
 
