@@ -1,3 +1,4 @@
+<% uses input_helper.InputGenerator%>
 <h1 class="page-title">
   <div><span class="op">Opportunity</span><span class="fi">Finder</span></div>
   <small><em>Find new business opportunities hidden in PolicyCenter</em></small>
@@ -26,19 +27,11 @@
 <div class="inset-8">
   <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
     <div class="form-group">
-    <label>
-      <strong>Select DataSet: </strong>
-    </label>
-    <select class="form-control" name="collections">
-      <optgroup label="Most Recent">
-      <% for(collection in model.DataSet.allDataSets){ %>
-        <option value=${java.net.URLEncoder.encode(collection['name'] as String, 'UTF-8')}>${collection['name']} (${collection['size']})</option>
-      <% } %>
-      </optgroup>
-    </select>
+      ${InputGenerator.select(model.DataSet#AllDataSets, "DataSet", {'class' -> 'form-control',
+                                                                     'name' -> 'jobs.RecommendJob[DataSetCollection]'})}
     </div>
     <div class="form-group">
-      <input class="btn btn-primary" type="submit" value="Begin Opportunity Analysis">
+      ${InputGenerator.submit('Begin Opportinity Analysis', {'class' -> 'btn btn-primary'})}
     </div>
     <div class="form-group pull-right">
       <button ic-post-to="/jobs?type=test" class="btn btn-default">

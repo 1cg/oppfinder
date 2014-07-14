@@ -12,19 +12,40 @@ uses datagen.GenerateRandom
 
 class GenerateJob extends Job {
 
+  enum Types {Test, Random}
+
   construct(data : Map<Object, Object>) {
     super(data)
   }
 
-  construct(inputCollection: String, dataSet : String) {
+  construct() {
     super()
-    update({'JobType' -> inputCollection})
-    update({'DataSetCollection' -> dataSet})
+  }
+
+  property get DataSetCollection() : String {
+    var ds = search('DataSetCollection') as String
+    if (ds == null) { //If we weren't provided a collection, generate one
+      ds = UUID.randomUUID().toString()
+      DataSetCollection = ds
+    }
+    return ds
+  }
+
+  property set DataSetCollection(collection : String) {
+    update({'DataSetCollection' -> collection})
+  }
+
+  property get JobType() : Types {
+    return Types.valueOf(search('JobType') as String)
+  }
+
+  property set JobType(type : Types) {
+    update({'JobType' -> type.toString()})
   }
 
   override function executeJob() {
     var data : List<Map<Object,Object>> = {}
-    if(search('JobType') as String == 'Reach') {
+    if (JobType.Value == Types.Test) {
       data = new GenerateTest().generateTest('Reach', 40000)
     } else {
       data = new GenerateRandom().generateRandom()
@@ -45,7 +66,7 @@ class GenerateJob extends Job {
       companies.add(company)
     }
     checkCancellation()
-    var collection = search('DataSetCollection') as String
+    var collection = DataSetCollection
     var dataSet = new MongoCollection(collection)
     dataSet.drop()
     dataSet.insert(companies)

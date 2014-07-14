@@ -8,14 +8,13 @@ uses jobs.RecommendJob
 uses view.jobs.JobDrillDown
 uses view.jobs.JobStatusFeedList
 uses jobs.TestJob
-uses util.GenerateJobFormParser
 uses jobs.SalesforceAuthJob
 uses sparkgs.IResourceController
 uses view.jobs.JobTable
 uses view.jobs.JobTableBody
 uses view.jobs.SubJobTableBody
 uses java.text.SimpleDateFormat
-uses java.net.URLDecoder
+uses jobs.GenerateJob
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -133,26 +132,27 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   override function create() : Object {
-    var UUID : String
-    if (Params['type'] == "test") {
-      UUID = new TestJob().start().UUId
-    } else if (Params['type'] == 'recommend') {
-      UUID = new RecommendJob(URLDecoder.decode(Params['collections'], 'UTF-8')).start().UUId
-    } else if (Params['type'] == 'upload') {
-      UUId = new UploadJob(Request.Body).start().UUId
-      UUID = UUId
-    } else if (Params['type'] == 'generate') {
-      UUId = GenerateJobFormParser.startJob(URLDecoder.decode(Params['dataSetName'], "UTF-8"), Params['generateStrategy']).UUId
-      UUID = UUId
-    } else if (Params['type'] == 'auth') {
-      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), null).start().UUId
-      UUID = UUId
-    } else if (Params['type'] == 'authselective') {
-      UUId = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), Params.all('resultcheckbox[]')).start().UUId
-      UUID = UUId
+    var job : jobs.Job
+    var type = Params['type']
+    if (type == 'test') {
+      job = new TestJob()
+    } else if (type == 'recommend') {
+      job = new RecommendJob()
+    } else if (type == 'upload') {
+      job = new UploadJob(Request.Body)
+      UUId = job.UUId
+    } else if (type == 'generate') {
+      job = new GenerateJob()
+      UUId = job.UUId
+    } else if (type == 'auth') {
+      job = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), null)
+    } else if (type == 'authselective') {
+      job = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), Params.all('resultcheckbox[]'))
     }
-    Headers['X-IC-Redirect'] = "/jobs/${UUID}"
-    return show(UUID)
+    job.updateFrom(Request.QueryMap.get({job.IntrinsicType.DisplayName}).toMap().mapValues(\ o -> o.first()))
+    job.start()
+    Headers['X-IC-Redirect'] = "/jobs/${job.UUId}"
+    return show(job.UUId)
   }
 
   override function _new() : Object {

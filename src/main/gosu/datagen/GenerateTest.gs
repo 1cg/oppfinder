@@ -31,7 +31,6 @@ class GenerateTest {
     var bigArray : List<Map<Object,Object>> = {}
     for (1..numCompanies index j) {
       var company : Map<Object,Object> = {}
-
       if (j == numCompanies-1) {
         company.put("Company", "RECOMMENDEE (test success)")
       } else if (j == numCompanies-2) {

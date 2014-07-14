@@ -32,6 +32,10 @@ class DataSet {
     return new MongoCollection(MASTER_DATA_SET).find()
   }
 
+  static property get AllDataSets() : List<String> {
+    return new MongoCollection(MASTER_DATA_SET).find().map(\ o -> o['name'] as String)
+  }
+
   static function find(id : String) : SkipIterable<Map> {
     var ds = new MongoCollection (MASTER_DATA_SET).find()
     var iter = ds?.iterator()

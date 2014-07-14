@@ -21,14 +21,21 @@ class RecommendJob extends Job {
     super(data)
   }
 
-  construct(dataSetName : String) {
+  construct() {
     super()
-    update({'DataSetToAnalyze' -> dataSetName})
+  }
+
+  property get DataSetCollection() : String {
+    return search('DataSetCollection') as String
+  }
+
+  property set DataSetCollection(collection : String) {
+    update({'DataSetCollection' -> collection})
   }
 
   override function executeJob() {
     checkCancellation()
-    var dataSet = search('DataSetToAnalyze') as String
+    var dataSet = DataSetCollection
     startSubJobs(dataSet)
     this.StatusFeed = "Started Sub Jobs"
     poll() //Blocks until sub-tasks are complete
