@@ -25,9 +25,8 @@ class SalesforceRESTClient {
     _httpClient = new HttpClient()
   }
 
-  // Decided to return the JSONObject to the caller since the refresh token may need to persist
-  // beyond the life of a SalesforceRESTClient object instance. Needed to expose it so it can be
-  // used.
+  // Once constructed, SalesforceRESTClient must have authenticate be called in order to work
+  // Caller should store the refresh_token from the return JSONObject
   function authenticate(authorizationCode : String, redirectURI : String) : JSONObject{
     var post = new PostMethod(SF_TOKEN_SITE)
     post.addParameter("grant_type", "authorization_code")
@@ -45,6 +44,7 @@ class SalesforceRESTClient {
     return response
   }
 
+  // If authenticate response has an invalid_grant error, the authorization must be refreshed with refresh
   function refresh(refreshToken : String) : JSONObject {
     var post = new PostMethod(SF_TOKEN_SITE)
     post.addParameter("grant_type", "refresh_token")
