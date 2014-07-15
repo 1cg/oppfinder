@@ -133,7 +133,7 @@ abstract class Job implements Runnable {
   }
 
   property get Progress() : int {
-    return dataStore.findOne(id)?.get('Progress') as Integer ?: 0
+    return dataStore.findOne(id)?['Progress'] as Integer ?: 0
   }
 
   property set Progress(progress : int) {
@@ -145,7 +145,7 @@ abstract class Job implements Runnable {
   }
 
   property get StatusFeed() : String {
-    return dataStore.findOne(id)?.get('StatusFeed') as String ?: ""
+    return dataStore.findOne(id)?['StatusFeed'] as String ?: ""
   }
 
   property set StatusFeed(feedUpdate : String) {
@@ -157,7 +157,7 @@ abstract class Job implements Runnable {
   }
 
   property get FieldName() : String {
-    return dataStore.findOne(id)?.get('Field') as String
+    return dataStore.findOne(id)?['Field'] as String
   }
 
   function cancel() {

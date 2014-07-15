@@ -9,15 +9,15 @@ uses gw.lang.reflect.IEnumType
 
 class InputGenerator {
 
-  static function text(literal : PropertyReference, name : String = null, options : Map<String,String> = null) : String {
-    var label =  label(name, literal)
+  static function textInput(literal: PropertyReference, name: String = null, options: Map<String, String> = null) : String {
+    var label =  labelInput(name, literal)
     return label + TagHelper.tag('input', {'name' -> format(literal),
                                            'type' -> 'text'}.merge(options))
   }
 
-  static function radio(literal : PropertyReference, name : String = null, options : Map<String,String> = null) : String {
+  static function radioInput(literal: PropertyReference, name: String = null, options: Map<String, String> = null) : String {
     var buf = new StringBuffer()
-    buf.append(label(name, literal))
+    buf.append(labelInput(name, literal))
     for (value in getValues(literal)) {
       var tag = (TagHelper.tag('input', {'value' -> value as String,
                                           'type' -> 'radio',
@@ -27,21 +27,25 @@ class InputGenerator {
     return buf.toString()
   }
 
-  static function submit(text : String = 'Submit', options : Map<String,String> = null) : String {
+  static function submitInput(text: String = 'Submit', options: Map<String, String> = null) : String {
     return TagHelper.tag('input', {'type' -> 'submit',
                                    'value' -> text}.merge(options))
   }
 
-  static function select(literal : PropertyReference, name : String = null,
-                         options : Map<String, String> = null) : String {
-    var label = label(name, literal)
+  static function selectInput(literal: PropertyReference, name: String = null,
+                              options: Map<String, String> = null) : String {
+    var label = labelInput(name, literal)
     return label + TagHelper.contentTag('select', options(literal), {'name' -> format(literal)}.merge(options))
   }
 
-  static function label(name : String, literal : PropertyReference) : String {
+  static function labelInput(name: String, literal: PropertyReference) : String {
     name = name ?: literal.PropertyInfo.DisplayName
     return TagHelper.contentTag('label', name + ':&nbsp;', {'for' -> format(literal)})
   }
+
+  /*
+  * ------ Helper methods -----
+   */
 
   private static function options(literal : PropertyReference) : String {
     var buf = new StringBuffer()

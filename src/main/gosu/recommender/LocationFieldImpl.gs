@@ -12,7 +12,7 @@ uses java.lang.Long
 class LocationFieldImpl extends AbstractField {
 
   final static var geocoder = new Geocoder()
-  final static var coordinates = new MongoCollection (DataSet.REGIONCOORDINATES).find().iterator().next()
+  final static var coordinates = new MongoCollection (DataSet.REGION_COORDINATES).find().iterator().next()
 
   construct() {
     _field = 'Region'

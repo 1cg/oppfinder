@@ -87,7 +87,7 @@ class GenerateJob extends Job {
     var coordInput = new FileReader(AssetLibrarian.INSTANCE.LATLNG)
     var bufRead = new BufferedReader(coordInput)
     var myLine = bufRead.readLine()
-    var dataStore = new MongoCollection (DataSet.REGIONCOORDINATES)
+    var dataStore = new MongoCollection (DataSet.REGION_COORDINATES)
     dataStore.drop()
     var locationMap : Map<String, String> = {}
     while (myLine != null) {

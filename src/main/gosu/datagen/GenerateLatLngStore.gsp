@@ -20,7 +20,7 @@ var bufRead = new BufferedReader(input)
 var myLine = bufRead.readLine()
 var geocoder = new Geocoder()
 
-var dataStore = new MongoCollection (DataSet.REGIONCOORDINATES)
+var dataStore = new MongoCollection (DataSet.REGION_COORDINATES)
 dataStore.drop()
 var locationMap : Map<String, String> = {}
 while (myLine != null) {

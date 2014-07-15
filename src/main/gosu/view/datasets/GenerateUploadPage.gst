@@ -8,10 +8,10 @@
       <h4>Generate Data Set</h4>
       <div class="well well-sm">
         <form ic-post-to="/jobs?type=generate" role="form">
-          ${InputGenerator.text(jobs.GenerateJob#DataSetCollection, 'New Data Set Name', {'placeholder' -> 'Leave blank for a random name','class' -> 'form-control'})}
+          ${InputGenerator.textInput(jobs.GenerateJob#DataSetCollection, 'New Data Set Name', {'placeholder' -> 'Leave blank for a random name','class' -> 'form-control'})}
           <br>
-          ${InputGenerator.radio(jobs.GenerateJob#JobType, 'Generation Method', {'class' -> 'radio'})}
-          ${InputGenerator.submit('Generate Data Set', {'class' -> 'btn btn-primary'})}
+          ${InputGenerator.radioInput(jobs.GenerateJob#JobType, 'Generation Method', {'class' -> 'radio'})}
+          ${InputGenerator.submitInput('Generate Data Set', {'class' -> 'btn btn-primary'})}
         </form>
       </div>
   </div>

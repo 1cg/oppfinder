@@ -8,7 +8,7 @@ uses util.TimeUtil
 
 class DataSet {
 
-  public static var REGIONCOORDINATES : String = "regionCoordinates"
+  public static var REGION_COORDINATES : String = "regionCoordinates"
   public static var MASTER_DATA_SET : String = "masterDataSet" // MongoCollection of DataSets to refer to
   var myDataSet : MongoCollection
   var info : Map<Object, Object>
@@ -17,7 +17,6 @@ class DataSet {
   construct(_collection : String) {
     collection = _collection
     myDataSet = new MongoCollection (collection)
-    var sdf = new SimpleDateFormat("MMM d, 'at' h:mm a")
     new MongoCollection (MASTER_DATA_SET).insert({"name" -> collection,
                                                   "size" -> myDataSet.Count,
                                                   "created" -> TimeUtil.now()})
