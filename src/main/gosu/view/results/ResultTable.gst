@@ -57,7 +57,7 @@
         </td>
       <% if (loggedIn) { %>
         <td>
-          <a href="#" ic-post-to="/jobs?type=auth&id=${result['UUId']}">Upload</a>
+          <a href="#" ic-post-to="/jobs?type=auth&SalesForceAuthJob[ResultCollection]=${result['UUId']}">Upload</a>
         </td>
       <% } %>
      </tr>

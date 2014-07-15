@@ -32,4 +32,8 @@ class Results {
     return DS.find()
   }
 
+  static property get AllResultsNames() : List<String> {
+    return DS.find().map(\ o -> o['UUId'] as String)
+  }
+
 }
