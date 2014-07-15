@@ -9,12 +9,10 @@ uses gw.lang.reflect.IEnumType
 
 class InputGenerator {
 
-  static function text(literal : PropertyReference, name : String = null,
-                       placeholder : String = "", options : Map<String,String> = null) : String {
+  static function text(literal : PropertyReference, name : String = null, options : Map<String,String> = null) : String {
     var label =  label(name, literal)
     return label + TagHelper.tag('input', {'name' -> format(literal),
-                                   'placeholder' -> placeholder,
-                                   'type' -> 'text'}.merge(options))
+                                           'type' -> 'text'}.merge(options))
   }
 
   static function radio(literal : PropertyReference, name : String = null, options : Map<String,String> = null) : String {
@@ -54,10 +52,10 @@ class InputGenerator {
   }
 
   private static function getValues(literal : PropertyReference) : Iterable<Object> {
-    if (literal.PropertyInfo.FeatureType typeis IEnumType) {
+    if (literal.PropertyInfo.FeatureType typeis Type<Iterable>) {
+      return literal.RootType[literal.PropertyInfo.Name] as Iterable<Object>
+    } else if (literal.PropertyInfo.FeatureType typeis IEnumType) {
       return literal.PropertyInfo.FeatureType.EnumValues
-    } else if (literal.PropertyInfo.FeatureType typeis Type<List>) {
-      return literal.RootType[literal.PropertyInfo.Name] as List<Object>
     } else {
       throw new IllegalArgumentException()
     }

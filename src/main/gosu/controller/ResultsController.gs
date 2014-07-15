@@ -22,11 +22,11 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   function push() : Object {
-    return ResultUpload.renderToString(Results.AllResults, Request.Session.attribute("code"))
+    return ResultUpload.renderToString(Results#AllResultsNames)
   }
 
   override function _new(): Object {
-    return NewAnalysis.renderToString(DataSet.allDataSets)
+    return NewAnalysis.renderToString()
   }
 
   override function create(): Object {

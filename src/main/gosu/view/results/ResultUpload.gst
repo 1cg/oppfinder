@@ -1,21 +1,10 @@
-<%@ params(results : util.iterable.SkipIterable<java.util.Map<Object,Object>>, code : String) %>
+<% uses gw.lang.reflect.features.PropertyReference
+   uses input_helper.InputGenerator %>
+<%@ params(results : PropertyReference) %>
 <div class='jumbotron'>
   <h2>Select a dataset to upload to Salesforce</h2>
   <form class="form-inline" role="form" ic-post-to="/jobs?type=auth">
-    <div class="form-group">
-    <label>
-      <strong>Select DataSet: </strong>
-    </label>
-    <select class="form-control" name="id">
-      <optgroup label="Most Recent">
-        <% for(result in results){ %>
-          <option value=${result['UUId']}>${result['UUId']}</option>
-        <% } %>
-      </optgroup>
-    </select>
-    </div>
-    <div class="form-group">
-      <input class="btn btn-primary" type="submit" value="Start Upload to Salesforce">
-    </div>
+    ${InputGenerator.select(results, 'Select Dataset', {'class' -> 'form-control', 'name' -> 'SalesForceAuthJob[ResultCollection]'})}
+    ${InputGenerator.submit('Start upload to Salesforce', {'class' -> 'btn btn-primary'})}
    </form>
 </div>
