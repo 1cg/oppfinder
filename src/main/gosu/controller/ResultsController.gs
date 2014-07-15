@@ -7,7 +7,6 @@ uses model.Results
 uses view.results.Result
 uses view.results.ResultUpload
 uses view.results.NewAnalysis
-uses model.DataSet
 
 class ResultsController implements  IHasRequestContext, IResourceController {
 
@@ -34,7 +33,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function show(id: String): Object {
-    var code = Request.Session.attribute("code")
+    var code = Request.Session.attribute("code") as String
     var loggedIn = (code != null && code != "")
     return Result.renderToString(id, Results.getResults(id), loggedIn, Results.getSource(id))
   }

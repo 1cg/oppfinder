@@ -36,9 +36,9 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function generateProgress() : Object {
-    var progress = Job.find(UUId)?.Progress+"%"
-    if (progress == "100%") cancelPolling()
-    return raw(progress)
+    var progress = Job.find(UUId)?.Progress
+    if (progress == 100) cancelPolling()
+    return raw(progress + "%")
   }
 
   function generateComplete() : Object {
@@ -108,9 +108,9 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function progress(UUID : String) : Object {
-    var job = Job.find(UUID)
-    if (job?.Progress == 100) cancelPolling()
-    return raw(job?.Progress+"%")
+    var progress = Job.find(UUID)?.Progress
+    if (progress == 100) cancelPolling()
+    return raw(progress+"%")
   }
 
   function status(UUID : String) : Object {
@@ -145,9 +145,7 @@ class JobController implements IHasRequestContext, IResourceController {
       job = new GenerateJob()
       UUId = job.UUId
     } else if (type == 'auth') {
-      job = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), null)
-    } else if (type == 'authselective') {
-      job = new SalesforceAuthJob(Params['id'], Request.Session.attribute("code"), Params.all('resultcheckbox[]'))
+      job = new SalesforceAuthJob(Request.Session.attribute("code"), Params.all('resultcheckbox[]'))
     }
     job.updateFrom(Request.QueryMap.get({job.IntrinsicType.DisplayName}).toMap().mapValues(\ o -> o.first()))
     job.start()
