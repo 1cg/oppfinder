@@ -15,6 +15,7 @@ uses view.jobs.JobTableBody
 uses view.jobs.SubJobTableBody
 uses java.text.SimpleDateFormat
 uses jobs.GenerateJob
+uses java.lang.IllegalStateException
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -133,19 +134,26 @@ class JobController implements IHasRequestContext, IResourceController {
 
   override function create() : Object {
     var job : jobs.Job
-    var type = Params['type']
-    if (type == 'test') {
-      job = new TestJob()
-    } else if (type == 'recommend') {
-      job = new RecommendJob()
-    } else if (type == 'upload') {
-      job = new UploadJob(Request.Body)
-      UUId = job.UUId
-    } else if (type == 'generate') {
-      job = new GenerateJob()
-      UUId = job.UUId
-    } else if (type == 'auth') {
-      job = new SalesforceAuthJob(Request.Session.attribute("code"), Params.all('resultcheckbox[]'))
+    switch(Params['type']) {
+      case 'test' :
+        job = new TestJob()
+        break
+      case 'recommend' :
+        job = new RecommendJob()
+        break
+      case 'upload' :
+        job = new UploadJob(Request.Body)
+        UUId = job.UUId
+        break
+      case 'generate' :
+        job = new GenerateJob()
+        UUId = job.UUId
+        break
+      case 'auth' :
+        job = new SalesforceAuthJob(Request.Session.attribute("code"), Params.all('resultcheckbox[]'))
+        break
+      default:
+        throw new IllegalStateException("No such job type")
     }
     job.updateFrom(Request.QueryMap.get({job.IntrinsicType.DisplayName}).toMap().mapValues(\ o -> o.first()))
     job.start()

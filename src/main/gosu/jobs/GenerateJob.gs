@@ -14,7 +14,7 @@ class GenerateJob extends Job {
 
   enum Types {Test, Random}
 
-  construct(data : Map<Object, Object>) {
+  construct(data : Map<String, Object>) {
     super(data)
   }
 
@@ -44,16 +44,16 @@ class GenerateJob extends Job {
   }
 
   override function executeJob() {
-    var data : List<Map<Object,Object>> = {}
+    var data : List<Map<String,Object>> = {}
     if (JobType.Value == Types.Test) {
-      data = new GenerateTest().generateTest('Reach', 40000)
+      data = new GenerateTest().generateTest('Reach', 2)
     } else {
       data = new GenerateRandom().generateRandom()
     }
     checkCancellation()
     this.StatusFeed = "Dropping previous dataset"
     checkCancellation()
-    var companies : List<Map<Object,Object>> = {}
+    var companies : List<Map<String,Object>> = {}
     this.StatusFeed = "Parsed company information"
     for (company in data index i) {
       if (i % 20 == 0) {
@@ -72,6 +72,7 @@ class GenerateJob extends Job {
     dataSet.insert(companies)
     new DataSet(collection)
     this.StatusFeed = "Company information inserted"
+    this.StatusFeed = 'View data set <a href="/datasets/${collection}">here</a>'
     //writeLatLng()
     this.StatusFeed = "Done"
   }

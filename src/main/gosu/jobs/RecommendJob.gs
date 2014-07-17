@@ -17,7 +17,7 @@ class RecommendJob extends Job {
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
-  construct(data : Map<Object, Object> ) {
+  construct(data : Map<String, Object> ) {
     super(data)
   }
 
@@ -94,7 +94,7 @@ class RecommendJob extends Job {
       var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1}).iterator().next()
       result.put('Company', company['Company'])
       result.put('Policy',MahoutUtil.longToPolicy(info[1].toLong()))
-      result.put('Value', each.Value)
+      result.put('Value', String.format('%.3g%n',{each.Value}))
       finalResults.add(result)
     }
     Results.addResults(UUId, finalResults, dataSet)

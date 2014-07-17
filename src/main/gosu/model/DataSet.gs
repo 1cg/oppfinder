@@ -3,7 +3,6 @@ package model
 uses java.util.HashMap
 uses java.util.Map
 uses util.iterable.SkipIterable
-uses java.text.SimpleDateFormat
 uses util.TimeUtil
 
 class DataSet {
@@ -11,7 +10,7 @@ class DataSet {
   public static var REGION_COORDINATES : String = "regionCoordinates"
   public static var MASTER_DATA_SET : String = "masterDataSet" // MongoCollection of DataSets to refer to
   var myDataSet : MongoCollection
-  var info : Map<Object, Object>
+  var info : Map<String, Object>
   var collection : String
 
   construct(_collection : String) {
@@ -59,7 +58,7 @@ class DataSet {
   }
 
   // put and get are for the child classes to update info
-  protected function put (s : Object, o : Object) {
+  protected function put (s : String, o : Object) {
     info.put(s, o)
   }
 

@@ -5,7 +5,7 @@ uses java.lang.Thread
 
 class TestJob extends Job {
 
-  construct(data : Map<Object, Object> ) {
+  construct(data : Map<String, Object> ) {
     super(data)
   }
 

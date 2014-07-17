@@ -4,10 +4,10 @@ uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses util.MahoutUtil
 uses model.MongoCollection
-uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 uses java.util.Map
 uses java.lang.Integer
 uses util.AssetLibrarian
+uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 
 class ReachFieldImpl extends AbstractField {
 

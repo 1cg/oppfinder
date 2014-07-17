@@ -14,7 +14,7 @@ class UploadJob extends Job {
   construct() {
     super()
   }
-  construct(data : Map<Object, Object>) {
+  construct(data : Map<String, Object>) {
     super(data)
   }
 

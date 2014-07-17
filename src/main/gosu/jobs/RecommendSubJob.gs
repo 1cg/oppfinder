@@ -7,15 +7,14 @@ uses recommender.Field
 uses java.lang.Float
 uses java.lang.Math
 uses java.lang.Long
-uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDPlusPlusFactorizer
-uses org.apache.mahout.cf.taste.impl.recommender.svd.SVDRecommender
+uses org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
 
 class RecommendSubJob extends Job {
 
   var maxRecommendation : Float
   var minRecommendation : Float
 
-  construct(data : Map<Object, Object> ) {
+  construct(data : Map<String, Object> ) {
     super(data)
   }
 
@@ -59,11 +58,11 @@ class RecommendSubJob extends Job {
     maxRecommendation = Float.MIN_VALUE
     minRecommendation = Float.MAX_VALUE
     checkCancellation()
-    var c = Class.forName(this.FieldName)
+    var c = Class.forName(FieldName)
     var field = c.newInstance() as Field
     var model = field.getModel(this.Collection)
     checkCancellation()
-    var recommender = new SVDRecommender(model, new SVDPlusPlusFactorizer(model,10,10))
+    var recommender = new GenericItemBasedRecommender(model, field.getSimilarity(model))
     var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
     var userIDs = model.getUserIDs()
     userIDs.skip(this.Start as int)
@@ -92,6 +91,7 @@ class RecommendSubJob extends Job {
 
   function normalize(value : Float) : Float {
     return (value - minRecommendation) / (maxRecommendation - minRecommendation)
+
   }
 
   override function doReset() {}

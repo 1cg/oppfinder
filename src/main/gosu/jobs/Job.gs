@@ -15,23 +15,26 @@ uses java.lang.Class
 uses java.lang.Exception
 uses util.CancellationException
 uses util.RedisConfigUtil
+uses model.Document
 
-abstract class Job implements Runnable {
+abstract class Job extends Document implements Runnable {
 
   static final var COLLECTION = 'jobs'
   protected static final var MAX_PROGRESS_VALUE : int = 100
   static var dataStore = new MongoCollection (COLLECTION)
-  var id : Map<Object, Object>
+  var id : Map<String, Object>
 
-  construct(data : Map<Object, Object>) {
+  construct(data : Map<String, Object>) {
+    super(dataStore)
     if (data == null) throw "No such UUID"
     else if (dataStore.findOne({'UUId' -> data['UUId']}) == null) throw "No such UUID"
-    id = new HashMap<Object,Object>()
+    id = new HashMap<String,Object>()
     id['UUId'] = data['UUId']
   }
 
   construct() {
-    id = new HashMap<Object, Object>()
+    super(dataStore)
+    id = new HashMap<String, Object>()
     this.UUId = UUID.randomUUID().toString()
     this.Progress = 0
     this.Type = this.IntrinsicType.Name
@@ -84,11 +87,11 @@ abstract class Job implements Runnable {
   }
 
   function delete() {
-    dataStore.remove(dataStore.findOne({'UUId' -> UUId}))
+    dataStore.remove(dataStore.findOne({'UUId' -> UUId}).toMap() as Map<String, Object>)
   }
 
-  final function update(update : Map<Object,Object>) {
-    dataStore.update(id, update)
+  final function update(update : Map<String,Object>) {
+    upsertAll(update)
   }
 
   function search(field : String) : Object {
@@ -100,7 +103,7 @@ abstract class Job implements Runnable {
   }
 
   property set Type(type : String) {
-    dataStore.update(id,{'Type' -> type})
+   upsert('Type', type)
   }
 
   property get Failed() : boolean {
@@ -112,7 +115,7 @@ abstract class Job implements Runnable {
   }
 
   property set StartTime(time : Long) {
-    dataStore.update(id,{'StartTime' -> time})
+    upsert('StartTime', time)
   }
 
   property get EndTime() : Long {
@@ -120,7 +123,7 @@ abstract class Job implements Runnable {
   }
 
   property set EndTime(time : Long) {
-    dataStore.update(id,{'EndTime' -> time})
+    upsert('EndTime', time)
   }
 
   property get UUId() : String {
@@ -140,7 +143,7 @@ abstract class Job implements Runnable {
     if (progress == MAX_PROGRESS_VALUE) {
       this.Status = 'Complete'
     }
-    dataStore.update(id, {'Progress' -> progress})
+    upsert('Progress', progress)
     checkBounds(progress)
   }
 
@@ -149,11 +152,11 @@ abstract class Job implements Runnable {
   }
 
   property set StatusFeed(feedUpdate : String) {
-    dataStore.update(id, {'StatusFeed' -> this.StatusFeed+feedUpdate+"\n"})
+   upsert('StatusFeed', this.StatusFeed+feedUpdate+"\n")
   }
 
   property set FieldName(field: String) {
-    dataStore.update(id, {'Field' -> field})
+    upsert('Field', field)
   }
 
   property get FieldName() : String {
@@ -186,9 +189,9 @@ abstract class Job implements Runnable {
   property set Cancelled(status : boolean) {
     EndTime = System.currentTimeMillis()
     if (status) {
-      dataStore.update(id, {'Status' -> 'Cancelled'})
+      upsert('Status', 'Cancelled')
     } else {
-      dataStore.update(id, {'Status' -> 'Reset'})
+      upsert('Status', 'Reset')
     }
   }
 
@@ -205,7 +208,7 @@ abstract class Job implements Runnable {
   }
 
   property set Status(status : String) {
-    dataStore.update(id, {'Status' -> status})
+    upsert('Status', status)
   }
 
   property get ElapsedTime() : String {
@@ -243,7 +246,7 @@ abstract class Job implements Runnable {
   }
 
   function displayState(state : String) {
-    dataStore.update(id, {'State' -> state})
+    upsert('State', state)
   }
 
   /*

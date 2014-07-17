@@ -19,7 +19,7 @@ class SalesforceAuthJob extends Job {
   static final var SF_CLIENT_ID     = System.Env["SF_CLIENT_ID"]?.toString()
   static final var SF_CLIENT_SECRET = System.Env["SF_CLIENT_SECRET"]?.toString()
 
-  construct(data : Map<Object, Object>) {
+  construct(data : Map<String, Object>) {
     super(data)
   }
 
@@ -77,7 +77,6 @@ class SalesforceAuthJob extends Job {
       opp.set("Description", "It is recommended that this company take on the "+recommendation['Policy']+" policy.")
 
       var result = salesforce.insert(opp)
-
       if (!(result["success"] as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }

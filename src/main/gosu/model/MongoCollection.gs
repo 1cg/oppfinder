@@ -65,15 +65,19 @@ class MongoCollection {
   }
 
 
-  function findOne(ref : Map<Object, Object>) : Map<Object, Object> {
-    return _collection.findOne(new BasicDBObject(ref))?.toMap()
+  function findOne(ref : Map<String, Object>) : DBObject {
+    return _collection.findOne(ref)
   }
 
-  function insert(o : Map<Object, Object>) : WriteResult {
-    return _collection.insert( new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
+  function insert(o : DBObject) : WriteResult {
+    return _collection.insert(o, WriteConcern.ACKNOWLEDGED)
   }
 
-  function insert(objects : List<Map<Object, Object>>) : WriteResult {
+  function insert(o : Map<String, Object>) : WriteResult {
+    return _collection.insert(new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
+  }
+
+  function insert(objects : List<Map<String, Object>>) : WriteResult {
     return _collection.insert(objects.map(\ o -> new BasicDBObject(o)), WriteConcern.ACKNOWLEDGED)
   }
 
@@ -81,26 +85,20 @@ class MongoCollection {
     return _collection.getCount()
   }
 
-  function getCount(o : Map<Object, Object>) : long {
+  function getCount(o : Map<String, Object>) : long {
     return _collection.getCount(new BasicDBObject(o))
   }
 
-  function remove(o : Map<Object, Object>) : WriteResult {
+  function remove(o : Map<String, Object>) : WriteResult {
     return _collection.remove(new BasicDBObject(o))
   }
 
-  function save(o : Map<Object, Object>) : WriteResult {
+  function save(o : Map<String, Object>) : WriteResult {
     return _collection.save(new BasicDBObject(o),WriteConcern.ACKNOWLEDGED)
   }
 
-  function update(q : Map<Object, Object>, o : Map<Object, Object>) {
-    var current = _collection.findOne(new BasicDBObject(q))
-    if (current != null) {
-      current.putAll(new BasicDBObject(o))
-    } else {
-      current = new BasicDBObject(o)
-    }
-    _collection.update(new BasicDBObject(q), current,false,false,WriteConcern.ACKNOWLEDGED)
+  function update(q : DBObject, o : DBObject) {
+    _collection.update(q, o,false,false,WriteConcern.ACKNOWLEDGED)
   }
 
   function drop() {
