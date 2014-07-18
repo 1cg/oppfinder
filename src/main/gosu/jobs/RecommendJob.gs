@@ -92,18 +92,16 @@ class RecommendJob extends Job {
     checkCancellation()
     //TODO --Make a real Result object
     var finalResults : List<Map<Object, Object>>= {}
-    var companyDB = new MongoCollection (dataSet)
-    for (each in sorted.iterator() index i) {
+    /*for (each in sorted index i) {
       if (i == NUM_RECOMMENDATIONS) break
       var result : Map<Object, Object> = {}
-      var info = each.Key.split(DELIMITER)
       var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1}).iterator().next()
       result.put('Company', company['Company'])
       result.put('Policy',MahoutUtil.longToPolicy(info[1].toLong()))
       result.put('Value', String.format('%.3g%n',{each.Value}))
       finalResults.add(result)
     }
-    Results.addResults(UUId, finalResults, dataSet)
+    Results.addResults(UUId, finalResults, dataSet)*/
   }
 
   /*
