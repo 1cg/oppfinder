@@ -1,12 +1,11 @@
 package jobs
 
-uses java.util.Map
 uses java.lang.Thread
 
 class TestJob extends Job {
 
-  construct(data : Map<String, Object> ) {
-    super(data)
+  construct(key : String, value : String) {
+    super(key,value)
   }
 
   construct() {

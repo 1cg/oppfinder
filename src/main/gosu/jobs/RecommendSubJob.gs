@@ -14,8 +14,8 @@ class RecommendSubJob extends Job {
   var maxRecommendation : Float
   var minRecommendation : Float
 
-  construct(data : Map<String, Object> ) {
-    super(data)
+  construct(key : String, value : String) {
+    super(key,value)
   }
 
   /*
@@ -31,27 +31,27 @@ class RecommendSubJob extends Job {
   }
 
   property get Start() : long {
-    return search('Start') as Long
+    return getField('Start') as Long
   }
 
   property set Start(start : long) {
-    update({'Start' -> start})
+    upsert('Start', start)
   }
 
   property get Number() : long {
-    return search('Number') as Long
+    return getField('Number') as Long
   }
 
   property set Number(start : long) {
-    update({'Number' -> start})
+    upsert('Number', start)
   }
 
   property get Collection() : String {
-    return search('DataSetCollection') as String
+    return getField('DataSetCollection') as String
   }
 
   property set Collection(collection : String) {
-    update({'DataSetCollection' -> collection})
+    upsert('DataSetCollection', collection)
   }
 
   override function executeJob() {
@@ -97,7 +97,7 @@ class RecommendSubJob extends Job {
   override function doReset() {}
 
   override property set Status(status : String) {
-    update({'Status' -> 'Subjob'})
+    upsert('Status', 'Subjob')
   }
 
   override function renderToString() : String {

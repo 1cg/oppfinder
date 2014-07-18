@@ -1,6 +1,5 @@
 package jobs
 
-uses java.util.Map
 uses model.MongoCollection
 uses org.json.simple.JSONArray
 uses org.json.simple.parser.JSONParser
@@ -14,8 +13,9 @@ class UploadJob extends Job {
   construct() {
     super()
   }
-  construct(data : Map<String, Object>) {
-    super(data)
+
+  construct(key : String, value : String) {
+    super(key,value)
   }
 
   construct(body : String) {

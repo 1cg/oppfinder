@@ -24,10 +24,12 @@ class DataSet {
     info = new HashMap<String, Object>()
   }
 
+  //TODO --FIX THIS
   static function all(_collection : String = "defaultDataSet") : SkipIterable<Map<String,Object>> {
     return new TransformIterable<Map<String,Object>>(new MongoCollection (_collection).find().Cursor, \o -> (o as BasicDBObject))
   }
 
+  //TODO --FIX THIS
   static property get allDataSets() : SkipIterable<Map<Object,Object>> {
     return new TransformIterable<Map<String,Object>>(new MongoCollection(MASTER_DATA_SET).find().Cursor, \o -> (o as BasicDBObject))
   }

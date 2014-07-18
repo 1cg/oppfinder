@@ -6,6 +6,7 @@ uses model.MongoCollection
 uses java.lang.Float
 uses util.MahoutUtil
 uses java.util.Arrays
+uses util.iterable.SkipIterable
 uses model.Results
 
 class RecommendJob extends Job {
@@ -17,8 +18,8 @@ class RecommendJob extends Job {
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
-  construct(data : Map<String, Object> ) {
-    super(data)
+  construct(key : String, value : String) {
+    super(key,value)
   }
 
   construct() {
@@ -26,24 +27,25 @@ class RecommendJob extends Job {
   }
 
   property get DataSetCollection() : String {
-    return search('DataSetCollection') as String
+    return getField('DataSetCollection') as String
   }
 
   property set DataSetCollection(collection : String) {
-    update({'DataSetCollection' -> collection})
+    upsert('DataSetCollection', collection)
   }
 
   override function executeJob() {
     checkCancellation()
     var dataSet = DataSetCollection
     startSubJobs(dataSet)
-    this.StatusFeed = "Started Sub Jobs"
+    StatusFeed = "Started Sub Jobs"
     poll() //Blocks until sub-tasks are complete
-    this.StatusFeed = "Sub Jobs Complete"
+    StatusFeed = "Sub Jobs Complete"
+    save()
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
       var ds = new MongoCollection(jobID)
-      for (companyRecommendations in ds?.find() index i) {
+      for (companyRecommendations in ds?.find().map(\ o -> (o as Map<String, Object>)) index i) {
         if (i % 200 == 0) checkCancellation()
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
@@ -56,10 +58,12 @@ class RecommendJob extends Job {
       }
       ds.drop() //Get rid of the temp data
     }
-    this.StatusFeed = "Recommendations Calculated"
+    StatusFeed = "Recommendations Calculated"
+    save()
     storeTopRecommendations(recommendations, dataSet)
     this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
     this.StatusFeed = "Done"
+    save()
   }
 
   /*
@@ -75,7 +79,8 @@ class RecommendJob extends Job {
         checkCancellation()
       }
     }
-    update({'SubJobs' -> subJobsID.toString()})
+    upsert('SubJobs', subJobsID.toString())
+    save()
   }
 
   /*
@@ -85,6 +90,7 @@ class RecommendJob extends Job {
   function storeTopRecommendations(recommendations : Map<String, Float>, dataSet : String) {
     var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue().reversed())
     checkCancellation()
+    //TODO --Make a real Result object
     var finalResults : List<Map<Object, Object>>= {}
     var companyDB = new MongoCollection (dataSet)
     for (each in sorted.iterator() index i) {
@@ -130,7 +136,7 @@ class RecommendJob extends Job {
       checkCancellation()
       finished = true
       for (jobID in subJobsID) {
-        var progress = Job.find(jobID)?.Progress
+        var progress = Job.findJob(jobID)?.Progress
         sum += progress
         if (progress < Job.MAX_PROGRESS_VALUE) {
           finished = false
@@ -145,11 +151,11 @@ class RecommendJob extends Job {
     }
   }
 
-  property get SubJobs() : List<jobs.Job> {
-    var stringArray = search('SubJobs') as String
+  property get SubJobs() : SkipIterable<jobs.Job> {
+    var stringArray = getField('SubJobs') as String
     if (stringArray != null) {
       var array = Arrays.asList(stringArray?.substring(1, stringArray.length() - 1)?.split(", "))
-      return array.map(\ j -> newUp(j, 'jobs.RecommendSubJob'))
+      return Job.findByIDs(array)
     }
     return null
   }
@@ -159,7 +165,8 @@ class RecommendJob extends Job {
     for (job in SubJobs) {
       job?.delete()
     }
-    update({'SubJobs' -> null})
+    upsert('SubJobs', null)
+    save()
   }
 
 }
