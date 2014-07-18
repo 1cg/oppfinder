@@ -51,9 +51,9 @@ class RecommendJob extends Job {
         var entry = companyRecommendations.entrySet().first()
         if (recommendations.containsKey(entry.Key)) {
           var value = recommendations.get(entry.Key)
-          recommendations.put(entry.Key as String, (value + (entry.Value as Float)) / 2)
+          recommendations.put(entry.Key, (value + (entry.Value as Float)) / 2)
         } else {
-          recommendations.put(entry.Key as String,entry.Value as Float)
+          recommendations.put(entry.Key,entry.Value as Float)
         }
       }
       ds.drop() //Get rid of the temp data
