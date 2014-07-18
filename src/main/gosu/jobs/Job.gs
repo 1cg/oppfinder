@@ -1,49 +1,40 @@
 package jobs
 
 uses net.greghaines.jesque.Job
-uses model.MongoCollection
-uses java.util.Map
 uses java.lang.Runnable
-uses java.util.HashMap
 uses java.util.UUID
 uses java.lang.System
 uses java.lang.Integer
 uses java.lang.Long
 uses java.lang.Thread
-uses util.iterable.TransformIterable
-uses java.lang.Class
 uses java.lang.Exception
 uses util.CancellationException
 uses util.RedisConfigUtil
 uses model.Document
+uses util.iterable.SkipIterable
+uses model.MongoCollection
 
 abstract class Job extends Document implements Runnable {
 
-  static final var COLLECTION = 'jobs'
+  static var collection : String as readonly COLLECTION = 'jobs'
   protected static final var MAX_PROGRESS_VALUE : int = 100
-  static var dataStore = new MongoCollection (COLLECTION)
-  var id : Map<String, Object>
-
-  construct(data : Map<String, Object>) {
-    super(dataStore)
-    if (data == null) throw "No such UUID"
-    else if (dataStore.findOne({'UUId' -> data['UUId']}) == null) throw "No such UUID"
-    id = new HashMap<String,Object>()
-    id['UUId'] = data['UUId']
-  }
 
   construct() {
-    super(dataStore)
-    id = new HashMap<String, Object>()
-    this.UUId = UUID.randomUUID().toString()
-    this.Progress = 0
-    this.Type = this.IntrinsicType.Name
+    UUId = UUID.randomUUID().toString()
+    Progress = 0
+    Type = IntrinsicType.Name
+    save()
+  }
+
+  construct(key : String, value : String) {
+    super(key,value)
   }
 
   override final function run() {
     try {
       executeJob()
-      this.Progress = 100
+      Progress = 100
+      save()
     } catch(ce : CancellationException) {
       //Do nothing
     } catch(e : Exception) {
@@ -56,16 +47,17 @@ abstract class Job extends Document implements Runnable {
   }
 
   function handleErrorState(e : Exception) {
-    update({'Exception' -> e.StackTraceAsString})
+    upsert('Exception', e.StackTraceAsString)
     Status = 'Failed'
     EndTime = System.currentTimeMillis()
+    save()
     e.printStackTrace()
   }
 
   abstract function executeJob()
 
   final function start() : jobs.Job {
-    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,{dataStore.findOne(id)}))
+    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,{'UUId' -> UUId}))
     return this
   }
 
@@ -78,28 +70,17 @@ abstract class Job extends Document implements Runnable {
   abstract function doReset()
 
   final function reset() {
-    update({'StatusFeed' -> null})
+    upsert('StatusFeed', null)
     Status = 'Active'
     Progress = 0
     doReset()
     EndTime = null
+    save()
     start()
   }
 
-  function delete() {
-    dataStore.remove(dataStore.findOne({'UUId' -> UUId}).toMap() as Map<String, Object>)
-  }
-
-  final function update(update : Map<String,Object>) {
-    upsertAll(update)
-  }
-
-  function search(field : String) : Object {
-    return dataStore.findOne(id)?[field]
-  }
-
   property get Type() : String {
-    return (this.IntrinsicType.Name)
+    return getField('Type') as String
   }
 
   property set Type(type : String) {
@@ -111,7 +92,7 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get StartTime() : Long {
-    return dataStore.findOne(id)?['StartTime'] as Long
+    return getField('StartTime') as Long
   }
 
   property set StartTime(time : Long) {
@@ -119,7 +100,7 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get EndTime() : Long {
-    return dataStore.findOne(id)?['EndTime'] as Long
+    return getField('EndTime') as Long
   }
 
   property set EndTime(time : Long) {
@@ -127,16 +108,15 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get UUId() : String {
-    return id?['UUId'] as String
+    return getField('UUId') as String
   }
 
   property set UUId(newUUId : String) {
-    id?['UUId'] = newUUId
-    dataStore.save(id)
+    upsert('UUId', newUUId)
   }
 
   property get Progress() : int {
-    return dataStore.findOne(id)?['Progress'] as Integer ?: 0
+    return getField('Progress') as Integer ?: 0
   }
 
   property set Progress(progress : int) {
@@ -148,11 +128,11 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get StatusFeed() : String {
-    return dataStore.findOne(id)?['StatusFeed'] as String ?: ""
+    return getField('StatusFeed') as String ?: ""
   }
 
   property set StatusFeed(feedUpdate : String) {
-   upsert('StatusFeed', this.StatusFeed+feedUpdate+"\n")
+    upsert('StatusFeed', this.StatusFeed+feedUpdate+"\n")
   }
 
   property set FieldName(field: String) {
@@ -160,18 +140,15 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get FieldName() : String {
-    return dataStore.findOne(id)?['Field'] as String
+    return getField('Field') as String
   }
 
   function cancel() {
     Cancelled = true
+    save()
   }
 
-  static function find(UUID : String) : jobs.Job {
-    return newUp(UUID, null)
-  }
-
-  static function findByStatus(status : String) : util.iterable.SkipIterable<jobs.Job> {
+  static function findByStatus(status : String) : SkipIterable<jobs.Job> {
     if (status == 'all') {
       return AllJobs
     } else if (status == 'failed') {
@@ -200,11 +177,11 @@ abstract class Job extends Document implements Runnable {
       this.Cancelled = true
       return true
     }
-    return (dataStore.findOne(id)?['Status'] as String == 'Cancelled')
+    return (Status == 'Cancelled')
   }
 
   property get Status() : String {
-    return dataStore.findOne(id)?.get('Status') as String
+    return getField('Status') as String
   }
 
   property set Status(status : String) {
@@ -249,57 +226,38 @@ abstract class Job extends Document implements Runnable {
     upsert('State', state)
   }
 
-  /*
-  * Instantiates an object through the provided class name
-  */
-  static function newUp(UUID : String, type : String) : jobs.Job {
-    if (UUID == null) return null
-    else if (type == null) {
-      type = dataStore.findOne({'UUId' -> UUID})?['Type'] as String
-      if (type == null || type == "") return null
-    }
-    return Class.forName(type)
-                      .getConstructor({Map.Type.IntrinsicClass})
-                      .newInstance({{'Type' -> type, 'UUId' -> UUID}}) as jobs.Job
+  static property get ActiveJobs() : SkipIterable<jobs.Job> {
+    return findMany('Status', 'Active', COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get ActiveJobs() : util.iterable.SkipIterable<jobs.Job> {
-    return new TransformIterable<jobs.Job>(
-        dataStore.find({'Status' -> 'Active'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+  static property get CompleteJobs() : SkipIterable<jobs.Job> {
+    return findMany('Status', 'Complete', COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get CompleteJobs() : util.iterable.SkipIterable<jobs.Job> {
-    return new TransformIterable<jobs.Job>(
-        dataStore.find({'Status' -> 'Complete'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+  static property get CancelledJobs() : SkipIterable<jobs.Job> {
+    return findMany('Status', 'Cancelled', COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get CancelledJobs() : util.iterable.SkipIterable<jobs.Job> {
-    return new TransformIterable<jobs.Job>(
-        dataStore.find({'Status' -> 'Cancelled'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+  static property get FailedJobs() : SkipIterable<jobs.Job> {
+    return findMany('Status', 'Failed', COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get FailedJobs() : util.iterable.SkipIterable<jobs.Job> {
-    return new TransformIterable<jobs.Job>(
-        dataStore.find({'Status' -> 'Failed'}).Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
-  }
-
-  static property get AllJobs() : util.iterable.SkipIterable<jobs.Job> {
-    return new TransformIterable<jobs.Job>(
-        dataStore.queryNot('Status', 'Subjob').Cursor, \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+  static property get AllJobs() : SkipIterable<jobs.Job> {
+    return instantiateMany(new MongoCollection(COLLECTION).queryNot('Status', 'Subjob')) as SkipIterable<jobs.Job>
   }
 
   // This is for Salesforce uploading
-  static property get CompleteRecommendJobs() : util.iterable.SkipIterable<jobs.Job> {
-    return new TransformIterable<jobs.Job>(
-        dataStore.find({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}).Cursor,
-            \ m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+  static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
+    return findMany({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}, COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static function findByIDs(IDs : List<String>) : util.iterable.SkipIterable<jobs.Job> {
+  static function findByIDs(IDs : List<String>) : SkipIterable<jobs.Job> {
     if (IDs == null) return null
-    return new TransformIterable<jobs.Job>(
-        dataStore.queryOr(IDs, 'UUId').Cursor, \
-            m -> newUp((m as Map)['UUId'] as String, (m as Map)['Type'] as String))
+    return instantiateMany(new MongoCollection(COLLECTION).queryOr(IDs, 'UUId')) as SkipIterable<jobs.Job>
+  }
+
+  static function findJob(UUID : String) : jobs.Job {
+    return Document.find('UUId', UUID, COLLECTION) as jobs.Job
   }
 
   abstract function renderToString() : String

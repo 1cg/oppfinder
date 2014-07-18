@@ -13,34 +13,33 @@ class MongoCollection {
   }
 
  /* Automatically sorts from oldest to newest */
-  function find(ref : Map<Object, Object>) : TransformIterable<Map<Object,Object>> {
-     return new TransformIterable<Map<Object,Object>>(
+  function find(ref : Map<String, Object>) : TransformIterable<DBObject> {
+     return new TransformIterable<DBObject>(
          _collection.find(new BasicDBObject(ref))
                             .sort(new BasicDBObject({'_id' -> -1})),
-                             \ o  -> (o as BasicDBObject))
+                             \ o  -> o as BasicDBObject)
   }
 
   /* Automatically sorts from oldest to newest */
-  function find(ref : Map<Object, Object>, keys : Map<Object, Object>) : TransformIterable<Map<Object,Object>> {
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find(new BasicDBObject(ref),
-                          new BasicDBObject(keys))
+  function find(ref : Map<String, Object>, keys : Map<String, Object>) : TransformIterable<DBObject> {
+    return new TransformIterable<DBObject>(
+        _collection.find(new BasicDBObject(ref), new BasicDBObject(keys))
                           .sort(new BasicDBObject({'_id' -> -1})),
-                          \ o -> (o as BasicDBObject))
+                          \ o -> o as BasicDBObject)
 
   }
 
   /* Automatically sorts from oldest to newest */
-  function find() : TransformIterable<Map<Object,Object>> {
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+  function find() : TransformIterable<DBObject> {
+    return new TransformIterable<DBObject>(
+        _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
   property get Name() : String {
     return _collection.Name
   }
 
-  function queryOr(values : List<String>, key : String) : TransformIterable<Map<Object,Object>> {
+  function queryOr(values : List<String>, key : String) : TransformIterable<DBObject> {
     var document = new BasicDBObject()
     var qb = new QueryBuilder()
     var list : List<DBObject> = {}
@@ -51,22 +50,26 @@ class MongoCollection {
     }
     qb.or(list.toTypedArray())
     document.putAll(qb.get())
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+    return new TransformIterable<DBObject>(
+        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
-  function queryNot(key : String, value : String) : TransformIterable<Map<Object,Object>> {
+  function queryNot(key : String, value : String) : TransformIterable<DBObject> {
     var document = new BasicDBObject()
     var qb = new QueryBuilder()
     qb.put(key).notEquals(value)
     document.putAll(qb.get())
-    return new TransformIterable<Map<Object,Object>>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> (o as BasicDBObject))
+    return new TransformIterable<DBObject>(
+        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
 
-  function findOne(ref : Map<String, Object>) : DBObject {
+  function findOne(ref : DBObject) : DBObject {
     return _collection.findOne(ref)
+  }
+
+  function findOne() : DBObject {
+    return _collection.findOne()
   }
 
   function insert(o : DBObject) : WriteResult {
@@ -93,12 +96,20 @@ class MongoCollection {
     return _collection.remove(new BasicDBObject(o))
   }
 
+  function remove(key : String, value : Object) : WriteResult {
+    return _collection.remove(new BasicDBObject(key,value))
+  }
+
   function save(o : Map<String, Object>) : WriteResult {
     return _collection.save(new BasicDBObject(o),WriteConcern.ACKNOWLEDGED)
   }
 
   function update(q : DBObject, o : DBObject) {
-    _collection.update(q, o,false,false,WriteConcern.ACKNOWLEDGED)
+    _collection.update(q, new BasicDBObject('$set',o),false,false,WriteConcern.ACKNOWLEDGED)
+  }
+
+  function increment(q : DBObject, o : DBObject) {
+    _collection.update(q, new BasicDBObject('$inc',o),false,false,WriteConcern.ACKNOWLEDGED)
   }
 
   function drop() {

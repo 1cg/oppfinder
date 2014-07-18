@@ -4,6 +4,8 @@ uses java.util.HashMap
 uses java.util.Map
 uses util.iterable.SkipIterable
 uses util.TimeUtil
+uses util.iterable.TransformIterable
+uses com.mongodb.BasicDBObject
 
 class DataSet {
 
@@ -22,12 +24,12 @@ class DataSet {
     info = new HashMap<String, Object>()
   }
 
-  static function all(_collection : String = "defaultDataSet") : SkipIterable<Map> {
-    return new MongoCollection (_collection).find()
+  static function all(_collection : String = "defaultDataSet") : SkipIterable<Map<String,Object>> {
+    return new TransformIterable<Map<String,Object>>(new MongoCollection (_collection).find().Cursor, \o -> (o as BasicDBObject))
   }
 
   static property get allDataSets() : SkipIterable<Map<Object,Object>> {
-    return new MongoCollection(MASTER_DATA_SET).find()
+    return new TransformIterable<Map<String,Object>>(new MongoCollection(MASTER_DATA_SET).find().Cursor, \o -> (o as BasicDBObject))
   }
 
   static property get AllDataSets() : List<String> {

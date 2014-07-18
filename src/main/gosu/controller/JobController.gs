@@ -32,18 +32,18 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function subJobTable(UUID : String) : Object {
-    var jobs = (Job.find(UUID) as RecommendJob).SubJobs
+    var jobs = (Job.findJob(UUID) as RecommendJob).SubJobs
     return raw(SubJobTableBody.renderToString(UUID,Job.findByIDs(jobs?.map(\ j -> j.UUId))?.paginate(Params['page'])))
   }
 
   function generateProgress() : Object {
-    var progress = Job.find(UUId)?.Progress
+    var progress = Job.findJob(UUId)?.Progress
     if (progress == 100) cancelPolling()
     return raw(progress + "%")
   }
 
   function generateComplete() : Object {
-    if (Job.find(UUId)?.Progress == 100) {
+    if (Job.findJob(UUId)?.Progress == 100) {
       cancelPolling()
       return raw('<div class="fa fa-check chk navbar-left"</div>')
     }
@@ -51,7 +51,7 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function complete(UUID : String) : Object {
-    if (Job.find(UUID)?.Progress == 100) {
+    if (Job.findJob(UUID)?.Progress == 100) {
       cancelPolling()
       return raw('<div class="fa fa-check chk navbar-left"</div>')
     }
@@ -60,27 +60,27 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function created(UUID : String) : Object {
     var sdf = new SimpleDateFormat("MMM d, 'at' h:mm a")
-    return sdf.format(Job.find(UUID)?.StartTime)
+    return sdf.format(Job.findJob(UUID)?.StartTime)
   }
 
   function cancel(UUID : String) : String {
-    Job.find(UUID)?.cancel()
+    Job.findJob(UUID)?.cancel()
     return null
   }
 
   function reset(UUID : String) : String {
-    Job.find(UUID)?.reset()
+    Job.findJob(UUID)?.reset()
     return null
   }
 
   function delete(UUID : String) : String {
-    Job.find(UUID)?.delete()
+    Job.findJob(UUID)?.delete()
     return null
   }
 
   function deleteBulk() : String {
     for (UUID in Params.all('jobcheckbox[]')) {
-      var job = Job.find(UUID)
+      var job = Job.findJob(UUID)
       if(job.Progress == 100 || job.Cancelled || job.Failed) {
         job.delete()
       }
@@ -90,7 +90,7 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function cancelBulk() : String {
     for (UUID in Params.all('jobcheckbox[]')) {
-      var job = Job.find(UUID)
+      var job = Job.findJob(UUID)
       if(job.Progress < 100 && !(job.Cancelled || job.Failed)) {
         job.cancel()
       }
@@ -100,7 +100,7 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function resetBulk() : String {
     for (UUID in Params.all('jobcheckbox[]')) {
-      var job = Job.find(UUID)
+      var job = Job.findJob(UUID)
       if(job.Cancelled || job.Failed) {
         job.reset()
       }
@@ -109,25 +109,25 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function progress(UUID : String) : Object {
-    var progress = Job.find(UUID)?.Progress
+    var progress = Job.findJob(UUID)?.Progress
     if (progress == 100) cancelPolling()
     return raw(progress+"%")
   }
 
   function status(UUID : String) : Object {
-    var job = Job.find(UUID)
+    var job = Job.findJob(UUID)
     if (job?.Progress == 100) cancelPolling()
     return raw(job?.Status)
   }
 
   function elapsed(UUID : String) : Object {
-    var job = Job.find(UUID)
+    var job = Job.findJob(UUID)
     if (job?.Progress == 100) cancelPolling()
     return raw(job?.ElapsedTime)
   }
 
   function statusFeed(UUID : String) : Object {
-    var job = Job.find(UUID)
+    var job = Job.findJob(UUID)
     if (job?.Progress == 100) cancelPolling()
     return raw(JobStatusFeedList.renderToString(job?.StatusFeed, UUID))
   }
@@ -156,6 +156,7 @@ class JobController implements IHasRequestContext, IResourceController {
         throw new IllegalStateException("No such job type")
     }
     job.updateFrom(Request.QueryMap.get({job.IntrinsicType.DisplayName}).toMap().mapValues(\ o -> o.first()))
+    job.save()
     job.start()
     Headers['X-IC-Redirect'] = "/jobs/${job.UUId}"
     return show(job.UUId)
@@ -166,7 +167,7 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   override function show(id: String) : Object {
-     return JobDrillDown.renderToString(Job.find(id))
+     return JobDrillDown.renderToString(Job.findJob(id))
   }
 
   override function edit(id: String) : Object {

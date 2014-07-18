@@ -14,8 +14,8 @@ class GenerateJob extends Job {
 
   enum Types {Test, Random}
 
-  construct(data : Map<String, Object>) {
-    super(data)
+  construct(key : String, value : String) {
+    super(key,value)
   }
 
   construct() {
@@ -23,7 +23,7 @@ class GenerateJob extends Job {
   }
 
   property get DataSetCollection() : String {
-    var ds = search('DataSetCollection') as String
+    var ds = getField('DataSetCollection') as String
     if (ds == null) { //If we weren't provided a collection, generate one
       ds = UUID.randomUUID().toString()
       DataSetCollection = ds
@@ -32,15 +32,15 @@ class GenerateJob extends Job {
   }
 
   property set DataSetCollection(collection : String) {
-    update({'DataSetCollection' -> collection})
+    upsert('DataSetCollection', collection)
   }
 
   property get JobType() : Types {
-    return Types.valueOf(search('JobType') as String)
+    return Types.valueOf(getField('JobType') as String)
   }
 
   property set JobType(type : Types) {
-    update({'JobType' -> type.toString()})
+    upsert('JobType', type.toString())
   }
 
   override function executeJob() {
@@ -55,10 +55,12 @@ class GenerateJob extends Job {
     checkCancellation()
     var companies : List<Map<String,Object>> = {}
     this.StatusFeed = "Parsed company information"
+    save()
     for (company in data index i) {
       if (i % 20 == 0) {
         this.Progress = (i * 100) / (data.Count)
         checkCancellation()
+        save()
       }
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
