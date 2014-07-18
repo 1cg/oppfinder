@@ -9,7 +9,7 @@ uses org.json.simple.JSONObject
 uses java.math.BigDecimal
 uses org.json.simple.JSONArray
 uses util.AssetLibrarian
-uses java.util.Map
+uses model.Company
 
 class GenerateRandom {
   /*
@@ -17,7 +17,7 @@ class GenerateRandom {
    * Number of companies is dependent on the length of Companies.txt
    * output : The file path to write and place the JSON file.
    */
-  function generateRandom() : List<Map<Object,Object>>{
+  static function generateRandom(collection : String) : List<Company>{
     var columnMap = AssetLibrarian.INSTANCE.COLUMNMAP
     var rand = new Random()
     var dataMap = new HashMap<String, List>()
@@ -34,9 +34,9 @@ class GenerateRandom {
       dataMap.put(column, data)
     }
 
-    var bigArray : List<Map<Object,Object>> = {}
+    var bigArray : List<Company> = {}
     for (name in dataMap.get("Company") index i) {
-      var company : Map<Object,Object> = {}
+      var company = new Company(collection)
       company.put("Company", dataMap.get("Company").get(i % dataMap.get("Company").size()) as String)
       company.put("Contact Name", dataMap.get("Contact Name").get(i % dataMap.get("Contact Name").size()) as String)
       company.put("Email", dataMap.get("Email").get(i % dataMap.get("Email").size()) as String)

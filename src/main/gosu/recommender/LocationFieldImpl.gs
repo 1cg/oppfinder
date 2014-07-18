@@ -4,7 +4,7 @@ uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity
 uses util.MahoutUtil
-uses model.MongoCollection
+uses model.database.MongoCollection
 uses model.DataSet
 uses com.google.code.geocoder.Geocoder
 uses java.lang.Long

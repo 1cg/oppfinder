@@ -1,6 +1,5 @@
 package jobs
 
-uses java.util.Map
 uses java.lang.System
 uses salesforce.SalesforceRESTClient
 uses java.util.Calendar
@@ -9,7 +8,7 @@ uses java.lang.Thread
 uses model.Results
 uses java.lang.Math
 uses java.util.Arrays
-uses model.MongoCollection
+uses model.database.MongoCollection
 uses java.lang.Exception
 uses salesforce.SObject
 
@@ -19,22 +18,22 @@ class SalesforceAuthJob extends Job {
   static final var SF_CLIENT_ID     = System.Env["SF_CLIENT_ID"]?.toString()
   static final var SF_CLIENT_SECRET = System.Env["SF_CLIENT_SECRET"]?.toString()
 
-  construct(data : Map<Object, Object>) {
-    super(data)
+  construct(key : String, value : Object) {
+    super(key,value)
   }
 
   construct(authCode : String, selectCompanies : String[]) {
     super()
-    update({'AuthCode' -> authCode})
-    update({'SelectCompanies' -> selectCompanies})
+    put('AuthCode', authCode)
+    put('SelectCompanies', selectCompanies)
   }
 
   property get ResultCollection() : String {
-    return search('ResultCollection') as String
+    return get('ResultCollection') as String
   }
 
   property set ResultCollection(collection : String) {
-    update({'ResultCollection' -> collection})
+    put('ResultCollection', collection)
   }
 
   override function executeJob() {
@@ -53,7 +52,7 @@ class SalesforceAuthJob extends Job {
 
     var recommendations = Results.getResults(ResultCollection)
     var date = Date
-    var s = search('SelectCompanies') as String
+    var s = get('SelectCompanies') as String
     var selectCompanies = null as List
     if (s != null && s != "") {
       s = s.replace("\"", "").replace(" ","")
@@ -77,7 +76,6 @@ class SalesforceAuthJob extends Job {
       opp.set("Description", "It is recommended that this company take on the "+recommendation['Policy']+" policy.")
 
       var result = salesforce.insert(opp)
-
       if (!(result["success"] as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }
@@ -89,7 +87,7 @@ class SalesforceAuthJob extends Job {
 
   private function authorize() : SalesforceRESTClient {
     var salesforce = new SalesforceRESTClient(SF_CLIENT_ID, SF_CLIENT_SECRET)
-    var authResponse = salesforce.authenticate(search('AuthCode') as String, SF_REDIRECT_URI)
+    var authResponse = salesforce.authenticate(get('AuthCode') as String, SF_REDIRECT_URI)
     if (authResponse["error"] as String == null) { // Authorized without error
       (new MongoCollection("SalesforceRefreshToken")).insert({"RefreshToken" -> authResponse["refresh_token"] as String})
       this.StatusFeed = "Connected!"

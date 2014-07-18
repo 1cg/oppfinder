@@ -3,15 +3,17 @@ package model
 uses java.util.HashMap
 uses java.util.Map
 uses util.iterable.SkipIterable
-uses java.text.SimpleDateFormat
 uses util.TimeUtil
+uses util.iterable.TransformIterable
+uses com.mongodb.BasicDBObject
+uses model.database.MongoCollection
 
 class DataSet {
 
   public static var REGION_COORDINATES : String = "regionCoordinates"
   public static var MASTER_DATA_SET : String = "masterDataSet" // MongoCollection of DataSets to refer to
   var myDataSet : MongoCollection
-  var info : Map<Object, Object>
+  var info : Map<String, Object>
   var collection : String
 
   construct(_collection : String) {
@@ -23,12 +25,14 @@ class DataSet {
     info = new HashMap<String, Object>()
   }
 
-  static function all(_collection : String = "defaultDataSet") : SkipIterable<Map> {
-    return new MongoCollection (_collection).find()
+  //TODO --FIX THIS
+  static function all(_collection : String = "defaultDataSet") : SkipIterable<Map<String,Object>> {
+    return new TransformIterable<Map<String,Object>>(new MongoCollection (_collection).find().Cursor, \o -> (o as BasicDBObject))
   }
 
+  //TODO --FIX THIS
   static property get allDataSets() : SkipIterable<Map<Object,Object>> {
-    return new MongoCollection(MASTER_DATA_SET).find()
+    return new TransformIterable<Map<String,Object>>(new MongoCollection(MASTER_DATA_SET).find().Cursor, \o -> (o as BasicDBObject))
   }
 
   static property get AllDataSets() : List<String> {
@@ -59,7 +63,7 @@ class DataSet {
   }
 
   // put and get are for the child classes to update info
-  protected function put (s : Object, o : Object) {
+  protected function put (s : String, o : Object) {
     info.put(s, o)
   }
 

@@ -4,7 +4,7 @@ uses com.google.code.geocoder.GeocoderRequestBuilder
 uses com.google.code.geocoder.Geocoder
 uses java.lang.Thread
 uses model.DataSet
-uses model.MongoCollection
+uses model.database.MongoCollection
 uses java.util.Map
 uses util.AssetLibrarian
 

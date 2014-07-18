@@ -1,6 +1,5 @@
 package util
 
-uses model.MongoCollection
 uses org.apache.mahout.cf.taste.impl.common.FastByIDMap
 uses org.apache.mahout.cf.taste.model.PreferenceArray
 uses org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray
@@ -9,10 +8,11 @@ uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.impl.model.GenericDataModel
 uses java.util.Map
 uses java.lang.Integer
-uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
 uses java.util.concurrent.locks.ReentrantLock
+uses model.database.MongoCollection
+uses org.json.simple.JSONArray
 
 class MahoutUtil {
 
@@ -21,7 +21,7 @@ class MahoutUtil {
   static var MODEL_MAP : Map<String, DataModel> = {}
   static var MODEL_COUNT : Map<String, Integer> = {}
 
-  static function toDataModel(ds : MongoCollection, field : String, t1(f : String) : float, t2(f : String) : float) : DataModel {
+  static function toDataModel(ds : MongoCollection, field : String, t1 : block(f : String) : float, t2 : block(f : String) : float = null) : DataModel {
     var lookup = ds.Name + field
     using(_LOCK) {
       if (MODEL_MAP[lookup] != null) {
@@ -32,10 +32,9 @@ class MahoutUtil {
       var idMap = new FastByIDMap<PreferenceArray>()
       for (companyData in companies) {
         var companyPolicies = JSONValue.parse(companyData['Policies'] as String) as JSONArray
-        var preferences = new GenericUserPreferenceArray(companyPolicies.size() * 2)
+        var preferences = new GenericUserPreferenceArray(companyPolicies.size() * (t2 == null ? 1 : 2))
         var id = (companyData['longID'] as String).toLong()
         for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
-          var data = companyData[field]
           preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData[field] as String)))
           if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
         }
