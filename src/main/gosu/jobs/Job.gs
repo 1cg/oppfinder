@@ -10,9 +10,9 @@ uses java.lang.Thread
 uses java.lang.Exception
 uses util.CancellationException
 uses util.RedisConfigUtil
-uses model.Document
+uses model.database.Document
 uses util.iterable.SkipIterable
-uses model.MongoCollection
+uses model.database.MongoCollection
 
 abstract class Job extends Document implements Runnable {
 
@@ -20,14 +20,15 @@ abstract class Job extends Document implements Runnable {
   protected static final var MAX_PROGRESS_VALUE : int = 100
 
   construct() {
+    super(COLLECTION)
     UUId = UUID.randomUUID().toString()
     Progress = 0
     Type = IntrinsicType.Name
     save()
   }
 
-  construct(key : String, value : String) {
-    super(key,value)
+  construct(key : String, value : Object) {
+    super(COLLECTION, key, value)
   }
 
   override final function run() {
@@ -47,7 +48,7 @@ abstract class Job extends Document implements Runnable {
   }
 
   function handleErrorState(e : Exception) {
-    upsert('Exception', e.StackTraceAsString)
+    put('Exception', e.StackTraceAsString)
     Status = 'Failed'
     EndTime = System.currentTimeMillis()
     save()
@@ -57,7 +58,7 @@ abstract class Job extends Document implements Runnable {
   abstract function executeJob()
 
   final function start() : jobs.Job {
-    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,{'UUId' -> UUId}))
+    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,new Object[]{'UUId',UUId}))
     return this
   }
 
@@ -70,7 +71,7 @@ abstract class Job extends Document implements Runnable {
   abstract function doReset()
 
   final function reset() {
-    upsert('StatusFeed', null)
+    put('StatusFeed', null)
     Status = 'Active'
     Progress = 0
     doReset()
@@ -80,11 +81,11 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get Type() : String {
-    return getField('Type') as String
+    return get('Type') as String
   }
 
   property set Type(type : String) {
-   upsert('Type', type)
+   put('Type', type)
   }
 
   property get Failed() : boolean {
@@ -92,55 +93,55 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get StartTime() : Long {
-    return getField('StartTime') as Long
+    return get('StartTime') as Long
   }
 
   property set StartTime(time : Long) {
-    upsert('StartTime', time)
+    put('StartTime', time)
   }
 
   property get EndTime() : Long {
-    return getField('EndTime') as Long
+    return get('EndTime') as Long
   }
 
   property set EndTime(time : Long) {
-    upsert('EndTime', time)
+    put('EndTime', time)
   }
 
   property get UUId() : String {
-    return getField('UUId') as String
+    return get('UUId') as String
   }
 
   property set UUId(newUUId : String) {
-    upsert('UUId', newUUId)
+    put('UUId', newUUId)
   }
 
   property get Progress() : int {
-    return getField('Progress') as Integer ?: 0
+    return get('Progress') as Integer ?: 0
   }
 
   property set Progress(progress : int) {
     if (progress == MAX_PROGRESS_VALUE) {
       this.Status = 'Complete'
     }
-    upsert('Progress', progress)
+    put('Progress', progress)
     checkBounds(progress)
   }
 
   property get StatusFeed() : String {
-    return getField('StatusFeed') as String ?: ""
+    return get('StatusFeed') as String ?: ""
   }
 
   property set StatusFeed(feedUpdate : String) {
-    upsert('StatusFeed', this.StatusFeed+feedUpdate+"\n")
+    put('StatusFeed', this.StatusFeed+feedUpdate+"\n")
   }
 
   property set FieldName(field: String) {
-    upsert('Field', field)
+    put('Field', field)
   }
 
   property get FieldName() : String {
-    return getField('Field') as String
+    return get('Field') as String
   }
 
   function cancel() {
@@ -166,9 +167,9 @@ abstract class Job extends Document implements Runnable {
   property set Cancelled(status : boolean) {
     EndTime = System.currentTimeMillis()
     if (status) {
-      upsert('Status', 'Cancelled')
+      put('Status', 'Cancelled')
     } else {
-      upsert('Status', 'Reset')
+      put('Status', 'Reset')
     }
   }
 
@@ -181,11 +182,11 @@ abstract class Job extends Document implements Runnable {
   }
 
   property get Status() : String {
-    return getField('Status') as String
+    return get('Status') as String
   }
 
   property set Status(status : String) {
-    upsert('Status', status)
+    put('Status', status)
   }
 
   property get ElapsedTime() : String {
@@ -223,7 +224,7 @@ abstract class Job extends Document implements Runnable {
   }
 
   function displayState(state : String) {
-    upsert('State', state)
+    put('State', state)
   }
 
   static property get ActiveJobs() : SkipIterable<jobs.Job> {

@@ -1,7 +1,7 @@
 package jobs
 
 uses java.util.Map
-uses model.MongoCollection
+uses model.database.MongoCollection
 uses java.lang.Class
 uses recommender.Field
 uses java.lang.Float
@@ -14,7 +14,7 @@ class RecommendSubJob extends Job {
   var maxRecommendation : Float
   var minRecommendation : Float
 
-  construct(key : String, value : String) {
+  construct(key : String, value : Object) {
     super(key,value)
   }
 
@@ -31,27 +31,27 @@ class RecommendSubJob extends Job {
   }
 
   property get Start() : long {
-    return getField('Start') as Long
+    return get('Start') as Long
   }
 
   property set Start(start : long) {
-    upsert('Start', start)
+    put('Start', start)
   }
 
   property get Number() : long {
-    return getField('Number') as Long
+    return get('Number') as Long
   }
 
   property set Number(start : long) {
-    upsert('Number', start)
+    put('Number', start)
   }
 
   property get Collection() : String {
-    return getField('DataSetCollection') as String
+    return get('DataSetCollection') as String
   }
 
   property set Collection(collection : String) {
-    upsert('DataSetCollection', collection)
+    put('DataSetCollection', collection)
   }
 
   override function executeJob() {
@@ -97,7 +97,7 @@ class RecommendSubJob extends Job {
   override function doReset() {}
 
   override property set Status(status : String) {
-    upsert('Status', 'Subjob')
+    put('Status', 'Subjob')
   }
 
   override function renderToString() : String {

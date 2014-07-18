@@ -1,8 +1,13 @@
-package model
+package model.database
 
-uses com.mongodb.*
 uses java.util.Map
 uses util.iterable.TransformIterable
+uses com.mongodb.WriteConcern
+uses com.mongodb.BasicDBObject
+uses com.mongodb.DBCollection
+uses com.mongodb.QueryBuilder
+uses com.mongodb.DBObject
+uses com.mongodb.WriteResult
 
 class MongoCollection {
 
@@ -13,16 +18,16 @@ class MongoCollection {
   }
 
  /* Automatically sorts from oldest to newest */
-  function find(ref : Map<String, Object>) : TransformIterable<DBObject> {
-     return new TransformIterable<DBObject>(
+  function find(ref : Map<String, Object>) : TransformIterable<BasicDBObject> {
+     return new TransformIterable<BasicDBObject>(
          _collection.find(new BasicDBObject(ref))
                             .sort(new BasicDBObject({'_id' -> -1})),
                              \ o  -> o as BasicDBObject)
   }
 
   /* Automatically sorts from oldest to newest */
-  function find(ref : Map<String, Object>, keys : Map<String, Object>) : TransformIterable<DBObject> {
-    return new TransformIterable<DBObject>(
+  function find(ref : Map<String, Object>, keys : Map<String, Object>) : TransformIterable<BasicDBObject> {
+    return new TransformIterable<BasicDBObject>(
         _collection.find(new BasicDBObject(ref), new BasicDBObject(keys))
                           .sort(new BasicDBObject({'_id' -> -1})),
                           \ o -> o as BasicDBObject)
@@ -30,8 +35,8 @@ class MongoCollection {
   }
 
   /* Automatically sorts from oldest to newest */
-  function find() : TransformIterable<DBObject> {
-    return new TransformIterable<DBObject>(
+  function find() : TransformIterable<BasicDBObject> {
+    return new TransformIterable<BasicDBObject>(
         _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
@@ -39,7 +44,7 @@ class MongoCollection {
     return _collection.Name
   }
 
-  function queryOr(values : List<String>, key : String) : TransformIterable<DBObject> {
+  function queryOr(values : List<String>, key : String) : TransformIterable<BasicDBObject> {
     var document = new BasicDBObject()
     var qb = new QueryBuilder()
     var list : List<DBObject> = {}
@@ -50,26 +55,26 @@ class MongoCollection {
     }
     qb.or(list.toTypedArray())
     document.putAll(qb.get())
-    return new TransformIterable<DBObject>(
+    return new TransformIterable<BasicDBObject>(
         _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
-  function queryNot(key : String, value : String) : TransformIterable<DBObject> {
+  function queryNot(key : String, value : String) : TransformIterable<BasicDBObject> {
     var document = new BasicDBObject()
     var qb = new QueryBuilder()
     qb.put(key).notEquals(value)
     document.putAll(qb.get())
-    return new TransformIterable<DBObject>(
+    return new TransformIterable<BasicDBObject>(
         _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
 
-  function findOne(ref : DBObject) : DBObject {
-    return _collection.findOne(ref)
+  function findOne(ref : DBObject) : BasicDBObject {
+    return _collection.findOne(ref) as BasicDBObject
   }
 
-  function findOne() : DBObject {
-    return _collection.findOne()
+  function findOne() : BasicDBObject {
+    return _collection.findOne() as BasicDBObject
   }
 
   function insert(o : DBObject) : WriteResult {

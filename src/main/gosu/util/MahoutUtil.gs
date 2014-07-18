@@ -1,6 +1,5 @@
 package util
 
-uses model.MongoCollection
 uses org.apache.mahout.cf.taste.impl.common.FastByIDMap
 uses org.apache.mahout.cf.taste.model.PreferenceArray
 uses org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray
@@ -9,10 +8,11 @@ uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.impl.model.GenericDataModel
 uses java.util.Map
 uses java.lang.Integer
-uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
 uses java.util.concurrent.locks.ReentrantLock
+uses model.database.MongoCollection
+uses org.json.simple.JSONArray
 
 class MahoutUtil {
 

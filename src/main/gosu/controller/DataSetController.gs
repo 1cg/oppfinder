@@ -2,7 +2,7 @@ package controller
 
 uses sparkgs.util.IHasRequestContext
 uses sparkgs.IResourceController
-uses view.companies.Companies
+uses view.datasets.Drilldown
 uses view.datasets.DataSetTable
 uses model.DataSet
 uses view.datasets.GenerateUploadPage
@@ -15,7 +15,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
   }
   override function show(id: String)  : Object {
     var did = URLDecoder.decode(id, "UTF-8")
-    return Companies.renderToString(did, DataSet.find(did).paginate(Params['page']))
+    return Drilldown.renderToString(did, DataSet.find(did).paginate(Params['page']))
   }
 
   override function create()  : Object {

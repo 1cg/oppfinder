@@ -3,11 +3,11 @@ package recommender
 uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses util.MahoutUtil
-uses model.MongoCollection
 uses java.util.Map
 uses java.lang.Integer
 uses util.AssetLibrarian
 uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
+uses model.database.MongoCollection
 
 class ReachFieldImpl extends AbstractField {
 

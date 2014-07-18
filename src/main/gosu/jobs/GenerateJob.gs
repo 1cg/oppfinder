@@ -1,20 +1,16 @@
 package jobs
 
-uses java.util.Map
-uses java.io.FileReader
-uses java.io.BufferedReader
-uses model.MongoCollection
 uses model.DataSet
-uses util.AssetLibrarian
 uses java.util.UUID
 uses datagen.GenerateTest
 uses datagen.GenerateRandom
+uses model.Company
 
 class GenerateJob extends Job {
 
   enum Types {Test, Random}
 
-  construct(key : String, value : String) {
+  construct(key : String, value : Object) {
     super(key,value)
   }
 
@@ -23,7 +19,7 @@ class GenerateJob extends Job {
   }
 
   property get DataSetCollection() : String {
-    var ds = getField('DataSetCollection') as String
+    var ds = get('DataSetCollection') as String
     if (ds == null) { //If we weren't provided a collection, generate one
       ds = UUID.randomUUID().toString()
       DataSetCollection = ds
@@ -32,28 +28,28 @@ class GenerateJob extends Job {
   }
 
   property set DataSetCollection(collection : String) {
-    upsert('DataSetCollection', collection)
+    put('DataSetCollection', collection)
   }
 
   property get JobType() : Types {
-    return Types.valueOf(getField('JobType') as String)
+    return Types.valueOf(get('JobType') as String)
   }
 
   property set JobType(type : Types) {
-    upsert('JobType', type.toString())
+    put('JobType', type.toString())
   }
 
   override function executeJob() {
-    var data : List<Map<String,Object>> = {}
+    var data : List<Company> = {}
     if (JobType.Value == Types.Test) {
-      data = new GenerateTest().generateTest('Reach', 2)
+      data = GenerateTest.generateTest(DataSetCollection,'Reach', 2)
     } else {
-      data = new GenerateRandom().generateRandom()
+      data = GenerateRandom.generateRandom(DataSetCollection)
     }
     checkCancellation()
     this.StatusFeed = "Dropping previous dataset"
     checkCancellation()
-    var companies : List<Map<String,Object>> = {}
+    var companies : List<Company> = {}
     this.StatusFeed = "Parsed company information"
     save()
     for (company in data index i) {
@@ -65,17 +61,12 @@ class GenerateJob extends Job {
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
-      companies.add(company)
+      company.save()
     }
     checkCancellation()
-    var collection = DataSetCollection
-    var dataSet = new MongoCollection(collection)
-    dataSet.drop()
-    dataSet.insert(companies)
-    new DataSet(collection)
+    new DataSet(DataSetCollection) //TODO -- remove this magic shit
     this.StatusFeed = "Company information inserted"
-    this.StatusFeed = 'View data set <a href="/datasets/${collection}">here</a>'
-    //writeLatLng()
+    this.StatusFeed = 'View data set <a href="/datasets/${DataSetCollection}">here</a>'
     this.StatusFeed = "Done"
   }
 
@@ -83,24 +74,6 @@ class GenerateJob extends Job {
 
   override function renderToString() : String {
     return ""
-  }
-
-  // We stored the cities and coordinates in a file to work around the Google Geocoder request limit.
-  function writeLatLng() {
-    var coordInput = new FileReader(AssetLibrarian.INSTANCE.LATLNG)
-    var bufRead = new BufferedReader(coordInput)
-    var myLine = bufRead.readLine()
-    var dataStore = new MongoCollection (DataSet.REGION_COORDINATES)
-    dataStore.drop()
-    var locationMap : Map<String, String> = {}
-    while (myLine != null) {
-      var split = myLine.split(":")
-      var city = split[0]
-      var coords = split[1].substring(1)
-      locationMap[city] = coords
-      myLine = bufRead.readLine()
-    }
-    dataStore.insert(locationMap)
   }
 
 }

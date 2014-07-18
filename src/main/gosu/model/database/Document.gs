@@ -1,17 +1,17 @@
-package model
+package model.database
 
-uses com.mongodb.BasicDBObject
 uses java.util.Map
-uses java.util.Set
-uses com.mongodb.DBObject
-uses util.inflector.Inflector
-uses java.lang.Class
 uses util.iterable.SkipIterable
 uses util.iterable.TransformIterable
+uses java.lang.Class
+uses java.util.Set
+uses com.mongodb.BasicDBObject
+uses com.mongodb.DBObject
+uses util.inflector.Inflector
 
 abstract class Document {
 
-  var _obj : DBObject
+  var _obj : BasicDBObject
   var _id : Object //Unique ID. This would be the primary key in a SQL database or a unique document ID in MongoDB
   var _collection : MongoCollection
   var inserted : boolean as readonly Persisted
@@ -19,7 +19,7 @@ abstract class Document {
   //If no name is supplied, the name of the data source is assumed to be the plural of the name of the class
   construct() {
     _obj = new BasicDBObject()
-    _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.GenericType.Name).toLowerCase())
+    _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
     inserted = false
   }
 
@@ -30,36 +30,40 @@ abstract class Document {
   }
 
   //If no name is supplied, the name of the data source is assumed to be the plural of the name of the class
-  construct(key : String, value : String) {
-    _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.GenericType.Name).toLowerCase())
+  construct(key : String, value : Object) {
+    _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
     reload(key, value)
     _id = _obj['_id']
     inserted = true
   }
 
-  construct(collection : String, key : String, value : String) {
+  construct(collection : String, key : String, value : Object) {
     _collection = new MongoCollection(collection)
     reload(key, value)
     _id = _obj['_id']
     inserted = true
   }
 
-  function upsert(key : String, value : Object) {
+  final function put(key: String, value: Object) {
     _obj.put(key, value)
   }
 
-  function upsertAndSave(key : String, value : Object) {
+  final function putAndSave(key: String, value: Object) {
     _obj.put(key, value)
     save()
   }
 
-  function upsertAll(upserts : Map<String, Object>) {
+  final function putAll(upserts: Map<String, Object>) {
     _obj.putAll(upserts)
   }
 
-  function upsertAllAndSave(upserts : Map<String, Object>) {
+  final function putAllAndSave(upserts: Map<String, Object>) {
     _obj.putAll(upserts)
     save()
+  }
+
+  final function get(value: String) : Object {
+    return _obj[value]
   }
 
   function delete() {
@@ -74,21 +78,18 @@ abstract class Document {
     increment(field, by*-1)
   }
 
-  function save() {
+  final function save() {
     if (inserted) {
       _collection.update(query(), _obj)
     } else {
       _obj['intrinsic_type'] = this.IntrinsicType.Name
       _id = _collection.insert(_obj).UpsertedId
+      inserted = true
     }
   }
 
-  function reload(key = '_id', value = null) {
+  final function reload(key = '_id', value = null) {
     _obj = _collection.findOne(new BasicDBObject(key, value ?: _id))
-  }
-
-  function getField(value : String) : Object {
-    return _obj[value]
   }
 
   static function find(key : String, value : Object, collection : String) : Document {
@@ -111,11 +112,12 @@ abstract class Document {
     return instantiateMany(_collection.find(new BasicDBObject(criteria)))
   }
 
-  protected static function instantiateMany(documents : TransformIterable<DBObject>) : SkipIterable<Document> {
-    return new TransformIterable<Document>(documents.Cursor,\ d -> instantiate(d as DBObject))
+  protected static function instantiateMany(documents : TransformIterable<BasicDBObject>) : SkipIterable<Document> {
+    return new TransformIterable<Document>(documents.Cursor,\ d -> instantiate(d as BasicDBObject))
   }
 
-  protected static function instantiate(d : DBObject) : Document {
+  protected static function instantiate(d : BasicDBObject) : Document {
+    if (d == null) return null
     return Class.forName(d['intrinsic_type'] as String)
     .getConstructor({String.Type, Object.Type})
         .newInstance({'_id', d['_id']}) as Document

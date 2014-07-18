@@ -2,7 +2,7 @@ package jobs
 
 uses java.util.Map
 uses java.lang.Thread
-uses model.MongoCollection
+uses model.database.MongoCollection
 uses java.lang.Float
 uses util.MahoutUtil
 uses java.util.Arrays
@@ -18,7 +18,7 @@ class RecommendJob extends Job {
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
-  construct(key : String, value : String) {
+  construct(key : String, value : Object) {
     super(key,value)
   }
 
@@ -27,11 +27,11 @@ class RecommendJob extends Job {
   }
 
   property get DataSetCollection() : String {
-    return getField('DataSetCollection') as String
+    return get('DataSetCollection') as String
   }
 
   property set DataSetCollection(collection : String) {
-    upsert('DataSetCollection', collection)
+    put('DataSetCollection', collection)
   }
 
   override function executeJob() {
@@ -45,7 +45,7 @@ class RecommendJob extends Job {
     var recommendations : Map<String, Float>  = {}
     for (jobID in subJobsID) {
       var ds = new MongoCollection(jobID)
-      for (companyRecommendations in ds?.find().map(\ o -> (o as Map<String, Object>)) index i) {
+      for (companyRecommendations in ds?.find() index i) {
         if (i % 200 == 0) checkCancellation()
         companyRecommendations.remove('_id')
         var entry = companyRecommendations.entrySet().first()
@@ -79,7 +79,7 @@ class RecommendJob extends Job {
         checkCancellation()
       }
     }
-    upsert('SubJobs', subJobsID.toString())
+    put('SubJobs', subJobsID.toString())
     save()
   }
 
@@ -152,7 +152,7 @@ class RecommendJob extends Job {
   }
 
   property get SubJobs() : SkipIterable<jobs.Job> {
-    var stringArray = getField('SubJobs') as String
+    var stringArray = get('SubJobs') as String
     if (stringArray != null) {
       var array = Arrays.asList(stringArray?.substring(1, stringArray.length() - 1)?.split(", "))
       return Job.findByIDs(array)
@@ -165,7 +165,7 @@ class RecommendJob extends Job {
     for (job in SubJobs) {
       job?.delete()
     }
-    upsert('SubJobs', null)
+    put('SubJobs', null)
     save()
   }
 

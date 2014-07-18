@@ -8,6 +8,7 @@ uses util.iterable.SkipIterable
 uses util.TimeUtil
 uses com.mongodb.BasicDBObject
 uses util.iterable.TransformIterable
+uses model.database.MongoCollection
 
 class Results {
 

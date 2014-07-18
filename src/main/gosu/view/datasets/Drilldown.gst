@@ -18,7 +18,7 @@
         <tr>
           <% for (type in model.Company.CompanyDataTypes) { %>
             <td> <% if (type == 'Policies') {
-              for (policy in model.Company.PolicyBreakdown(entry[type] as String)){ %>
+      for (policy in model.Company.PolicyBreakdown(entry[type] as String)){ %>
                ${policy}<br>
               <% }} else { %>
                ${entry[type]} <% } %>

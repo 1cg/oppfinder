@@ -6,6 +6,7 @@ uses util.iterable.SkipIterable
 uses util.TimeUtil
 uses util.iterable.TransformIterable
 uses com.mongodb.BasicDBObject
+uses model.database.MongoCollection
 
 class DataSet {
 
