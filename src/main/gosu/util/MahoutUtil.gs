@@ -11,8 +11,8 @@ uses java.lang.Integer
 uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
 uses java.util.concurrent.locks.ReentrantLock
-uses model.database.MongoCollection
 uses org.json.simple.JSONArray
+uses model.DataSetInfo
 
 class MahoutUtil {
 
@@ -21,22 +21,23 @@ class MahoutUtil {
   static var MODEL_MAP : Map<String, DataModel> = {}
   static var MODEL_COUNT : Map<String, Integer> = {}
 
-  static function toDataModel(ds : MongoCollection, field : String, t1 : block(f : String) : float, t2 : block(f : String) : float = null) : DataModel {
-    var lookup = ds.Name + field
+  static function toDataModel(collection : String, field : String, t1 : block(f : String) : float, t2 : block(f : String) : float = null) : DataModel {
+    var lookup = collection + field
     using(_LOCK) {
       if (MODEL_MAP[lookup] != null) {
         MODEL_COUNT[lookup] = MODEL_COUNT[lookup] + 1
         return MODEL_MAP[lookup]
       }
-      var companies = ds.find({}, {field -> 1, 'Policies' -> 1, 'longID' -> 1}) //Find the field and policies for each company
+      var companies = DataSetInfo.find(collection)
+      print(companies.Count)
       var idMap = new FastByIDMap<PreferenceArray>()
       for (companyData in companies) {
-        var companyPolicies = JSONValue.parse(companyData['Policies'] as String) as JSONArray
+        var companyPolicies = JSONValue.parse(companyData.get('Policies') as String) as JSONArray
         var preferences = new GenericUserPreferenceArray(companyPolicies.size() * (t2 == null ? 1 : 2))
-        var id = (companyData['longID'] as String).toLong()
+        var id = (companyData.get('longID') as String).toLong()
         for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
-          preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData[field] as String)))
-          if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(companyData[field] as String)))
+          preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData.get(field) as String)))
+          if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(companyData.get(field) as String)))
         }
         idMap.put(id, preferences)
       }

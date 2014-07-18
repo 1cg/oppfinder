@@ -1,10 +1,11 @@
 package jobs
 
-uses model.DataSet
+uses model.DataSetInfo
 uses java.util.UUID
 uses datagen.GenerateTest
 uses datagen.GenerateRandom
 uses model.Company
+uses model.database.Document
 
 class GenerateJob extends Job {
 
@@ -42,9 +43,9 @@ class GenerateJob extends Job {
   override function executeJob() {
     var data : List<Company> = {}
     if (JobType.Value == Types.Test) {
-      data = GenerateTest.generateTest(DataSetCollection,'Reach', 2)
+      data = GenerateTest.generateTest('Reach', 2)
     } else {
-      data = GenerateRandom.generateRandom(DataSetCollection)
+      data = GenerateRandom.generateRandom()
     }
     checkCancellation()
     this.StatusFeed = "Dropping previous dataset"
@@ -61,10 +62,11 @@ class GenerateJob extends Job {
       var uuid = UUID.randomUUID()
       company.put('UUId', uuid.toString())
       company.put('longID', uuid.LeastSignificantBits)
+      company.DataSet = DataSetCollection
       company.save()
     }
     checkCancellation()
-    new DataSet(DataSetCollection) //TODO -- remove this magic shit
+    DataSetInfo.register(DataSetCollection, Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count)
     this.StatusFeed = "Company information inserted"
     this.StatusFeed = 'View data set <a href="/datasets/${DataSetCollection}">here</a>'
     this.StatusFeed = "Done"

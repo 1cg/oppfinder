@@ -6,8 +6,23 @@ uses model.database.Document
 
 class Company extends Document {
 
-  construct(collection : String) {
-    super(collection)
+  static var id : String as ForeignName = 'data_set_id'
+  static var collection : String as Collection = 'companies'
+
+  construct() {
+    super()
+  }
+
+  construct(key : String, value : Object) {
+    super(key, value)
+  }
+
+  property get DataSet() : String {
+    return get(id) as String
+  }
+
+  property set DataSet(foreign : String) {
+    put(id, foreign)
   }
 
   static property get CompanyDataTypes() : List<String> {

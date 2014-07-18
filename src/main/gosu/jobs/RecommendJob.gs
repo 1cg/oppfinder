@@ -8,6 +8,9 @@ uses util.MahoutUtil
 uses java.util.Arrays
 uses util.iterable.SkipIterable
 uses model.Results
+uses model.Result
+uses java.util.Collection
+uses model.Result.ResultComparator
 
 class RecommendJob extends Job {
 
@@ -42,25 +45,22 @@ class RecommendJob extends Job {
     poll() //Blocks until sub-tasks are complete
     StatusFeed = "Sub Jobs Complete"
     save()
-    var recommendations : Map<String, Float>  = {}
+    var recommendations : Map<String, Result>  = {}
     for (jobID in subJobsID) {
-      var ds = new MongoCollection(jobID)
-      for (companyRecommendations in ds?.find() index i) {
+      for (result in Result.find(jobID) index i) {
         if (i % 200 == 0) checkCancellation()
-        companyRecommendations.remove('_id')
-        var entry = companyRecommendations.entrySet().first()
-        if (recommendations.containsKey(entry.Key)) {
-          var value = recommendations.get(entry.Key)
-          recommendations.put(entry.Key, (value + (entry.Value as Float)) / 2)
+        if (recommendations.containsKey(result.Key)) {
+          result.Value = (recommendations.get(result.Key).Value + result.Value) / 2
+          recommendations.put(result.Key, result)
         } else {
-          recommendations.put(entry.Key,entry.Value as Float)
+          recommendations.put(result.Key,result)
         }
+        result.delete()
       }
-      ds.drop() //Get rid of the temp data
     }
     StatusFeed = "Recommendations Calculated"
     save()
-    storeTopRecommendations(recommendations, dataSet)
+    storeTopRecommendations(recommendations.Values, dataSet)
     this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
     this.StatusFeed = "Done"
     save()
@@ -87,8 +87,8 @@ class RecommendJob extends Job {
   * Takes a set of recommendations and sorts them by the value (in decreasing order).
   * Those recommendations that are the strongest will be stored.
    */
-  function storeTopRecommendations(recommendations : Map<String, Float>, dataSet : String) {
-    var sorted = recommendations.entrySet().stream().sorted(Map.Entry.comparingByValue().reversed())
+  function storeTopRecommendations(recommendations : Collection<Result>, dataSet : String) {
+    var sorted = recommendations.stream().sorted(new ResultComparator())
     checkCancellation()
     //TODO --Make a real Result object
     var finalResults : List<Map<Object, Object>>= {}

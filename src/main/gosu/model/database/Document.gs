@@ -8,6 +8,7 @@ uses java.util.Set
 uses com.mongodb.BasicDBObject
 uses com.mongodb.DBObject
 uses util.inflector.Inflector
+uses java.lang.Integer
 
 abstract class Document {
 
@@ -110,6 +111,25 @@ abstract class Document {
   static function findMany(criteria : Map<String, Object>, collection : String) : SkipIterable<Document> {
     var _collection = new MongoCollection(collection)
     return instantiateMany(_collection.find(new BasicDBObject(criteria)))
+  }
+
+  static function all(collection : String) : SkipIterable<Document> {
+    var _collection = new MongoCollection(collection)
+    return instantiateMany(_collection.find())
+  }
+
+  static function all(collection : String, fields : List<String>) : SkipIterable<Document> {
+    var _collection = new MongoCollection(collection)
+    var map : Map<String, Integer> = {}
+    for (field in fields) {
+      map.put(field, 1)
+    }
+    return instantiateMany(_collection.find({}, map))
+  }
+
+  static function first(collection : String) : Document {
+    var _collection = new MongoCollection(collection)
+    return instantiate(_collection.findOne())
   }
 
   protected static function instantiateMany(documents : TransformIterable<BasicDBObject>) : SkipIterable<Document> {

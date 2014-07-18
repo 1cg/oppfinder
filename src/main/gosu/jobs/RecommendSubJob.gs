@@ -8,6 +8,7 @@ uses java.lang.Float
 uses java.lang.Math
 uses java.lang.Long
 uses org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
+uses model.Result
 
 class RecommendSubJob extends Job {
 
@@ -28,6 +29,7 @@ class RecommendSubJob extends Job {
     this.Start = start
     this.Number = number
     this.Collection = collection
+    save()
   }
 
   property get Start() : long {
@@ -60,17 +62,18 @@ class RecommendSubJob extends Job {
     checkCancellation()
     var c = Class.forName(FieldName)
     var field = c.newInstance() as Field
-    var model = field.getModel(this.Collection)
+    var model = field.getModel(Collection)
     checkCancellation()
     var recommender = new GenericItemBasedRecommender(model, field.getSimilarity(model))
-    var myRecommendations : List<Map<String,Float>> = {} // The recommended items for all users from this particular job
     var userIDs = model.getUserIDs()
-    userIDs.skip(this.Start as int)
+    userIDs.skip(Start as int)
     var number = this.Number
+    var results : List<Result> = {}
     for (i in 0..|number) {
       if (i > 0 && i % 50 == 0) {
         Progress = Math.max(((i* 100)/number) as int, 1) //Reduce write load
         checkCancellation()
+        save()
       }
       if (!userIDs.hasNext()) break
       var user = userIDs.next()
@@ -79,19 +82,24 @@ class RecommendSubJob extends Job {
         maxRecommendation = Math.max(recommendation.Value, maxRecommendation)
         minRecommendation = Math.min(recommendation.Value, minRecommendation)
         //Store the id in the table as well as the recommendation (a policy) and value
-        myRecommendations.add({user.toString()+RecommendJob.DELIMITER+recommendation.ItemID -> recommendation.Value})
+        var result = new Result()
+        result.User = user.toString()
+        result.ItemID = recommendation.ItemID
+        result.Value = recommendation.Value
+        result.ResultSet = UUId
+        results.add(result)
       }
     }
-    myRecommendations = myRecommendations.map(\ m -> m.mapValues(\ v-> normalize(v)))
-    if (myRecommendations.size() > 0) {
-      new MongoCollection (this.UUId).insert(myRecommendations)
+    results = results.map(\ r -> normalize(r))
+    for (r in results) {
+      r.save()
     }
     field.releaseModel()
   }
 
-  function normalize(value : Float) : Float {
-    return (value - minRecommendation) / (maxRecommendation - minRecommendation)
-
+  function normalize(result : Result) : Result {
+    result.Value = (result.Value - minRecommendation) / (maxRecommendation - minRecommendation)
+    return result
   }
 
   override function doReset() {}

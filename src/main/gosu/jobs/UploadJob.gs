@@ -6,6 +6,8 @@ uses model.Company
 uses org.json.simple.JSONObject
 uses java.util.UUID
 uses java.util.Map
+uses model.database.Document
+uses model.DataSetInfo
 
 class UploadJob extends Job {
 
@@ -30,11 +32,14 @@ class UploadJob extends Job {
     checkCancellation()
     var iterations = array.size()
     for (companyObject in array index i) {
-      var company = new Company(DataSetCollection)
-      company.putAllAndSave((companyObject as JSONObject) as Map<String, Object>)
+      var company = new Company()
+      company.putAll((companyObject as JSONObject) as Map<String, Object>)
+      company.DataSet = UUId
+      company.save()
       checkCancellation()
       this.Progress = (i*100)/iterations
     }
+    DataSetInfo.register(DataSetCollection, Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count)
     this.Progress = 100
   }
 
@@ -62,7 +67,7 @@ class UploadJob extends Job {
   override function doReset() {}
 
   override function renderToString() : String {
-    return view.datasets.DataSetTable.renderToString(model.DataSet.allDataSets.paginate("1"))
+    return view.datasets.DataSetTable.renderToString(model.DataSetInfo.All.paginate("1"))
   }
 
 }

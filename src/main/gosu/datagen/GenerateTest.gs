@@ -27,10 +27,10 @@ class GenerateTest {
    * Generates JSON of companies with arbitrary details except for two companies with clear similarities in
    * reach. The Recommendation Job should recommend company RECOMMENDEE to GODZILLA
    */
-  static function generateTest(collection : String, testVar : String, numCompanies : int = 20000) : List<Company> {
+  static function generateTest(testVar : String, numCompanies : int = 20000) : List<Company> {
     var bigArray : List<Company> = {}
     for (1..numCompanies index j) {
-      var company = new Company(collection)
+      var company = new Company()
       if (j == numCompanies-1) {
         company.put("Company", "RECOMMENDEE (test success)")
       } else if (j == numCompanies-2) {

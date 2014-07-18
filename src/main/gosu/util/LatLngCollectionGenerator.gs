@@ -3,7 +3,7 @@ package util
 uses java.io.FileReader
 uses java.io.BufferedReader
 uses java.util.Map
-uses model.DataSet
+uses model.DataSetInfo
 uses model.database.MongoCollection
 
 class LatLngCollectionGenerator {
@@ -13,7 +13,7 @@ class LatLngCollectionGenerator {
     var coordInput = new FileReader(AssetLibrarian.INSTANCE.LATLNG)
     var bufRead = new BufferedReader(coordInput)
     var myLine = bufRead.readLine()
-    var dataStore = new MongoCollection (DataSet.REGION_COORDINATES)
+    var dataStore = new MongoCollection (DataSetInfo.REGION_COORDINATES)
     dataStore.drop()
     var locationMap : Map<String, String> = {}
     while (myLine != null) {

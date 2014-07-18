@@ -3,7 +3,7 @@ uses java.io.BufferedReader
 uses com.google.code.geocoder.GeocoderRequestBuilder
 uses com.google.code.geocoder.Geocoder
 uses java.lang.Thread
-uses model.DataSet
+uses model.DataSetInfo
 uses model.database.MongoCollection
 uses java.util.Map
 uses util.AssetLibrarian
@@ -20,7 +20,7 @@ var bufRead = new BufferedReader(input)
 var myLine = bufRead.readLine()
 var geocoder = new Geocoder()
 
-var dataStore = new MongoCollection (DataSet.REGION_COORDINATES)
+var dataStore = new MongoCollection (DataSetInfo.REGION_COORDINATES)
 dataStore.drop()
 var locationMap : Map<String, String> = {}
 while (myLine != null) {
