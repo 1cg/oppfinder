@@ -25,7 +25,7 @@ class TagHelper {
     if (options == null) return ""
     for (option in options.entrySet()) {
       if ((option.Key as String) == 'data' && option.Value typeis Map<Object,Object>) {
-        for (data in (option.Value as Map<Object,Object>).entrySet()) {
+        for (data in (option.Value).entrySet()) {
           attributes.add(dataTagOptions(data.Key as String, data.Value))
         }
       } else if (BOOLEAN_ATTRIBUTES.contains(option.Key as String)) {
