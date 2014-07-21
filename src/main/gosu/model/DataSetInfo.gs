@@ -2,14 +2,12 @@ package model
 
 uses util.iterable.SkipIterable
 uses util.TimeUtil
-uses model.database.MongoCollection
 uses model.database.Document
 
 class DataSetInfo extends Document {
 
   public static var REGION_COORDINATES : String = "regionCoordinates"
   public static var MASTER_DATA_SET : String = "masterDataSet" // MongoCollection of DataSets to refer to
-  var myDataSet : MongoCollection
 
   construct(key : String, value : Object) {
     super(MASTER_DATA_SET, key, value)

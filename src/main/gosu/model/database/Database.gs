@@ -25,4 +25,5 @@ class Database {
     //Iff not exists, create collection with default params
     return DB.createCollection(collectionName, null)
   }
+
 }

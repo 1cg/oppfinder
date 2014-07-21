@@ -1,14 +1,8 @@
 uses util.inflector.Inflector
-uses model.Result
+uses util.LatLngCollectionGenerator
+uses model.Coordinate
 uses model.database.Document
 
 print(Inflector.pluralize('result'))
-print(Document.all('results').Count)
-var foo = new Result()
-foo.save()
-print(Document.all('results').Count)
-foo.put('foo', 'foo')
-foo.save()
-print(Document.all('results').Count)
-foo.delete()
-print(Document.all('results').Count)
+LatLngCollectionGenerator.writeLatLng()
+print(Document.all(Coordinate.Collection).first().AllFields)

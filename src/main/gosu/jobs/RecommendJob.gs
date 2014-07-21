@@ -92,11 +92,10 @@ class RecommendJob extends Job {
   * Those recommendations that are the strongest will be stored.
    */
   function storeTopRecommendations(recommendations : Collection<Result>, dataSet : String) {
-    var sorted = recommendations.orderByDescending(\ o -> o.Value)
+    var sorted = recommendations.orderByDescending(\ o -> o.Value).subList(0,NUM_RECOMMENDATIONS).reverse()
     checkCancellation()
     var finalResults : List<Result>= {}
-    for (result in sorted index i) {
-      if (i == NUM_RECOMMENDATIONS) break
+    for (result in sorted) {
       result.Value = String.format('%.3g%n',{result.Value}).toFloat()
       result.ResultSet = UUId
       var company = Company.findByID(result.User)
@@ -104,6 +103,7 @@ class RecommendJob extends Job {
       result.put('Policy', MahoutUtil.longToPolicy(result.ItemID))
       result.save()
     }
+    print(Document.all('results').Count)
     ResultInfo.addResults(UUId, dataSet)
   }
 

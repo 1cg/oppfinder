@@ -2,28 +2,21 @@ package util
 
 uses java.io.FileReader
 uses java.io.BufferedReader
-uses java.util.Map
-uses model.DataSetInfo
-uses model.database.MongoCollection
+uses model.Coordinate
 
 class LatLngCollectionGenerator {
 
   // We stored the cities and coordinates in a file to work around the Google Geocoder request limit.
   static function writeLatLng() {
-    var coordInput = new FileReader(AssetLibrarian.INSTANCE.LATLNG)
-    var bufRead = new BufferedReader(coordInput)
-    var myLine = bufRead.readLine()
-    var dataStore = new MongoCollection (DataSetInfo.REGION_COORDINATES)
-    dataStore.drop()
-    var locationMap : Map<String, String> = {}
-    while (myLine != null) {
-      var split = myLine.split(":")
+    var reader = new BufferedReader(new FileReader(AssetLibrarian.INSTANCE.LATLNG))
+    var coordinate = new Coordinate()
+    for (line in reader.lines().iterator()) {
+      var split = line.split(":")
       var city = split[0]
-      var coords = split[1].substring(1)
-      locationMap[city] = coords
-      myLine = bufRead.readLine()
+      var coordinates = split[1].substring(1)
+      coordinate.put(city, coordinates)
     }
-    dataStore.insert(locationMap)
+    coordinate.save()
   }
 
 }

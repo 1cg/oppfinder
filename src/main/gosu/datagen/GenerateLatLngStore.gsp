@@ -3,10 +3,8 @@ uses java.io.BufferedReader
 uses com.google.code.geocoder.GeocoderRequestBuilder
 uses com.google.code.geocoder.Geocoder
 uses java.lang.Thread
-uses model.DataSetInfo
-uses model.database.MongoCollection
-uses java.util.Map
 uses util.AssetLibrarian
+uses model.Coordinate
 
 /*
   This program is meant to be used once so we could work on the rest of the program without having to worry about
@@ -15,20 +13,14 @@ uses util.AssetLibrarian
  */
 
 
-var input = new FileReader(AssetLibrarian.INSTANCE.getPath("Cities.txt"))
-var bufRead = new BufferedReader(input)
-var myLine = bufRead.readLine()
+var reader = new BufferedReader(new FileReader(AssetLibrarian.INSTANCE.getPath("Cities.txt")))
 var geocoder = new Geocoder()
-
-var dataStore = new MongoCollection (DataSetInfo.REGION_COORDINATES)
-dataStore.drop()
-var locationMap : Map<String, String> = {}
-while (myLine != null) {
-  var geocoderRequest = new GeocoderRequestBuilder().setAddress(myLine).setLanguage("en").getGeocoderRequest();
+var coordinate = new Coordinate()
+for (line in reader.lines()) {
+  var geocoderRequest = new GeocoderRequestBuilder().setAddress(line).setLanguage("en").getGeocoderRequest();
   var resultSLoc = geocoder.geocode(geocoderRequest).Results.get(0)
   var result = resultSLoc.Geometry.Location
-  locationMap[resultSLoc.FormattedAddress.replaceAll('\\.','')] = result.Lat.longValue() + ", "+result.Lng.longValue()
-  myLine = bufRead.readLine()
+  coordinate.put(resultSLoc.FormattedAddress.replaceAll('\\.',''),result.Lat.longValue() + ", "+result.Lng.longValue())
   Thread.sleep(150)
 }
-dataStore.insert(locationMap)
+coordinate.save()
