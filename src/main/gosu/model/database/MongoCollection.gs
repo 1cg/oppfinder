@@ -8,6 +8,7 @@ uses com.mongodb.DBCollection
 uses com.mongodb.QueryBuilder
 uses com.mongodb.DBObject
 uses com.mongodb.WriteResult
+uses org.bson.types.ObjectId
 
 class MongoCollection {
 
@@ -77,12 +78,10 @@ class MongoCollection {
     return _collection.findOne() as BasicDBObject
   }
 
-  function insert(o : DBObject) : WriteResult {
-    return _collection.insert(o, WriteConcern.ACKNOWLEDGED)
-  }
-
-  function insert(o : Map<String, Object>) : WriteResult {
-    return _collection.insert(new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
+  function insert(o : Map<String, Object>) : ObjectId {
+    var doc = new BasicDBObject(o)
+    _collection.insert(doc, WriteConcern.ACKNOWLEDGED)
+    return doc.get('_id') as ObjectId
   }
 
   function insert(objects : List<Map<String, Object>>) : WriteResult {
@@ -98,11 +97,11 @@ class MongoCollection {
   }
 
   function remove(o : Map<String, Object>) : WriteResult {
-    return _collection.remove(new BasicDBObject(o))
+    return _collection.remove(new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
   }
 
   function remove(key : String, value : Object) : WriteResult {
-    return _collection.remove(new BasicDBObject(key,value))
+    return _collection.remove(new BasicDBObject(key,value), WriteConcern.ACKNOWLEDGED)
   }
 
   function save(o : Map<String, Object>) : WriteResult {

@@ -35,10 +35,6 @@ class DataSetInfo extends Document {
     return all(MASTER_DATA_SET).map(\ o -> o.get('Name') as String)
   }
 
-  static function find(id : String) : SkipIterable<Company> {
-    return findMany(Company.ForeignName, id, Company.Collection) as SkipIterable<Company>
-  }
-
   static property get MostRecent() : DataSetInfo {
     return first(MASTER_DATA_SET) as DataSetInfo
   }

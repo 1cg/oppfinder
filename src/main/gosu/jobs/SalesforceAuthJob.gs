@@ -5,7 +5,7 @@ uses salesforce.SalesforceRESTClient
 uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
-uses model.Results
+uses model.ResultInfo
 uses java.lang.Math
 uses java.util.Arrays
 uses model.database.MongoCollection
@@ -50,7 +50,7 @@ class SalesforceAuthJob extends Job {
      */
     this.StatusFeed = "Uploading results from <a href=https://gosuroku.herokuapp.com/results/"+ResultCollection+">"+ResultCollection+"</a>"
 
-    var recommendations = Results.getResults(ResultCollection)
+    var recommendations = ResultInfo.findResults(ResultCollection)
     var date = Date
     var s = get('SelectCompanies') as String
     var selectCompanies = null as List
@@ -68,12 +68,12 @@ class SalesforceAuthJob extends Job {
 
       checkCancellation()
       var opp = new SObject("Opportunity")
-      opp.set("Name", recommendation['Company'] as String)
+      opp.set("Name", recommendation.Company)
       opp.set("AccountId", SF_ACCOUNT_ID)
       opp.set("CloseDate", date)
-      opp.set("Probability", String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100))
+      opp.set("Probability", String.valueOf(Double.parseDouble(recommendation.Value as String) * 100))
       opp.set("StageName", "Qualification")
-      opp.set("Description", "It is recommended that this company take on the "+recommendation['Policy']+" policy.")
+      opp.set("Description", "It is recommended that this company take on the "+recommendation.get('Policy')+" policy.")
 
       var result = salesforce.insert(opp)
       if (!(result["success"] as Boolean)) {

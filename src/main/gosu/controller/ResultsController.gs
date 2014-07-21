@@ -3,7 +3,7 @@ package controller
 uses sparkgs.util.IHasRequestContext
 uses sparkgs.IResourceController
 uses view.results.ResultTable
-uses model.Results
+uses model.ResultInfo
 uses view.results.Result
 uses view.results.ResultUpload
 uses view.results.NewAnalysis
@@ -17,11 +17,11 @@ class ResultsController implements  IHasRequestContext, IResourceController {
     if (loggedIn && !hasAttribute) {
       Request.Session.attribute("code", code)
     }
-    return ResultTable.renderToString(loggedIn, Results.AllResults.paginate(Params['page']))
+    return ResultTable.renderToString(loggedIn, ResultInfo.All.paginate(Params['page']))
   }
 
   function push() : Object {
-    return ResultUpload.renderToString(Results#AllResultsNames)
+    return ResultUpload.renderToString(ResultInfo #AllResultsNames)
   }
 
   override function _new(): Object {
@@ -35,7 +35,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   override function show(id: String): Object {
     var code = Request.Session.attribute("code") as String
     var loggedIn = (code != null && code != "")
-    return Result.renderToString(id, Results.getResults(id), loggedIn, Results.getSource(id))
+    return Result.renderToString(id, ResultInfo.findResults(id), loggedIn, ResultInfo.getSource(id))
   }
 
   override function edit(id: String): Object {

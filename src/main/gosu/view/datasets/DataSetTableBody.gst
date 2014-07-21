@@ -17,7 +17,7 @@
   <% for (result in dataSetInfo) {%>
     <tr>
       <td>
-        <a href='/datasets/${java.net.URLEncoder.encode(result.Name as String,"UTF-8")}'>${result.Name}</a>
+        <a href='/datasets/${java.net.URLEncoder.encode(result.Name,"UTF-8")}'>${result.Name}</a>
       </td>
       <td>
         ${result.get('Size') ?: ""}

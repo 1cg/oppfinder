@@ -1,4 +1,4 @@
-<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean, source : String) %>
+<%@ params(id : String, results : java.util.List<model.Result>, loggedIn : Boolean, source : String) %>
 <%@ extends sparkgs.SparkGSTemplate %>
 <div>
   <h2 class="page-title">Results</h2>
@@ -41,13 +41,13 @@
   <% for (result in results index i) {%>
     <tr>
       <td>
-        ${result['Company']}
+        ${result.Company}
       </td>
       <td>
-        ${result['Policy']}
+        ${result.get('Policy')}
       </td>
       <td>
-        ${result['Value']}
+        ${result.Value}
       </td>
       <% if (loggedIn) { %>
       <td>

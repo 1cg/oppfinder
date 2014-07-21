@@ -9,11 +9,12 @@ uses com.mongodb.BasicDBObject
 uses com.mongodb.DBObject
 uses util.inflector.Inflector
 uses java.lang.Integer
+uses org.bson.types.ObjectId
 
 abstract class Document {
 
   var _obj : BasicDBObject
-  var _id : Object //Unique ID. This would be the primary key in a SQL database or a unique document ID in MongoDB
+  var _id : ObjectId //Unique ID. This would be the primary key in a SQL database or a unique document ID in MongoDB
   var _collection : MongoCollection
   var inserted : boolean as readonly Persisted
 
@@ -34,14 +35,14 @@ abstract class Document {
   construct(key : String, value : Object) {
     _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
     reload(key, value)
-    _id = _obj['_id']
+    _id = _obj['_id'] as ObjectId
     inserted = true
   }
 
   construct(collection : String, key : String, value : Object) {
     _collection = new MongoCollection(collection)
     reload(key, value)
-    _id = _obj['_id']
+    _id = _obj['_id'] as ObjectId
     inserted = true
   }
 
@@ -69,6 +70,7 @@ abstract class Document {
 
   function delete() {
     _collection.remove('_id',_id)
+    inserted = false
   }
 
   function increment(field : String, by = 1) {
@@ -84,13 +86,14 @@ abstract class Document {
       _collection.update(query(), _obj)
     } else {
       _obj['intrinsic_type'] = this.IntrinsicType.Name
-      _id = _collection.insert(_obj).UpsertedId
+      _id = _collection.insert(_obj)
       inserted = true
     }
   }
 
   final function reload(key = '_id', value = null) {
-    _obj = _collection.findOne(new BasicDBObject(key, value ?: _id))
+    if (key == '_id') _obj = _collection.findOne(new BasicDBObject(key, value as ObjectId))
+    else _obj = _collection.findOne(new BasicDBObject(key, value ?: _id))
   }
 
   static function find(key : String, value : Object, collection : String) : Document {
@@ -140,7 +143,7 @@ abstract class Document {
     if (d == null) return null
     return Class.forName(d['intrinsic_type'] as String)
     .getConstructor({String.Type, Object.Type})
-        .newInstance({'_id', d['_id']}) as Document
+        .newInstance({'_id', d['_id'] as ObjectId}) as Document
   }
 
   property get AllFields() : Set<String> {
@@ -151,7 +154,7 @@ abstract class Document {
   }
 
   private function query() : DBObject {
-    return new BasicDBObject('_id', _obj['_id'])
+    return new BasicDBObject('_id', _id)
   }
 
 }

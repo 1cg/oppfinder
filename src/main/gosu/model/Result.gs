@@ -2,7 +2,6 @@ package model
 
 uses model.database.Document
 uses util.iterable.SkipIterable
-uses java.util.Comparator
 uses java.lang.Float
 
 class Result extends Document {
@@ -18,18 +17,18 @@ class Result extends Document {
   }
 
   static function find(id : String) : SkipIterable<Result> {
-    return Document.findMany(collection, 'ResultSet', id) as SkipIterable<Result>
+    return Document.findMany('ResultSet', id, collection) as SkipIterable<Result>
   }
 
   property get Key() : String {
-    return User+ItemID
+    return User + "" + ItemID
   }
 
-  property get User() : String {
-    return get('User') as String
+  property get User() : long {
+    return (get('User') as String).toLong()
   }
 
-  property set User(key : String) {
+  property set User(key : long) {
     put('User', key)
   }
 
@@ -49,19 +48,20 @@ class Result extends Document {
     put('Value', value)
   }
 
+  property get Company() : String {
+    return get('Company') as String
+  }
+
+  property set Company(company : String) {
+    put('Company', company)
+  }
+
   property get ResultSet() : String {
     return get('ResultSet') as String
   }
 
   property set ResultSet(resultSet : String) {
     put('ResultSet', resultSet)
-  }
-
-  static class ResultComparator implements Comparator<Result> {
-
-    override function compare(o1 : Result, o2 : Result) : int {
-      return o2.Value.compareTo(o2.Value)
-    }
   }
 
 }

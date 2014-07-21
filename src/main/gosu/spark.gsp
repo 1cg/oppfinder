@@ -17,7 +17,7 @@ resource("/jobs", new JobController())
 // DataSets
 resource("/datasets", new DataSetController())
 
-// Results
+// ResultInfo
 resource("/results", new ResultsController())
 
 onException(Exception, \ ex, req, resp -> {

@@ -59,9 +59,7 @@ class GenerateJob extends Job {
         checkCancellation()
         save()
       }
-      var uuid = UUID.randomUUID()
-      company.put('UUId', uuid.toString())
-      company.put('longID', uuid.LeastSignificantBits)
+      company.put('longID', UUID.randomUUID().LeastSignificantBits)
       company.DataSet = DataSetCollection
       company.save()
     }

@@ -1,4 +1,4 @@
-<%@ params(loggedIn : boolean, resultNames : util.iterable.PagerIterable<java.util.Map<Object,Object>>) %>
+<%@ params(loggedIn : boolean, resultNames : util.iterable.PagerIterable<model.ResultInfo>) %>
 <div>
   <h2 class="page-title">Results</h2>
   <a href="/results/new" class="btn btn-primary pull-right">New Analysis</a>
@@ -47,17 +47,17 @@
     for(result in resultNames)  {%>
       <tr>
         <td>
-          <a href='/results/${result['UUId']}'>${result['UUId']}</a>
+          <a href='/results/${result.get('UUId')}'>${result.get('UUId')}</a>
         </td>
         <td>
-          ${result['created'] ?: ''}
+          ${result.get('Created') ?: ''}
         </td>
         <td>
-          ${result['Source'] ?: ''}
+          ${result.get('Source') ?: ''}
         </td>
       <% if (loggedIn) { %>
         <td>
-          <a href="#" ic-post-to="/jobs?type=auth&SalesForceAuthJob[ResultCollection]=${result['UUId']}">Upload</a>
+          <a href="#" ic-post-to="/jobs?type=auth&SalesForceAuthJob[ResultCollection]=${result.get('UUId')}">Upload</a>
         </td>
       <% } %>
      </tr>

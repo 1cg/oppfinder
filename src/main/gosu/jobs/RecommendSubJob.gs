@@ -1,7 +1,5 @@
 package jobs
 
-uses java.util.Map
-uses model.database.MongoCollection
 uses java.lang.Class
 uses recommender.Field
 uses java.lang.Float
@@ -83,7 +81,7 @@ class RecommendSubJob extends Job {
         minRecommendation = Math.min(recommendation.Value, minRecommendation)
         //Store the id in the table as well as the recommendation (a policy) and value
         var result = new Result()
-        result.User = user.toString()
+        result.User = user
         result.ItemID = recommendation.ItemID
         result.Value = recommendation.Value
         result.ResultSet = UUId

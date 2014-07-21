@@ -3,6 +3,7 @@ package model
 uses org.json.simple.JSONValue
 uses org.json.simple.JSONArray
 uses model.database.Document
+uses util.iterable.SkipIterable
 
 class Company extends Document {
 
@@ -23,6 +24,14 @@ class Company extends Document {
 
   property set DataSet(foreign : String) {
     put(id, foreign)
+  }
+
+  static function findByJob(UUID : String) : SkipIterable<Company> {
+    return Document.findMany(id, UUID, collection) as SkipIterable<Company>
+  }
+
+  static function findByID(ID : long) : Company {
+    return Document.find('longID', ID, collection) as Company
   }
 
   static property get CompanyDataTypes() : List<String> {

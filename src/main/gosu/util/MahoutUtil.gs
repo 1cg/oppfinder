@@ -12,7 +12,7 @@ uses org.json.simple.JSONObject
 uses org.json.simple.JSONValue
 uses java.util.concurrent.locks.ReentrantLock
 uses org.json.simple.JSONArray
-uses model.DataSetInfo
+uses model.Company
 
 class MahoutUtil {
 
@@ -28,16 +28,15 @@ class MahoutUtil {
         MODEL_COUNT[lookup] = MODEL_COUNT[lookup] + 1
         return MODEL_MAP[lookup]
       }
-      var companies = DataSetInfo.find(collection)
-      print(companies.Count)
+      var companies = Company.findByJob(collection)
       var idMap = new FastByIDMap<PreferenceArray>()
-      for (companyData in companies) {
-        var companyPolicies = JSONValue.parse(companyData.get('Policies') as String) as JSONArray
+      for (company in companies) {
+        var companyPolicies = JSONValue.parse(company.get('Policies') as String) as JSONArray
         var preferences = new GenericUserPreferenceArray(companyPolicies.size() * (t2 == null ? 1 : 2))
-        var id = (companyData.get('longID') as String).toLong()
+        var id = (company.get('longID') as String).toLong()
         for (policy in companyPolicies.map(\ o -> o as JSONObject) index i) { //Map each field to a long value and then add it as a preference
-          preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(companyData.get(field) as String)))
-          if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(companyData.get(field) as String)))
+          preferences.set(i,new GenericPreference(id, policyToLong(policy), t1(company.get(field) as String)))
+          if (t2 != null) preferences.set(i+companyPolicies.size(),new GenericPreference(id,policyToLong(policy), t2(company.get(field) as String)))
         }
         idMap.put(id, preferences)
       }

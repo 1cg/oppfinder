@@ -2,15 +2,14 @@ package jobs
 
 uses java.util.Map
 uses java.lang.Thread
-uses model.database.MongoCollection
-uses java.lang.Float
 uses util.MahoutUtil
 uses java.util.Arrays
 uses util.iterable.SkipIterable
-uses model.Results
+uses model.ResultInfo
 uses model.Result
 uses java.util.Collection
-uses model.Result.ResultComparator
+uses model.Company
+uses model.database.Document
 
 class RecommendJob extends Job {
 
@@ -60,17 +59,22 @@ class RecommendJob extends Job {
     }
     StatusFeed = "Recommendations Calculated"
     save()
-    storeTopRecommendations(recommendations.Values, dataSet)
-    this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
-    this.StatusFeed = "Done"
-    save()
+    if (recommendations.Count == 0) {
+      this.StatusFeed = "No recommendations found"
+      save()
+    } else {
+      storeTopRecommendations(recommendations.Values, dataSet)
+      this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
+      this.StatusFeed = "Done"
+      save()
+    }
   }
 
   /*
   * Runs each of the sub jobs that analyze the selected fields
    */
   function startSubJobs(dataSet : String) {
-    var size = (new MongoCollection (dataSet).getCount({})+ NUM_BUCKETS-1)/NUM_BUCKETS
+    var size = (Document.findMany(Company.ForeignName, dataSet, Company.Collection).Count + NUM_BUCKETS-1)/NUM_BUCKETS
     for (jobName in subJobs) {
       for (i in 0..|NUM_BUCKETS) {
         var job = new RecommendSubJob(jobName,i * size, size, dataSet)
@@ -88,20 +92,19 @@ class RecommendJob extends Job {
   * Those recommendations that are the strongest will be stored.
    */
   function storeTopRecommendations(recommendations : Collection<Result>, dataSet : String) {
-    var sorted = recommendations.stream().sorted(new ResultComparator())
+    var sorted = recommendations.orderByDescending(\ o -> o.Value)
     checkCancellation()
-    //TODO --Make a real Result object
-    var finalResults : List<Map<Object, Object>>= {}
-    /*for (each in sorted index i) {
+    var finalResults : List<Result>= {}
+    for (result in sorted index i) {
       if (i == NUM_RECOMMENDATIONS) break
-      var result : Map<Object, Object> = {}
-      var company = companyDB.find({'longID' -> info[0].toLong()},{'Company' -> 1}).iterator().next()
-      result.put('Company', company['Company'])
-      result.put('Policy',MahoutUtil.longToPolicy(info[1].toLong()))
-      result.put('Value', String.format('%.3g%n',{each.Value}))
-      finalResults.add(result)
+      result.Value = String.format('%.3g%n',{result.Value}).toFloat()
+      result.ResultSet = UUId
+      var company = Company.findByID(result.User)
+      result.Company = company.get('Company') as String
+      result.put('Policy', MahoutUtil.longToPolicy(result.ItemID))
+      result.save()
     }
-    Results.addResults(UUId, finalResults, dataSet)*/
+    ResultInfo.addResults(UUId, dataSet)
   }
 
   /*
@@ -109,7 +112,10 @@ class RecommendJob extends Job {
    */
   override function doReset() {
     for (jobID in subJobsID) {
-      new MongoCollection(jobID)?.drop()
+      var results = ResultInfo.findResults(jobID)
+      for (result in results) {
+        result.delete()
+      }
     }
   }
 
@@ -141,7 +147,7 @@ class RecommendJob extends Job {
         }
       }
       var progress = sum / subJobsID.size()
-      if (progress > 0) Progress = progress
+      if (progress > 0 && progress != 100) Progress = progress
       if (finished) {
         return
       }
