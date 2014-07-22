@@ -15,16 +15,10 @@ extends sparkgs.SparkGSFile
 StaticFiles = '/public'
 Layout = view.Layout
 
-//using(httpsFilter()) {
-var _collection = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
-print("spark collection name: "+_collection.FullName)
-var _realm = new MongoUserPasswordRealm(_collection)
-var _securityManager : SecurityManager = new DefaultSecurityManager(_realm)
-SecurityUtils.setSecurityManager(_securityManager) // I know this much is good - same secMan ubiquitously
-
+var _realm = new MongoUserPasswordRealm(Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION"))
+SecurityUtils.setSecurityManager(new DefaultSecurityManager(_realm))
 var _subject = SecurityUtils.getSubject()
 
-// Root
 resource('/user', new UserController(_realm, _subject))
 
 using(filter(new AuthFilter())) {

@@ -143,7 +143,7 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
 
       var permissionsObj = p.get("permissions")
       if(permissionsObj != null && permissionsObj typeis List<?>) {
-        for(r in permissionsObj as List<Object>) {
+        for(r in permissionsObj) {
           info.addStringPermission(r.toString())
         }
       }

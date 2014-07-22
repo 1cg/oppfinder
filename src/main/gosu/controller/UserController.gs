@@ -34,21 +34,10 @@ class UserController implements IHasRequestContext, IResourceController {
   override function create(): Object {
     var username = Params['username']
     var password = Params['password']
-    print("creating: "+username + ", "+password)
 
     var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
     var DBObj = new DBObject[] { _realm.createUserCredentials(username, password)}
     db.insert(DBObj)
-
-    // prints out the stuff in the current realm database
-    try {
-      var s1 = db.find()
-      for ( yo in s1.iterator()) {
-        print(yo)
-      }
-    } catch (e) {
-      print(e)
-    }
 
     return null
   }
@@ -68,30 +57,29 @@ class UserController implements IHasRequestContext, IResourceController {
         currentUser.login(token)
 
         if (currentUser.isAuthenticated()) {
-          print("user authenticated")
-          print("auth user: "+currentUser.getPrincipal())
+          print("User authenticated: "+currentUser.getPrincipal())
           Headers['X-IC-Redirect'] = "/"
-          return ""
+          return index()
         } else {
-          print("dafuq")
         }
       } catch(uae : UnknownAccountException) { // need to get to handling this on front end
-        print("username doesn't exist")
+        Headers['X-IC-Script'] = 'alert("Unknown account! Please try again.");'
       } catch(ice : IncorrectCredentialsException) {
-        print("password didn't match: "+ice)
+        Headers['X-IC-Script'] = 'alert("Incorrect Credentials! Please try again.");'
       } catch(lae : LockedAccountException) {
-        print("account for that username is locked")
+        Headers['X-IC-Script'] = 'alert("Your account is locked.");'
       } catch(ae : AuthenticationException) {
-        print("authentication exception "+ae)
-        throw(ae)
+        Headers['X-IC-Script'] = 'alert("Authentication Exception! Please try again.");'
       }
+      Headers['X-IC-Redirect'] = "/user"
     }
-    return null
+    return ""
   }
 
   function logout() : Object {
     SecurityUtils.getSubject().logout()
     Headers['X-IC-Redirect'] = "/user"
+    redirect("/user")
     return index()
   }
 
