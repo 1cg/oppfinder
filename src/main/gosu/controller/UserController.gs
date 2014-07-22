@@ -10,7 +10,7 @@ uses org.apache.shiro.authc.IncorrectCredentialsException
 uses org.apache.shiro.authc.LockedAccountException
 uses org.apache.shiro.authc.AuthenticationException
 uses org.apache.shiro.mgt.RealmSecurityManager
-uses model.Database
+uses model.database.Database
 uses org.apache.shiro.realm.AuthorizingRealm
 uses com.mongodb.DBObject
 uses auth.MongoUserPasswordRealm

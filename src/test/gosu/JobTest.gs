@@ -6,13 +6,13 @@ class JobTest extends TestCase {
 
   public function testUpdateSearch() {
     var job = new TestJob()
-    job.update({'Test' -> 'Test'})
-    assertEquals(job.search('Test'), 'Test')
+    job.put('Test', 'Test')
+    assertEquals(job.get('Test') as String, 'Test')
   }
 
   public function testSearchNonExistant() {
     var job = new TestJob()
-    assertNull(job.search("Not a field"))
+    assertNull(job.get("Not a field"))
   }
 
   public function testTypeProperties() {
@@ -77,11 +77,11 @@ class JobTest extends TestCase {
 
   public function testProgress() {
     var job = new TestJob()
-    assertEquals("0%", Job.find(job.UUId).Progress + "%")
+    assertEquals("0%", Job.findJob(job.UUId).Progress + "%")
   }
 
   public function testFindInvalid() {
-    assertNull(Job.find("Not a value"))
+    assertNull(Job.findJob("Not a value"))
   }
 
   public function testActiveJobs() {
