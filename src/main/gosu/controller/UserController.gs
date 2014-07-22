@@ -71,14 +71,14 @@ class UserController implements IHasRequestContext, IResourceController {
         currentUser.login(token)
 
         if (currentUser.isAuthenticated()) {
-          print("user authenticated")
-          print("auth user: "+currentUser.getPrincipal())
-          redirect("/")
-          return ""
+          print("User authenticated: "+currentUser.getPrincipal())
+          Headers['X-IC-Redirect'] = "/"
+          return index()
         } else {
           print("dafuq")
         }
       } catch(uae : UnknownAccountException) { // need to get to handling this on front end
+        Headers['X-IC-Script'] = 'alert("Unknown account! Please try again.");'
         print("username doesn't exist")
       } catch(ice : IncorrectCredentialsException) {
         print("password didn't match: "+ice)
@@ -86,15 +86,17 @@ class UserController implements IHasRequestContext, IResourceController {
         print("account for that username is locked")
       } catch(ae : AuthenticationException) {
         print("authentication exception "+ae)
-        throw(ae)
+
       }
+      Headers['X-IC-Redirect'] = "/user"
     }
-    return null
+    return ""
   }
 
   function logout() : Object {
     SecurityUtils.getSubject().logout()
     Headers['X-IC-Redirect'] = "/user"
+    redirect("/user")
     return index()
   }
 
