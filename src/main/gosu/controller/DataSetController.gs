@@ -16,7 +16,6 @@ class DataSetController implements IHasRequestContext, IResourceController {
   }
   override function show(id: String)  : Object {
     var did = URLDecoder.decode(id, "UTF-8")
-    print(did)
     return Drilldown.renderToString(did, Company.findByJob(did).paginate(Params['page']))
   }
 
@@ -37,7 +36,6 @@ class DataSetController implements IHasRequestContext, IResourceController {
   }
 
   function delete(id : String) {
-    print('called')
     DataSetInfo.deleteAll(id)
   }
 }
