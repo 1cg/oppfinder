@@ -2,16 +2,13 @@ package controller
 
 uses sparkgs.IResourceController
 uses sparkgs.util.IHasRequestContext
-uses org.apache.shiro.config.IniSecurityManagerFactory
 uses org.apache.shiro.SecurityUtils
 uses org.apache.shiro.authc.UsernamePasswordToken
 uses org.apache.shiro.authc.UnknownAccountException
 uses org.apache.shiro.authc.IncorrectCredentialsException
 uses org.apache.shiro.authc.LockedAccountException
 uses org.apache.shiro.authc.AuthenticationException
-uses org.apache.shiro.mgt.RealmSecurityManager
 uses model.database.Database
-uses org.apache.shiro.realm.AuthorizingRealm
 uses com.mongodb.DBObject
 uses auth.MongoUserPasswordRealm
 uses org.apache.shiro.subject.Subject
@@ -37,21 +34,10 @@ class UserController implements IHasRequestContext, IResourceController {
   override function create(): Object {
     var username = Params['username']
     var password = Params['password']
-    print("creating: "+username + ", "+password)
 
     var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
     var DBObj = new DBObject[] { _realm.createUserCredentials(username, password)}
     db.insert(DBObj)
-
-    // prints out the stuff in the current realm database
-    try {
-      var s1 = db.find()
-      for ( yo in s1.iterator()) {
-        print(yo)
-      }
-    } catch (e) {
-      print(e)
-    }
 
     return null
   }
@@ -75,18 +61,15 @@ class UserController implements IHasRequestContext, IResourceController {
           Headers['X-IC-Redirect'] = "/"
           return index()
         } else {
-          print("dafuq")
         }
       } catch(uae : UnknownAccountException) { // need to get to handling this on front end
         Headers['X-IC-Script'] = 'alert("Unknown account! Please try again.");'
-        print("username doesn't exist")
       } catch(ice : IncorrectCredentialsException) {
-        print("password didn't match: "+ice)
+        Headers['X-IC-Script'] = 'alert("Incorrect Credentials! Please try again.");'
       } catch(lae : LockedAccountException) {
-        print("account for that username is locked")
+        Headers['X-IC-Script'] = 'alert("Your account is locked.");'
       } catch(ae : AuthenticationException) {
-        print("authentication exception "+ae)
-        throw(ae)
+        Headers['X-IC-Script'] = 'alert("Authentication Exception! Please try again.");'
       }
       Headers['X-IC-Redirect'] = "/user"
     }
