@@ -2,16 +2,13 @@ package controller
 
 uses sparkgs.IResourceController
 uses sparkgs.util.IHasRequestContext
-uses org.apache.shiro.config.IniSecurityManagerFactory
 uses org.apache.shiro.SecurityUtils
 uses org.apache.shiro.authc.UsernamePasswordToken
 uses org.apache.shiro.authc.UnknownAccountException
 uses org.apache.shiro.authc.IncorrectCredentialsException
 uses org.apache.shiro.authc.LockedAccountException
 uses org.apache.shiro.authc.AuthenticationException
-uses org.apache.shiro.mgt.RealmSecurityManager
 uses model.database.Database
-uses org.apache.shiro.realm.AuthorizingRealm
 uses com.mongodb.DBObject
 uses auth.MongoUserPasswordRealm
 uses org.apache.shiro.subject.Subject
@@ -73,7 +70,7 @@ class UserController implements IHasRequestContext, IResourceController {
         if (currentUser.isAuthenticated()) {
           print("user authenticated")
           print("auth user: "+currentUser.getPrincipal())
-          redirect("/")
+          Headers['X-IC-Redirect'] = "/"
           return ""
         } else {
           print("dafuq")
