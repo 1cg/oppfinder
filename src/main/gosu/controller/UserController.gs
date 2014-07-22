@@ -57,7 +57,6 @@ class UserController implements IHasRequestContext, IResourceController {
         currentUser.login(token)
 
         if (currentUser.isAuthenticated()) {
-          print("User authenticated: "+currentUser.getPrincipal())
           Headers['X-IC-Redirect'] = "/"
           return index()
         } else {
