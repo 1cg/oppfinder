@@ -2,71 +2,36 @@ package model
 
 uses org.json.simple.JSONValue
 uses org.json.simple.JSONArray
+uses model.database.Document
+uses util.iterable.SkipIterable
 
-class Company extends DataSet {
+class Company extends Document {
 
-  construct(collection : String) {
-    super(collection)
-  }
+  static var id : String as ForeignName = 'data_set_id'
+  static var collection : String as Collection = 'companies'
 
-  property set CompanyName(companyName : String) {
-    put("Company", companyName)
-  }
-  property get CompanyName() : String {
-    return get("Company") as String
+  construct() {
+    super()
   }
 
-  property set ContactName(contactName : String) {
-    put("Contact Name", contactName)
-  }
-  property get ContactName() : String {
-    return get("Contact Name") as String
+  construct(key : String, value : Object) {
+    super(key, value)
   }
 
-  property set Email(email : String) {
-    put("Email", email)
-  }
-  property get Email() : String {
-    return get("Email") as String
+  property get DataSet() : String {
+    return get(id) as String
   }
 
-  property set Region(region : String) {
-    put("Region", region)
+  property set DataSet(foreign : String) {
+    put(id, foreign)
   }
 
-  property get Region() : String {
-    return get("Region") as String
+  static function findByJob(UUID : String) : SkipIterable<Company> {
+    return Document.findMany(id, UUID, collection) as SkipIterable<Company>
   }
 
-  property set Size(size : String) {
-    put("Size", size)
-  }
-
-  property get Size() : String {
-    return get("Size") as String
-  }
-
-  property get Reach() : String {
-    return get("Reach") as String
-  }
-
-  property set Reach(reach : String) {
-    put("Reach", reach)
-  }
-
-  property get Revenue() : String {
-    return get("Revenue") as String
-  }
-
-  property set Revenue(revenue : String) {
-    put("Revenue", revenue)
-  }
-
-  property set Policies(policies : String) {
-    put("Policies", policies)
-  }
-  property get Policies() : String {
-    return get("Policies") as String
+  static function findByID(ID : long) : Company {
+    return Document.find('longID', ID, collection) as Company
   }
 
   static property get CompanyDataTypes() : List<String> {

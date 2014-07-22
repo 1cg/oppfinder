@@ -27,11 +27,11 @@
 <div class="inset-8">
   <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
     <div class="form-group">
-      ${InputGenerator.select(model.DataSet#AllDataSets, "DataSet", {'class' -> 'form-control',
+      ${InputGenerator.selectInput(model.DataSetInfo#AllNames, "DataSet", {'class' -> 'form-control',
                                                                      'name' -> 'jobs.RecommendJob[DataSetCollection]'})}
     </div>
     <div class="form-group">
-      ${InputGenerator.submit('Begin Opportinity Analysis', {'class' -> 'btn btn-primary'})}
+      ${InputGenerator.submitInput('Begin Opportinity Analysis', {'class' -> 'btn btn-primary'})}
     </div>
     <div class="form-group pull-right">
       <button ic-post-to="/jobs?type=test" class="btn btn-default">

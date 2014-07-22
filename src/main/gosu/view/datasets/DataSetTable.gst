@@ -1,4 +1,4 @@
-<%@ params(dataSetNames : util.iterable.PagerIterable<java.util.Map<Object,Object>>) %>
+<%@ params(dataSetInfo : util.iterable.PagerIterable<model.DataSetInfo>) %>
 
 <div>
   <h2 class="page-title">Data Sets</h2>
@@ -6,6 +6,6 @@
 </div>
 
 <div id='wrapper'>
-  ${view.datasets.DataSetTableBody.renderToString(dataSetNames)}
+  ${view.datasets.DataSetTableBody.renderToString(dataSetInfo)}
 </div>
 

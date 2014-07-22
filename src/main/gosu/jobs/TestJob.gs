@@ -1,12 +1,11 @@
 package jobs
 
-uses java.util.Map
 uses java.lang.Thread
 
 class TestJob extends Job {
 
-  construct(data : Map<Object, Object> ) {
-    super(data)
+  construct(key : String, value : Object) {
+    super(key,value)
   }
 
   construct() {
@@ -16,6 +15,7 @@ class TestJob extends Job {
   override function executeJob() {
     checkCancellation()
     this.StatusFeed = "Starting"
+    save()
     var iterations = 30
     for(var i in 1..iterations) {
       if (i == iterations/2) this.StatusFeed = "50% Complete"
@@ -23,8 +23,10 @@ class TestJob extends Job {
       print("Test Job On Iteration ${i}")
       Thread.sleep(1 * 1000)
       this.Progress = (i * 100)/iterations
+      save()
     }
     this.StatusFeed = "Done"
+    save()
     print("Test Job Complete")
   }
 

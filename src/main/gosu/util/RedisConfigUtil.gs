@@ -36,6 +36,7 @@ class RedisConfigUtil {
       try {
         _CLIENT.enqueue(queue, job)
       } catch(e) {
+        //Reconnect
         _CLIENT = new ClientImpl(_CONFIG)
         _CLIENT.enqueue(queue, job)
       }

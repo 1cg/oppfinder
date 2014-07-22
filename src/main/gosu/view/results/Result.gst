@@ -1,11 +1,11 @@
-<%@ params(id : String, results : java.util.List<java.util.Map<Object,Object>>, loggedIn : Boolean, source : String) %>
+<%@ params(id : String, results : java.util.List<model.Result>, loggedIn : Boolean, source : String) %>
 <%@ extends sparkgs.SparkGSTemplate %>
 <div>
   <h2 class="page-title">Results</h2>
 </div>
 <form>
   <% if (loggedIn) { %>
-  <a ic-post-to="/jobs?type=authselective&SalesForceAuthJob[ResultCollection]=${id}" class="btn btn-primary pull-right">Upload</a>
+  <a ic-post-to="/jobs?type=auth&jobs.SalesforceAuthJob[ResultCollection]=${id}" class="btn btn-primary pull-right">Upload</a>
   <% } %>
 <div class="detail-row">
   <span class="detail-label">Job Id: </span>
@@ -41,13 +41,13 @@
   <% for (result in results index i) {%>
     <tr>
       <td>
-        ${result['Company']}
+        ${result.Company}
       </td>
       <td>
-        ${result['Policy']}
+        ${result.get('Policy')}
       </td>
       <td>
-        ${result['Value']}
+        ${result.Value}
       </td>
       <% if (loggedIn) { %>
       <td>

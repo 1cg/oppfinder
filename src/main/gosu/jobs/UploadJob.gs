@@ -1,68 +1,73 @@
 package jobs
 
-uses java.util.Map
-uses model.MongoCollection
 uses org.json.simple.JSONArray
 uses org.json.simple.parser.JSONParser
 uses model.Company
 uses org.json.simple.JSONObject
 uses java.util.UUID
+uses java.util.Map
+uses model.database.Document
+uses model.DataSetInfo
 
 class UploadJob extends Job {
 
-
-  construct() {
-    super()
-  }
-  construct(data : Map<Object, Object>) {
-    super(data)
+  construct(key : String, value : Object) {
+    super(key,value)
   }
 
   construct(body : String) {
-    var dataSet = new MongoCollection ("uploadToParse")
-    dataSet.drop()
-    dataSet.insert({"file" -> body})
-    dataSet.insert({'collection' -> UUID.randomUUID().toString()})
+    Data = body
+    DataSetCollection = UUID.randomUUID().toString()
   }
 
   override function executeJob() {
     checkCancellation()
-    var c = new MongoCollection ("uploadToParse").find().iterator().next()
-    var body = (c["file"]).toString()
-    var i = 0
-    for (0..3) {
-      i = body.indexOf("\n", i+1)
-    }
-    body = body.substring(i)
-    body = body.substring(0, body.lastIndexOf("\n---"))
-    if (body.length < 6) {
+    var data = Data
+    data = data.substring(0, data.lastIndexOf("\n---"))
+    if (data.length < 6) {
       this.Progress = 100
       return
     }
-    var parser = new JSONParser()
-    var array = parser.parse(body) as JSONArray
+    var array = new JSONParser().parse(data) as JSONArray
     checkCancellation()
     var iterations = array.size()
-    for (var j in 0..iterations-1) {
-      var company = new Company(c['collection'] as String)
-      var obj = array[j] as JSONObject
-      company.CompanyName = obj.get("Company") as String
-      company.ContactName = obj.get("Contact Name") as String
-      company.Email = obj.get("Email") as String
-      company.Region = obj.get("Region") as String
-      company.Size = obj.get("Size") as String
-      company.Policies = obj.get("policies") as String
+    for (companyObject in array index i) {
+      var company = new Company()
+      company.putAll((companyObject as JSONObject) as Map<String, Object>)
+      company.DataSet = UUId
       company.save()
       checkCancellation()
-      this.Progress = (j*100)/iterations
+      this.Progress = (i*100)/iterations
     }
+    DataSetInfo.register(DataSetCollection, Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count)
     this.Progress = 100
+  }
+
+  property get Data() : String {
+    return get('Data') as String
+  }
+
+  property set Data(data : String) {
+    put('Data',data)
+  }
+
+  property get DataSetCollection() : String {
+    var ds = get('DataSetCollection') as String
+    if (ds == null) { //If we weren't provided a collection, generate one
+      ds = UUID.randomUUID().toString()
+      DataSetCollection = ds
+    }
+    return ds
+  }
+
+  property set DataSetCollection(collection : String) {
+    put('DataSetCollection', collection)
   }
 
   override function doReset() {}
 
   override function renderToString() : String {
-    return view.datasets.DataSetTable.renderToString(model.DataSet.allDataSets.paginate("1"))
+    return view.datasets.DataSetTable.renderToString(model.DataSetInfo.All.paginate("1"))
   }
 
 }

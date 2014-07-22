@@ -1,15 +1,14 @@
 package jobs
 
-uses java.util.Map
 uses java.lang.System
 uses salesforce.SalesforceRESTClient
 uses java.util.Calendar
 uses java.lang.Double
 uses java.lang.Thread
-uses model.Results
+uses model.ResultInfo
 uses java.lang.Math
 uses java.util.Arrays
-uses model.MongoCollection
+uses model.database.MongoCollection
 uses java.lang.Exception
 uses salesforce.SObject
 
@@ -19,15 +18,22 @@ class SalesforceAuthJob extends Job {
   static final var SF_CLIENT_ID     = System.Env["SF_CLIENT_ID"]?.toString()
   static final var SF_CLIENT_SECRET = System.Env["SF_CLIENT_SECRET"]?.toString()
 
-  construct(data : Map<Object, Object>) {
-    super(data)
+  construct(key : String, value : Object) {
+    super(key,value)
   }
 
-  construct(recommendUUID : String, authCode : String, selectCompanies : String[]) {
+  construct(authCode : String, selectCompanies : String[]) {
     super()
-    update({'RecommendUUID' -> recommendUUID})
-    update({'AuthCode' -> authCode})
-    update({'SelectCompanies' -> selectCompanies})
+    put('AuthCode', authCode)
+    put('SelectCompanies', selectCompanies)
+  }
+
+  property get ResultCollection() : String {
+    return get('ResultCollection') as String
+  }
+
+  property set ResultCollection(collection : String) {
+    put('ResultCollection', collection)
   }
 
   override function executeJob() {
@@ -37,37 +43,21 @@ class SalesforceAuthJob extends Job {
     /*
      * ---- Access Salesforce Resources ----
      */
-    var salesforce = new SalesforceRESTClient(SF_CLIENT_ID, SF_CLIENT_SECRET)
-    var authResponse = salesforce.authenticate(search('AuthCode') as String, SF_REDIRECT_URI)
-
-    if (authResponse.get("error") as String == null) { // Authorized without error
-      var tokenStore = new MongoCollection("SalesforceRefreshToken")
-      tokenStore.drop()
-      tokenStore.insert({"RefreshToken" -> authResponse.get("refresh_token") as String})
-      this.StatusFeed = "Connected!"
-    } else if (authResponse.get("error") as String == "invalid_grant") { // need to use refresh token
-      var refreshToken = new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next().get("RefreshToken") as String
-      salesforce.refresh(refreshToken)
-      this.StatusFeed = "Token Refreshed!"
-    } else {
-      this.StatusFeed = "Error! "+authResponse.get("error") as String
-      handleErrorState(new Exception("Error: "+(authResponse.get("error") as String)))
-    }
+    var salesforce = authorize()
 
     /*
      * ---- Upload to Salesforce ----
      */
-    this.StatusFeed = "Uploading results from <a href=https://gosuroku.herokuapp.com/results/"+(search('RecommendUUID') as String)+">"+(search('RecommendUUID') as String)+"</a>"
+    this.StatusFeed = "Uploading results from <a href=https://gosuroku.herokuapp.com/results/"+ResultCollection+">"+ResultCollection+"</a>"
 
-    var recommendations = Results.getResults(search('RecommendUUID') as String)
-    var date = getDate()
-    var s = search('SelectCompanies') as String
+    var recommendations = ResultInfo.findResults(ResultCollection)
+    var date = Date
+    var s = get('SelectCompanies') as String
     var selectCompanies = null as List
-    if (s != null) {
+    if (s != null && s != "") {
       s = s.replace("\"", "").replace(" ","")
       selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
     }
-
     for (recommendation in recommendations index i) {
       if (s != null && !selectCompanies.contains(i as String)) {
         continue
@@ -78,22 +68,37 @@ class SalesforceAuthJob extends Job {
 
       checkCancellation()
       var opp = new SObject("Opportunity")
-      opp.set("Name", recommendation['Company'] as String)
+      opp.set("Name", recommendation.Company)
       opp.set("AccountId", SF_ACCOUNT_ID)
       opp.set("CloseDate", date)
-      opp.set("Probability", String.valueOf(Double.parseDouble(recommendation['Value'] as String) * 100))
+      opp.set("Probability", String.valueOf(Double.parseDouble(recommendation.Value as String) * 100))
       opp.set("StageName", "Qualification")
-      opp.set("Description", "It is recommended that this company take on the "+recommendation['Policy']+" policy.")
+      opp.set("Description", "It is recommended that this company take on the "+recommendation.get('Policy')+" policy.")
 
       var result = salesforce.insert(opp)
-
-      if (!(result.get("success") as Boolean)) {
+      if (!(result["success"] as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }
     }
 
     this.StatusFeed = "Done! Uploads available as opportunities <a href=${salesforce.InstanceURL}/${SF_ACCOUNT_ID}>on Salesforce</a>"
     this.Progress = 100
+  }
+
+  private function authorize() : SalesforceRESTClient {
+    var salesforce = new SalesforceRESTClient(SF_CLIENT_ID, SF_CLIENT_SECRET)
+    var authResponse = salesforce.authenticate(get('AuthCode') as String, SF_REDIRECT_URI)
+    if (authResponse["error"] as String == null) { // Authorized without error
+      (new MongoCollection("SalesforceRefreshToken")).insert({"RefreshToken" -> authResponse["refresh_token"] as String})
+      this.StatusFeed = "Connected!"
+    } else if (authResponse["error"] as String == "invalid_grant") { // need to use refresh token
+      salesforce.refresh(new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next()["RefreshToken"] as String)
+      this.StatusFeed = "Token Refreshed!"
+    } else {
+      this.StatusFeed = "Error! "+authResponse["error"] as String
+      handleErrorState(new ("Error: "+(authResponse["error"] as String)))
+    }
+    return salesforce
   }
 
   override function doReset() {
@@ -104,7 +109,7 @@ class SalesforceAuthJob extends Job {
   }
 
   /* Returns current date in Salesforce Object Date field format */
-  private function getDate() : String {
+  private property get Date() : String {
     var cal = Calendar.getInstance()
     return cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE)
   }

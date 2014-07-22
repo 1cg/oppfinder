@@ -1,10 +1,10 @@
-package model
+package model.database
 
-uses com.mongodb.DBCollection
 uses com.mongodb.DB
-uses java.lang.System
 uses com.mongodb.MongoURI
 uses java.lang.SuppressWarnings
+uses java.lang.System
+uses com.mongodb.DBCollection
 
 class Database {
 
@@ -25,4 +25,5 @@ class Database {
     //Iff not exists, create collection with default params
     return DB.createCollection(collectionName, null)
   }
+
 }

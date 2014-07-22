@@ -1,4 +1,4 @@
-<%@ params(dataSetNames : util.iterable.PagerIterable<java.util.Map<Object,Object>>) %>
+<%@ params(dataSetInfo : util.iterable.PagerIterable<model.DataSetInfo>) %>
 <table class="table">
   <thead>
     <tr>
@@ -14,19 +14,19 @@
     </tr>
   </thead>
   <tbody>
-  <% for (result in dataSetNames) {%>
+  <% for (result in dataSetInfo) {%>
     <tr>
       <td>
-        <a href='/datasets/${java.net.URLEncoder.encode(result['name'] as String,"UTF-8")}'>${result['name']}</a>
+        <a href='/datasets/${java.net.URLEncoder.encode(result.Name,"UTF-8")}'>${result.Name}</a>
       </td>
       <td>
-        ${result['size'] ?: ""}
+        ${result.get('Size') ?: ""}
       </td>
       <td>
-        ${result['created'] ?: ""}
+        ${result.Created ?: ""}
       </td>
     </tr>
   <% } %>
   </tbody>
 </table>
-${new widgets.PagerWidget().renderWidget(dataSetNames)}
+${new widgets.PagerWidget().renderWidget(dataSetInfo)}

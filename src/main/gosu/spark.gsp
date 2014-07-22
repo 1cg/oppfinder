@@ -4,7 +4,7 @@ uses controller.ResultsController
 uses java.lang.Exception
 uses controller.UserController
 uses org.apache.shiro.SecurityUtils
-uses model.Database
+uses model.database.Database
 uses org.apache.shiro.mgt.DefaultSecurityManager
 uses auth.MongoUserPasswordRealm
 uses org.apache.shiro.mgt.SecurityManager
@@ -24,7 +24,7 @@ SecurityUtils.setSecurityManager(_securityManager) // I know this much is good -
 
 var _subject = SecurityUtils.getSubject()
 
-  // Root
+// Root
 resource('/user', new UserController(_realm, _subject))
 
 using(filter(new AuthFilter())) {
