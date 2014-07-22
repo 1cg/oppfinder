@@ -53,8 +53,6 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
   }
 
   function createUserCredentials(username : String, plainTextPassword : String) : DBObject {
-    print("CREATE USER CREDENTIALS. collection: " +_collection.FullName)
-    print("Plaintext pw: "+ plainTextPassword)
     var salt = rng.nextBytes()
     var pw = new Sha256Hash(plainTextPassword, salt, hashIterations).toBase64()
 
@@ -64,8 +62,6 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
     obj.put("salt", salt.toBase64())
     obj.put("algorithm", Sha256Hash.ALGORITHM_NAME)
     obj.put("hashIterations", hashIterations)
-
-    print("STORED: Salt (not b64): "+salt+ " PassHash: "+pw)
 
 
     return obj
@@ -91,7 +87,6 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
    *
    */
   override function doGetAuthenticationInfo(authToken: AuthenticationToken): AuthenticationInfo {
-    print("DoGetAuthenticationInfo() called!")
     if (!(authToken typeis UsernamePasswordToken)) {
       throw new AuthenticationException("This realm only supports UsernamePasswordTokens")
     }
@@ -129,7 +124,6 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
    *
    */
   override function doGetAuthorizationInfo(p0: PrincipalCollection): AuthorizationInfo {
-    print("DoGetAuthorizationInfo called!")
     var info = new SimpleAuthorizationInfo()
     var cursor = _collection.find( new BasicDBObject("_id", new BasicDBObject("$in",p0.asList())))
 
@@ -148,7 +142,6 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
         }
       }
     }
-    print("DoGetAuthorizationInfo returns!")
     return info
   }
 
