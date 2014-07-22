@@ -10,6 +10,7 @@ uses org.json.simple.parser.JSONParser
 uses org.json.simple.JSONArray
 uses java.util.Map
 uses org.json.simple.JSONObject
+uses java.util.Set
 
 class DataUploadJob extends Job {
 
@@ -62,9 +63,11 @@ class DataUploadJob extends Job {
       data = parseUpload()
     }
     checkCancellation()
-    checkCancellation()
     var companies : List<Company> = {}
     this.StatusFeed = "Parsed company information"
+    var policies : Set<String> = {}
+    print(companies)
+    print(policies)
     save()
     for (company in data index i) {
       if (i % 20 == 0) {
