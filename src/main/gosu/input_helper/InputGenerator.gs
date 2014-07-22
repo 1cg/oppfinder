@@ -22,7 +22,7 @@ class InputGenerator {
       var tag = (TagHelper.tag('input', {'value' -> value as String,
                                           'type' -> 'radio',
                                           'name' -> format(literal)}.merge(options)))
-      buf.append(TagHelper.contentTag('label', tag + value as String, options))
+      buf.append(TagHelper.contentTag('label', tag + value as String, options, false))
     }
     return buf.toString()
   }
@@ -35,12 +35,12 @@ class InputGenerator {
   static function selectInput(literal: PropertyReference, name: String = null,
                               options: Map<String, String> = null) : String {
     var label = labelInput(name, literal)
-    return label + TagHelper.contentTag('select', options(literal), {'name' -> format(literal)}.merge(options))
+    return label + TagHelper.contentTag('select', options(literal), {'name' -> format(literal)}.merge(options), false)
   }
 
   static function labelInput(name: String, literal: PropertyReference) : String {
     name = name ?: literal.PropertyInfo.DisplayName
-    return TagHelper.contentTag('label', name + ':&nbsp;', {'for' -> format(literal)})
+    return TagHelper.contentTag('label', name + ': ', {'for' -> format(literal)})
   }
 
   /*

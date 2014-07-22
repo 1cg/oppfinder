@@ -4,7 +4,6 @@ uses sparkgs.ISparkGSFilter
 uses sparkgs.SparkGSResponse
 uses sparkgs.SparkGSRequest
 uses org.apache.shiro.SecurityUtils
-uses spark.Response
 
 class AuthFilter implements ISparkGSFilter {
   override function before(req: SparkGSRequest, resp: SparkGSResponse) {

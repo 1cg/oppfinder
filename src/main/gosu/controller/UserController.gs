@@ -86,7 +86,7 @@ class UserController implements IHasRequestContext, IResourceController {
         print("account for that username is locked")
       } catch(ae : AuthenticationException) {
         print("authentication exception "+ae)
-
+        throw(ae)
       }
       Headers['X-IC-Redirect'] = "/user"
     }

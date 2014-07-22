@@ -3,7 +3,6 @@ package controller
 uses sparkgs.util.IHasRequestContext
 
 uses jobs.Job
-uses jobs.UploadJob
 uses jobs.RecommendJob
 uses view.jobs.JobDrillDown
 uses view.jobs.JobStatusFeedList
@@ -14,7 +13,7 @@ uses view.jobs.JobTable
 uses view.jobs.JobTableBody
 uses view.jobs.SubJobTableBody
 uses java.text.SimpleDateFormat
-uses jobs.GenerateJob
+uses jobs.DataUploadJob
 uses java.lang.IllegalStateException
 uses model.Company
 
@@ -142,13 +141,10 @@ class JobController implements IHasRequestContext, IResourceController {
       case 'recommend' :
         job = new RecommendJob()
         break
-      case 'upload' :
-        job = new UploadJob(Request.Body)
-        UUId = job.UUId
-        break
       case 'generate' :
-        if (!verifyCollection()) return raw('OOps please choose another data set name')
-        job = new GenerateJob()
+        if (!verifyCollection()) return ""
+        job = new DataUploadJob()
+        job.put('Body', Request.Body)
         UUId = job.UUId
         break
       case 'auth' :
@@ -185,7 +181,12 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function verifyCollection() : boolean {
-    return Company.validCollection(Request.QueryMap.get({GenerateJob.Type.DisplayName}).toMap()['DataSetCollection'].first())
+    if (!Company.validCollection(Request.QueryMap.get({DataUploadJob.Type.DisplayName}).toMap()['DataSetCollection'].first())){
+      Headers['X-IC-Script'] = 'alert("Duplicate data set name; choose another!");'
+      Headers['X-IC-Redirect'] = "/datasets/new"
+      return false
+    }
+    return true
   }
 
 
