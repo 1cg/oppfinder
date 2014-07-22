@@ -16,6 +16,7 @@ uses view.jobs.SubJobTableBody
 uses java.text.SimpleDateFormat
 uses jobs.GenerateJob
 uses java.lang.IllegalStateException
+uses model.Company
 
 class JobController implements IHasRequestContext, IResourceController {
 
@@ -146,6 +147,7 @@ class JobController implements IHasRequestContext, IResourceController {
         UUId = job.UUId
         break
       case 'generate' :
+        if (!verifyCollection()) return raw('OOps please choose another data set name')
         job = new GenerateJob()
         UUId = job.UUId
         break
@@ -180,6 +182,10 @@ class JobController implements IHasRequestContext, IResourceController {
 
   function cancelPolling() {
     Headers['X-IC-CancelPolling'] = true as String
+  }
+
+  function verifyCollection() : boolean {
+    return Company.validCollection(Request.QueryMap.get({GenerateJob.Type.DisplayName}).toMap()['DataSetCollection'].first())
   }
 
 

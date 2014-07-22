@@ -46,4 +46,8 @@ class Company extends Document {
     return policies
   }
 
+  static function validCollection(name : String) : boolean {
+    return Document.find(id, name, collection) == null
+  }
+
 }
