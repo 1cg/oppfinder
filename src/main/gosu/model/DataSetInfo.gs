@@ -6,15 +6,14 @@ uses model.database.Document
 
 class DataSetInfo extends Document {
 
-  public static var REGION_COORDINATES : String = "regionCoordinates"
-  public static var MASTER_DATA_SET : String = "masterDataSet" // MongoCollection of DataSets to refer to
+  public static var _collection: String = "DataSetInfo"
 
   construct(key : String, value : Object) {
-    super(MASTER_DATA_SET, key, value)
+    super(_collection, key, value)
   }
 
   construct() {
-    super(MASTER_DATA_SET)
+    super(_collection)
   }
 
   static function register(collection : String, count : long) {
@@ -26,15 +25,15 @@ class DataSetInfo extends Document {
   }
 
   static property get All() : SkipIterable<DataSetInfo> {
-    return all(MASTER_DATA_SET) as SkipIterable<DataSetInfo>
+    return all(_collection) as SkipIterable<DataSetInfo>
   }
 
   static property get AllNames() : List<String> {
-    return all(MASTER_DATA_SET).map(\ o -> o.get('Name') as String)
+    return all(_collection).map(\ o -> o.get('Name') as String)
   }
 
   static property get MostRecent() : DataSetInfo {
-    return first(MASTER_DATA_SET) as DataSetInfo
+    return first(_collection) as DataSetInfo
   }
 
   property get Name() : String {
@@ -59,6 +58,13 @@ class DataSetInfo extends Document {
 
   property set Created(time : String) {
     put('Created', time)
+  }
+
+  static function deleteAll(id : String) {
+    for (company in Company.findByJob(id)) {
+      company.delete()
+    }
+    Document.find('Name', id, _collection).delete()
   }
 
 }

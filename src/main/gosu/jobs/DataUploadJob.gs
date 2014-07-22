@@ -6,8 +6,12 @@ uses datagen.GenerateTest
 uses datagen.GenerateRandom
 uses model.Company
 uses model.database.Document
+uses org.json.simple.parser.JSONParser
+uses org.json.simple.JSONArray
+uses java.util.Map
+uses org.json.simple.JSONObject
 
-class GenerateJob extends Job {
+class DataUploadJob extends Job {
 
   enum Types {Test, Random}
 
@@ -40,15 +44,24 @@ class GenerateJob extends Job {
     put('JobType', type.toString())
   }
 
+  property get Data() : String {
+    return get('Data') as String
+  }
+
+  property set Data(data : String) {
+    put('Data',data)
+  }
+
   override function executeJob() {
     var data : List<Company> = {}
     if (JobType.Value == Types.Test) {
       data = GenerateTest.generateTest('Reach', 2)
-    } else {
+    } else if (JobType.Value == Types.Random) {
       data = GenerateRandom.generateRandom()
+    } else {
+      data = parseUpload()
     }
     checkCancellation()
-    this.StatusFeed = "Dropping previous dataset"
     checkCancellation()
     var companies : List<Company> = {}
     this.StatusFeed = "Parsed company information"
@@ -64,7 +77,8 @@ class GenerateJob extends Job {
       company.save()
     }
     checkCancellation()
-    DataSetInfo.register(DataSetCollection, Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count)
+    var size = Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count
+    DataSetInfo.register(DataSetCollection, size)
     this.StatusFeed = "Company information inserted"
     this.StatusFeed = 'View data set <a href="/datasets/${DataSetCollection}">here</a>'
     this.StatusFeed = "Done"
@@ -74,6 +88,26 @@ class GenerateJob extends Job {
 
   override function renderToString() : String {
     return ""
+  }
+
+  function parseUpload() : List<Company> {
+    var data = Data
+    data = data.substring(0, data.lastIndexOf("\n---"))
+    if (data.length < 6) {
+      this.Progress = 100
+      save()
+      return null
+    }
+    var array = new JSONParser().parse(data) as JSONArray
+    checkCancellation()
+    var iterations = array.size()
+    var companies : List<Company> = {}
+    for (companyObject in array index i) {
+      var company = new Company()
+      company.putAll((companyObject as JSONObject) as Map<String, Object>)
+      companies.add(company)
+    }
+    return companies
   }
 
 }

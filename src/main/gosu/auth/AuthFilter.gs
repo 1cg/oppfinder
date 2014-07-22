@@ -6,9 +6,10 @@ uses sparkgs.SparkGSRequest
 uses org.apache.shiro.SecurityUtils
 
 class AuthFilter implements ISparkGSFilter {
+
   override function before(req: SparkGSRequest, resp: SparkGSResponse) {
     if(!SecurityUtils.getSubject().Authenticated) {
-      resp.redirect("/users")
+      resp.redirect("/user")
     }
   }
 
