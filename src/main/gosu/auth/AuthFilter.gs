@@ -8,7 +8,8 @@ uses org.apache.shiro.SecurityUtils
 class AuthFilter implements ISparkGSFilter {
   override function before(req: SparkGSRequest, resp: SparkGSResponse) {
     if(!SecurityUtils.getSubject().Authenticated) {
-      resp.redirect("/users")
+      print("not authenticated")
+      resp.redirect("/user")
     }
   }
 

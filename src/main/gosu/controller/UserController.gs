@@ -73,7 +73,8 @@ class UserController implements IHasRequestContext, IResourceController {
         if (currentUser.isAuthenticated()) {
           print("user authenticated")
           print("auth user: "+currentUser.getPrincipal())
-          return "Authenticated!"
+          redirect("/")
+          return ""
         } else {
           print("dafuq")
         }
@@ -93,7 +94,8 @@ class UserController implements IHasRequestContext, IResourceController {
 
   function logout() : Object {
     SecurityUtils.getSubject().logout()
-    return null
+    Headers['X-IC-Redirect'] = "/user"
+    return index()
   }
 
   override function _new(): Object {

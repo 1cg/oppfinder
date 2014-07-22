@@ -42,9 +42,6 @@ using(filter(new AuthFilter())) {
 
 
 
-
-
-
 onException(Exception, \ ex, req, resp -> {
   resp.Body = view.ExceptionPage.renderToString(ex)
 })
