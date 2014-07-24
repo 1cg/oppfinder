@@ -3,11 +3,6 @@ uses controller.DataSetController
 uses controller.ResultsController
 uses java.lang.Exception
 uses controller.UserController
-uses org.apache.shiro.SecurityUtils
-uses model.database.Database
-uses org.apache.shiro.mgt.DefaultSecurityManager
-uses auth.MongoUserPasswordRealm
-uses org.apache.shiro.mgt.SecurityManager
 uses auth.AuthFilter
 
 extends sparkgs.SparkGSFile
@@ -15,11 +10,7 @@ extends sparkgs.SparkGSFile
 StaticFiles = '/public'
 Layout = view.Layout
 
-var _realm = new MongoUserPasswordRealm(Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION"))
-SecurityUtils.setSecurityManager(new DefaultSecurityManager(_realm))
-var _subject = SecurityUtils.getSubject()
-
-resource('/user', new UserController(_realm, _subject))
+resource('/user', new UserController())
 
 using(filter(new AuthFilter())) {
   get('/', \-> view.Root.renderToString())
