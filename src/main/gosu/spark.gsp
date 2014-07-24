@@ -7,7 +7,6 @@ uses org.apache.shiro.SecurityUtils
 uses model.database.Database
 uses org.apache.shiro.mgt.DefaultSecurityManager
 uses auth.MongoUserPasswordRealm
-uses org.apache.shiro.mgt.SecurityManager
 uses auth.AuthFilter
 
 extends sparkgs.SparkGSFile
@@ -33,8 +32,6 @@ using(filter(new AuthFilter())) {
   // Results
   resource("/results", new ResultsController())
 }
-
-
 
 onException(Exception, \ ex, req, resp -> {
   resp.Body = view.ExceptionPage.renderToString(ex)

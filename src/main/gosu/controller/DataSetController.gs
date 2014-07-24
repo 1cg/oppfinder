@@ -8,15 +8,21 @@ uses view.datasets.GenerateUploadPage
 uses java.net.URLDecoder
 uses model.Company
 uses model.DataSetInfo
+uses view.datasets.DataSetTableBody
 
 class DataSetController implements IHasRequestContext, IResourceController {
 
   override function index() : Object {
     return DataSetTable.renderToString(DataSetInfo.All.paginate(Params['page'] ?: 1))
   }
+
   override function show(id: String)  : Object {
     var did = URLDecoder.decode(id, "UTF-8")
     return Drilldown.renderToString(did, Company.findByJob(did).paginate(Params['page']))
+  }
+
+  function table() : Object {
+    return DataSetTableBody.renderToString(DataSetInfo.All.paginate(Params['page'] ?: 1))
   }
 
   override function create()  : Object {
@@ -35,7 +41,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
     return null
   }
 
-  function delete(id : String) {
-    DataSetInfo.deleteAll(id)
+  function delete() {
+    DataSetInfo.deleteAll(Params['id'])
   }
 }

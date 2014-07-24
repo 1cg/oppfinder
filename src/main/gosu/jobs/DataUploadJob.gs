@@ -11,6 +11,7 @@ uses org.json.simple.JSONArray
 uses java.util.Map
 uses org.json.simple.JSONObject
 uses java.util.Set
+uses model.Policy
 
 class DataUploadJob extends Job {
 
@@ -65,9 +66,7 @@ class DataUploadJob extends Job {
     checkCancellation()
     var companies : List<Company> = {}
     this.StatusFeed = "Parsed company information"
-    var policies : Set<String> = {}
-    print(companies)
-    print(policies)
+    var policies : Set<Policy> = {}
     save()
     for (company in data index i) {
       if (i % 20 == 0) {
@@ -78,10 +77,11 @@ class DataUploadJob extends Job {
       company.put('longID', UUID.randomUUID().LeastSignificantBits)
       company.DataSet = DataSetCollection
       company.save()
+      policies.addAll(company.Policies)
     }
     checkCancellation()
     var size = Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count
-    DataSetInfo.register(DataSetCollection, size)
+    DataSetInfo.register(DataSetCollection, size, policies)
     this.StatusFeed = "Company information inserted"
     this.StatusFeed = 'View data set <a href="/datasets/${DataSetCollection}">here</a>'
     this.StatusFeed = "Done"
