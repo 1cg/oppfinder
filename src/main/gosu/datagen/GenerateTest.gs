@@ -1,8 +1,6 @@
 package datagen
 
 
-uses org.json.simple.JSONArray
-uses org.json.simple.JSONObject
 uses model.Company
 uses model.Policy
 

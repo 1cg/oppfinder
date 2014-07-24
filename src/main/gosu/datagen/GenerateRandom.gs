@@ -5,9 +5,7 @@ uses java.util.Random
 uses java.util.LinkedList
 uses java.io.FileReader
 uses java.io.BufferedReader
-uses org.json.simple.JSONObject
 uses java.math.BigDecimal
-uses org.json.simple.JSONArray
 uses util.AssetLibrarian
 uses model.Company
 uses model.Policy
