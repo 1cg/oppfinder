@@ -25,8 +25,6 @@ using(filter(new AuthFilter())) {
   resource("/results", new ResultsController())
 }
 
-
-
 onException(Exception, \ ex, req, resp -> {
   resp.Body = view.ExceptionPage.renderToString(ex)
 })

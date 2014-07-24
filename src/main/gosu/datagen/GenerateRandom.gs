@@ -10,6 +10,7 @@ uses java.math.BigDecimal
 uses org.json.simple.JSONArray
 uses util.AssetLibrarian
 uses model.Company
+uses model.Policy
 
 class GenerateRandom {
   /*
@@ -42,18 +43,16 @@ class GenerateRandom {
       company.put("Email", dataMap.get("Email").get(i % dataMap.get("Email").size()) as String)
       company.put("Region", dataMap.get("Region").get(rand.nextInt(dataMap.get("Region").size())) as String)
       company.put("Reach", dataMap.get("Reach").get(rand.nextInt(dataMap.get("Reach").size())) as String)
-      var coPolicies = new JSONArray();
+      var coPolicies : List<Policy> = {}
       for (policyType in dataMap.get("Policy") index j) {
         if (rand.nextInt(2) == 0 || j+1 == dataMap.get("Policy").size()) {
-          var policy = new JSONObject()
-          policy.put("Type", policyType as String)
-          policy.put("Premium", (5000 + rand.nextInt(999500)))
+          var policy = new Policy(policyType as String, 5000 + rand.nextInt(999500))
           coPolicies.add(policy)
         } else {
           continue
         }
       }
-      company.put("Policies", coPolicies)
+      company.Policies = coPolicies
       company.put("Revenue", (new BigDecimal(10 + rand.nextInt(162000))).toString())
       company.put("Size", (50 + rand.nextInt(40000)) as String)
       bigArray.add(company)

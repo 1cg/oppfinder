@@ -3,6 +3,9 @@ package model
 uses util.iterable.SkipIterable
 uses util.TimeUtil
 uses model.database.Document
+uses input_helper.Json
+uses java.util.Set
+uses com.google.gson.reflect.TypeToken
 
 class DataSetInfo extends Document {
 
@@ -16,11 +19,12 @@ class DataSetInfo extends Document {
     super(_collection)
   }
 
-  static function register(collection : String, count : long) {
+  static function register(collection : String, count : long, policies : Set<Policy>) {
     var info = new DataSetInfo()
     info.Created = TimeUtil.now()
     info.Size = count
     info.Name = collection
+    info.Policies = policies
     info.save()
   }
 
@@ -34,6 +38,14 @@ class DataSetInfo extends Document {
 
   static property get MostRecent() : DataSetInfo {
     return first(_collection) as DataSetInfo
+  }
+
+  property get Policies() : Set<Policy> {
+    return Json.fromJSON(get('Policies') as String, new TypeToken<Set<Policy>>(){}.getType())
+  }
+
+  property set Policies(policies : Set<Policy>) {
+    put('Policies', policies.toJSON())
   }
 
   property get Name() : String {

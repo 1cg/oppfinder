@@ -4,6 +4,7 @@ package datagen
 uses org.json.simple.JSONArray
 uses org.json.simple.JSONObject
 uses model.Company
+uses model.Policy
 
 class GenerateTest {
 
@@ -46,22 +47,22 @@ class GenerateTest {
           company.put(key, controlVariables[key])
         }
       }
-      var coPolicies = new JSONArray()
-      var policy = new JSONObject()
+      var coPolicies : List<Policy> = {}
+      var policy = new Policy()
       if(j == numCompanies-1) {
-        policy.put("Type", "Property")
+        policy.Policy =  "Property"
       } else if (j == numCompanies -2) {
-        var policy2 = new JSONObject()
-        policy2.put("Type", "Property")
-        policy2.put("Premium", "100")
+        var policy2 = new Policy()
+        policy2.Policy = "Property"
+        policy2.Value = 100
         coPolicies.add(policy2)
-        policy.put("Type", "Godzilla")
+        policy.Policy = "Godzilla"
       } else {
-        policy.put("Type", "Godzilla")
+        policy.Policy = "Godzilla"
       }
-      policy.put("Premium", "100")
+      policy.Value =  100
       coPolicies.add(policy)
-      company.put("Policies", coPolicies)
+      company.Policies = coPolicies
       bigArray.add(company)
     }
     return bigArray

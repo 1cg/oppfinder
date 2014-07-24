@@ -1,4 +1,4 @@
-<%@ params(id : String, pager: util.iterable.PagerIterable<model.database.Document>)%>
+<%@ params(id : String, companies: util.iterable.PagerIterable<model.Company>)%>
 <div>
   <h2 class="page-title">DataSet: ${id}</h2>
   <button class='btn btn-primary pull-right' ic-post-to='/jobs?type=recommend&jobs.RecommendJob[DataSetCollection]=${id}'>Analyze DataSet</button>
@@ -14,20 +14,20 @@
       </tr>
     </thead>
     <tbody>
-      <% for (entry in pager) { %>
+      <% for (company in companies) { %>
         <tr>
           <% for (type in model.Company.CompanyDataTypes) { %>
             <td> <% if (type == 'Policies') {
-      for (policy in model.Company.PolicyBreakdown(entry.get(type) as String)){ %>
+            for (policy in company.Policies){ %>
                ${policy}<br>
               <% }} else { %>
-               ${entry.get(type)} <% } %>
+               ${company.get(type)} <% } %>
             </td>
           <% } %>
         </tr>
       <% } %>
     </tbody>
   </table>
-  ${new widgets.PagerWidget().renderWidget(pager)}
+  ${new widgets.PagerWidget().renderWidget(companies)}
 </div>
 
