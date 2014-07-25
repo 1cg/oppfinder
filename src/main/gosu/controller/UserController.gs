@@ -37,6 +37,9 @@ class UserController implements IHasRequestContext, IResourceController {
 
     var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
     var DBObj = new DBObject[] { _realm.createUserCredentials(username, password)}
+
+    // insert a check to ensure all usernames are unique; no duplicates!!
+
     db.insert(DBObj)
 
     return null
@@ -57,6 +60,7 @@ class UserController implements IHasRequestContext, IResourceController {
 
         if (currentUser.isAuthenticated()) {
           Session["currentUser"] = currentUser
+          Session["username"] = Params['username'] // used for authorization
           Headers['X-IC-Redirect'] = "/"
           return index()
         } else {
@@ -77,6 +81,7 @@ class UserController implements IHasRequestContext, IResourceController {
   }
 
   function logout() : Object {
+    Session.remove("username")
     Session.remove("currentUser")
     SecurityUtils.getSubject().logout()
     Headers['X-IC-Redirect'] = "/user"

@@ -19,7 +19,7 @@ class ResultsController implements  IHasRequestContext, IResourceController {
     if (loggedIn && !hasAttribute) {
       Request.Session.attribute("code", code)
     }
-    return ResultTable.renderToString(loggedIn, ResultInfo.All.paginate(Params['page']))
+    return ResultTable.renderToString(loggedIn, ResultInfo.getAll(Session['username'] as String).paginate(Params['page']))
   }
 
   function push() : Object {

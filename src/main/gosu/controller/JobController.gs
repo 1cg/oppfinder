@@ -21,12 +21,12 @@ class JobController implements IHasRequestContext, IResourceController {
 
   override function index() : Object {
     var status = Params['status'] ?: "all"
-    return JobTable.renderToString(status, Job.findByStatus(status).paginate(Params['page']))
+    return JobTable.renderToString(status, Job.findByStatus(status, Session['username'] as String).paginate(Params['page']))
   }
 
   function table() : Object {
     var status = Params['status'] ?: "all"
-    return raw(JobTableBody.renderToString(status, Job.findByStatus(status).paginate(Params['page'])))
+    return raw(JobTableBody.renderToString(status, Job.findByStatus(status, Session['username'] as String).paginate(Params['page'])))
   }
 
   function subJobTable(UUID : String) : Object {
@@ -152,6 +152,7 @@ class JobController implements IHasRequestContext, IResourceController {
       default:
         throw new IllegalStateException("No such job type")
     }
+    job.put('Owner', Session["username"])
     job.updateFrom(Request.QueryMap.get({job.IntrinsicType.DisplayName}).toMap().mapValues(\ o -> o.first()))
     job.save()
     job.start()

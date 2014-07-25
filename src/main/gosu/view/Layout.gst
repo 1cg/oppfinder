@@ -56,8 +56,8 @@
               Connected to Salesforce <font color="#3399f3"><i class="fa fa-cloud"></i></font>
               <% } %>
             </a></li>
-            <li><a href="/user/logout">Log out <i class="fa fa-sign-out"></i></a></li>
             <li><a href="https://github.com/carsongross/oppfinder">GitHub <i class="fa fa-github"></i></a></li>
+            <li><a href="/user/logout">Log out <i class="fa fa-sign-out"></i></a></li>
           </ul>
         </div>
       </div>

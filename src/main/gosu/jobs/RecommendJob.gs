@@ -104,7 +104,8 @@ class RecommendJob extends Job {
       result.put('Policy', MahoutUtil.longToPolicy(policies, result.ItemID))
       result.save()
     }
-    ResultInfo.addResults(UUId, DataSetCollection)
+    var owner = get("Owner") as String
+    ResultInfo.addResults(UUId, DataSetCollection, owner)
   }
 
   /*

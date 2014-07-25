@@ -19,22 +19,25 @@ class DataSetInfo extends Document {
     super(_collection)
   }
 
-  static function register(collection : String, count : long, policies : List<Policy>, fields : Set<String>) {
+  static function register(collection : String, count : long, policies : List<Policy>, fields : Set<String>, owner : String) : DataSetInfo {
     var info = new DataSetInfo()
     info.Created = TimeUtil.now()
     info.Size = count
     info.Name = collection
     info.Policies = policies
+    print("registering owner..."+owner)
+    info.Owner = owner
     info.Fields = fields
     info.save()
+    return info
   }
 
   static function findDS(name : String) : DataSetInfo {
     return Document.find('Name', name, _collection) as DataSetInfo
   }
 
-  static property get All() : SkipIterable<DataSetInfo> {
-    return all(_collection) as SkipIterable<DataSetInfo>
+  static function getAll(owner : String) : SkipIterable<DataSetInfo> {
+    return findMany('Owner', owner, _collection) as SkipIterable<DataSetInfo>
   }
 
   static property get AllNames() : List<String> {
@@ -57,6 +60,15 @@ class DataSetInfo extends Document {
     //put('Policies', policies.toJSON())
   }
 
+  property get Owner() : String {
+    return get('Owner') as String
+  }
+
+  property set Owner(name : String) {
+    print("setting dataset owner now!: " + name)
+    put('Owner', name)
+  }
+
   property get Companies() : SkipIterable<Company> {
     return Company.findByJob(Name)
   }
@@ -68,7 +80,7 @@ class DataSetInfo extends Document {
   property set Fields(fields : Set<String>) {
     put('Fields', fields.toJSON())
   }
-
+  
   property get Name() : String {
     return get('Name') as String
   }

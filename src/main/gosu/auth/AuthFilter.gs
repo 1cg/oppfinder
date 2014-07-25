@@ -11,6 +11,7 @@ class AuthFilter implements ISparkGSFilter {
     if(currentUser == null) {
       resp.redirect("/user")
     } else if (!currentUser.Authenticated) {
+      req.Session.remove("username")
       req.Session.remove("currentUser")
       req.Headers['X-IC-Redirect'] = "/"
       resp.redirect("/user")
