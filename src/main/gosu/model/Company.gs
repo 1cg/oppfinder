@@ -2,6 +2,7 @@ package model
 
 uses model.database.Document
 uses util.iterable.SkipIterable
+uses java.util.Set
 
 class Company extends Document {
 
@@ -34,6 +35,15 @@ class Company extends Document {
     //TODO - Change this back
     put('Policies', policies.toString())
     //put('Policies', policies.toJSON())
+  }
+
+  property get AnalyzableFields() : Set<String> {
+    var fields = AllFields
+    fields.remove(id)
+    fields.remove('Policies')
+    fields.remove('longID')
+    fields.remove('Company')
+    return fields
   }
 
   static function findByJob(UUID : String) : SkipIterable<Company> {

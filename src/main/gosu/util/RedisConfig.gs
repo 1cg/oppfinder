@@ -9,9 +9,9 @@ uses net.greghaines.jesque.client.ClientImpl
 uses java.util.concurrent.locks.ReentrantLock
 uses net.greghaines.jesque.Job
 
-class RedisConfigUtil {
+class RedisConfig {
 
-  static final var _INSTANCE : RedisConfigUtil as readonly INSTANCE = new RedisConfigUtil()
+  static final var _INSTANCE : RedisConfig as readonly INSTANCE = new RedisConfig ()
   static final var _LOCK = new ReentrantLock()
   var _CONFIG : Config as readonly CONFIG
   var _CLIENT : Client as readonly CLIENT
