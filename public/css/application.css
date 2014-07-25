@@ -58,3 +58,7 @@ body {
 .no-wrap {
   min-width: 80px;
 }
+
+.formcontent {
+  padding:10px;
+}

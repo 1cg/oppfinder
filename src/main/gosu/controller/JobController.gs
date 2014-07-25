@@ -19,8 +19,6 @@ uses model.Company
 
 class JobController implements IHasRequestContext, IResourceController {
 
-  static var UUId : String
-
   override function index() : Object {
     var status = Params['status'] ?: "all"
     return JobTable.renderToString(status, Job.findByStatus(status, Session['username'] as String).paginate(Params['page']))
@@ -37,13 +35,13 @@ class JobController implements IHasRequestContext, IResourceController {
   }
 
   function generateProgress() : Object {
-    var progress = Job.findJob(UUId)?.Progress
+    var progress = Job.findJob(Session['UUId'] as String)?.Progress
     if (progress == 100) cancelPolling()
     return raw(progress + "%")
   }
 
   function generateComplete() : Object {
-    if (Job.findJob(UUId)?.Progress == 100) {
+    if (Job.findJob(Session['UUId'] as String)?.Progress == 100) {
       cancelPolling()
       return raw('<div class="fa fa-check chk navbar-left"</div>')
     }
@@ -140,12 +138,13 @@ class JobController implements IHasRequestContext, IResourceController {
         break
       case 'recommend' :
         job = new RecommendJob()
+        (job as RecommendJob).Fields = Params.all('Fields[]')?.toList()
         break
       case 'generate' :
         if (!verifyCollection()) return ""
         job = new DataUploadJob()
         job.put('Body', Request.Body)
-        UUId = job.UUId
+        Session['UUId'] = job.UUId
         break
       case 'auth' :
         job = new SalesforceAuthJob(Request.Session.attribute("code"), Params.all('resultcheckbox[]'))

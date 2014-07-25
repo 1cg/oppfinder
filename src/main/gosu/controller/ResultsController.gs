@@ -6,7 +6,9 @@ uses view.results.ResultTable
 uses model.ResultInfo
 uses view.results.Result
 uses view.results.ResultUpload
-uses view.results.NewAnalysis
+uses view.results.Analysis
+uses view.results.AnalysisSetup
+uses model.DataSetInfo
 
 class ResultsController implements  IHasRequestContext, IResourceController {
 
@@ -25,11 +27,12 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   override function _new(): Object {
-    return NewAnalysis.renderToString()
+    return Analysis.renderToString(null)
   }
 
   override function create(): Object {
-    return null
+    var info = DataSetInfo.findDS(Params['jobs.RecommendJob[DataSetCollection]'])
+    return raw(AnalysisSetup.renderToString(info))
   }
 
   override function show(id: String): Object {

@@ -1,4 +1,4 @@
-<%@ extends input_helper.InputGenerator %>
+DataUpload<%@ extends input_helper.InputGenerator %>
 <div>
   <h2 class="page-title">New Data Set</h2>
 </div>
@@ -8,9 +8,9 @@
       <h4>Generate Data Set</h4>
       <div class="well well-sm">
         <form ic-post-to="/jobs?type=generate" role="form">
-          ${textInput(jobs.DataUploadJob#DataSetCollection, 'New Data Set Name', {'placeholder' -> 'Leave blank for a random name','class' -> 'form-control'})}
+          ${textInput(jobs.DataUploadJob #DataSetCollection, 'New Data Set Name', {'placeholder' -> 'Leave blank for a random name','class' -> 'form-control'})}
           <br>
-          ${radioInput(jobs.DataUploadJob#JobType, 'Generation Method', {'class' -> 'radio'})}
+          ${radioInput(jobs.DataUploadJob #JobType, 'Generation Method', {'class' -> 'radio'})}
           ${submitInput('Generate Data Set', {'class' -> 'btn btn-primary'})}
         </form>
       </div>

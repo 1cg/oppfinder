@@ -13,7 +13,7 @@
     <repository>
         <id>gosu-lang.org-snapshots</id>
         <name>Official Gosu website (snapshots)</name>
-        <url>http://gosu-lang.org/nexus/content/repositories/snapshots</url>
+        <url>http://gosu-lang.org/repositories/m2/snapshots</url>
     </repository>
     <repository>
         <id>sonatype-nexus-snapshots</id>

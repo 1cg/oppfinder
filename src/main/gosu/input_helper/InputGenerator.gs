@@ -6,6 +6,7 @@ uses java.lang.StringBuffer
 uses java.util.Map
 uses java.lang.IllegalArgumentException
 uses gw.lang.reflect.IEnumType
+uses java.util.Collection
 
 class InputGenerator {
 
@@ -19,9 +20,33 @@ class InputGenerator {
     var buf = new StringBuffer()
     buf.append(labelInput(name, literal))
     for (value in getValues(literal)) {
-      var tag = (TagHelper.tag('input', {'value' -> value as String,
+      var tag = (TagHelper.tag('input', {'value' -> value.toString(),
                                           'type' -> 'radio',
                                           'name' -> format(literal)}.merge(options)))
+      buf.append(TagHelper.contentTag('label', tag + value as String, options, false))
+    }
+    return buf.toString()
+  }
+
+  static function checkboxInput(literal: PropertyReference, name: String = null, options: Map<String, String> = null) : String {
+    var buf = new StringBuffer()
+    buf.append(labelInput(name, literal))
+    for (value in getValues(literal)) {
+      var tag = (TagHelper.tag('input', {'value' -> value.toString(),
+                                         'type' -> 'checkbox',
+                                         'name' -> 'checkbox[]'}.merge(options)))
+      buf.append(TagHelper.contentTag('label', tag + value as String, options, false))
+    }
+    return buf.toString()
+  }
+
+  static function checkboxInputCollection(collection : Collection<Object>, name : String, options: Map<String, String> = null) : String {
+    var buf = new StringBuffer()
+    buf.append(TagHelper.contentTag('label', name + ': ', {'for' -> '${name}[]'}))
+    for (value in collection) {
+      var tag = (TagHelper.tag('input', {'value' -> value.toString(),
+                                         'type' -> 'checkbox',
+                                         'name' -> '${name}[]'}.merge(options)))
       buf.append(TagHelper.contentTag('label', tag + value as String, options, false))
     }
     return buf.toString()

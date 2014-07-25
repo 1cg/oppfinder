@@ -15,5 +15,13 @@ class Policy {
     _value = value
   }
 
+  override function equals(obj : Object) : boolean {
+    if (!(obj typeis Policy)) return false
+    return (obj as Policy).Policy == _policy
+  }
+
+  override function hashCode() : int {
+    return _policy.hashCode()
+  }
 
 }

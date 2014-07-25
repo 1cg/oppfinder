@@ -14,19 +14,20 @@ uses org.bson.types.ObjectId
 abstract class Document {
 
   var _obj : BasicDBObject
+  var _shadow : BasicDBObject
   var _id : ObjectId //Unique ID. This would be the primary key in a SQL database or a unique document ID in MongoDB
   var _collection : MongoCollection
   var inserted : boolean as readonly Persisted
 
   //If no name is supplied, the name of the data source is assumed to be the plural of the name of the class
   construct() {
-    _obj = new BasicDBObject()
+    _obj = new()
     _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
     inserted = false
   }
 
   construct(collection : String) {
-    _obj = new BasicDBObject()
+    _obj = new()
     _collection = new MongoCollection(collection)
     inserted = false
   }
@@ -35,6 +36,8 @@ abstract class Document {
   construct(key : String, value : Object) {
     _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
     reload(key, value)
+    _shadow = new()
+    _shadow.putAll(_obj)
     _id = _obj['_id'] as ObjectId
     inserted = true
   }
@@ -42,6 +45,8 @@ abstract class Document {
   construct(collection : String, key : String, value : Object) {
     _collection = new MongoCollection(collection)
     reload(key, value)
+    _shadow = new()
+    _shadow.putAll(_obj)
     _id = _obj['_id'] as ObjectId
     inserted = true
   }
@@ -83,12 +88,24 @@ abstract class Document {
 
   final function save() {
     if (inserted) {
-      _collection.update(query(), _obj)
+      _collection.update(query(), shadowDiff())
     } else {
       _obj['intrinsic_type'] = this.IntrinsicType.Name
       _id = _collection.insert(_obj)
+      _shadow = new()
+      _shadow.putAll(_obj)
       inserted = true
     }
+  }
+
+  final function shadowDiff() : BasicDBObject {
+    var diff = new BasicDBObject()
+    for (entry in _obj.entrySet()) {
+      if (_shadow[entry.Key] == null || _shadow[entry.Key] != entry.Value) {
+        diff.put(entry.Key, entry.Value)
+      }
+    }
+    return diff
   }
 
   final function reload(key = '_id', value = null) {

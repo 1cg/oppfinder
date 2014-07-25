@@ -3,20 +3,21 @@ package jobs
 uses java.util.Map
 uses java.lang.Thread
 uses util.MahoutUtil
-uses java.util.Arrays
 uses util.iterable.SkipIterable
 uses model.ResultInfo
 uses model.Result
 uses java.util.Collection
 uses model.Company
 uses model.database.Document
+uses com.google.gson.Gson
+uses com.google.gson.reflect.TypeToken
+uses model.DataSetInfo
 
 class RecommendJob extends Job {
 
   static final var NUM_RECOMMENDATIONS = 10
   static final var NUM_BUCKETS = 4
   public static final var DELIMITER : String = ","
-  var subJobs = {"recommender.LocationFieldImpl", "recommender.SizeFieldImpl", "recommender.ReachFieldImpl","recommender.RevenueFieldImpl"}
   var subJobsID : List<String> = {}
   final var SLEEP_TIME = 1000
 
@@ -38,8 +39,8 @@ class RecommendJob extends Job {
 
   override function executeJob() {
     checkCancellation()
-    var dataSet = DataSetCollection
-    startSubJobs(dataSet)
+    print(Fields)
+    startSubJobs()
     StatusFeed = "Started Sub Jobs"
     poll() //Blocks until sub-tasks are complete
     StatusFeed = "Sub Jobs Complete"
@@ -63,7 +64,7 @@ class RecommendJob extends Job {
       this.StatusFeed = "No recommendations found"
       save()
     } else {
-      storeTopRecommendations(recommendations.Values, dataSet)
+      storeTopRecommendations(recommendations.Values)
       this.StatusFeed = "Recommendations Stored: <a href=/results/${UUId}><strong>See Results!</strong></a>"
       this.StatusFeed = "Done"
       save()
@@ -73,17 +74,17 @@ class RecommendJob extends Job {
   /*
   * Runs each of the sub jobs that analyze the selected fields
    */
-  function startSubJobs(dataSet : String) {
-    var size = (Document.findMany(Company.ForeignName, dataSet, Company.Collection).Count + NUM_BUCKETS-1)/NUM_BUCKETS
-    for (jobName in subJobs) {
+  private function startSubJobs() {
+    var size = (Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count + NUM_BUCKETS-1)/NUM_BUCKETS
+    for (field in Fields) {
       for (i in 0..|NUM_BUCKETS) {
-        var job = new RecommendSubJob(jobName,i * size, size, dataSet)
+        var job = new RecommendSubJob(field,i * size, size, DataSetCollection)
         job.start()
         subJobsID.add(job.UUId)
         checkCancellation()
       }
     }
-    put('SubJobs', subJobsID.toString())
+    put('SubJobs', subJobsID.toJSON())
     save()
   }
 
@@ -91,20 +92,21 @@ class RecommendJob extends Job {
   * Takes a set of recommendations and sorts them by the value (in decreasing order).
   * Those recommendations that are the strongest will be stored.
    */
-  function storeTopRecommendations(recommendations : Collection<Result>, dataSet : String) {
+  private function storeTopRecommendations(recommendations : Collection<Result>) {
     var sorted = recommendations.orderByDescending(\ o -> o.Value).subList(0,NUM_RECOMMENDATIONS)
     checkCancellation()
     var finalResults : List<Result>= {}
+    var policies = MahoutUtil.makePolicyMap(DataSetInfo.findDS(DataSetCollection).Policies)
     for (result in sorted) {
       result.Value = String.format('%.3g%n',{result.Value}).toFloat()
       result.ResultSet = UUId
       var company = Company.findByID(result.User)
       result.Company = company.get('Company') as String
-      result.put('Policy', MahoutUtil.longToPolicy(result.ItemID))
+      result.put('Policy', MahoutUtil.longToPolicy(policies, result.ItemID))
       result.save()
     }
     var owner = get("Owner") as String
-    ResultInfo.addResults(UUId, dataSet, owner)
+    ResultInfo.addResults(UUId, DataSetCollection, owner)
   }
 
   /*
@@ -156,12 +158,8 @@ class RecommendJob extends Job {
   }
 
   property get SubJobs() : SkipIterable<jobs.Job> {
-    var stringArray = get('SubJobs') as String
-    if (stringArray != null) {
-      var array = Arrays.asList(stringArray?.substring(1, stringArray.length() - 1)?.split(", "))
-      return Job.findByIDs(array)
-    }
-    return null
+    var UUIDs : List<String> = new Gson().fromJson(get('SubJobs') as String, new TypeToken<List<String>>(){}.getType())
+    return Job.findByIDs(UUIDs)
   }
 
   override property set Cancelled(status : boolean) {
@@ -171,6 +169,14 @@ class RecommendJob extends Job {
     }
     put('SubJobs', null)
     save()
+  }
+
+  property get Fields() : List<String> {
+    return new Gson().fromJson(get('Fields') as String, new TypeToken<List<String>>(){}.getType())
+  }
+
+  property set Fields(fields : List<String>) {
+    put('Fields', fields?.toJSON())
   }
 
 }
