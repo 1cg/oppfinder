@@ -80,6 +80,14 @@ class UserController implements IHasRequestContext, IResourceController {
     return ""
   }
 
+  function verifyNewAccountDuplicateName(username : String) : boolean {
+    var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
+    //db.find(new BasicDBObject().put("name", username))
+
+
+    return false
+  }
+
   function logout() : Object {
     Session.remove("username")
     Session.remove("currentUser")
