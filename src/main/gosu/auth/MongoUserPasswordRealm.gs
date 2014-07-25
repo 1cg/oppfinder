@@ -124,11 +124,18 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
    *
    */
   override function doGetAuthorizationInfo(p0: PrincipalCollection): AuthorizationInfo {
+    print("Getting AuthorizationInfo")
     var info = new SimpleAuthorizationInfo()
+    info.setRoles({"standard_user"})
+    info.setStringPermissions({}) //set them to the set of permissions (collections?) associated with this username.
+    return info
+/*
     var cursor = _collection.find( new BasicDBObject("_id", new BasicDBObject("$in",p0.asList())))
+    print("cursor: "+cursor)
 
     for(p in cursor) {
       var rolesObj = p.get("roles")
+      print("role: "+rolesObj)
       if (rolesObj != null && rolesObj typeis List<?>) {
       }
       for(r in rolesObj as List<Object>) {
@@ -142,7 +149,8 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
         }
       }
     }
-    return info
+    print("Returning Authorization Info")
+    return info */
   }
 
 }

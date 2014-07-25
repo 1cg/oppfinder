@@ -12,14 +12,14 @@ uses model.database.Database
 uses com.mongodb.DBObject
 uses auth.MongoUserPasswordRealm
 uses org.apache.shiro.subject.Subject
+uses org.apache.shiro.mgt.DefaultSecurityManager
 
 class UserController implements IHasRequestContext, IResourceController {
   var _realm : MongoUserPasswordRealm
-  var _subject : Subject
 
-  construct(realm : MongoUserPasswordRealm, subject : Subject) {
-    _realm = realm
-    _subject = subject
+  construct() {
+    _realm = new MongoUserPasswordRealm(Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION"))
+    SecurityUtils.setSecurityManager(new DefaultSecurityManager(_realm))
   }
 
   //GET Sign In Page
@@ -46,9 +46,8 @@ class UserController implements IHasRequestContext, IResourceController {
 
 
   function login() : Object {
+    var currentUser = new Subject.Builder(SecurityUtils.getSecurityManager()).buildSubject()
 
-   // var currentUser = SecurityUtils.getSubject()
-    var currentUser = _subject
     if (!currentUser.isAuthenticated()) {
       var token = new UsernamePasswordToken(Params['username'], Params['password'])
       token.setRememberMe(true)
@@ -57,9 +56,11 @@ class UserController implements IHasRequestContext, IResourceController {
         currentUser.login(token)
 
         if (currentUser.isAuthenticated()) {
+          Session["currentUser"] = currentUser
           Headers['X-IC-Redirect'] = "/"
           return index()
         } else {
+          throw "Failed to catch authentication exception?"
         }
       } catch(uae : UnknownAccountException) { // need to get to handling this on front end
         Headers['X-IC-Script'] = 'alert("Unknown account! Please try again.");'
@@ -76,6 +77,7 @@ class UserController implements IHasRequestContext, IResourceController {
   }
 
   function logout() : Object {
+    Session.remove("currentUser")
     SecurityUtils.getSubject().logout()
     Headers['X-IC-Redirect'] = "/user"
     redirect("/user")
