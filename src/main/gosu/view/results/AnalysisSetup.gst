@@ -6,7 +6,7 @@
     ${submitInput('Choose Data Set',{'class' -> 'btn btn-primary'})}
   </div>
   <div class='formcontent'>
-    ${checkboxInputCollection(info.Fields, 'Fields', {'class' -> 'btn btn-primary', 'style' -> 'padding:5px;'})}
+    ${checkboxInputCollection(info.AnalyzableFields, 'Fields', {'class' -> 'btn btn-primary', 'style' -> 'padding:5px;'})}
   </div>
   <div class='formcontent'>
     ${submitInput('Analyze Data Set', {'class' -> 'btn btn-primary'})}

@@ -2,7 +2,8 @@ package model
 
 uses model.database.Document
 uses util.iterable.SkipIterable
-uses java.util.Set
+uses input_helper.Json
+uses com.google.gson.reflect.TypeToken
 
 class Company extends Document {
 
@@ -26,24 +27,11 @@ class Company extends Document {
   }
 
   property get Policies() : List<Policy> {
-    //TODO - Change this back
-    return {new Policy('Workers Comp', 10), new Policy('Business Auto', 10) , new Policy('Property',10),  new Policy('Earthquake', 10), new Policy('Tsunami', 10), new Policy('Godzilla', 10)}
-    //return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
+    return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
   }
 
   property set Policies(policies : List<Policy>) {
-    //TODO - Change this back
-    put('Policies', policies.toString())
-    //put('Policies', policies.toJSON())
-  }
-
-  property get AnalyzableFields() : Set<String> {
-    var fields = AllFields
-    fields.remove(id)
-    fields.remove('Policies')
-    fields.remove('longID')
-    fields.remove('Company')
-    return fields
+    put('Policies', policies.toJSON())
   }
 
   static function findByJob(UUID : String) : SkipIterable<Company> {

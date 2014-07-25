@@ -31,7 +31,6 @@ class MahoutUtil {
       for (company in info.Companies) {
         var preferences = new GenericUserPreferenceArray(company.Policies.Count * (t2 == null ? 1 : 2))
         var id = (company.get('longID') as String).toLong()
-        print(company.get(field))
         for (policy in company.Policies index i) { //Map each field to a long value and then add it as a preference
           preferences.set(i,new GenericPreference(id, policies[policy], t1(company.get(field) as String)))
           if (t2 != null) preferences.set(company.Policies.Count,new GenericPreference(id,policies[policy], t2(company.get(field) as String)))

@@ -18,7 +18,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
 
   override function show(id: String)  : Object {
     var did = URLDecoder.decode(id, "UTF-8")
-    return Drilldown.renderToString(did, DataSetInfo.findDS(did).Companies.paginate(Params['page']))
+    return Drilldown.renderToString(did, DataSetInfo.findDS(did)?.Companies?.paginate(Params['page']))
   }
 
   function table() : Object {

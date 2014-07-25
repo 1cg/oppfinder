@@ -49,15 +49,11 @@ class DataSetInfo extends Document {
   }
 
   property get Policies() : List<Policy> {
-    //TODO - Change this back
-    return {new Policy('Workers Comp', 10), new Policy('Business Auto', 10) , new Policy('Property',10),  new Policy('Earthquake', 10), new Policy('Tsunami', 10), new Policy('Godzilla', 10)}
-    //return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
+    return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
   }
 
   property set Policies(policies : List<Policy>) {
-    //TODO - Change this back
-    put('Policies', policies.toString())
-    //put('Policies', policies.toJSON())
+    put('Policies', policies.toJSON())
   }
 
   property get Owner() : String {
@@ -79,6 +75,16 @@ class DataSetInfo extends Document {
 
   property set Fields(fields : Set<String>) {
     put('Fields', fields.toJSON())
+  }
+
+
+  property get AnalyzableFields() : Set<String> {
+    var fields = Fields
+    fields.remove(Company.ForeignName)
+    fields.remove('Policies')
+    fields.remove('longID')
+    fields.remove('Company')
+    return fields
   }
   
   property get Name() : String {
