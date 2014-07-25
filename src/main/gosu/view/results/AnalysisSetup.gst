@@ -5,10 +5,11 @@
     ${selectInput(model.DataSetInfo#AllNames, "DataSet", {'class' -> 'form-control', 'name' -> 'jobs.RecommendJob[DataSetCollection]'})}
     ${submitInput('Choose Data Set',{'class' -> 'btn btn-primary'})}
   </div>
-  <div class='formcontent'>
-    ${checkboxInputCollection(info.AnalyzableFields, 'Fields', {'class' -> 'btn btn-primary', 'style' -> 'padding:5px;'})}
+  <hr>
+  <div class='formcontent well well-lg'>
+    ${checkboxInputCollection(info.AnalyzableFields, 'Fields', {'style' -> 'padding:5px;'})}
   </div>
   <div class='formcontent'>
     ${submitInput('Analyze Data Set', {'class' -> 'btn btn-primary'})}
-  </div>
+   </div>
 </form>
