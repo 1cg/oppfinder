@@ -13,7 +13,7 @@ uses view.datasets.DataSetTableBody
 class DataSetController implements IHasRequestContext, IResourceController {
 
   override function index() : Object {
-    return DataSetTable.renderToString(DataSetInfo.All.paginate(Params['page'] ?: 1))
+    return DataSetTable.renderToString(DataSetInfo.getAll(Session['username'] as String).paginate(Params['page'] ?: "1"))
   }
 
   override function show(id: String)  : Object {
@@ -22,7 +22,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
   }
 
   function table() : Object {
-    return DataSetTableBody.renderToString(DataSetInfo.All.paginate(Params['page'] ?: 1))
+    return DataSetTableBody.renderToString(DataSetInfo.getAll(Session['Username'] as String).paginate(Params['page'] ?: "1"))
   }
 
   override function create()  : Object {

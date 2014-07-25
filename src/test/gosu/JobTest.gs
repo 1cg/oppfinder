@@ -62,14 +62,14 @@ class JobTest extends TestCase {
     job.Status = 'Foo'
     assertEquals('Foo', job.Status)
   }
-
+/*
   public function testCancelledJobs() {
     var job = new TestJob()
     var cancelled = Job.CancelledJobs.Count
     job.Cancelled = true
     assertEquals(cancelled + 1, Job.CancelledJobs.Count)
   }
-
+*/
   public function testEndTimeNotDone() {
     var job = new TestJob()
     assertNull(job.EndTime)
@@ -83,11 +83,11 @@ class JobTest extends TestCase {
   public function testFindInvalid() {
     assertNull(Job.findJob("Not a value"))
   }
-
+/*
   public function testActiveJobs() {
     var active = Job.ActiveJobs.Count
     var job = new TestJob()
     assertEquals(active + 1, Job.ActiveJobs.Count)
   }
-
+*/
 }

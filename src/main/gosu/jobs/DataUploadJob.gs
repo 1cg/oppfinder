@@ -81,7 +81,7 @@ class DataUploadJob extends Job {
     }
     checkCancellation()
     var size = Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count
-    DataSetInfo.register(DataSetCollection, size, policies)
+    DataSetInfo.register(DataSetCollection, size, policies, get('Owner') as String)
     this.StatusFeed = "Company information inserted"
     this.StatusFeed = 'View data set <a href="/datasets/${DataSetCollection}">here</a>'
     this.StatusFeed = "Done"

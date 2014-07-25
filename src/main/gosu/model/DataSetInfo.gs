@@ -19,17 +19,19 @@ class DataSetInfo extends Document {
     super(_collection)
   }
 
-  static function register(collection : String, count : long, policies : Set<Policy>) {
+  static function register(collection : String, count : long, policies : Set<Policy>, owner : String) : DataSetInfo {
     var info = new DataSetInfo()
     info.Created = TimeUtil.now()
     info.Size = count
     info.Name = collection
     info.Policies = policies
+    info.Owner = owner
     info.save()
+    return info
   }
 
-  static property get All() : SkipIterable<DataSetInfo> {
-    return all(_collection) as SkipIterable<DataSetInfo>
+  static function getAll(owner : String) : SkipIterable<DataSetInfo> {
+    return findMany('Owner', owner, _collection) as SkipIterable<DataSetInfo>
   }
 
   static property get AllNames() : List<String> {
@@ -46,6 +48,14 @@ class DataSetInfo extends Document {
 
   property set Policies(policies : Set<Policy>) {
     put('Policies', policies.toJSON())
+  }
+
+  property get Owner() : String {
+    return get('Owner') as String
+  }
+
+  property set Owner(name : String) {
+    put('Owner', name)
   }
 
   property get Name() : String {

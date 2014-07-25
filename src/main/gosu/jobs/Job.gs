@@ -149,17 +149,17 @@ abstract class Job extends Document implements Runnable {
     save()
   }
 
-  static function findByStatus(status : String) : SkipIterable<jobs.Job> {
+  static function findByStatus(status : String, owner : String) : SkipIterable<jobs.Job> {
     if (status == 'all') {
-      return AllJobs
+      return getAllJobs(owner)
     } else if (status == 'failed') {
-      return FailedJobs
+      return getFailedJobs(owner)
     } else if (status == 'cancelled') {
-      return CancelledJobs
+      return getCancelledJobs(owner)
     } else if (status == 'running') {
-      return ActiveJobs
+      return getActiveJobs(owner)
     } else if (status == 'completed') {
-      return CompleteJobs
+      return getCompleteJobs(owner)
     }
     throw "Unsupported state for jobs: ${status}"
   }
@@ -227,24 +227,24 @@ abstract class Job extends Document implements Runnable {
     put('State', state)
   }
 
-  static property get ActiveJobs() : SkipIterable<jobs.Job> {
-    return findMany('Status', 'Active', COLLECTION) as SkipIterable<jobs.Job>
+  static function getActiveJobs(owner : String) : SkipIterable<jobs.Job> {
+    return findMany({'Status' -> 'Active', 'Owner' -> owner}, COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get CompleteJobs() : SkipIterable<jobs.Job> {
-    return findMany('Status', 'Complete', COLLECTION) as SkipIterable<jobs.Job>
+  static function getCompleteJobs(owner : String) : SkipIterable<jobs.Job> {
+    return findMany({'Status' -> 'Complete', 'Owner' -> owner}, COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get CancelledJobs() : SkipIterable<jobs.Job> {
-    return findMany('Status', 'Cancelled', COLLECTION) as SkipIterable<jobs.Job>
+  static function getCancelledJobs(owner : String) : SkipIterable<jobs.Job> {
+    return findMany({'Status' -> 'Cancelled', 'Owner' -> owner}, COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get FailedJobs() : SkipIterable<jobs.Job> {
-    return findMany('Status', 'Failed', COLLECTION) as SkipIterable<jobs.Job>
+  static function getFailedJobs(owner : String) : SkipIterable<jobs.Job> {
+    return findMany({'Status' -> 'Complete', 'Owner' -> owner}, COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  static property get AllJobs() : SkipIterable<jobs.Job> {
-    return instantiateMany(new MongoCollection(COLLECTION).queryNot('Status', 'Subjob')) as SkipIterable<jobs.Job>
+  static function getAllJobs(owner : String) : SkipIterable<jobs.Job> {
+    return instantiateMany(new MongoCollection(COLLECTION).queryNotAndIs('Status', 'Subjob', 'Owner', owner)) as SkipIterable<jobs.Job>
   }
 
   // This is for Salesforce uploading

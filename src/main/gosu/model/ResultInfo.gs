@@ -16,11 +16,12 @@ class ResultInfo extends Document {
     super(collection)
   }
 
-  static function addResults(UUID : String, source : String) {
+  static function addResults(UUID : String, source : String, owner : String) {
     var info = new ResultInfo()
     info.put('UUId', UUID)
     info.put('Source' , source)
     info.put('Created', TimeUtil.now())
+    info.put('Owner', owner)
     info.save()
   }
 
@@ -32,8 +33,8 @@ class ResultInfo extends Document {
     return Document.find('UUId', UUID, collection).get('Source') as String
   }
 
-  static property get All() : SkipIterable<ResultInfo> {
-    return Document.all(collection) as SkipIterable<ResultInfo>
+  static function getAll(owner : String) : SkipIterable<ResultInfo> {
+    return Document.findMany({'Owner' -> owner}, collection) as SkipIterable<ResultInfo>
   }
 
   static property get AllResultsNames() : List<String> {

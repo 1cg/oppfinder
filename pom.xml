@@ -11,9 +11,9 @@
 
 <repositories>
     <repository>
-        <id>gosu-lang.org-releases</id>
-        <name>Official Gosu website (releases)</name>
-        <url>http://gosu-lang.org/repositories/m2/releases</url>
+        <id>gosu-lang.org-snapshots</id>
+        <name>Official Gosu website (snapshots)</name>
+        <url>http://gosu-lang.org/nexus/content/repositories/snapshots</url>
     </repository>
     <repository>
         <id>sonatype-nexus-snapshots</id>
@@ -34,7 +34,7 @@
     <dependency>
         <groupId>org.gosu-lang.gosu</groupId>
         <artifactId>gosu</artifactId>
-        <version>0.10.J82</version>
+        <version>1-java8-SNAPSHOT</version>
         <type>pom</type>
         <exclusions>
             <exclusion>
