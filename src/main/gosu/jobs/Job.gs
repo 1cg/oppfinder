@@ -9,10 +9,11 @@ uses java.lang.Long
 uses java.lang.Thread
 uses java.lang.Exception
 uses util.CancellationException
-uses util.RedisConfigUtil
+uses util.RedisConfig
 uses model.database.Document
 uses util.iterable.SkipIterable
 uses model.database.MongoCollection
+uses util.RedisConfig
 
 abstract class Job extends Document implements Runnable {
 
@@ -58,7 +59,7 @@ abstract class Job extends Document implements Runnable {
   abstract function executeJob()
 
   final function start() : jobs.Job {
-    RedisConfigUtil.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,new Object[]{'UUId',UUId}))
+    RedisConfig.INSTANCE.enqueue('main',new Job(this.IntrinsicType.Name,new Object[]{'UUId',UUId}))
     return this
   }
 

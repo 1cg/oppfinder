@@ -1,7 +1,7 @@
 package model
 
 uses util.iterable.SkipIterable
-uses util.TimeUtil
+uses util.Time
 uses model.database.Document
 uses input_helper.Json
 uses java.util.Set
@@ -21,7 +21,7 @@ class DataSetInfo extends Document {
 
   static function register(collection : String, count : long, policies : List<Policy>, fields : Set<String>, owner : String) : DataSetInfo {
     var info = new DataSetInfo()
-    info.Created = TimeUtil.now()
+    info.Created = Time.now()
     info.Size = count
     info.Name = collection
     info.Policies = policies
