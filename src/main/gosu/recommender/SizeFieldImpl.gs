@@ -7,8 +7,8 @@ uses org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity
 
 class SizeFieldImpl extends AbstractField {
 
-  construct() {
-    _field = 'Size'
+  construct(field : String) {
+    _field = field
   }
 
   override function getModel(collection : String): DataModel {

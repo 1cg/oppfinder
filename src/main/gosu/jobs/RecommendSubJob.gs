@@ -12,6 +12,8 @@ class RecommendSubJob extends Job {
 
   var maxRecommendation : Float
   var minRecommendation : Float
+  static var fieldMap = {'Location' -> "recommender.RegionFieldImpl", 'Size' -> "recommender.SizeFieldImpl", 'Reach' -> "recommender.ReachFieldImpl",'Revenue' -> "recommender.RevenueFieldImpl"}
+
 
   construct(key : String, value : Object) {
     super(key,value)
@@ -58,8 +60,7 @@ class RecommendSubJob extends Job {
     maxRecommendation = Float.MIN_VALUE
     minRecommendation = Float.MAX_VALUE
     checkCancellation()
-    var c = Class.forName(FieldName)
-    var field = c.newInstance() as Field
+    var field = Class.forName(mapField()).getConstructor({String.Type}).newInstance({FieldName}) as Field
     var model = field.getModel(Collection)
     checkCancellation()
     var recommender = new GenericItemBasedRecommender(model, field.getSimilarity(model))
@@ -95,7 +96,12 @@ class RecommendSubJob extends Job {
     field.releaseModel()
   }
 
-  function normalize(result : Result) : Result {
+  private function mapField() : String {
+    var field = FieldName
+    return fieldMap[FieldName] ?: 'recommender.DefaultFieldImpl'
+  }
+
+  private function normalize(result : Result) : Result {
     result.Value = (result.Value - minRecommendation) / (maxRecommendation - minRecommendation)
     return result
   }

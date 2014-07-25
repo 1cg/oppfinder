@@ -1,10 +1,10 @@
-<% uses gw.lang.reflect.features.PropertyReference
-   uses input_helper.InputGenerator %>
+<% uses gw.lang.reflect.features.PropertyReference %>
+<%@ extends input_helper.InputGenerator %>
 <%@ params(results : PropertyReference) %>
 <div class='jumbotron'>
   <h2>Select a dataset to upload to Salesforce</h2>
   <form class="form-inline" role="form" ic-post-to="/jobs?type=auth">
-    ${InputGenerator.selectInput(results, 'Select Dataset', {'class' -> 'form-control', 'name' -> 'jobs.SalesforceAuthJob[ResultCollection]'})}
-    ${InputGenerator.submitInput('Start upload to Salesforce', {'class' -> 'btn btn-primary'})}
+    ${selectInput(results, 'Select Dataset', {'class' -> 'form-control', 'name' -> 'jobs.SalesforceAuthJob[ResultCollection]'})}
+    ${submitInput('Start upload to Salesforce', {'class' -> 'btn btn-primary'})}
    </form>
 </div>

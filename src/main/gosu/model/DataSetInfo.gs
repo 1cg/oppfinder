@@ -9,7 +9,7 @@ uses com.google.gson.reflect.TypeToken
 
 class DataSetInfo extends Document {
 
-  public static var _collection: String = "DataSetInfo"
+  final static var _collection: String as Collection = "DataSetInfo"
 
   construct(key : String, value : Object) {
     super(_collection, key, value)
@@ -19,13 +19,18 @@ class DataSetInfo extends Document {
     super(_collection)
   }
 
-  static function register(collection : String, count : long, policies : Set<Policy>) {
+  static function register(collection : String, count : long, policies : List<Policy>, fields : Set<String>) {
     var info = new DataSetInfo()
     info.Created = TimeUtil.now()
     info.Size = count
     info.Name = collection
     info.Policies = policies
+    info.Fields = fields
     info.save()
+  }
+
+  static function findDS(name : String) : DataSetInfo {
+    return Document.find('Name', name, _collection) as DataSetInfo
   }
 
   static property get All() : SkipIterable<DataSetInfo> {
@@ -40,12 +45,28 @@ class DataSetInfo extends Document {
     return first(_collection) as DataSetInfo
   }
 
-  property get Policies() : Set<Policy> {
-    return Json.fromJSON(get('Policies') as String, new TypeToken<Set<Policy>>(){}.getType())
+  property get Policies() : List<Policy> {
+    //TODO - Change this back
+    return {new Policy('Workers Comp', 10), new Policy('Business Auto', 10) , new Policy('Property',10),  new Policy('Earthquake', 10), new Policy('Tsunami', 10), new Policy('Godzilla', 10)}
+    //return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
   }
 
-  property set Policies(policies : Set<Policy>) {
-    put('Policies', policies.toJSON())
+  property set Policies(policies : List<Policy>) {
+    //TODO - Change this back
+    put('Policies', policies.toString())
+    //put('Policies', policies.toJSON())
+  }
+
+  property get Companies() : SkipIterable<Company> {
+    return Company.findByJob(Name)
+  }
+
+  property get Fields() : Set<String> {
+    return Json.fromJSON(get('Fields') as String, new TypeToken<Set<String>>(){}.getType())
+  }
+
+  property set Fields(fields : Set<String>) {
+    put('Fields', fields.toJSON())
   }
 
   property get Name() : String {

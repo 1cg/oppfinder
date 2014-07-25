@@ -9,13 +9,13 @@ uses java.lang.Long
 uses model.Coordinate
 uses model.database.Document
 
-class LocationFieldImpl extends AbstractField {
+class RegionFieldImpl extends AbstractField {
 
   final static var geocoder = new Geocoder()
   final static var coordinatesMap = Document.all(Coordinate.Collection).first()
 
-  construct() {
-    _field = 'Region'
+  construct(field : String) {
+    _field = field
   }
 
   override function getModel(collection : String): DataModel {

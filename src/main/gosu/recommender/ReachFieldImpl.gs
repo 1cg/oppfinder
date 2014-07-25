@@ -12,8 +12,8 @@ class ReachFieldImpl extends AbstractField {
 
   static final var reachMap = makeReachMap()
 
-  construct() {
-    _field = 'Reach'
+  construct(field : String) {
+    _field = field
   }
 
   override function getModel(collection : String): DataModel {
