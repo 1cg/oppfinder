@@ -19,12 +19,13 @@ class DataSetInfo extends Document {
     super(_collection)
   }
 
-  static function register(collection : String, count : long, policies : List<Policy>, fields : Set<Policy>, owner : String) : DataSetInfo {
+  static function register(collection : String, count : long, policies : List<Policy>, fields : Set<String>, owner : String) : DataSetInfo {
     var info = new DataSetInfo()
     info.Created = TimeUtil.now()
     info.Size = count
     info.Name = collection
     info.Policies = policies
+    print("registering owner..."+owner)
     info.Owner = owner
     info.Fields = fields
     info.save()
@@ -64,6 +65,7 @@ class DataSetInfo extends Document {
   }
 
   property set Owner(name : String) {
+    print("setting dataset owner now!: " + name)
     put('Owner', name)
   }
 
