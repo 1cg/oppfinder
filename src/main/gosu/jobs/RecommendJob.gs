@@ -39,7 +39,6 @@ class RecommendJob extends Job {
 
   override function executeJob() {
     checkCancellation()
-    print(Fields)
     startSubJobs()
     StatusFeed = "Started Sub Jobs"
     poll() //Blocks until sub-tasks are complete
