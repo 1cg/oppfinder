@@ -66,11 +66,11 @@ class ResultInfo extends Document {
   }
 
   static function getAll(owner : String) : SkipIterable<ResultInfo> {
-    return Document.findMany({'Owner' -> owner}, collection) as SkipIterable<ResultInfo>
+    return Document.findMany('Owner',  owner, collection) as SkipIterable<ResultInfo>
   }
 
   static property get AllResultsNames() : List<String> {
-    return all(collection).map(\ r -> (r as ResultInfo).UUId as String)
+    return all(collection).map(\ r -> (r as ResultInfo).UUId)
   }
 
 }

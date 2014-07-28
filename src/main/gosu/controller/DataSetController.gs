@@ -4,7 +4,6 @@ uses sparkgs.util.IHasRequestContext
 uses sparkgs.IResourceController
 uses view.datasets.Drilldown
 uses view.datasets.DataSetTable
-//uses view.datasets.GenerateUploadPage
 uses java.net.URLDecoder
 uses model.DataSetInfo
 uses view.datasets.DataSetTableBody

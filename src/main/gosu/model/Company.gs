@@ -2,8 +2,8 @@ package model
 
 uses model.database.Document
 uses util.iterable.SkipIterable
-uses input_helper.Json
 uses com.google.gson.reflect.TypeToken
+uses com.google.gson.Gson
 
 class Company extends Document {
 
@@ -27,7 +27,7 @@ class Company extends Document {
   }
 
   property get Policies() : List<Policy> {
-    return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
+    return new Gson().fromJson(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
   }
 
   property set Policies(policies : List<Policy>) {

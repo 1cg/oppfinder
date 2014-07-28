@@ -7,10 +7,11 @@ uses java.lang.Double
 uses java.lang.Thread
 uses model.ResultInfo
 uses java.lang.Math
-uses java.util.Arrays
-uses model.database.MongoCollection
 uses java.lang.Exception
 uses salesforce.SObject
+uses com.google.gson.reflect.TypeToken
+uses com.google.gson.Gson
+uses model.RefreshToken
 
 class SalesforceAuthJob extends Job {
   static final var SF_REDIRECT_URI  = "https://gosuroku.herokuapp.com/results"
@@ -22,10 +23,12 @@ class SalesforceAuthJob extends Job {
     super(key,value)
   }
 
-  construct(authCode : String, selectCompanies : String[]) {
+  construct(authCode : String, companies : String[]) {
     super()
-    put('AuthCode', authCode)
-    put('SelectCompanies', selectCompanies)
+    AuthorizationCode = authCode
+    if (companies != null && companies.Count > 0) {
+      Companies = companies.toList()
+    }
   }
 
   property get ResultCollection() : String {
@@ -34,6 +37,22 @@ class SalesforceAuthJob extends Job {
 
   property set ResultCollection(collection : String) {
     put('ResultCollection', collection)
+  }
+
+  property get AuthorizationCode() : String {
+    return get('AuthCode') as String
+  }
+
+  property set AuthorizationCode(code : String) {
+    put('AuthCode', code)
+  }
+
+  property get Companies() : List<String> {
+    return new Gson().fromJson(get('Comapnies') as String, new TypeToken<List<String>>(){}.getType())
+  }
+
+  property set Companies(companies : List<String>) {
+    put('Companies', companies.toJSON())
   }
 
   override function executeJob() {
@@ -52,14 +71,9 @@ class SalesforceAuthJob extends Job {
 
     var recommendations = ResultInfo.findResults(ResultCollection)
     var date = Date
-    var s = get('SelectCompanies') as String
-    var selectCompanies = null as List
-    if (s != null && s != "") {
-      s = s.replace("\"", "").replace(" ","")
-      selectCompanies = Arrays.asList(s.substring(1, s.length -1).split(","))
-    }
+    var companies = Companies?.map(\ c -> c.toInt())
     for (recommendation in recommendations index i) {
-      if (s != null && !selectCompanies.contains(i as String)) {
+      if (companies != null && !companies.contains(i)) {
         continue
       }
       this.StatusFeed = "Uploading recommendation "+(i+1)+": "+recommendation['Company']
@@ -87,12 +101,13 @@ class SalesforceAuthJob extends Job {
 
   private function authorize() : SalesforceRESTClient {
     var salesforce = new SalesforceRESTClient(SF_CLIENT_ID, SF_CLIENT_SECRET)
-    var authResponse = salesforce.authenticate(get('AuthCode') as String, SF_REDIRECT_URI)
+    var authResponse = salesforce.authenticate(AuthorizationCode, SF_REDIRECT_URI)
     if (authResponse["error"] as String == null) { // Authorized without error
-      (new MongoCollection("SalesforceRefreshToken")).insert({"RefreshToken" -> authResponse["refresh_token"] as String})
+      var token = RefreshToken.RefreshToken
+      token.Token = authResponse["refresh_token"] as String
       this.StatusFeed = "Connected!"
     } else if (authResponse["error"] as String == "invalid_grant") { // need to use refresh token
-      salesforce.refresh(new MongoCollection("SalesforceRefreshToken").find()?.iterator()?.next()["RefreshToken"] as String)
+      salesforce.refresh(RefreshToken.RefreshToken.Token)
       this.StatusFeed = "Token Refreshed!"
     } else {
       this.StatusFeed = "Error! "+authResponse["error"] as String

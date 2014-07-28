@@ -12,7 +12,8 @@ uses util.CancellationException
 uses util.RedisConfig
 uses model.database.Document
 uses util.iterable.SkipIterable
-uses model.database.MongoCollection
+uses com.mongodb.QueryBuilder
+uses com.mongodb.BasicDBObject
 
 abstract class Job extends Document implements Runnable {
 
@@ -244,17 +245,16 @@ abstract class Job extends Document implements Runnable {
   }
 
   static function getAllJobs(owner : String) : SkipIterable<jobs.Job> {
-    return instantiateMany(new MongoCollection(COLLECTION).queryNotAndIs('Status', 'Subjob', 'Owner', owner)) as SkipIterable<jobs.Job>
+    return query((new QueryBuilder().put('Status').notEquals('Subjob').and('Owner').is(owner)), COLLECTION) as SkipIterable<jobs.Job>
   }
 
-  // This is for Salesforce uploading
   static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
     return findMany({'Status' -> 'Complete', 'Type' -> 'jobs.RecommendJob'}, COLLECTION) as SkipIterable<jobs.Job>
   }
 
   static function findByIDs(IDs : List<String>) : SkipIterable<jobs.Job> {
     if (IDs == null) return null
-    return instantiateMany(new MongoCollection(COLLECTION).queryOr(IDs, 'UUId')) as SkipIterable<jobs.Job>
+    return query(new QueryBuilder().or(IDs.map(\ id -> new BasicDBObject('UUId',id)).toTypedArray()), COLLECTION) as SkipIterable<jobs.Job>
   }
 
   static function findJob(UUID : String) : jobs.Job {

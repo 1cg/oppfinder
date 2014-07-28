@@ -13,7 +13,7 @@ Layout = view.Layout
 resource('/user', new UserController())
 
 using(filter(new AuthFilter())) {
-  get('/', \-> view.Root.renderToString())
+  get('/', \-> view.Root.renderToString(Session['username'] as String))
 
   // Jobs
   resource("/jobs", new JobController())
