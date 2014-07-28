@@ -22,7 +22,7 @@ class DataSetController implements IHasRequestContext, IResourceController {
   }
 
   function table() : Object {
-    return DataSetTableBody.renderToString(DataSetInfo.getAll(Session['Username'] as String).paginate(Params['page'] ?: "1"))
+    return DataSetTableBody.renderToString(DataSetInfo.getAll(Session['username'] as String).paginate(Params['page'] ?: "1"))
   }
 
   override function create()  : Object {
@@ -42,6 +42,6 @@ class DataSetController implements IHasRequestContext, IResourceController {
   }
 
   function delete() {
-    DataSetInfo.deleteAll(Params['id'])
+    DataSetInfo.deleteAll(Params['id'], Session['username'] as String)
   }
 }

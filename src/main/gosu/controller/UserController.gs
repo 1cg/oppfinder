@@ -13,6 +13,7 @@ uses com.mongodb.DBObject
 uses auth.MongoUserPasswordRealm
 uses org.apache.shiro.subject.Subject
 uses org.apache.shiro.mgt.DefaultSecurityManager
+uses com.mongodb.BasicDBObject
 
 class UserController implements IHasRequestContext, IResourceController {
   var _realm : MongoUserPasswordRealm
@@ -34,14 +35,14 @@ class UserController implements IHasRequestContext, IResourceController {
   override function create(): Object {
     var username = Params['username']
     var password = Params['password']
-
+    if (!newNameIsUnique(username)) {
+      Headers['X-IC-Script'] = 'alert("An account already exists for that name. Please pick a new name.");'
+      Headers['X-IC-Redirect'] = "/user"
+      return ""
+    }
     var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
     var DBObj = new DBObject[] { _realm.createUserCredentials(username, password)}
-
-    // insert a check to ensure all usernames are unique; no duplicates!!
-
     db.insert(DBObj)
-
     return null
   }
 
@@ -57,7 +58,6 @@ class UserController implements IHasRequestContext, IResourceController {
       try {
         // Authenticates the subject
         currentUser.login(token)
-
         if (currentUser.isAuthenticated()) {
           Session["currentUser"] = currentUser
           Session["username"] = Params['username'] // used for authorization
@@ -80,12 +80,12 @@ class UserController implements IHasRequestContext, IResourceController {
     return ""
   }
 
-  function verifyNewAccountDuplicateName(username : String) : boolean {
+  private function newNameIsUnique(username : String) : boolean {
     var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
-    //db.find(new BasicDBObject().put("name", username))
-
-
-    return false
+    var dbobj = new BasicDBObject()
+    dbobj.put("name", username)
+    var iter = db.find(dbobj)
+    return (iter.count() == 0)
   }
 
   function logout() : Object {

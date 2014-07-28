@@ -38,6 +38,10 @@ class Company extends Document {
     return Document.findMany(id, UUID, collection) as SkipIterable<Company>
   }
 
+  static function findByJob(UUID : String, owner : String) : SkipIterable<Company> {
+    return Document.findMany({id -> UUID, "Owner" -> owner}, collection) as SkipIterable<Company>
+  }
+
   static function findByID(ID : long) : Company {
     return Document.find('longID', ID, collection) as Company
   }
