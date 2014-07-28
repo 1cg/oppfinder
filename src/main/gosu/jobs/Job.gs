@@ -13,7 +13,6 @@ uses util.RedisConfig
 uses model.database.Document
 uses util.iterable.SkipIterable
 uses model.database.MongoCollection
-uses util.RedisConfig
 
 abstract class Job extends Document implements Runnable {
 

@@ -55,18 +55,8 @@ abstract class Document {
     _obj.put(key, value)
   }
 
-  final function putAndSave(key: String, value: Object) {
-    _obj.put(key, value)
-    save()
-  }
-
   final function putAll(upserts: Map<String, Object>) {
     _obj.putAll(upserts)
-  }
-
-  final function putAllAndSave(upserts: Map<String, Object>) {
-    _obj.putAll(upserts)
-    save()
   }
 
   final function get(value: String) : Object {
@@ -98,7 +88,7 @@ abstract class Document {
     }
   }
 
-  final function shadowDiff() : BasicDBObject {
+  private final function shadowDiff() : BasicDBObject {
     var diff = new BasicDBObject()
     for (entry in _obj.entrySet()) {
       if (_shadow[entry.Key] == null || _shadow[entry.Key] != entry.Value) {
@@ -108,7 +98,7 @@ abstract class Document {
     return diff
   }
 
-  final function reload(key = '_id', value = null) {
+  private final function reload(key = '_id', value = null) {
     if (key == '_id') _obj = _collection.findOne(new BasicDBObject(key, value as ObjectId))
     else _obj = _collection.findOne(new BasicDBObject(key, value ?: _id))
   }

@@ -3,7 +3,6 @@ package model
 uses util.Time
 uses model.database.Document
 uses util.iterable.SkipIterable
-uses util.Time
 
 class ResultInfo extends Document {
 
@@ -71,7 +70,7 @@ class ResultInfo extends Document {
   }
 
   static property get AllResultsNames() : List<String> {
-    return all(collection).map(\ r -> (r as ResultInfo).UUId as String)
+    return all(collection).map(\ r -> (r as ResultInfo).UUId)
   }
 
 }
