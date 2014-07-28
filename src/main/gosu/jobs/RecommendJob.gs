@@ -2,7 +2,7 @@ package jobs
 
 uses java.util.Map
 uses java.lang.Thread
-uses util.MahoutUtil
+uses util.Mahout
 uses util.iterable.SkipIterable
 uses model.ResultInfo
 uses model.Result
@@ -96,13 +96,13 @@ class RecommendJob extends Job {
     var sorted = recommendations.orderByDescending(\ o -> o.Value).subList(0,NUM_RECOMMENDATIONS)
     checkCancellation()
     var finalResults : List<Result>= {}
-    var policies = MahoutUtil.makePolicyMap(DataSetInfo.findDS(DataSetCollection).Policies)
+    var policies = Mahout.makePolicyMap(DataSetInfo.findDS(DataSetCollection).Policies)
     for (result in sorted) {
       result.Value = String.format('%.3g%n',{result.Value}).toFloat()
       result.ResultSet = UUId
       var company = Company.findByID(result.User)
       result.Company = company.get('Company') as String
-      result.put('Policy', MahoutUtil.longToPolicy(policies, result.ItemID))
+      result.put('Policy', Mahout.longToPolicy(policies, result.ItemID))
       result.save()
     }
     var owner = get("Owner") as String

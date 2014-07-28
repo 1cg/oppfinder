@@ -1,7 +1,8 @@
 <%@ params(id : String, companies: util.iterable.PagerIterable<model.Company>)%>
+<%@ extends input_helper.TagHelper %>
 <div>
   <h2 class="page-title">DataSet: ${id}</h2>
-  <button class='btn btn-primary pull-right' ic-post-to='/jobs?type=recommend&jobs.RecommendJob[DataSetCollection]=${id}'>Analyze DataSet</button>
+  ${contentTag('a', 'Analyze Data Set',{'class' -> 'btn btn-primary pull-right', 'href' ->'/results/new?collection=' + id})}
 </div>
 <a href='/datasets'><strong>Back to DataSets</strong></a>
 <div id='wrapper'>

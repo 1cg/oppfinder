@@ -3,7 +3,7 @@ package recommender
 uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
 uses org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity
-uses util.MahoutUtil
+uses util.Mahout
 uses com.google.code.geocoder.Geocoder
 uses java.lang.Long
 uses model.Coordinate
@@ -20,7 +20,7 @@ class RegionFieldImpl extends AbstractField {
 
   override function getModel(collection : String): DataModel {
     _collection = collection
-    return MahoutUtil.toDataModel(collection, _field,
+    return Mahout.toDataModel(collection, _field,
         \ l -> locationToLat(l),\ l -> locationToLng(l))
   }
 
