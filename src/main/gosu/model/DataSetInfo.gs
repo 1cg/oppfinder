@@ -3,9 +3,9 @@ package model
 uses util.iterable.SkipIterable
 uses util.Time
 uses model.database.Document
-uses input_helper.Json
 uses java.util.Set
 uses com.google.gson.reflect.TypeToken
+uses com.google.gson.Gson
 
 class DataSetInfo extends Document {
 
@@ -48,7 +48,7 @@ class DataSetInfo extends Document {
   }
 
   property get Policies() : List<Policy> {
-    return Json.fromJSON(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
+    return new Gson().fromJson(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
   }
 
   property set Policies(policies : List<Policy>) {
@@ -69,7 +69,7 @@ class DataSetInfo extends Document {
   }
 
   property get Fields() : Set<String> {
-    return Json.fromJSON(get('Fields') as String, new TypeToken<Set<String>>(){}.getType())
+    return new Gson().fromJson(get('Fields') as String, new TypeToken<Set<String>>(){}.getType())
   }
 
   property set Fields(fields : Set<String>) {

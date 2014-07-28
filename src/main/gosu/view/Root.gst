@@ -1,4 +1,5 @@
 <%@ extends input_helper.InputGenerator%>
+<%@ params(owner : String) %>
 <h1 class="page-title">
   <div><span class="op">Opportunity</span><span class="fi">Finder</span></div>
   <small><em>Find new business opportunities hidden in PolicyCenter</em></small>
@@ -27,7 +28,7 @@
 <div class="inset-8">
   <form class="form-inline" role="form" ic-post-to="/results/new">
     <div class="form-group">
-      ${selectInput(model.DataSetInfo#AllNames, "DataSet", {'class' -> 'form-control', 'name' -> 'collection'})}
+      ${selectInputCollection(model.DataSetInfo.getAll(owner).map(\ o -> o.Name), "DataSet", {'class' -> 'form-control', 'name' -> 'collection'})}
     </div>
     <div class="form-group">
       ${submitInput('Begin Opportinity Analysis', {'class' -> 'btn btn-primary'})}

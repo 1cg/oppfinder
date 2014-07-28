@@ -47,9 +47,14 @@ class InputGenerator {
                                    'value' -> text}.merge(options))
   }
 
+  static function selectInputCollection(collection : Collection<Object>, name: String, options: Map<String, String> = null) : String {
+    var label = TagHelper.contentTag('label', name + ': ', {'for' -> '${name}'})
+    return label + TagHelper.contentTag('select', options(collection), {'name' -> name}.merge(options), false)
+  }
+
   static function selectInput(literal: PropertyReference, name: String = null, options: Map<String, String> = null) : String {
     var label = labelInput(name, literal)
-    return label + TagHelper.contentTag('select', options(literal), {'name' -> format(literal)}.merge(options), false)
+    return label + TagHelper.contentTag('select', options(getValues(literal)), {'name' -> format(literal)}.merge(options), false)
   }
 
   static function emailInput(literal : PropertyReference, name : String = null, options : Map<String, String> = null) : String {
@@ -66,9 +71,9 @@ class InputGenerator {
   * ------ Helper methods -----
    */
 
-  private static function options(literal : PropertyReference) : String {
+  private static function options(values : Iterable<Object>) : String {
     var buf = new StringBuffer()
-    for (value in getValues(literal)) {
+    for (value in values) {
       buf.append(TagHelper.contentTag("option",value as String, {'value' -> value as String}))
     }
     return buf.toString()

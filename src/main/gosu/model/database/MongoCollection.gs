@@ -45,21 +45,6 @@ class MongoCollection {
     return _collection.Name
   }
 
-  function queryOr(values : List<String>, key : String) : TransformIterable<BasicDBObject> {
-    var document = new BasicDBObject()
-    var qb = new QueryBuilder()
-    var list : List<DBObject> = {}
-    for (item in values) {
-      var o = new BasicDBObject()
-      o[key] = item
-      list.add(o)
-    }
-    qb.or(list.toTypedArray())
-    document.putAll(qb.get())
-    return new TransformIterable<BasicDBObject>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
-  }
-
   function queryNot(key : String, value : String) : TransformIterable<BasicDBObject> {
     var document = new BasicDBObject()
     var qb = new QueryBuilder()
@@ -68,16 +53,6 @@ class MongoCollection {
     return new TransformIterable<BasicDBObject>(
         _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
-
-  function queryNotAndIs(key : String, value : String, andKey : String, andValue : String) : TransformIterable<BasicDBObject> {
-    var document = new BasicDBObject()
-    var qb = new QueryBuilder()
-    qb.put(key).notEquals(value).and(andKey).is(andValue)
-    document.putAll(qb.get())
-    return new TransformIterable<BasicDBObject>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
-  }
-
 
   function findOne(ref : DBObject) : BasicDBObject {
     return _collection.findOne(ref) as BasicDBObject
