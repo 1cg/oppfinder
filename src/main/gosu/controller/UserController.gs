@@ -8,18 +8,16 @@ uses org.apache.shiro.authc.UnknownAccountException
 uses org.apache.shiro.authc.IncorrectCredentialsException
 uses org.apache.shiro.authc.LockedAccountException
 uses org.apache.shiro.authc.AuthenticationException
-uses model.database.Database
-uses com.mongodb.DBObject
 uses auth.MongoUserPasswordRealm
 uses org.apache.shiro.subject.Subject
 uses org.apache.shiro.mgt.DefaultSecurityManager
-uses com.mongodb.BasicDBObject
+uses model.User
 
 class UserController implements IHasRequestContext, IResourceController {
   var _realm : MongoUserPasswordRealm
 
   construct() {
-    _realm = new MongoUserPasswordRealm(Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION"))
+    _realm = new MongoUserPasswordRealm()
     SecurityUtils.setSecurityManager(new DefaultSecurityManager(_realm))
   }
 
@@ -40,9 +38,7 @@ class UserController implements IHasRequestContext, IResourceController {
       Headers['X-IC-Redirect'] = "/user"
       return ""
     }
-    var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
-    var DBObj = new DBObject[] { _realm.createUserCredentials(username, password)}
-    db.insert(DBObj)
+    _realm.saveUserCredentials(username, password)
     return null
   }
 
@@ -81,11 +77,7 @@ class UserController implements IHasRequestContext, IResourceController {
   }
 
   private function newNameIsUnique(username : String) : boolean {
-    var db = Database.INSTANCE.getCollection("MONGO_USER_AUTHENTICATION")
-    var dbobj = new BasicDBObject()
-    dbobj.put("name", username)
-    var iter = db.find(dbobj)
-    return (iter.count() == 0)
+    return User.find(username) == null
   }
 
   function logout() : Object {

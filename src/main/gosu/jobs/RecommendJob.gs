@@ -77,7 +77,6 @@ class RecommendJob extends Job {
     var size = (Document.findMany(Company.ForeignName, DataSetCollection, Company.Collection).Count + NUM_BUCKETS-1)/NUM_BUCKETS
     var fields = Fields ?: DataSetInfo.findDS(DataSetCollection).AnalyzableFields
     for (field in fields) {
-      print('Starting for field ${field}')
       for (i in 0..|NUM_BUCKETS) {
         var job = new RecommendSubJob(field, i * size, size, DataSetCollection)
         job.start()
