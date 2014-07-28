@@ -1,4 +1,4 @@
-DataUpload<%@ extends input_helper.InputGenerator %>
+<%@ extends input_helper.InputGenerator %>
 <div>
   <h2 class="page-title">New Data Set</h2>
 </div>

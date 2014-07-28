@@ -30,25 +30,15 @@ class InputGenerator {
 
   static function checkboxInput(literal: PropertyReference, name: String = null, options: Map<String, String> = null) : String {
     var buf = new StringBuffer()
-    buf.append(labelInput(name, literal))
-    for (value in getValues(literal)) {
-      var tag = (TagHelper.tag('input', {'value' -> value.toString(),
-                                         'type' -> 'checkbox',
-                                         'name' -> 'checkbox[]'}.merge(options)))
-      buf.append(TagHelper.contentTag('label', tag + value as String, options, false))
-    }
+    buf.append(labelInput(name, literal)+'<br>')
+    buf.append(checkboxes(getValues(literal), name, options))
     return buf.toString()
   }
 
   static function checkboxInputCollection(collection : Collection<Object>, name : String, options: Map<String, String> = null) : String {
     var buf = new StringBuffer()
-    buf.append(TagHelper.contentTag('label', name + ': ', {'for' -> '${name}[]'}))
-    for (value in collection) {
-      var tag = (TagHelper.tag('input', {'value' -> value.toString(),
-                                         'type' -> 'checkbox',
-                                         'name' -> '${name}[]'}.merge(options)))
-      buf.append(TagHelper.contentTag('label', tag + value as String, options, false))
-    }
+    buf.append(TagHelper.contentTag('label', name + ': ', {'for' -> '${name}[]'})+'<br>')
+    buf.append(checkboxes(collection, name, options))
     return buf.toString()
   }
 
@@ -57,10 +47,14 @@ class InputGenerator {
                                    'value' -> text}.merge(options))
   }
 
-  static function selectInput(literal: PropertyReference, name: String = null,
-                              options: Map<String, String> = null) : String {
+  static function selectInput(literal: PropertyReference, name: String = null, options: Map<String, String> = null) : String {
     var label = labelInput(name, literal)
     return label + TagHelper.contentTag('select', options(literal), {'name' -> format(literal)}.merge(options), false)
+  }
+
+  static function emailInput(literal : PropertyReference, name : String = null, options : Map<String, String> = null) : String {
+    var label = labelInput(name, literal)
+    return label + TagHelper.tag('input', {'name' -> format(literal), 'type' -> 'email'}.merge(options))
   }
 
   static function labelInput(name: String, literal: PropertyReference) : String {
@@ -88,6 +82,15 @@ class InputGenerator {
     } else {
       throw new IllegalArgumentException()
     }
+  }
+
+  private static function checkboxes(values : Iterable<Object>, name : String, options : Map<Object, Object>) : String {
+    var result = new StringBuffer()
+    for (value in values) {
+      var tag = (TagHelper.tag('input', {'value' -> value.toString(), 'type' -> 'checkbox', 'name' -> '${name}[]'}.merge(options)))
+      result.append(TagHelper.contentTag('label', tag + value.toString(), options, false)+'<br>')
+    }
+    return result.toString()
   }
 
   private static function format(literal : PropertyReference) : String {

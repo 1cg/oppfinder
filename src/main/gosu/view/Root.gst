@@ -1,4 +1,4 @@
-<% uses input_helper.InputGenerator%>
+<%@ extends input_helper.InputGenerator%>
 <h1 class="page-title">
   <div><span class="op">Opportunity</span><span class="fi">Finder</span></div>
   <small><em>Find new business opportunities hidden in PolicyCenter</em></small>
@@ -25,13 +25,12 @@
 <hr/>
 
 <div class="inset-8">
-  <form class="form-inline" role="form" ic-post-to="/jobs?type=recommend">
+  <form class="form-inline" role="form" ic-post-to="/results/new">
     <div class="form-group">
-      ${InputGenerator.selectInput(model.DataSetInfo#AllNames, "DataSet", {'class' -> 'form-control',
-                                                                     'name' -> 'jobs.RecommendJob[DataSetCollection]'})}
+      ${selectInput(model.DataSetInfo#AllNames, "DataSet", {'class' -> 'form-control', 'name' -> 'collection'})}
     </div>
     <div class="form-group">
-      ${InputGenerator.submitInput('Begin Opportinity Analysis', {'class' -> 'btn btn-primary'})}
+      ${submitInput('Begin Opportinity Analysis', {'class' -> 'btn btn-primary'})}
     </div>
     <div class="form-group pull-right">
       <button ic-post-to="/jobs?type=test" class="btn btn-default">

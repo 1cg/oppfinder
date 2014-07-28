@@ -16,6 +16,7 @@ class TagHelper {
   static function tag(name : String, options : Map<Object,Object> = null, open = false, escape = true) : String {
     return "<${name}${tagOptions(options, escape)}${open ? '>' : '/>'}"
   }
+
   static function contentTag(name : String, content : String =  "", options : Map<Object,Object> = null, escape = true) : String {
     content = escape ? HtmlEscape.escape(content) : content
     return "<${name}${options == null ? "" : tagOptions(options, escape)}>${content}</${name}>"

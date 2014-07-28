@@ -24,4 +24,8 @@ class Policy {
     return _policy.hashCode()
   }
 
+  override function toString() : String {
+    return _policy + ' : ' + _value
+  }
+
 }
