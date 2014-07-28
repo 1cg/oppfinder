@@ -31,7 +31,7 @@ class UserController implements IHasRequestContext, IResourceController {
 
 
 
-  // POST TO the index leads to this guy. This should be create account
+  // User registration
   override function create(): Object {
     var username = Params['username']
     var password = Params['password']
