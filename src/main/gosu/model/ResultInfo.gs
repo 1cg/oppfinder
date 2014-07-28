@@ -3,7 +3,6 @@ package model
 uses util.Time
 uses model.database.Document
 uses util.iterable.SkipIterable
-uses util.Time
 
 class ResultInfo extends Document {
 

@@ -111,8 +111,8 @@ class DataSetInfo extends Document {
     put('Created', time)
   }
 
-  static function deleteAll(id : String) {
-    for (company in Company.findByJob(id)) {
+  static function deleteAll(id : String, owner : String) {
+    for (company in Company.findByJob(id, owner)) {
       company.delete()
     }
     Document.find('Name', id, _collection).delete()
