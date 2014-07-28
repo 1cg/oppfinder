@@ -17,7 +17,7 @@
       <% for (company in companies) { %>
         <tr>
           <% for (type in model.Company.CompanyDataTypes) { %>
-            <td> <% if (type == 'Policies') {
+            <td style='white-space: nowrap'> <% if (type == 'Policies') {
             for (policy in company.Policies){ %>
                ${policy}<br>
               <% }} else { %>

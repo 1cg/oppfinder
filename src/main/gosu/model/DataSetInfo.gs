@@ -25,7 +25,6 @@ class DataSetInfo extends Document {
     info.Size = count
     info.Name = collection
     info.Policies = policies
-    print("registering owner..."+owner)
     info.Owner = owner
     info.Fields = fields
     info.save()

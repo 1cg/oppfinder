@@ -23,16 +23,15 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   function push() : Object {
-    return ResultUpload.renderToString(ResultInfo #AllResultsNames)
+    return ResultUpload.renderToString(ResultInfo#AllResultsNames)
   }
 
   override function _new(): Object {
-    return Analysis.renderToString(null)
+    return Analysis.renderToString(DataSetInfo.findDS(Params['collection']))
   }
 
   override function create(): Object {
-    var info = DataSetInfo.findDS(Params['jobs.RecommendJob[DataSetCollection]'])
-    return raw(AnalysisSetup.renderToString(info))
+    return raw(AnalysisSetup.renderToString(DataSetInfo.findDS(Params['collection'])))
   }
 
   override function show(id: String): Object {
