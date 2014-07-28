@@ -58,7 +58,7 @@ class UserController implements IHasRequestContext, IResourceController {
           Session["currentUser"] = currentUser
           Session["username"] = Params['username'] // used for authorization
           Headers['X-IC-Redirect'] = "/"
-          return index()
+          return "Welcome to OppFinder, "+Params['username']+"!"
         } else {
           throw "Failed to catch authentication exception?"
         }
