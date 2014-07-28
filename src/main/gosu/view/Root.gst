@@ -26,7 +26,7 @@
 <hr/>
 
 <div class="inset-8">
-  <form class="form-inline" role="form" ic-post-to="/results/new">
+  <form class="form-inline" role="form" method='get' action="/results/new">
     <div class="form-group">
       ${selectInputCollection(model.DataSetInfo.getAll(owner).map(\ o -> o.Name), "DataSet", {'class' -> 'form-control', 'name' -> 'collection'})}
     </div>

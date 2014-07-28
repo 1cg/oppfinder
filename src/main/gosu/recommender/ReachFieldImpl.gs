@@ -2,7 +2,7 @@ package recommender
 
 uses org.apache.mahout.cf.taste.model.DataModel
 uses org.apache.mahout.cf.taste.similarity.ItemSimilarity
-uses util.MahoutUtil
+uses util.Mahout
 uses java.util.Map
 uses java.lang.Integer
 uses util.AssetLibrarian
@@ -18,7 +18,7 @@ class ReachFieldImpl extends AbstractField {
 
   override function getModel(collection : String): DataModel {
     _collection = collection
-    return MahoutUtil.toDataModel(collection, _field,
+    return Mahout.toDataModel(collection, _field,
        \ o -> reachToLong(o), null)
   }
 

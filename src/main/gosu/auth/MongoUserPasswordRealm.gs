@@ -11,12 +11,11 @@ uses org.apache.shiro.crypto.hash.Sha256Hash
 uses org.apache.shiro.crypto.SecureRandomNumberGenerator
 uses org.apache.shiro.authc.UsernamePasswordToken
 uses org.apache.shiro.authc.AuthenticationException
-uses com.mongodb.BasicDBObject
 uses org.apache.shiro.authc.UnknownAccountException
-uses com.mongodb.DBObject
 uses org.apache.shiro.authc.SimpleAuthenticationInfo
 uses org.apache.shiro.authz.SimpleAuthorizationInfo
 uses org.apache.shiro.authc.IncorrectCredentialsException
+uses model.User
 
 class MongoUserPasswordRealm extends AuthorizingRealm {
   public static final var DEFAULT_AUTH_FIELD : String = "passwordAuthentication"
@@ -36,35 +35,22 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
   construct() {
     matcher.setHashIterations(hashIterations)
     matcher.setStoredCredentialsHexEncoded(false)
-
-  }
-
-  construct(collection : DBCollection) {
-    this()
-    this._collection=collection
-  }
-
-  property set Collection(collection : DBCollection) {
-    this._collection = collection
   }
 
   override function supports(token : AuthenticationToken) : boolean {
     return token typeis UsernamePasswordToken
   }
 
-  function createUserCredentials(username : String, plainTextPassword : String) : DBObject {
+  function saveUserCredentials(username : String, plainTextPassword : String) {
     var salt = rng.nextBytes()
     var pw = new Sha256Hash(plainTextPassword, salt, hashIterations).toBase64()
-
-    var obj = new BasicDBObject()
-    obj.put("name", username)
-    obj.put("password", pw)
-    obj.put("salt", salt.toBase64())
-    obj.put("algorithm", Sha256Hash.ALGORITHM_NAME)
-    obj.put("hashIterations", hashIterations)
-
-
-    return obj
+    var user = new User()
+    user.Name = username
+    user.put("password", pw)
+    user.put("salt", salt.toBase64())
+    user.put("algorithm", Sha256Hash.ALGORITHM_NAME)
+    user.put("hashIterations", hashIterations)
+    user.save()
   }
 
   /*
@@ -95,17 +81,16 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
     if(token.Username == null) {
       throw new AuthenticationException("Cannot log in null user")
     }
-
-    var obj = _collection.findOne(new BasicDBObject("name",token.Username))
-    if (obj == null) {
+    var user = User.find(token.Username)
+    if (user == null) {
       throw new UnknownAccountException("Unknown user "+token.Username)
     }
 
-    var salt = Sha256Hash.fromBase64String(obj.get("salt") as String)
-    var hashedPW = obj.get("password") as String //hashed, converted to Base64
+    var salt = Sha256Hash.fromBase64String(user.get("salt") as String)
+    var hashedPW = user.get("password") as String //hashed, converted to Base64
 
     if (new Sha256Hash(token.Password, salt, hashIterations).toBase64() == hashedPW) {
-      return new SimpleAuthenticationInfo(obj.get("name"), token.Password, salt, getName())
+      return new SimpleAuthenticationInfo(user.Name, token.Password, salt, getName())
     } else {
       throw new IncorrectCredentialsException()
     }
@@ -129,28 +114,6 @@ class MongoUserPasswordRealm extends AuthorizingRealm {
     info.setRoles({"standard_user"})
     info.setStringPermissions({}) //set them to the set of permissions (collections?) associated with this username.
     return info
-/*
-    var cursor = _collection.find( new BasicDBObject("_id", new BasicDBObject("$in",p0.asList())))
-    print("cursor: "+cursor)
-
-    for(p in cursor) {
-      var rolesObj = p.get("roles")
-      print("role: "+rolesObj)
-      if (rolesObj != null && rolesObj typeis List<?>) {
-      }
-      for(r in rolesObj as List<Object>) {
-        info.addRole(r.toString())
-      }
-
-      var permissionsObj = p.get("permissions")
-      if(permissionsObj != null && permissionsObj typeis List<?>) {
-        for(r in permissionsObj) {
-          info.addStringPermission(r.toString())
-        }
-      }
-    }
-    print("Returning Authorization Info")
-    return info */
   }
 
 }

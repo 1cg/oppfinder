@@ -12,7 +12,7 @@ uses java.util.concurrent.locks.ReentrantLock
 uses model.DataSetInfo
 uses model.Policy
 
-class MahoutUtil {
+class Mahout {
 
   static final var _LOCK = new ReentrantLock()
   static var MODEL_MAP : Map<String, DataModel> = {}

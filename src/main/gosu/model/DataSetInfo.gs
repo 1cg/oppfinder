@@ -60,7 +60,6 @@ class DataSetInfo extends Document {
   }
 
   property set Owner(name : String) {
-    print("setting dataset owner now!: " + name)
     put('Owner', name)
   }
 

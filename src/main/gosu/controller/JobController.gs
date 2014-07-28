@@ -34,20 +34,6 @@ class JobController implements IHasRequestContext, IResourceController {
     return raw(SubJobTableBody.renderToString(UUID,Job.findByIDs(jobs?.map(\ j -> j.UUId))?.paginate(Params['page'])))
   }
 
-  function generateProgress() : Object {
-    var progress = Job.findJob(Session['UUId'] as String)?.Progress
-    if (progress == 100) cancelPolling()
-    return raw(progress + "%")
-  }
-
-  function generateComplete() : Object {
-    if (Job.findJob(Session['UUId'] as String)?.Progress == 100) {
-      cancelPolling()
-      return raw('<div class="fa fa-check chk navbar-left"</div>')
-    }
-    return  raw('<div></div>')
-  }
-
   function complete(UUID : String) : Object {
     if (Job.findJob(UUID)?.Progress == 100) {
       cancelPolling()

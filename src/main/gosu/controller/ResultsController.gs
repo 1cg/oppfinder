@@ -23,11 +23,11 @@ class ResultsController implements  IHasRequestContext, IResourceController {
   }
 
   function push() : Object {
-    return ResultUpload.renderToString(ResultInfo#AllResultsNames)
+    return ResultUpload.renderToString(ResultInfo.getAll(Session['username'] as String).map(\o->o.UUId))
   }
 
   override function _new(): Object {
-    return Analysis.renderToString(DataSetInfo.findDS(Params['collection']))
+    return Analysis.renderToString(DataSetInfo.findDS(Params['collection']), Session['username'] as String)
   }
 
   override function create(): Object {
