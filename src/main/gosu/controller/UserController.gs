@@ -62,7 +62,7 @@ class UserController implements IHasRequestContext, IResourceController {
           Session["currentUser"] = currentUser
           Session["username"] = Params['username'] // used for authorization
           Headers['X-IC-Redirect'] = "/"
-          return index()
+          return ""
         } else {
           throw "Failed to catch authentication exception?"
         }
