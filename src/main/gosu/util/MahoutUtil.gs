@@ -25,6 +25,7 @@ class MahoutUtil {
         MODEL_COUNT[lookup] = MODEL_COUNT[lookup] + 1
         return MODEL_MAP[lookup]
       }
+      print(collection)
       var info = DataSetInfo.findDS(collection)
       var policies = makePolicyMap(info.Policies)
       var idMap = new FastByIDMap<PreferenceArray>()
