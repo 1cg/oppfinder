@@ -6,9 +6,11 @@
   <div class='col-md-6'>
     <h4>Choose a Data Set</h4>
     <div class='well well-sm'>
-      <form class="form-inline" role="form" ic-target='#form' ic-post-to="/results"}>
-        ${selectInputCollection(model.DataSetInfo.getAll(owner).map(\ o -> o.Name), "DataSet", {'class' -> 'form-control', 'name' -> 'collection'})}
-        ${submitInput('Choose Data Set',{'class' -> 'btn btn-primary'})}
+      <form class="form-inline" role="form" ic-target='#form' ic-post-to="/results">
+        <div class='formcontent'>
+          ${selectInputCollection(model.DataSetInfo.getAll(owner).map(\ o -> o.Name), "DataSet", {'class' -> 'form-control', 'name' -> 'collection'})}
+          ${submitInput('Choose Data Set',{'class' -> 'btn btn-primary'})}
+        </div>
       </form>
     </div>
   </div>
