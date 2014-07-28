@@ -75,6 +75,7 @@ class DataUploadJob extends Job {
         save()
       }
       company.put('longID', UUID.randomUUID().LeastSignificantBits)
+      company.put('Owner', Owner)
       company.DataSet = DataSetCollection
       company.save()
       policies.addAll(company.Policies)
