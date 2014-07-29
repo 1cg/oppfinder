@@ -81,6 +81,14 @@ abstract class Job extends Document implements Runnable {
     start()
   }
 
+  property get Owner() : String {
+    return get('Owner') as String
+  }
+
+  property set Owner(owner : String) {
+    put('Owner', owner)
+  }
+
   property get Type() : String {
     return get('Type') as String
   }

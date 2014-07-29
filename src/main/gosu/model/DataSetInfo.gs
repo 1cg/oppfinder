@@ -82,6 +82,9 @@ class DataSetInfo extends Document {
     fields.remove('Policies')
     fields.remove('longID')
     fields.remove('Company')
+    fields.remove('Owner')
+    fields.remove('Contact Name')
+    fields.remove('Email')
     return fields
   }
   
