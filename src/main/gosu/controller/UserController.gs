@@ -39,7 +39,9 @@ class UserController implements IHasRequestContext, IResourceController {
       return ""
     }
     _realm.saveUserCredentials(username, password)
-    return null
+    Headers['X-IC-Script'] = 'alert("New user created. Please sign in!");'
+    Headers['X-IC-Redirect'] = "/user"
+    return "User created!"
   }
 
 
