@@ -79,7 +79,7 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "Uploading recommendation "+(i+1)+": "+recommendation['Company']
       Thread.sleep(4500) //Don't go over the API limit (5 requests per 20 seconds)!
       this.Progress = Math.max(10, (i * 100) / recommendations.size())
-
+      save()
       checkCancellation()
       var opp = new SObject("Opportunity")
       opp.set("Name", recommendation.Company)
@@ -88,15 +88,13 @@ class SalesforceAuthJob extends Job {
       opp.set("Probability", String.valueOf(Double.parseDouble(recommendation.Value as String) * 100))
       opp.set("StageName", "Qualification")
       opp.set("Description", "It is recommended that this company take on the "+recommendation.get('Policy')+" policy.")
-
       var result = salesforce.insert(opp)
       if (!(result["success"] as Boolean)) {
         this.StatusFeed = "Failed upload. Response from Salesforce: "+result
       }
     }
-
     this.StatusFeed = "Done! Uploads available as opportunities <a href=${salesforce.InstanceURL}/${SF_ACCOUNT_ID}>on Salesforce</a>"
-    this.Progress = 100
+    save()
   }
 
   private function authorize() : SalesforceRESTClient {
@@ -104,7 +102,9 @@ class SalesforceAuthJob extends Job {
     var authResponse = salesforce.authenticate(AuthorizationCode, SF_REDIRECT_URI)
     if (authResponse["error"] as String == null) { // Authorized without error
       var token = RefreshToken.RefreshToken
+      token = token ?: new RefreshToken()
       token.Token = authResponse["refresh_token"] as String
+      token.save()
       this.StatusFeed = "Connected!"
     } else if (authResponse["error"] as String == "invalid_grant") { // need to use refresh token
       salesforce.refresh(RefreshToken.RefreshToken.Token)
@@ -113,6 +113,7 @@ class SalesforceAuthJob extends Job {
       this.StatusFeed = "Error! "+authResponse["error"] as String
       handleErrorState(new ("Error: "+(authResponse["error"] as String)))
     }
+    save()
     return salesforce
   }
 
