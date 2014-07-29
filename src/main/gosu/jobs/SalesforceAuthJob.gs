@@ -104,7 +104,9 @@ class SalesforceAuthJob extends Job {
     var authResponse = salesforce.authenticate(AuthorizationCode, SF_REDIRECT_URI)
     if (authResponse["error"] as String == null) { // Authorized without error
       var token = RefreshToken.RefreshToken
+      token = token ?: new RefreshToken()
       token.Token = authResponse["refresh_token"] as String
+      token.save()
       this.StatusFeed = "Connected!"
     } else if (authResponse["error"] as String == "invalid_grant") { // need to use refresh token
       salesforce.refresh(RefreshToken.RefreshToken.Token)
