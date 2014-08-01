@@ -1,4 +1,4 @@
-package util.iterable
+package model.database.iterable
 
 uses java.lang.Iterable
 uses java.util.Iterator

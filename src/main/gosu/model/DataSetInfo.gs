@@ -1,11 +1,11 @@
 package model
 
-uses util.iterable.SkipIterable
 uses util.Time
 uses model.database.Document
 uses java.util.Set
 uses com.google.gson.reflect.TypeToken
 uses com.google.gson.Gson
+uses model.database.iterable.SkipIterable
 
 class DataSetInfo extends Document {
 
@@ -84,7 +84,6 @@ class DataSetInfo extends Document {
     fields.remove('Company')
     fields.remove('Owner')
     fields.remove('Contact Name')
-    fields.remove('Email')
     return fields
   }
   

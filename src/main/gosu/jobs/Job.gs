@@ -11,7 +11,7 @@ uses java.lang.Exception
 uses util.CancellationException
 uses util.RedisConfig
 uses model.database.Document
-uses util.iterable.SkipIterable
+uses model.database.iterable.SkipIterable
 uses com.mongodb.QueryBuilder
 uses com.mongodb.BasicDBObject
 

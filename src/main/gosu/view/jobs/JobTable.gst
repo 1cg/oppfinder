@@ -1,4 +1,4 @@
-<%@ params(type : String, pager : util.iterable.PagerIterable<jobs.Job>)%>
+<%@ params(type : String, pager : model.database.iterable.PagerIterable<jobs.Job>)%>
 <div>
   <form>
   <div class="btn-group status-select pull-right">

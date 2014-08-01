@@ -1,4 +1,4 @@
-<%@ params(id : String, companies: util.iterable.PagerIterable<model.Company>)%>
+<%@ params(id : String, companies: model.database.iterable.PagerIterable<model.Company>)%>
 <%@ extends input_helper.TagHelper %>
 <div>
   <h2 class="page-title">DataSet: ${id}</h2>

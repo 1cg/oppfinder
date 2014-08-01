@@ -3,7 +3,6 @@ package jobs
 uses java.util.Map
 uses java.lang.Thread
 uses util.Mahout
-uses util.iterable.SkipIterable
 uses model.ResultInfo
 uses model.Result
 uses java.util.Collection
@@ -12,6 +11,7 @@ uses model.database.Document
 uses com.google.gson.Gson
 uses com.google.gson.reflect.TypeToken
 uses model.DataSetInfo
+uses model.database.iterable.SkipIterable
 
 class RecommendJob extends Job {
 

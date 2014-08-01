@@ -1,9 +1,9 @@
 package model
 
 uses model.database.Document
-uses util.iterable.SkipIterable
 uses com.google.gson.reflect.TypeToken
 uses com.google.gson.Gson
+uses model.database.iterable.SkipIterable
 
 class Company extends Document {
 

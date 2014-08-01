@@ -1,8 +1,8 @@
 package model
 
 uses model.database.Document
-uses util.iterable.SkipIterable
 uses java.lang.Float
+uses model.database.iterable.SkipIterable
 
 class Result extends Document {
 

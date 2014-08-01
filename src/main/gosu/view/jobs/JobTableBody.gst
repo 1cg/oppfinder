@@ -1,4 +1,4 @@
-<%@ params(type: String, pager: util.iterable.PagerIterable<jobs.Job>) %>
+<%@ params(type: String, pager: model.database.iterable.PagerIterable<jobs.Job>) %>
 <div ic-src='/jobs/table?status=${type}&page=${pager.Current}' ic-deps="/jobs">
 
 <% if ((pager == null) || (pager.Current == 1 && pager.Count == 0)) { %>

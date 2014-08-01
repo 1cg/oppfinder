@@ -1,15 +1,12 @@
 package model.database
 
 uses java.util.Map
-uses util.iterable.SkipIterable
-uses util.iterable.TransformIterable
 uses java.lang.Class
 uses java.util.Set
-uses com.mongodb.BasicDBObject
-uses com.mongodb.DBObject
 uses util.inflector.Inflector
-uses org.bson.types.ObjectId
 uses com.mongodb.QueryBuilder
+uses model.database.iterable.SkipIterable
+uses model.database.iterable.TransformIterable
 
 abstract class Document {
 
@@ -17,11 +14,13 @@ abstract class Document {
     -------Private Fields-------------------------------------------------
    */
 
-  var _obj : BasicDBObject
-  var _shadow : BasicDBObject
-  var _id : ObjectId //Unique ID. This would be the primary key in a SQL database or a unique document ID in MongoDB
-  var _collection : MongoCollection
-  var inserted : boolean as readonly Persisted
+  var _obj : Map<String, Object>
+  var _shadow : Map<String, Object>
+  var _id : ID
+  var _dataSet: DataSet
+  var _inserted: boolean as readonly Persisted
+  static final var _database : MongoDatabase = MongoDatabase.INSTANCE
+  static final var TYPE_FIELD = 'intrinsic_type'
 
   /*
    -------------Constructors----------------------------------------------
@@ -29,34 +28,34 @@ abstract class Document {
 
   //If no name is supplied, the name of the data source is assumed to be the plural of the name of the class
   construct() {
-    _obj = new()
-    _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
-    inserted = false
+    _obj = {}
+    _dataSet = _database.getDataSet(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
+    _inserted = false
   }
 
   construct(collection : String) {
-    _obj = new()
-    _collection = new MongoCollection(collection)
-    inserted = false
+    _obj = {}
+    _dataSet = _database.getDataSet(collection)
+    _inserted = false
   }
 
   //If no name is supplied, the name of the data source is assumed to be the plural of the name of the class
   construct(key : String, value : Object) {
-    _collection = new MongoCollection(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
+    _dataSet = _database.getDataSet(Inflector.pluralize(this.IntrinsicType.TypeInfo.Name).toLowerCase())
     reload(key, value)
-    _shadow = new()
+    _shadow = {}
     _shadow.putAll(_obj)
-    _id = _obj['_id'] as ObjectId
-    inserted = true
+    _id = new ID(_obj[_database.IDName])
+    _inserted = true
   }
 
   construct(collection : String, key : String, value : Object) {
-    _collection = new MongoCollection(collection)
+    _dataSet = _database.getDataSet(collection)
     reload(key, value)
-    _shadow = new()
+    _shadow = {}
     _shadow.putAll(_obj)
-    _id = _obj['_id'] as ObjectId
-    inserted = true
+    _id = new ID(_obj[_database.IDName])
+    _inserted = true
   }
 
   /*
@@ -76,12 +75,12 @@ abstract class Document {
   }
 
   function delete() {
-    _collection.remove('_id',_id)
-    inserted = false
+    _dataSet.remove(_database.IDName, _id.ID)
+    _inserted = false
   }
 
   final function increment(field : String, by = 1) {
-    _collection.increment(query(), new BasicDBObject(field, by))
+    _dataSet.increment(query(), {field -> by})
   }
 
   final function decrement(field : String, by = 1) {
@@ -89,55 +88,60 @@ abstract class Document {
   }
 
   final function save() {
-    if (inserted) {
-      _collection.update(query(), shadowDiff())
+    if (_inserted) {
+      _dataSet.update(query(), shadowDiff())
     } else {
-      _obj['intrinsic_type'] = this.IntrinsicType.Name
-      _id = _collection.insert(_obj)
-      _shadow = new()
+      _obj[TYPE_FIELD] = this.IntrinsicType.Name
+      _id = _dataSet.insert(_obj)
+      _shadow = {}
       _shadow.putAll(_obj)
-      inserted = true
+      _inserted = true
     }
+  }
+
+  final function reload(key : String = null, value = null) {
+    if (key == _database.IDName) value = (value as ID).ID
+    _obj = _dataSet.findOne({key ?: _database.IDName ->  value ?: _id.ID})
   }
 
   /*
   ---------------------Finders------------------------------------------------
    */
 
-  static function find(key : String, value : Object, collection : String) : Document {
-    var _collection = new MongoCollection(collection)
-    return instantiate(_collection.findOne(new BasicDBObject(key, value)))
+  static function find(key : String, value : Object, dataSetName: String) : Document {
+    var dataSet = _database.getDataSet(dataSetName)
+    return instantiate(dataSet.findOne({key -> value}))
   }
 
-  static function findMany(key : String, value : Object, collection : String) : SkipIterable<Document> {
-    var _collection = new MongoCollection(collection)
-    return instantiateMany(_collection.find(new BasicDBObject(key, value)))
+  static function findMany(key : String, value : Object, dataSetName: String) : SkipIterable<Document> {
+    var dataSet = _database.getDataSet(dataSetName)
+    return instantiateMany(dataSet.find({key -> value}))
   }
 
-  static function findMany(criteria : Map<String, Object>, collection : String) : SkipIterable<Document> {
-    var _collection = new MongoCollection(collection)
-    return instantiateMany(_collection.find(new BasicDBObject(criteria)))
+  static function findMany(criteria : Map<String, Object>, dataSetName: String) : SkipIterable<Document> {
+    var dataSet = _database.getDataSet(dataSetName)
+    return instantiateMany(dataSet.find(criteria))
   }
 
-  static function query(query : QueryBuilder, collection : String) : SkipIterable<Document> {
-    var _collection = new MongoCollection(collection)
-    return instantiateMany(_collection.find(query.toQuery()))
+  static function query(query : QueryBuilder, dataSetName: String) : SkipIterable<Document> {
+    var dataSet = _database.getDataSet(dataSetName)
+    return instantiateMany(dataSet.find(query.toQuery()))
   }
 
-  static function all(collection : String) : SkipIterable<Document> {
-    var _collection = new MongoCollection(collection)
-    return instantiateMany(_collection.find())
+  static function all(dataSetName: String) : SkipIterable<Document> {
+    var dataSet = _database.getDataSet(dataSetName)
+    return instantiateMany(dataSet.all())
   }
 
-  static function first(collection : String) : Document {
-    var _collection = new MongoCollection(collection)
-    return instantiate(_collection.findOne())
+  static function first(dataSetName: String) : Document {
+    var dataSet = _database.getDataSet(dataSetName)
+    return instantiate(dataSet.first())
   }
 
   property get AllFields() : Set<String> {
     var keys = _obj.keySet()
-    keys.remove('_id')
-    keys.remove('intrinsic_type')
+    keys.remove(_dataSet.IDName)
+    keys.remove(TYPE_FIELD)
     return keys
   }
 
@@ -145,8 +149,8 @@ abstract class Document {
   ----------------------------Helper functions---------------------------------------
    */
 
-  private final function shadowDiff() : BasicDBObject {
-    var diff = new BasicDBObject()
+  private final function shadowDiff() : Map<String, Object> {
+    var diff : Map<String, Object> = {}
     for (entry in _obj.entrySet()) {
       if (_shadow[entry.Key] == null || _shadow[entry.Key] != entry.Value) {
         diff.put(entry.Key, entry.Value)
@@ -155,25 +159,20 @@ abstract class Document {
     return diff
   }
 
-  private final function reload(key = '_id', value = null) {
-    if (key == '_id') _obj = _collection.findOne(new BasicDBObject(key, value as ObjectId))
-    else _obj = _collection.findOne(new BasicDBObject(key, value ?: _id))
-  }
-
   //Lazy instantation of the documents in order to prevent over consumption of memory
-  private static function instantiateMany(documents : TransformIterable<BasicDBObject>) : SkipIterable<Document> {
-    return new TransformIterable<Document>(documents.Cursor,\ d -> instantiate(d as BasicDBObject))
+  private static function instantiateMany(documents : SkipIterable<Map<String,Object>>) : SkipIterable<Document> {
+    return new TransformIterable<Document>(documents.Cursor,\ d -> instantiate(d as Map<String, Object>))
   }
 
-  private static function instantiate(d : BasicDBObject) : Document {
+  private static function instantiate(d : Map<String,Object>) : Document {
     if (d == null) return null
-    return Class.forName(d['intrinsic_type'] as String)
+    return Class.forName(d[TYPE_FIELD] as String)
         .getConstructor({String.Type, Object.Type})
-        .newInstance({'_id', d['_id'] as ObjectId}) as Document
+        .newInstance({_database.IDName, new ID(d[_database.IDName])}) as Document
   }
 
-  private function query() : DBObject {
-    return new BasicDBObject('_id', _id)
+  private function query() : Map<String, Object> {
+    return {_database.IDName -> _id.ID}
   }
 
 }

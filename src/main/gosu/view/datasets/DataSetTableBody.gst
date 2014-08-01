@@ -1,4 +1,4 @@
-<%@ params(dataSetInfo : util.iterable.PagerIterable<model.DataSetInfo>) %>
+<%@ params(dataSetInfo : model.database.iterable.PagerIterable<model.DataSetInfo>) %>
 <div ic-src='/datasets/table?page=${dataSetInfo.Current}' ic-deps='/datasets'>
   <table class="table">
     <thead>

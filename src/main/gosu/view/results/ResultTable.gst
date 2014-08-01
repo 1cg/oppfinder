@@ -1,4 +1,4 @@
-<%@ params(loggedIn : boolean, resultNames : util.iterable.PagerIterable<model.ResultInfo>) %>
+<%@ params(loggedIn : boolean, resultNames : model.database.iterable.PagerIterable<model.ResultInfo>) %>
 <div>
   <h2 class="page-title">Results</h2>
   <a href="/results/new" class="btn btn-primary pull-right">New Analysis</a>

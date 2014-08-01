@@ -1,4 +1,4 @@
-<%@ params(UUID : String, pager: util.iterable.PagerIterable<jobs.Job>) %>
+<%@ params(UUID : String, pager: model.database.iterable.PagerIterable<jobs.Job>) %>
 <div ic-src=${'/jobs/'+UUID+'/subjobtable?page='+(pager == null ? 1 : pager.Current)} ic-poll="3s" ic-transition="none" ic-deps="/jobs">
   <table class="table table-striped table-hover">
     <thead>

@@ -1,4 +1,4 @@
-<%@ params(dataSetInfo : util.iterable.PagerIterable<model.DataSetInfo>) %>
+<%@ params(dataSetInfo : model.database.iterable.PagerIterable<model.DataSetInfo>) %>
 
 <div>
   <h2 class="page-title">Data Sets</h2>

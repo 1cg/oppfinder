@@ -1,107 +1,76 @@
 package model.database
 
 uses java.util.Map
-uses util.iterable.TransformIterable
 uses com.mongodb.WriteConcern
 uses com.mongodb.BasicDBObject
 uses com.mongodb.DBCollection
-uses com.mongodb.QueryBuilder
-uses com.mongodb.DBObject
-uses com.mongodb.WriteResult
-uses org.bson.types.ObjectId
+uses model.database.iterable.TransformIterable
+uses model.database.iterable.SkipIterable
 
-class MongoCollection {
+class MongoCollection implements DataSet {
 
   var _collection : DBCollection
 
-  construct(collectionName : String) {
-    _collection = Database.INSTANCE.getCollection(collectionName)
+  construct (name : String) {
+    _collection = MongoDatabase.INSTANCE.getCollection(name)
   }
 
- /* Automatically sorts from oldest to newest */
-  function find(ref : Map<String, Object>) : TransformIterable<BasicDBObject> {
-     return new TransformIterable<BasicDBObject>(
-         _collection.find(new BasicDBObject(ref))
-                            .sort(new BasicDBObject({'_id' -> -1})),
-                             \ o  -> o as BasicDBObject)
+  construct (collection : DBCollection) {
+    _collection = collection
   }
 
   /* Automatically sorts from oldest to newest */
-  function find(ref : Map<String, Object>, keys : Map<String, Object>) : TransformIterable<BasicDBObject> {
-    return new TransformIterable<BasicDBObject>(
-        _collection.find(new BasicDBObject(ref), new BasicDBObject(keys))
-                          .sort(new BasicDBObject({'_id' -> -1})),
-                          \ o -> o as BasicDBObject)
-
+  override function find(query: Map<String, Object>, values: Map<String, Object> = null) : SkipIterable<BasicDBObject> {
+    var value : BasicDBObject
+    if (values != null) value = new BasicDBObject(values)
+    return new TransformIterable<BasicDBObject>(_collection.find(new BasicDBObject(query), value).sort(new BasicDBObject({'_id' -> -1})),\ o -> o as BasicDBObject)
   }
 
   /* Automatically sorts from oldest to newest */
-  function find() : TransformIterable<BasicDBObject> {
+  override function all() : SkipIterable<BasicDBObject> {
     return new TransformIterable<BasicDBObject>(
         _collection.find().sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
   }
 
-  property get Name() : String {
+  override property get Name() : String {
     return _collection.Name
   }
 
-  function queryNot(key : String, value : String) : TransformIterable<BasicDBObject> {
-    var document = new BasicDBObject()
-    var qb = new QueryBuilder()
-    qb.put(key).notEquals(value)
-    document.putAll(qb.get())
-    return new TransformIterable<BasicDBObject>(
-        _collection.find(document).sort(new BasicDBObject({'_id' -> -1})), \ o -> o as BasicDBObject)
-  }
-
-  function findOne(ref : DBObject) : BasicDBObject {
-    return _collection.findOne(ref) as BasicDBObject
-  }
-
-  function findOne() : BasicDBObject {
+  override function first() : Map<String, Object> {
     return _collection.findOne() as BasicDBObject
   }
 
-  function insert(o : Map<String, Object>) : ObjectId {
+  override function insert(o : Map<String, Object>) : ID {
     var doc = new BasicDBObject(o)
     _collection.insert(doc, WriteConcern.ACKNOWLEDGED)
-    return doc.get('_id') as ObjectId
+    return new ID(doc.get('_id'))
   }
 
-  function insert(objects : List<Map<String, Object>>) : WriteResult {
-    return _collection.insert(objects.map(\ o -> new BasicDBObject(o)), WriteConcern.ACKNOWLEDGED)
-  }
-
-  property get Count() : long {
+  override property get Count() : long {
     return _collection.getCount()
   }
 
-  function getCount(o : Map<String, Object>) : long {
-    return _collection.getCount(new BasicDBObject(o))
+  override function remove(key : String, value : Object) {
+    _collection.remove(new BasicDBObject(key,value), WriteConcern.ACKNOWLEDGED)
   }
 
-  function remove(o : Map<String, Object>) : WriteResult {
-    return _collection.remove(new BasicDBObject(o), WriteConcern.ACKNOWLEDGED)
-  }
-
-  function remove(key : String, value : Object) : WriteResult {
-    return _collection.remove(new BasicDBObject(key,value), WriteConcern.ACKNOWLEDGED)
-  }
-
-  function save(o : Map<String, Object>) : WriteResult {
-    return _collection.save(new BasicDBObject(o),WriteConcern.ACKNOWLEDGED)
-  }
-
-  function update(q : DBObject, o : DBObject) {
-    _collection.update(q, new BasicDBObject('$set',o),false,false,WriteConcern.ACKNOWLEDGED)
-  }
-
-  function increment(q : DBObject, o : DBObject) {
-    _collection.update(q, new BasicDBObject('$inc',o),false,false,WriteConcern.ACKNOWLEDGED)
-  }
-
-  function drop() {
+  override function drop() {
     _collection.drop()
   }
 
+  override function findOne(query: Map<String, Object>): Map<String, Object> {
+    return _collection.findOne(new BasicDBObject(query)) as BasicDBObject
+  }
+
+  override function update(query: Map<String, Object>, values: Map<String, Object>) {
+    _collection.update(new BasicDBObject(query), new BasicDBObject('$set',values),false,false,WriteConcern.ACKNOWLEDGED)
+  }
+
+  override function increment(query: Map<String, Object>, values: Map<String, Object>) {
+    _collection.update(new BasicDBObject(query), new BasicDBObject('$inc', values), false, false, WriteConcern.ACKNOWLEDGED)
+  }
+
+  override property get IDName(): String {
+    return '_id'
+  }
 }
