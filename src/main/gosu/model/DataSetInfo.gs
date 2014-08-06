@@ -43,10 +43,6 @@ class DataSetInfo extends Document {
     return all(_collection).map(\ o -> o.get('Name') as String)
   }
 
-  static property get MostRecent() : DataSetInfo {
-    return first(_collection) as DataSetInfo
-  }
-
   property get Policies() : List<Policy> {
     return new Gson().fromJson(get('Policies') as String, new TypeToken<List<Policy>>(){}.getType())
   }

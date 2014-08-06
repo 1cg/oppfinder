@@ -253,7 +253,7 @@ abstract class Job extends Document implements Runnable {
   }
 
   static function getAllJobs(owner : String) : SkipIterable<jobs.Job> {
-    return query((new QueryBuilder().put('Status').notEquals('Subjob').and('Owner').is(owner)), COLLECTION) as SkipIterable<jobs.Job>
+    return findMany(new QueryBuilder().put('Status').notEquals('Subjob').and('Owner').is(owner).toQuery(), COLLECTION) as SkipIterable<jobs.Job>
   }
 
   static property get CompleteRecommendJobs() : SkipIterable<jobs.Job> {
@@ -262,7 +262,7 @@ abstract class Job extends Document implements Runnable {
 
   static function findByIDs(IDs : List<String>) : SkipIterable<jobs.Job> {
     if (IDs == null) return null
-    return query(new QueryBuilder().or(IDs.map(\ id -> new BasicDBObject('UUId',id)).toTypedArray()), COLLECTION) as SkipIterable<jobs.Job>
+    return findMany(new QueryBuilder().or(IDs.map(\ id -> new BasicDBObject('UUId',id)).toTypedArray()).toQuery(), COLLECTION) as SkipIterable<jobs.Job>
   }
 
   static function findJob(UUID : String) : jobs.Job {
