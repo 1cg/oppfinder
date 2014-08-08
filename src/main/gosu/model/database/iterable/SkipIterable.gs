@@ -7,8 +7,6 @@ interface SkipIterable <E> extends Iterable<E> {
 
   function skip(n : long)
 
-  function copy() : SkipIterable<E>
-
   property get Count() : long
 
   property get Cursor() : DBCursor

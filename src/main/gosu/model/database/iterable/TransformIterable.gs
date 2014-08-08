@@ -23,10 +23,6 @@ class TransformIterable <T> implements Iterable<T>, SkipIterable<T> {
     _wrapped = _wrapped.skip(n as int)
   }
 
-  override function copy(): TransformIterable<T> {
-    return new TransformIterable<T>(_wrapped, _transform)
-  }
-
   override property get Count(): long {
     return _wrapped.count()
   }

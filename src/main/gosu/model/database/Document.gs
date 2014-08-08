@@ -157,40 +157,35 @@ abstract class Document {
    * at the very least implementation specific)
    */
   static function find(key : String, value : Object, dataSetName: String) : Document {
-    var dataSet = _database.getDataSet(dataSetName)
-    return instantiate(dataSet.findOne({key -> value}))
+    return instantiate(_database.getDataSet(dataSetName).findOne({key -> value}))
   }
 
   /*
    * Finds the documents (rows) that match the key (column name) value (row value) pair.
    */
   static function findMany(key : String, value : Object, dataSetName: String) : SkipIterable<Document> {
-    var dataSet = _database.getDataSet(dataSetName)
-    return instantiateMany(dataSet.find({key -> value}))
+    return instantiateMany(_database.getDataSet(dataSetName).find({key -> value}))
   }
 
   /*
    * Finds the documents (rows) that match the key (column name) value (row value) pairs specified.
    */
   static function findMany(criteria : Map<String, Object>, dataSetName: String) : SkipIterable<Document> {
-    var dataSet = _database.getDataSet(dataSetName)
-    return instantiateMany(dataSet.find(criteria))
+    return instantiateMany(_database.getDataSet(dataSetName).find(criteria))
   }
 
   /*
    * Finds the documents (rows) in the database
    */
   static function all(dataSetName: String) : SkipIterable<Document> {
-    var dataSet = _database.getDataSet(dataSetName)
-    return instantiateMany(dataSet.all())
+    return instantiateMany(_database.getDataSet(dataSetName).all())
   }
 
   /*
    * Returns the newest document (row) in the database
    */
   static function first(dataSetName: String) : Document {
-    var dataSet = _database.getDataSet(dataSetName)
-    return instantiate(dataSet.first())
+    return instantiate(_database.getDataSet(dataSetName).first())
   }
 
   /*
@@ -226,8 +221,8 @@ abstract class Document {
   private static function instantiate(d : Map<String,Object>) : Document {
     if (d == null) return null
     return Class.forName(d[TYPE_FIELD] as String)
-        .getConstructor({String.Type, Object.Type})
-        .newInstance({_database.IDName, new ID(d[_database.IDName])}) as Document
+                .getConstructor({String.Type, Object.Type})
+                .newInstance({_database.IDName, new ID(d[_database.IDName])}) as Document
   }
 
   private function query() : Map<String, Object> {
